@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:paddingVertical="16dp">
+
+    <ImageView
+        android:id="@+id/search_adapter_pic"
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="fitXY"
+        android:transitionName="photo"
+        android:src="@drawable/ic_book_icon_default"></ImageView>
+
+    <TextView
+        android:id="@+id/search_adapter_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+        android:textColor="#aaaaaa"
+        android:textStyle="bold"
+        android:layout_toRightOf="@id/search_adapter_pic"></TextView>
+
+    <TextView
+        android:id="@+id/search_adapter_author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="作者："
+        android:textColor="#aaaaaa"
+        android:textSize="12dp"
+        android:layout_toRightOf="@id/search_adapter_pic"
+        android:layout_below="@id/search_adapter_title"></TextView>
+
+    <TextView
+        android:id="@+id/search_adapter_coll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:text="章节："
+        android:textColor="#aaaaaa"
+        android:textSize="12dp"
+        android:layout_toRightOf="@id/search_adapter_pic"
+        android:layout_below="@id/search_adapter_author"></TextView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_toRightOf="@id/search_adapter_pic"
+        android:layout_below="@id/search_adapter_coll">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/background_text_search_result_source"
+            android:text="来源"
+            android:textColor="@color/base_color"
+            android:textSize="8dp"></TextView>
+
+        <TextView
+            android:id="@+id/search_adapter_source"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:text="来源："
+            android:textColor="#aaaaaa"
+            android:textSize="8dp"></TextView>
+    </LinearLayout>
+
+
+</RelativeLayout>

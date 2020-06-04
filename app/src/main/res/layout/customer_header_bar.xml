@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.inveno.xiandu.view.components.HeaderBar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/header1"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="#44666666"
+        android:visibility="gone"></View>
+
+    <LinearLayout
+        android:id="@+id/header_bar_title_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/header_bar_title_img"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:src="@mipmap/ic_header_bar_back"
+            android:tint="#ff888888"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/header_bar_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingLeft="13dp"
+            android:text=""
+            android:textColor="#ff888888"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/header_bar_option_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/header_bar_title_layout"
+        android:gravity="right"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/header_bar_option_progress"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="2dp"
+            android:padding="10dp"
+            android:tint="@color/base_color"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/header_bar_option_more"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:src="@mipmap/ic_header_bar_more"
+            android:tint="@color/base_color"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/header_bar_option_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:text="选项"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/header_bar_back_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@id/header_bar_title_layout"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:id="@+id/header_bar_back_img"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="8dp"
+            android:src="@mipmap/ic_header_bar_back"
+            android:tint="#ff888888" />
+
+        <TextView
+            android:id="@+id/header_bar_back_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingLeft="13dp"
+            android:text=""
+            android:textColor="#ff888888"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</com.inveno.xiandu.view.components.HeaderBar>

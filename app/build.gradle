@@ -1,0 +1,89 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao' // apply plugin
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.inveno.xiandu"
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+greendao {
+    schemaVersion 1
+    daoPackage 'com.inveno.xiandu.gen'
+    targetGenDir 'src/main/java'
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    //这个库不在andoirdx命名下
+    implementation "com.google.android.material:material:1.1.0"
+    //权限申请
+    implementation 'pub.devrel:easypermissions:3.0.0'
+    //ARouter
+    implementation 'com.alibaba:arouter-api:1.5.0'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.2.2'
+    //微信
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:5.4.3'
+    //消息中心
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    //下面两个是RxJava 和RxAndroid,gson转换中间件
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.0'
+    //图片框架
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    //解析器
+    implementation 'org.jsoup:jsoup:1.11.1'
+    //数据库
+    implementation 'org.greenrobot:greendao:3.3.0' // add library
+    annotationProcessor 'com.amitshekhar.android:debug-db:1.0.1'
+    //loading特效
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+    //butterknife
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
+    //Gson 库
+    implementation 'com.google.code.gson:gson:2.6.2'
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.0'
+    //转换器，请求结果转换成Model
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
+    //rxView
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+}
