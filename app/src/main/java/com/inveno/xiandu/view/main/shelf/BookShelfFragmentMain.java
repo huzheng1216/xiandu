@@ -34,12 +34,12 @@ import java.util.List;
  * Date 2020-02-28
  * Des 书架界面
  */
-public class BookRackFragmentMain extends BaseFragment {
+public class BookShelfFragmentMain extends BaseFragment {
 
     private MyTabLayout myTabLayout;
     private ViewPager viewPager;
-    private View editerBt;
-    private ImageView pic;
+//    private View editerBt;
+//    private ImageView pic;
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<Fragment> fragments = new ArrayList<>();
     private List<BookShelf> bookShelves;
@@ -50,7 +50,7 @@ public class BookRackFragmentMain extends BaseFragment {
     }
 
     @Override
-    public ViewGroup initView() {
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         bookShelves = SQL.getInstance(getContext()).getAllBookShelf();
         if (bookShelves.size() <= 0) {
@@ -69,11 +69,11 @@ public class BookRackFragmentMain extends BaseFragment {
             fragments.add(new ShelfFragment(bookShelf));
         }
 
-        ViewGroup inflate = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.fragment_bookrack_main, null);
+        ViewGroup inflate = (ViewGroup) inflater.inflate(R.layout.fragment_bookrack_main, null);
         myTabLayout = inflate.findViewById(R.id.tablelayout_fragment_bookrack_main);
         viewPager = inflate.findViewById(R.id.viewpager_fragment_bookrack_main);
-        editerBt = inflate.findViewById(R.id.edit_search_main);
-        pic = inflate.findViewById(R.id.bt_search_main_back);
+//        editerBt = inflate.findViewById(R.id.edit_search_main);
+//        pic = inflate.findViewById(R.id.bt_search_main_back);
         swipeRefreshLayout = inflate.findViewById(R.id.SwipeRefreshLayout);
         myAdapter = new MyAdapter(getChildFragmentManager());
         viewPager.setAdapter(myAdapter);
@@ -81,14 +81,14 @@ public class BookRackFragmentMain extends BaseFragment {
         myTabLayout.setSelectedTabIndicatorHeight(DensityUtil.dip2px(getContext(), 2));
         myTabLayout.setNeedSwitchAnimation(true);
         myTabLayout.setupWithViewPager(viewPager);
-        ClickUtil.bindSingleClick(editerBt, 200, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), SerchActivityMain.class);
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity(), pic, "photo").toBundle();
-                startActivity(intent, bundle);
-            }
-        });
+//        ClickUtil.bindSingleClick(editerBt, 200, new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(getContext(), SerchActivityMain.class);
+//                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) getActivity(), pic, "photo").toBundle();
+//                startActivity(intent, bundle);
+//            }
+//        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

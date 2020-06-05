@@ -1,9 +1,14 @@
 package com.inveno.xiandu.view.main;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -11,10 +16,12 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.main.my.MineFragment;
-import com.inveno.xiandu.view.main.shelf.BookRackFragmentMain;
+import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.main.store.StoreFragment;
+import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +33,9 @@ public class MainActivity extends BaseActivity {
     private MainViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
     private MenuItem menuItem;
+    private Toolbar toolbar;
+    View searchLayout;
+    ImageView pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +44,19 @@ public class MainActivity extends BaseActivity {
         requestMyPermissions();
         setContentView(R.layout.activity_main);
         setStatusBar(R.color.white, true);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        searchLayout = findViewById(R.id.home_toolbar_search);
+        pic = findViewById(R.id.home_tallbar_search_ic);
+        ClickUtil.bindSingleClick(searchLayout, 200, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SerchActivityMain.class);
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pic, "photo").toBundle();
+                startActivity(intent, bundle);
+            }
+        });
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -63,8 +86,7 @@ public class MainActivity extends BaseActivity {
         viewPagerAdapter = new MainViewPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         List<Fragment> list = new ArrayList<>();
-//        list.add(new SearchFragmentMain());
-        list.add(new BookRackFragmentMain());
+        list.add(new BookShelfFragmentMain());
         list.add(new StoreFragment());
         list.add(MineFragment.newInstance("我的"));
         viewPagerAdapter.setList(list);
