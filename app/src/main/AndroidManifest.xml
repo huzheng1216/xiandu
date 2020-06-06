@@ -39,10 +39,10 @@
             android:name=".view.search.SerchResultActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.book.DetailActivity"
+            android:name=".view.detail.DetailActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.book.ContentActivity"
+            android:name=".view.book.ActivityReader"
             android:theme="@style/FullScreenTheme" />
     </application>
 </manifest>

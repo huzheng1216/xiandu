@@ -61,8 +61,7 @@ public class StoreFragment extends BaseFragment {
         ButterKnife.bind(this, view);
 
         for (String s : strings) {
-            StoreItemFragment storeItemFragment = new StoreItemFragment();
-            storeItemFragment.setTitle(s);
+            StoreItemFragment storeItemFragment = new StoreItemFragment(s);
             fragments.add(storeItemFragment);
         }
         myAdapter = new MyAdapter(getChildFragmentManager());

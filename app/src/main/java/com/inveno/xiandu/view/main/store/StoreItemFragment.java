@@ -8,7 +8,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.book.Book;
+import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.utils.ClickUtil;
+import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.view.BaseFragment;
 
 /**
@@ -21,12 +26,8 @@ public class StoreItemFragment extends BaseFragment {
     String title;
     TextView textView;
 
-    public StoreItemFragment() {
-    }
-
-    public void setTitle(String title) {
+    public StoreItemFragment(String title) {
         this.title = title;
-//        textView.setText(title);
     }
 
     @Override
@@ -34,6 +35,17 @@ public class StoreItemFragment extends BaseFragment {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_store_item, container, false);
         textView = view.findViewById(R.id.title);
         textView.setText(title);
+        ClickUtil.bindSingleClick(textView, 500, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Book book = new Book();
+                book.setName(title);
+                book.setAuthor("zheng.hu");
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                        .withString("book", GsonUtil.objectToJson(book))
+                        .navigation();
+            }
+        });
         return view;
     }
 

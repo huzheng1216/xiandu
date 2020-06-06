@@ -1,4 +1,4 @@
-package com.inveno.xiandu.view.book;
+package com.inveno.xiandu.view.detail;
 
 import android.content.Context;
 import android.view.LayoutInflater;

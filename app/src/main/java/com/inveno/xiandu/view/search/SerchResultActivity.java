@@ -18,11 +18,10 @@ import com.inveno.xiandu.bean.book.Book;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.view.BaseActivity;
-import com.inveno.xiandu.view.book.DetailActivity;
+import com.inveno.xiandu.view.detail.DetailActivity;
 import com.inveno.xiandu.view.components.HeaderBar;
 import com.inveno.xiandu.view.components.PullRecyclerViewGroup2;
 
-import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;

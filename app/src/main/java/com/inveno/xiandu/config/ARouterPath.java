@@ -13,6 +13,6 @@ public class ARouterPath {
     public static final String ACTIVITY_AGREEMENT = BASE_URL + "AgreementActivity";
     public static final String ACTIVITY_SEARCH = BASE_URL + "SerchActivityMain";
     public static final String ACTIVITY_SEARCH_RESULT = BASE_URL + "SerchResultActivity";
-    public static final String ACTIVITY_CATALOG_MAIN = BASE_URL + "CatalogActivity";
+    public static final String ACTIVITY_DETAIL_MAIN = BASE_URL + "DetailActivity";
     public static final String ACTIVITY_CONTENT_MAIN = BASE_URL + "ContentActivity";
 }

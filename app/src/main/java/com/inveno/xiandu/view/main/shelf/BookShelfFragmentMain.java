@@ -1,13 +1,9 @@
 package com.inveno.xiandu.view.main.shelf;
 
-import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,12 +15,10 @@ import androidx.viewpager.widget.ViewPager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.db.SQL;
-import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
-import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import java.util.ArrayList;
 import java.util.List;

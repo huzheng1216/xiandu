@@ -126,13 +126,9 @@ public abstract class BaseFragment extends Fragment {
 
     //当前页面可见
     protected void onVisible(Boolean firstVisble) {
-    }
-
-    ;
+    };
 
     //当前页面不可见
     protected void onInVisible() {
-    }
-
-    ;
+    };
 }

@@ -62,7 +62,7 @@ public class ShelfFragment extends BaseFragment implements ShelfItemDialog.Shelf
 
             @Override
             public void onBookClick(int position) {
-                ARouter.getInstance().build(ARouterPath.ACTIVITY_CATALOG_MAIN)
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                         .withString("json", GsonUtil.objectToJson(data.get(position)))
                         .navigation();
             }

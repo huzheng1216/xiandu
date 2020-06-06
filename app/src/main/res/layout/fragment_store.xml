@@ -10,11 +10,10 @@
         android:id="@+id/MyTabLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
         android:layout_marginHorizontal="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"
+        app:layout_constraintTop_toTopOf="parent"
         app:tabBackground="@color/transparent"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/base_color"
@@ -23,8 +22,7 @@
         app:tabMode="scrollable"
         app:tabRippleColor="@color/transparent"
         app:tabSelectedTextColor="@color/base_color"
-        app:tabTextColor="#888888">
-    </com.inveno.xiandu.view.components.tablayout.MyTabLayout>
+        app:tabTextColor="#888888"></com.inveno.xiandu.view.components.tablayout.MyTabLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
@@ -33,11 +31,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tablelayout_fragment_bookrack_main">
+        app:layout_constraintTop_toBottomOf="@+id/MyTabLayout">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/ViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

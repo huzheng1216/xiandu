@@ -1,4 +1,4 @@
-package com.inveno.xiandu.view.book;
+package com.inveno.xiandu.view.detail;
 
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +34,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -42,22 +41,17 @@ import io.reactivex.disposables.Disposable;
  * Date 2020-02-11
  * Des 目录页
  */
-@Route(path = ARouterPath.ACTIVITY_CATALOG_MAIN)
+@Route(path = ARouterPath.ACTIVITY_DETAIL_MAIN)
 public class DetailActivity extends BaseActivity {
 
     //数据
     @Autowired(name = "json")
     protected String json;
     private Book book;
-    private List<BookCatalog> list = new ArrayList<>();
-    private CatalogAdapter catalogAdapter;
-    private Disposable disposable;//检索任务
 
     //控件
     @BindView(R.id.header_bar_back_tv)
     TextView title;
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
     @BindView(R.id.catalog_main_booc_ic)
     ImageView pic;
     @BindView(R.id.catalog_main_booc_name)
@@ -70,29 +64,19 @@ public class DetailActivity extends BaseActivity {
     TextView bookIntro;
     @BindView(R.id.AppBarLayout)
     AppBarLayout appBarLayout;
-    @BindView(R.id.NestedScrollView)
-    PullRecyclerViewGroup2 pullRecyclerViewGroup2;
     @BindView(R.id.progress_bar_read)
     ProgressBar progressBar;
     @BindView(R.id.bt_coll)
     TextView collBt;
     @BindView(R.id.bt_read)
     View readBt;
-    @BindView(R.id.bt_refresh)
-    View refreshBt;
+
     //返回
     @OnClick(R.id.header_bar_back_img)
     void onClick() {
         ActivityCompat.finishAfterTransition(this);
     }
-    //刷新
-    @OnClick(R.id.bt_refresh)
-    void refresh() {
-        refreshBt.setVisibility(View.GONE);
-        readBt.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
-        getCatalog();
-    }
+
     //收藏
     @OnClick(R.id.bt_coll)
     void coll() {
@@ -102,24 +86,13 @@ public class DetailActivity extends BaseActivity {
             enableCollBt();
         }
     }
-    //倒序排列
-    @OnClick(R.id.sort)
-    void sort() {
-        Collections.reverse(list);
-        catalogAdapter.notifyDataSetChanged();
-    }
+
     //立即阅读
     @OnClick(R.id.bt_read)
     void read() {
-        if (list.size() > 0) {
-            ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
-                    .withString("json", GsonUtil.objectToJson(book))
-                    .withString("sectionUrl", list.get(0).getUrl())
-                    .withString("sectionName", list.get(0).getName())
-                    .navigation();
-        } else {
-            Toaster.showToastCenter(this, "没有章节");
-        }
+        ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
+                .withString("json", GsonUtil.objectToJson(book))
+                .navigation();
     }
 
     @Override
@@ -137,28 +110,6 @@ public class DetailActivity extends BaseActivity {
                 } else {
                     title.setVisibility(View.GONE);
                 }
-                if (verticalOffset == 0) {
-                    pullRecyclerViewGroup2.isTopVisible = true;
-                } else {
-                    pullRecyclerViewGroup2.isTopVisible = false;
-                }
-            }
-        });
-
-        catalogAdapter = new CatalogAdapter(this, list);
-        // 设置Item添加和移除的动画
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(catalogAdapter);
-        catalogAdapter.setOnItemClickListener(new CatalogAdapter.OnItemClickListener() {
-            @Override
-            public void onClick(BookCatalog bookCatalog) {
-                ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
-                        .withString("json", GsonUtil.objectToJson(book))
-                        .withString("sectionUrl", bookCatalog.getUrl())
-                        .withString("sectionName", bookCatalog.getName())
-                        .navigation();
             }
         });
         initData();
@@ -179,54 +130,13 @@ public class DetailActivity extends BaseActivity {
         if (SQL.getInstance(this).queryBookByName(book.getName()).size() > 0) {
             enableCollBt();
         }
-        getCatalog();
-    }
-
-    //解析内容
-    private void getCatalog() {
-//        SearchTool.getInstance().getCatalog(book.getUrl(), book.getSource(this))
-//                .subscribe(new Observer<BookDetail>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        disposable = d;
-//                    }
-//
-//                    @Override
-//                    public void onNext(BookDetail bookDetail) {
-//                        book.setIntro(bookDetail.getIntro());
-//                        book.setBookCatalogs(bookDetail.getBookCatalogs());
-//                        bookIntro.setText(bookDetail.getIntro());
-//                        list.addAll(bookDetail.getBookCatalogs());
-//                        catalogAdapter.notifyDataSetChanged();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        progressBar.setVisibility(View.GONE);
-//                        readBt.setVisibility(View.GONE);
-//                        refreshBt.setVisibility(View.VISIBLE);
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        if (list.size() > 0) {
-//                            progressBar.setVisibility(View.GONE);
-//                            readBt.setVisibility(View.VISIBLE);
-//                            refreshBt.setVisibility(View.GONE);
-//                        } else {
-//                            progressBar.setVisibility(View.GONE);
-//                            readBt.setVisibility(View.GONE);
-//                            refreshBt.setVisibility(View.VISIBLE);
-//                        }
-//                    }
-//                });
     }
 
     //已收藏
     private void enableCollBt() {
         collBt.setEnabled(false);
         collBt.setTextColor(0xff888888);
-        collBt.setText("已收藏");
+        collBt.setText("已添加");
     }
 
     @Override
