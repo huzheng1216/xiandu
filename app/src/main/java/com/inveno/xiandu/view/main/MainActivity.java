@@ -2,12 +2,14 @@ package com.inveno.xiandu.view.main;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
@@ -21,6 +23,7 @@ import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.main.my.MineFragment;
 import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.main.store.StoreFragment;
+import com.inveno.xiandu.view.main.welfare.WelfareFragment;
 import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import java.util.ArrayList;
@@ -50,6 +53,7 @@ public class MainActivity extends BaseActivity {
         searchLayout = findViewById(R.id.home_toolbar_search);
         pic = findViewById(R.id.home_tallbar_search_ic);
         ClickUtil.bindSingleClick(searchLayout, 200, new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SerchActivityMain.class);
@@ -88,6 +92,7 @@ public class MainActivity extends BaseActivity {
         List<Fragment> list = new ArrayList<>();
         list.add(new BookShelfFragmentMain());
         list.add(new StoreFragment());
+        list.add(new WelfareFragment());
         list.add(MineFragment.newInstance("我的"));
         viewPagerAdapter.setList(list);
     }
@@ -98,6 +103,7 @@ public class MainActivity extends BaseActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             menuItem = item;
+            toolbar.setVisibility(View.VISIBLE);
             switch (item.getItemId()) {
                 case R.id.navigation_bookrack:
                     viewPager.setCurrentItem(0);
@@ -105,8 +111,12 @@ public class MainActivity extends BaseActivity {
                 case R.id.navigation_bookstore:
                     viewPager.setCurrentItem(1);
                     return true;
-                case R.id.navigation_mine:
+                case R.id.navigation_welfare:
                     viewPager.setCurrentItem(2);
+                    return true;
+                case R.id.navigation_mine:
+                    toolbar.setVisibility(View.GONE);
+                    viewPager.setCurrentItem(3);
                     return true;
             }
             return false;

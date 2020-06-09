@@ -1,117 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/layout_info"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginLeft="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="240dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="198dp"
+            android:background="@drawable/ic_mine_header_bg">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginBottom="40dp">
+                <ImageView
+                    android:id="@+id/iv_user_pic"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_header_default" />
 
-        <ImageView
-            android:id="@+id/iv_user_pic"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_header_default" />
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="点我登陆"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"/>
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:layout_toRightOf="@+id/iv_user_pic"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/mine_card_bg"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="点我登陆"
-                android:textColor="#888888"
-                android:textSize="16dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="--" />
 
-            <TextView
-                android:id="@+id/tv_des"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="点我登陆"
-                android:textColor="#888888"
-                android:textSize="12dp" />
+                <TextView
+                    android:id="@+id/textView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:text="我的金币" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="--" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    android:text="今日金币" />
+            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-
-    <View
-        android:id="@+id/view6"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginHorizontal="12dp"
-        android:background="#88888888"
-        android:layout_marginTop="32dp"
-        app:layout_constraintTop_toBottomOf="@+id/layout_info"
-        tools:layout_editor_absoluteX="16dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="5dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/view6">
+        tools:ignore="RtlSymmetry">
 
-        <LinearLayout
-            android:id="@+id/bt_source"
+        <RelativeLayout
+            android:id="@+id/mine_send_luckymoney"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingLeft="12dp"
             android:orientation="horizontal"
-            android:background="?attr/selectableItemBackground">
+            android:onClick="mine_read"
+            android:background="?attr/selectableItemBackground"
+            tools:ignore="RtlSymmetry">
 
             <ImageView
+                android:id="@+id/image1"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
-                android:src="@drawable/ic_source"></ImageView>
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_send_luckeymoney"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="图源"
-                android:textColor="#888"
-                android:textSize="12dp"
-                android:layout_gravity="center_vertical"></TextView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/bt_charts"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:paddingLeft="12dp"
-            android:orientation="horizontal"
-            android:background="?attr/selectableItemBackground">
+                android:text="分红包"
+                android:textColor="@color/gray_3"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/image1"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"/>
 
             <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_right"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginHorizontal="16dp"
+            android:background="#88888888" />
+
+        <RelativeLayout
+            android:id="@+id/mine_readed"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:onClick="mine_read"
+            android:background="?attr/selectableItemBackground"
+            tools:ignore="RtlSymmetry">
+
+            <ImageView
+                android:id="@+id/image2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
-                android:src="@drawable/ic_charts"></ImageView>
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_readed"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="排行榜"
-                android:textColor="#888"
-                android:textSize="12dp"
-                android:layout_gravity="center_vertical"></TextView>
-        </LinearLayout>
+                android:text="阅读足迹"
+                android:textColor="@color/gray_3"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/image2"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_right"/>
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
@@ -119,27 +191,111 @@
             android:layout_marginHorizontal="16dp"
             android:background="#88888888" />
 
-        <LinearLayout
-            android:id="@+id/bt_setting"
+        <RelativeLayout
+            android:id="@+id/mine_read"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:paddingLeft="12dp"
             android:orientation="horizontal"
-            android:background="?attr/selectableItemBackground">
+            android:onClick="mine_read"
+            android:background="?attr/selectableItemBackground"
+            tools:ignore="RtlSymmetry">
 
             <ImageView
+                android:id="@+id/image3"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:padding="10dp"
-                android:src="@drawable/ic_setting"></ImageView>
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_read"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的阅读偏好"
+                android:textColor="@color/gray_3"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/image3"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_right"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginHorizontal="16dp"
+            android:background="#88888888" />
+        <RelativeLayout
+            android:id="@+id/mine_qq"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:onClick="mine_qq"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/image4"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_qq"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="官方QQ群"
+                android:textColor="@color/gray_3"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/image4"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"/>
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginHorizontal="16dp"
+            android:background="#88888888" />
+        <RelativeLayout
+            android:id="@+id/mine_setting"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:onClick="mine_setting"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/image5"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_setting"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="设置"
-                android:textColor="#888"
-                android:textSize="12dp"
-                android:layout_gravity="center_vertical"></TextView>
-        </LinearLayout>
+                android:textColor="@color/gray_3"
+                android:textSize="14sp"
+                android:layout_toEndOf="@+id/image5"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="25dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_mine_right"/>
+        </RelativeLayout>
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
