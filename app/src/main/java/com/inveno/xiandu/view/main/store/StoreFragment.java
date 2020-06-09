@@ -9,9 +9,21 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.BaseFragment;
+import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
+import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,47 +34,20 @@ import butterknife.OnClick;
  * Date 2020-02-28
  * Des
  */
-public class StoreFragment extends Fragment {
+public class StoreFragment extends BaseFragment {
 
-    @BindView(R.id.iv_user_pic)
-    ImageView pic;
-    @BindView(R.id.tv_name)
-    TextView name;
-    @BindView(R.id.tv_des)
-    TextView des;
+    @BindView(R.id.MyTabLayout)
+    MyTabLayout myTabLayout;
+    @BindView(R.id.SwipeRefreshLayout)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.ViewPager)
+    ViewPager viewPager;
 
-    @OnClick(R.id.iv_user_pic)
-    void pic() {
-        Toaster.showToastCenter(getContext(), "登陆");
-    }
-
-    @OnClick(R.id.tv_name)
-    void name() {
-        Toaster.showToastCenter(getContext(), "登陆");
-    }
-
-    @OnClick(R.id.tv_des)
-    void des() {
-        Toaster.showToastCenter(getContext(), "登陆");
-    }
-
-    @OnClick(R.id.bt_source)
-    void source() {
-        Toaster.showToastCenter(getContext(), "设置源");
-    }
-
-    @OnClick(R.id.bt_charts)
-    void charts() {
-        Toaster.showToastCenter(getContext(), "排行榜");
-    }
-
-    @OnClick(R.id.bt_setting)
-    void setting() {
-        Toaster.showToastCenter(getContext(), "设置");
-    }
+    private List<Fragment> fragments = new ArrayList<>();
+    private String[] strings = new String[]{"推荐", "男频", "女频", "出版"};
+    MyAdapter myAdapter;
 
     public static StoreFragment newInstance(String name) {
-
         Bundle args = new Bundle();
         args.putString("name", name);
         StoreFragment fragment = new StoreFragment();
@@ -70,11 +55,21 @@ public class StoreFragment extends Fragment {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mine, container, false);
+    public ViewGroup initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_store, container, false);
         ButterKnife.bind(this, view);
+
+        for (String s : strings) {
+            StoreItemFragment storeItemFragment = new StoreItemFragment(s);
+            fragments.add(storeItemFragment);
+        }
+        myAdapter = new MyAdapter(getChildFragmentManager());
+        viewPager.setAdapter(myAdapter);
+        myTabLayout.setSelectedTabIndicatorWidth(DensityUtil.dip2px(getContext(), 10));
+        myTabLayout.setSelectedTabIndicatorHeight(DensityUtil.dip2px(getContext(), 2));
+        myTabLayout.setNeedSwitchAnimation(true);
+        myTabLayout.setupWithViewPager(viewPager);
         return view;
     }
 
@@ -89,5 +84,28 @@ public class StoreFragment extends Fragment {
 //            tv.setText(name);
 //        }
 
+    }
+
+
+    public class MyAdapter extends FragmentPagerAdapter {
+        public MyAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return strings.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return strings[position];
+        }
     }
 }

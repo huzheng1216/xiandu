@@ -10,56 +10,52 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        android:background="#aafafafa">
+        android:background="#aafafafa"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_search_main_toolbar"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="14dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@drawable/background_search_main_toolbar">
+
             <TextView
                 android:id="@+id/bt_coll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/base_color"
-                android:textSize="18dp"
+                android:gravity="center"
                 android:text="加入书架"
-                android:gravity="center"/>
+                android:textColor="@color/base_color"
+                android:textSize="18dp" />
         </RelativeLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_search_main_toolbar"
             android:layout_marginHorizontal="20dp"
             android:layout_marginVertical="14dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@drawable/background_search_main_toolbar">
+
             <ProgressBar
                 android:id="@+id/progress_bar_read"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_centerInParent="true"
-                android:indeterminateTint="@color/base_color"></ProgressBar>
+                android:indeterminateTint="@color/base_color"
+                android:visibility="gone"></ProgressBar>
+
             <TextView
                 android:id="@+id/bt_read"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/base_color"
-                android:textSize="18dp"
+                android:gravity="center"
                 android:text="立即阅读"
-                android:gravity="center"
-                android:visibility="gone"/>
-            <TextView
-                android:id="@+id/bt_refresh"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:textColor="@color/base_color"
                 android:textSize="18dp"
-                android:text="重新获取"
-                android:gravity="center"
-                android:visibility="gone"/>
+                android:visibility="visible" />
         </RelativeLayout>
     </LinearLayout>
 
@@ -97,147 +93,118 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <com.inveno.xiandu.view.components.PullRecyclerViewGroup2
-        android:id="@+id/NestedScrollView"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/CoordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_layout"
         android:layout_below="@id/header_bar">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/CoordinatorLayout"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/AppBarLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:background="#fff">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/AppBarLayout"
+            <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#fff">
+                android:minHeight="50dp"
+                app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
 
-                <com.google.android.material.appbar.CollapsingToolbarLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="50dp"
-                    app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed">
+                    android:layout_height="match_parent"
+                    android:background="#fff">
 
-                    <RelativeLayout
+                    <ImageView
+                        android:id="@+id/catalog_main_booc_ic"
+                        android:layout_width="84dp"
+                        android:layout_height="120dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:src="#88888888"
+                        android:transitionName="photo"></ImageView>
+
+                    <TextView
+                        android:id="@+id/catalog_main_booc_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_toRightOf="@id/catalog_main_booc_ic"
+                        android:text="书名"
+                        android:textColor="#666"
+                        android:textSize="18dp"
+                        android:textStyle="bold"></TextView>
+
+                    <TextView
+                        android:id="@+id/catalog_main_booc_author"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/catalog_main_booc_name"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@id/catalog_main_booc_ic"
+                        android:text="作者"
+                        android:textColor="@color/base_color"
+                        android:textSize="14dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/catalog_main_booc_words"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/catalog_main_booc_author"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@id/catalog_main_booc_ic"
+                        android:text="字数: 80w, 热度：89990"
+                        android:textColor="#888"
+                        android:textSize="14dp"></TextView>
+
+                    <TextView
+                        android:id="@+id/catalog_main_booc_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/catalog_main_booc_words"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@id/catalog_main_booc_ic"
+                        android:text="分类"
+                        android:textColor="@color/base_color"
+                        android:textSize="12dp"></TextView>
+
+                    <View
+                        android:id="@+id/catalog_main_booc_intro_tag"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#fff">
+                        android:layout_height="1px"
+                        android:layout_below="@id/catalog_main_booc_ic"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="12dp"
+                        android:background="#888888"></View>
 
-                        <ImageView
-                            android:id="@+id/catalog_main_booc_ic"
-                            android:layout_width="84dp"
-                            android:layout_height="120dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="16dp"
-                            android:src="#88888888"
-                            android:transitionName="photo"></ImageView>
-
-                        <TextView
-                            android:id="@+id/catalog_main_booc_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="24dp"
-                            android:layout_toRightOf="@id/catalog_main_booc_ic"
-                            android:text="书名"
-                            android:textColor="#666"
-                            android:textSize="18dp"
-                            android:textStyle="bold"></TextView>
-
-                        <TextView
-                            android:id="@+id/catalog_main_booc_author"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/catalog_main_booc_name"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="12dp"
-                            android:layout_toRightOf="@id/catalog_main_booc_ic"
-                            android:text="作者"
-                            android:textColor="#888"
-                            android:textSize="14dp"></TextView>
-
-                        <TextView
-                            android:id="@+id/catalog_main_booc_category"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/catalog_main_booc_author"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="12dp"
-                            android:layout_toRightOf="@id/catalog_main_booc_ic"
-                            android:text="分类"
-                            android:textColor="#888"
-                            android:textSize="14dp"></TextView>
-
-                        <TextView
-                            android:id="@+id/catalog_main_booc_intro_tag"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/catalog_main_booc_ic"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginLeft="16dp"
-                            android:layout_marginTop="12dp"
-                            android:text="介绍:"
-                            android:textColor="@color/base_color"
-                            android:textSize="14dp"></TextView>
-
-                        <TextView
-                            android:id="@+id/catalog_main_booc_intro"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/catalog_main_booc_intro_tag"
-                            android:layout_marginStart="24dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:ellipsize="end"
-                            android:lines="3"
-                            android:text="。。。。。。。。"
-                            android:textColor="#888888"
-                            android:textSize="12dp"></TextView>
+                    <TextView
+                        android:id="@+id/catalog_main_booc_intro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/catalog_main_booc_intro_tag"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:ellipsize="end"
+                        android:lines="3"
+                        android:text="。。。。。。。。"
+                        android:textColor="#888888"
+                        android:textSize="12dp"></TextView>
+                </RelativeLayout>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
 
-                        <TextView
-                            android:id="@+id/catalog_main_booc_category_tag"
-                            android:layout_width="wrap_content"
-                            android:layout_height="50dp"
-                            android:layout_below="@id/catalog_main_booc_intro"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="16dp"
-                            android:gravity="center_vertical"
-                            android:text="章节:"
-                            android:textColor="@color/base_color"
-                            android:textSize="14dp"></TextView>
-
-                        <ImageView
-                            android:id="@+id/sort"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentBottom="true"
-                            android:background="?attr/selectableItemBackground"
-                            android:padding="13dp"
-                            android:src="@drawable/ic_order"></ImageView>
-
-                    </RelativeLayout>
-
-                </com.google.android.material.appbar.CollapsingToolbarLayout>
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="8dp"
-                android:overScrollMode="never"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"></androidx.recyclerview.widget.RecyclerView>
-
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    </com.inveno.xiandu.view.components.PullRecyclerViewGroup2>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

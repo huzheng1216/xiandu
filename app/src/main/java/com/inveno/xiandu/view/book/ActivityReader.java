@@ -42,7 +42,7 @@ import io.reactivex.disposables.Disposable;
  * Des 目录页
  */
 @Route(path = ARouterPath.ACTIVITY_CONTENT_MAIN)
-public class ContentActivity extends BaseActivity {
+public class ActivityReader extends BaseActivity {
 
     //数据
     @Autowired(name = "json")

@@ -1,5 +1,6 @@
 package com.inveno.xiandu.view.main.shelf;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -47,8 +48,8 @@ public class ShelfFragment extends BaseFragment implements ShelfItemDialog.Shelf
     }
 
     @Override
-    public ViewGroup initView() {
-        ViewGroup inflate = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.fragment_bookrack_main_shelf, null);
+    public ViewGroup initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup inflate = (ViewGroup) inflater.inflate(R.layout.fragment_bookrack_main_shelf, null);
         recyclerView = inflate.findViewById(R.id.recycleview_fragment_bookrack_rack);
 
         shelfAdapter = new ShelfAdapter(getContext(), data);
@@ -61,7 +62,7 @@ public class ShelfFragment extends BaseFragment implements ShelfItemDialog.Shelf
 
             @Override
             public void onBookClick(int position) {
-                ARouter.getInstance().build(ARouterPath.ACTIVITY_CATALOG_MAIN)
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                         .withString("json", GsonUtil.objectToJson(data.get(position)))
                         .navigation();
             }

@@ -3,14 +3,14 @@
 
     <item
         android:id="@+id/navigation_bookrack"
-        android:icon="@drawable/ic_bt_bottomnavigation_bookrack"
+        android:icon="@drawable/selector_bottomnavigation_bookshelf"
         android:title="书架" />
     <item
         android:id="@+id/navigation_bookstore"
-        android:icon="@drawable/ic_bt_bottomnavigation_bookrack"
+        android:icon="@drawable/selector_bottomnavigation_store"
         android:title="书城" />
     <item
         android:id="@+id/navigation_mine"
-        android:icon="@drawable/ic_bt_bottomnavigation_mine"
+        android:icon="@drawable/selector_bottomnavigation_self"
         android:title="我的" />
 </menu>

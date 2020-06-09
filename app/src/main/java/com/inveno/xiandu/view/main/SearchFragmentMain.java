@@ -1,5 +1,6 @@
 package com.inveno.xiandu.view.main;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +25,8 @@ public class SearchFragmentMain extends BaseFragment {
     }
 
     @Override
-    public ViewGroup initView() {
-        ViewGroup inflate = (ViewGroup) LayoutInflater.from(getContext()).inflate(R.layout.fragment_search_main, null);
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup inflate = (ViewGroup) inflater.inflate(R.layout.fragment_search_main, null);
         search = inflate.findViewById(R.id.bt_search_fragment);
 
         ClickUtil.bindSingleClick(search, 500, new View.OnClickListener() {

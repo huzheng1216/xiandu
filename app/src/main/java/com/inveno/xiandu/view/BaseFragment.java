@@ -29,7 +29,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (contentView == null) {
-            contentView = initView();
+            contentView = initView(inflater, container, savedInstanceState);
         }
         if (contentView != null) {
             return contentView;
@@ -64,6 +64,7 @@ public abstract class BaseFragment extends Fragment {
             }
         }
     }
+
     /**
      * 当使用show/hide方法时，会触发此回调
      *
@@ -79,6 +80,7 @@ public abstract class BaseFragment extends Fragment {
             firstVisble = false;
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -104,7 +106,8 @@ public abstract class BaseFragment extends Fragment {
 
     //切换黑夜白天模式
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void dayNightChange(EventNightModeChange eventNightModeChange) {}
+    public void dayNightChange(EventNightModeChange eventNightModeChange) {
+    }
 
     @Override
     public void onDestroyView() {
@@ -119,9 +122,13 @@ public abstract class BaseFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    public abstract ViewGroup initView();
+    public abstract View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState);
+
     //当前页面可见
-    protected void onVisible(Boolean firstVisble){};
+    protected void onVisible(Boolean firstVisble) {
+    };
+
     //当前页面不可见
-    protected void onInVisible(){};
+    protected void onInVisible() {
+    };
 }

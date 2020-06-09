@@ -47,4 +47,28 @@
         <item name="android:activityCloseExitAnimation">@anim/alpha_out</item>
     </style>
 
+
+    <!--Toolbar主题配置-->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="actionMenuTextColor">@android:color/white</item> <!-- menu字体颜色,不要加android前缀，否则4.4以前无效 -->
+        <item name="android:textColorPrimary">@color/white</item> <!-- 改变menu图标及隐藏菜单字体颜色 -->
+    </style>
+
+    <!-- 顶部菜单样式-->
+    <style name="ToolbarPopupTheme" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <!--设置不覆盖锚点-->
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownWidth">wrap_content</item>
+        <item name="android:paddingRight">0dp</item>
+        <!-- 弹出层背景颜色 -->
+        <item name="android:popupBackground">#FFFFFF</item>
+        <item name="android:background">#FFFFFF</item>
+        <!-- 弹出层垂直方向上的偏移，即在竖直方向上距离Toolbar的距离，值为负则会盖住Toolbar -->
+        <item name="android:dropDownVerticalOffset">-7dp</item>
+        <!-- 弹出层水平方向上的偏移，即距离屏幕左边的距离，负值会导致右边出现空隙 -->
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+        <!-- 设置弹出菜单文字颜色 -->
+        <item name="android:textColor">#AAAAAA</item>
+    </style>
+
 </resources>

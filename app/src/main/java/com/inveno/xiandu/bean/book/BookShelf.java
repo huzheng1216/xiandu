@@ -12,8 +12,8 @@ import org.greenrobot.greendao.annotation.Id;
 @Entity
 public class BookShelf {
 
-    //书架ID
-    @Id(autoincrement = true)//设置自增长
+    //书籍ID
+    @Id
     private Long id;
 
     //书架名称
