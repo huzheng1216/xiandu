@@ -1,2 +1,6 @@
-include ':app'
+include ':app', ':ad_lib', ':free_time_read_lib_modules:book-service'
+include ':basics_modules:appcompat'
+include ':free_time_read_lib_modules:inveno-api-service'
+include ':basics_modules:basics-service'
+include ':free_time_read_lib_modules:android-device-service'
 rootProject.name = "xiandu"

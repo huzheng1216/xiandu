@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_bg"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/base_tittle_bar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="65dp">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="45dp"
+            android:text="@string/login_my_phone"
+            android:textSize="20sp"
+            android:textColor="#000"/>
+
+        <TextView
+            android:id="@+id/login_my_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="185****9291"
+            android:layout_marginTop="20dp"
+            android:textSize="25sp"
+            android:textColor="#000"
+            android:textStyle="bold"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/textView4"/>
+
+        <TextView
+            android:id="@+id/login_one_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_my_phone"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/button_radio_background"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:text="@string/login_one_key"/>
+
+        <TextView
+            android:id="@+id/login_other_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/login_one_key"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="12sp"
+            android:text="@string/login_other_phone" />
+        <LinearLayout
+            android:id="@+id/one_key_login_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/third_login_layout"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="@dimen/line_height"
+                android:background="#e2e2e2"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:text="@string/login_other"
+                android:textColor="#868a8f"
+                android:textSize="12sp"/>
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="@dimen/line_height"
+                android:background="#e2e2e2"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/third_login_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="36dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <com.inveno.xiandu.view.custom.ThumbnailView
+                android:id="@+id/qq_login_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="52dp"
+                android:src="@drawable/weixin"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,4 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="adapter_search_history">6dp</dimen>
+
+    <!-- 资讯列表字体大小 -->
+    <dimen name="item_title_text_size">17dp</dimen>
+    <dimen name="item_label_text_size">9dp</dimen>
+    <dimen name="item_time_text_size">11dp</dimen>
+    <dimen name="item_soure_text_size">11dp</dimen>
+
+    <!-- actionbar高度 -->
+    <dimen name="actionbar_height">45dip</dimen>
+    <dimen name="nav_drawer_status_bar_offset">0dp</dimen>
+    <dimen name="xfoot_icon_nonetwork_width">25.0dp</dimen>
+    <dimen name="xfoot_icon_nonetwork_padding">12.0dp</dimen>
+    <dimen name="info_text_title_size">14.0dp</dimen>
+    <dimen name="load_more_height">48.0dip</dimen>
+
+    <!-- 自定义对话框的宽度 -->
+    <dimen name="piflow_dialog_width">287dp</dimen>
+    <dimen name="piflow_dialog_width_new">312dp</dimen>
+
+    <!-- 收藏 -->
+    <!-- 底部设置栏 -->
+    <dimen name="toolbar_icon_size">32dp</dimen>
+    <dimen name="comment_content_size">14dip</dimen>
+
+    <!-- 分享fragmentdialog参数 -->
+    <dimen name="share_news_width">280dp</dimen>
+    <dimen name="share_news_minheight">232dp</dimen>
+    <dimen name="share_news_margintop">29.3dp</dimen>
+    <dimen name="share_news_title_size">20dip</dimen>
+    <dimen name="share_news_title_margintop">16.67dp</dimen>
+    <dimen name="share_news_columnWidth">143.33dp</dimen>
+    <dimen name="share_news_icon_width">48dp</dimen>
+    <dimen name="share_news_app_name_size">16dip</dimen>
+    <dimen name="share_news_app_name_margintop">10dp</dimen>
+    <dimen name="share_news_app_name_margintbottom">20dp</dimen>
+    <dimen name="share_news_app_icon_margintop">26.67dp</dimen>
+    <dimen name="share_news_cancel_btn_height">43.33dp</dimen>
+
+    <!-- 评论相关 -->
+    <dimen name="comment_shafa_text_size">14dip</dimen>
+    <dimen name="comment_nick_size">16dip</dimen>
+
+    <!-- 左上角设置按钮 -->
+    <dimen name="mm_up_arrow_margin">-16dp</dimen>
+    <dimen name="line_height">1dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
 </resources>

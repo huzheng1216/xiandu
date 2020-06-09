@@ -4,8 +4,21 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="gray">#aaaaaa</color>
+    <color name="gray_9">#999999</color>
+    <color name="gray_6">#666666</color>
+    <color name="gray_3">#333333</color>
+
     <color name="transparent">#00000000</color>
 
     <color name="base_color">#FF55A772</color>
     <color name="color_while">#FFFFFFFF</color>
+
+
+    <color name="clr_normal">#4678FF</color>
+    <color name="clr_pressed">#2C9ED9</color>
+
+    <color name="login_bg">#ECF2FE</color>
+
 </resources>

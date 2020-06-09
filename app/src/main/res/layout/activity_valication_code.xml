@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/login_bg">
+
+    <include
+        android:id="@+id/tittle"
+        layout="@layout/base_tittle_bar" />
+
+    <TextView
+        android:id="@+id/textview1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tittle"
+        android:layout_marginTop="45dp"
+        android:gravity="center"
+        android:text="输入验证码"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/vali_phone_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textview1"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="验证码已发送至 +86 1856663333"
+        android:textColor="#aaaaaa"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:id="@+id/vali_input_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vali_phone_num"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_radio_background"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/vali_code_input_editview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:ems="10"
+            android:inputType="phone"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"
+            android:layout_gravity="center"
+            android:background="#999999" />
+
+        <TextView
+            android:id="@+id/vali_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/login_resend_vali_code"
+            android:textColor="@color/gray_9"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/vali_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/vali_input_code"
+        android:background="@drawable/button_radio_background_disclick"
+        android:gravity="center"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:text="@string/login"/>
+</RelativeLayout>

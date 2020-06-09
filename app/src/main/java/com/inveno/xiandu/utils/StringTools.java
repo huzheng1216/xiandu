@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 
 import java.util.regex.Matcher;
@@ -21,10 +22,10 @@ public class StringTools {
      * 判断字符是否有内容 为空则返回true
      **/
     public static boolean isEmpty(String src) {
-        if (src == null || src.trim().length() == 0)
+        if (TextUtils.isEmpty(src)){
             return true;
-        else
-            return false;
+        }
+        return false;
     }
 
     /**

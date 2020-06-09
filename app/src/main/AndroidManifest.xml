@@ -30,6 +30,16 @@
             android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".view.user.login.LoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.user.login.LoginOtherPhoneActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.user.login.ValiCodeActivity"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name=".view.splash.AgreementActivity"
             android:theme="@style/AppTheme" />
         <activity

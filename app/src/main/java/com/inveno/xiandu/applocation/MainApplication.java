@@ -3,6 +3,7 @@ package com.inveno.xiandu.applocation;
 import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.basics.service.BasicsServiceModule;
 import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.db.DaoManager;
@@ -30,5 +31,7 @@ public class MainApplication extends Application {
         DDManager.init(this);
         //数据库管理工具
         DaoManager.getInstance(this);
+        //基础服务模块
+        BasicsServiceModule.Companion.onApplicationCreate(this);
     }
 }
