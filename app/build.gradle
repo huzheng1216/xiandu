@@ -86,4 +86,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
     //rxView
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    // OpenCC to convert Simp. Chinese to Trad. Chinese
+    implementation "com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar"
 }

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.Book;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
@@ -39,12 +38,12 @@ public class ShelfFragment extends BaseFragment implements ShelfItemDialog.Shelf
     private ShelfItemDialog bottomSheetDialog;
 
     //数据
-    private BookShelf bookShelf;
-    private List<Book> data = new ArrayList<>();
+//    private BookShelf bookShelf;
+    private List<BookShelf> data = new ArrayList<>();
 
-    public ShelfFragment(BookShelf bookShelf) {
+    public ShelfFragment() {
         super();
-        this.bookShelf = bookShelf;
+//        this.bookShelf = bookShelf;
     }
 
     @Override
@@ -101,25 +100,23 @@ public class ShelfFragment extends BaseFragment implements ShelfItemDialog.Shelf
 
     private void initData() {
         data.clear();
-        data.addAll(SQL.getInstance(getContext()).getAllBookByShelfId(bookShelf.getId()));
+//        data.addAll(SQL.getInstance(getContext()).getAllBookByShelfId(bookShelf.getId()));
         LogUtils.H("书架：" + data.size());
         shelfAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onMoveTop(int position) {
-        Book remove = data.remove(position);
+        BookShelf remove = data.remove(position);
         data.add(0, remove);
         shelfAdapter.notifyDataSetChanged();
-        SQL.getInstance(getContext()).updateBook(remove);
     }
 
     @Override
     public void onMoveYanFei(int position) {
-        Book remove = data.remove(position);
+        BookShelf remove = data.remove(position);
         shelfAdapter.notifyDataSetChanged();
 //        remove.setShelfId("yf");
-        SQL.getInstance(getContext()).updateBook(remove);
     }
 
     @Override
@@ -129,8 +126,7 @@ public class ShelfFragment extends BaseFragment implements ShelfItemDialog.Shelf
 
     @Override
     public void onDel(int position) {
-        Book remove = data.remove(position);
+        BookShelf remove = data.remove(position);
         shelfAdapter.notifyDataSetChanged();
-        SQL.getInstance(getContext()).delBoot(remove);
     }
 }

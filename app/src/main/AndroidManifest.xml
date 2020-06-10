@@ -42,7 +42,7 @@
             android:name=".view.detail.DetailActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.book.ActivityReader"
+            android:name=".view.read.ActivityReader"
             android:theme="@style/FullScreenTheme" />
     </application>
 </manifest>

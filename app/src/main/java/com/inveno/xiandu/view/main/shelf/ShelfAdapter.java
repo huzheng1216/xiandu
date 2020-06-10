@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.Book;
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.utils.ClickUtil;
 
 import java.util.List;
@@ -26,10 +26,10 @@ import java.util.List;
 public class ShelfAdapter extends RecyclerView.Adapter {
 
     private Context context;
-    private List<Book> data;
+    private List<BookShelf> data;
     private ShelfAdapterListener shelfAdapterListener;
 
-    public ShelfAdapter(Context context, List<Book> data) {
+    public ShelfAdapter(Context context, List<BookShelf> data) {
         this.context = context;
         this.data = data;
     }
@@ -63,8 +63,8 @@ public class ShelfAdapter extends RecyclerView.Adapter {
         } else {
 
             ItemViewHolder iholder = (ItemViewHolder) holder;
-            iholder.bookName.setText(data.get(position).getName());
-            Glide.with(context).load(data.get(position).getImg()).into(iholder.bookIc);
+            iholder.bookName.setText(data.get(position).getBook_name());
+            Glide.with(context).load(data.get(position).getPoster()).into(iholder.bookIc);
             ClickUtil.bindSingleClick(iholder.itemView, 500, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.Book;
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.StringTools;
@@ -28,12 +28,12 @@ import java.util.List;
  */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchViewHolder> {
 
-    private List<Book> data;
+    private List<BookShelf> data;
     private Context context;
     private String searchKey;
     private OnItemClickListener onItemClickListener;
 
-    public SearchResultAdapter(Context context, List<Book> data, String searchKey) {
+    public SearchResultAdapter(Context context, List<BookShelf> data, String searchKey) {
         this.data = data;
         this.context = context;
         this.searchKey = searchKey;
@@ -57,10 +57,10 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         RoundedCorners roundedCorners= new RoundedCorners(DensityUtil.dip2px(context,5));
         //通过RequestOptions扩展功能,override:采样率,因为ImageView就这么大,可以压缩图片,降低内存消耗
         RequestOptions options= RequestOptions.bitmapTransform(roundedCorners).override(300, 300);
-        Glide.with(context).load(data.get(i).getImg()).apply(options).into(viewHolder.pic);
-        viewHolder.title.setText(StringTools.highlight(context, data.get(i).getName(), searchKey, "#FF55A772"));
+        Glide.with(context).load(data.get(i).getPoster()).apply(options).into(viewHolder.pic);
+        viewHolder.title.setText(StringTools.highlight(context, data.get(i).getBook_name(), searchKey, "#FF55A772"));
         viewHolder.author.setText(data.get(i).getAuthor());
-        viewHolder.coll.setText(data.get(i).getColl());
+        viewHolder.coll.setText(data.get(i).getCategory_name());
 //        viewHolder.source.setText(data.get(i).getSource(context).getName());
         if (onItemClickListener != null) {
             ClickUtil.bindSingleClick(viewHolder.itemView, 500, new View.OnClickListener() {
@@ -98,7 +98,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     interface OnItemClickListener {
-        void onClick(Book book, ImageView pic);
+        void onClick(BookShelf book, ImageView pic);
     }
 
 }

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="#fff">
+
+    <ImageView
+        android:id="@+id/pic"
+        android:layout_width="80dp"
+        android:layout_height="110dp"></ImageView>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/pic"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="12dp"
+        android:maxLength="8"
+        android:textColor="#888"
+        android:textSize="16dp"
+        android:text="XXXXXXXX"></TextView>
+
+    <TextView
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/pic"
+        android:layout_below="@+id/name"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="12dp"
+        android:maxLength="8"
+        android:textColor="#88888888"
+        android:textSize="14dp"
+        android:text="作者"></TextView>
+
+    <TextView
+        android:id="@+id/catalog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/pic"
+        android:layout_below="@+id/author"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="12dp"
+        android:maxLength="8"
+        android:textColor="#88888888"
+        android:textSize="14dp"
+        android:text="类型"></TextView>
+
+    <TextView
+        android:id="@+id/words"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/pic"
+        android:layout_below="@+id/catalog"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="12dp"
+        android:maxLength="8"
+        android:textColor="#88888888"
+        android:textSize="14dp"
+        android:text="字数"></TextView>
+
+
+</RelativeLayout>

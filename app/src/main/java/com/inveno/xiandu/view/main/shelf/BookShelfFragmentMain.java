@@ -32,11 +32,10 @@ public class BookShelfFragmentMain extends BaseFragment {
 
     private MyTabLayout myTabLayout;
     private ViewPager viewPager;
-//    private View editerBt;
+    //    private View editerBt;
 //    private ImageView pic;
     private SwipeRefreshLayout swipeRefreshLayout;
     private List<Fragment> fragments = new ArrayList<>();
-    private List<BookShelf> bookShelves;
     private List<String> strings = new ArrayList<>();
     private MyAdapter myAdapter;
 
@@ -46,22 +45,10 @@ public class BookShelfFragmentMain extends BaseFragment {
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        bookShelves = SQL.getInstance(getContext()).getAllBookShelf();
-        if (bookShelves.size() <= 0) {
-            //没有书架,新建一个默认书架
-            BookShelf bookShelf = new BookShelf();
-            bookShelf.setId(0L);
-            bookShelf.setName("书架");
-            bookShelf.setTime(System.currentTimeMillis());
-            long l = SQL.getInstance(getContext()).addBookShelf(bookShelf);
-            bookShelf.setId(l);
-            bookShelves.add(bookShelf);
-        }
+
         //填充书架数据
-        for (BookShelf bookShelf : bookShelves) {
-            strings.add(bookShelf.getName());
-            fragments.add(new ShelfFragment(bookShelf));
-        }
+        strings.add("书架");
+        fragments.add(new ShelfFragment());
 
         ViewGroup inflate = (ViewGroup) inflater.inflate(R.layout.fragment_bookrack_main, null);
         myTabLayout = inflate.findViewById(R.id.tablelayout_fragment_bookrack_main);
