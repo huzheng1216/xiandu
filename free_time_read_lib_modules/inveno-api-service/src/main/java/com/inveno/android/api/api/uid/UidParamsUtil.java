@@ -1,5 +1,7 @@
 package com.inveno.android.api.api.uid;
 
+import android.text.TextUtils;
+
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.api.service.product.IProductService;
 import com.inveno.android.device.param.provider.AndroidParamProviderHolder;
@@ -35,7 +37,9 @@ public class UidParamsUtil {
 //        network	YES	string	网络wifi/2G/3G/4G/5G/其他移动网络/其他网络，暂不需要对制式作区分。对于批量上报的方式，可取上报时的联网类型。参考network取值
         paramMap.put("network",androidParamProvider.device().getNetwork());
 //        imei 	NO	string	手机IMEI号，如：SAMSUNG的一台GT-I9308手机的IMEI是：355065053311001，Android设备必填，iOS设备可选
-        paramMap.put("imei",androidParamProvider.device().getImei());
+        if(!TextUtils.isEmpty(androidParamProvider.device().getImei())){
+            paramMap.put("imei",androidParamProvider.device().getImei());
+        }
 //        aid	NO	string	Android 设备 ID。设备为Android时填写例如：3we4cf325c79f28e，Android设备必填，iOS设备不用
         paramMap.put("aid",androidParamProvider.device().getAid());
 //        idfa	NO	string	iOS 设备唯一ID，设备为iOS终端时必填，Android设备不用填写。

@@ -1,6 +1,7 @@
 package com.inveno.android.device.param.provider.impl;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
@@ -57,7 +58,11 @@ public class DeviceParamProvider implements IDeviceParamProvider {
      */
     @Override
     public String getImei() {
-        return TelephonyManagerTools.getImei(context);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            return "";
+        }else{
+            return TelephonyManagerTools.getImei(context);
+        }
     }
 
     @Override

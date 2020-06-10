@@ -22,7 +22,7 @@ public class AdAPI extends BaseSingleInstanceService {
     //https://business.inveno.com/ht_adui
     public StatefulCallBack<AdConfigData> requestAdConfig() {
         LinkedHashMap<String, Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        AdParamUtil.fillParams(param);
         final StatefulCallBack<HttpResponse> responseStatefulCallBack =
                 HttpUtil.postForm("https://business.inveno.com/ht_adui", param);
 
