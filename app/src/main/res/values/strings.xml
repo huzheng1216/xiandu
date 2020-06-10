@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">闲读</string>
+    <string name="app_name">闲读小说</string>
     <string name="agreement_title">个人信息保护指引</string>
     <string name="agreement_ok">我知道了</string>
     <!--隐私政策-->
@@ -303,4 +303,20 @@
     <!--mode-->
     <string name="nb.mode.night">夜间</string>
     <string name="nb.mode.morning">日间</string>
+    <!-- 登录 -->
+    <string name="login">登录</string>
+    <string name="login_my_phone">本机号码为</string>
+    <string name="login_one_key">一键登录</string>
+    <string name="login_other">其他方式登录</string>
+    <string name="login_other_phone">其他手机</string>
+    <string name="login_get_code">获取短信验证码</string>
+    <string name="login_phone_prompt">如果该手机号未注册，将自动注册</string>
+    <string name="login_please_input_phone_num">请输入手机号</string>
+    <string name="login_please_input_vali_code">请输入验证码</string>
+    <string name="login_resend_vali_code">重新发送</string>
+    <string name="login_send_vali_cade_phone_num">验证码已发送至+86 %s</string>
+    <string name="login_get_vali_code_fail">验证码获取失败</string>
+    <string name="login_fail">登录失败</string>
+    <string name="login_success">登录成功</string>
+
 </resources>

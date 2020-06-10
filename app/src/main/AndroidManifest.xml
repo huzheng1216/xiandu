@@ -30,6 +30,30 @@
             android:name=".view.main.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".view.user.login.LoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.user.login.LoginOtherPhoneActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.user.login.ValiCodeActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.my.ReadFootprintActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.my.ReadPreferencesActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.my.SendLuckymoneyActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.my.SettingActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.my.UserinfoActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".view.splash.AgreementActivity"
             android:theme="@style/AppTheme" />
         <activity

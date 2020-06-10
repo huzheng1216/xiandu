@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    //多牛聚合广告
+    implementation(name: 'donewsSDK4.92', ext: 'aar')
+    //广点通
+    implementation(name: 'GDTSDK.unionNormal.4.176.1046', ext: 'aar')
+    //穿山甲
+    implementation(name: 'open_ad_sdk_2803', ext: 'aar')
+    //百度
+    implementation(name: 'Baidu_MobAds_SDK-release', ext: 'aar')
+    //移动安全联盟OAID（生成唯一标识用来代替imei,如果app不添加，则可以不用加）
+    implementation(name: 'msa_mdid_1.0.13', ext: 'aar')
+}

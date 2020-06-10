@@ -15,4 +15,12 @@ public class ARouterPath {
     public static final String ACTIVITY_SEARCH_RESULT = BASE_URL + "SerchResultActivity";
     public static final String ACTIVITY_DETAIL_MAIN = BASE_URL + "DetailActivity";
     public static final String ACTIVITY_CONTENT_MAIN = BASE_URL + "ContentActivity";
+
+    public static final String ACTIVITY_LOGIN = BASE_URL + "LoginActivity";
+    public static final String ACTIVITY_LOGIN_OTHER_PHONE = BASE_URL + "LoginOtherPhoneActivity";
+    public static final String ACTIVITY_READ_FOOTPRINT = BASE_URL + "ReadFootprintActivity";
+    public static final String ACTIVITY_READ_PREFERENCES = BASE_URL + "ReadPreferencesActivity";
+    public static final String ACTIVITY_SEND_LUCKYMONEY = BASE_URL + "SendLuckymoneyActivity";
+    public static final String ACTIVITY_SETTING = BASE_URL + "SettingActivity";
+    public static final String ACTIVITY_USERINFO = BASE_URL + "UserinfoActivity";
 }

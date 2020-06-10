@@ -26,18 +26,22 @@ import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.SPUtils;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
+import com.inveno.xiandu.view.init.AppInitListener;
+import com.inveno.xiandu.view.init.AppInitViewProxy;
 
 /**
  * Created By huzheng
  * Date 2020-02-16
  * Des 启动页
  */
-public class SplashActivity extends BaseActivity {
+public class SplashActivity extends BaseActivity implements AppInitListener {
 
     private ImageView ad;
     private TextView skip;
     private Dialog dialog;
+    private AppInitViewProxy initViewProxy;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,40 +55,30 @@ public class SplashActivity extends BaseActivity {
         //是否第一次启动
         boolean firstLaunch = SPUtils.getInformain(Keys.FIRST_LAUNCH_KEY, false);
 
+        initViewProxy = new AppInitViewProxy(this, this);
+
         if (!firstLaunch) {
             //用户协议
             dialogShow2();
         } else {
             //广告时间 TODO
+            checkAndInit();
+        }
+    }
 
-            ARouter.getInstance().build(ARouterPath.ACTIVITY_MAIN)
-                    .navigation();
-            finish();
-//            Observable.interval(0, 1, TimeUnit.SECONDS)
-//                    .take(5)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new Observer<Long>() {
-//                        @Override
-//                        public void onSubscribe(Disposable d) {
-//                        }
-//
-//                        @Override
-//                        public void onNext(Long aLong) {
-//                            Toaster.showToastCenter(SplashActivity.this, ""+aLong);
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//
-//                        }
-//
-//                        @Override
-//                        public void onComplete() {
-//                            ARouter.getInstance().build(ARouterPath.ACTIVITY_MAIN)
-//                                    .navigation();
-//                            finish();
-//                        }
-//                    });
+
+
+    private void checkAndInit(){
+        if(initViewProxy.isNeedToCheckPermission()){
+            AppPermissionUtil.checkPermission(SplashActivity.this, new Runnable() {
+                @Override
+                public void run() {
+                    onAppPermissionGet();
+                }
+            },true);
+
+        }else{
+            initViewProxy.init();
         }
     }
 
@@ -112,10 +106,29 @@ public class SplashActivity extends BaseActivity {
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_MAIN)
                         .navigation();
                 finish();
+                checkAndInit();
             }
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        AppPermissionUtil.onRequestPermissionsResult(this,requestCode, permissions, grantResults);
+    }
+
+    private void onAppPermissionGet(){
+        if(dialog!=null && dialog.isShowing()){
+            dialog.dismiss();
+        }
+        initViewProxy.init();
+    }
+
+    private void readyToGoMain(){
+        ARouter.getInstance().build(ARouterPath.ACTIVITY_MAIN)
+                .navigation();
+        finish();
+    }
 
     //设置超链接文字
     private SpannableString getClickableSpan() {
@@ -163,5 +176,16 @@ public class SplashActivity extends BaseActivity {
         spanStr.setSpan(new ForegroundColorSpan(Color.BLUE), 41, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spanStr.setSpan(new BackgroundColorSpan(Color.WHITE), 41, 47, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanStr;
+    }
+
+    @Override
+    public void onAppInitSuccess() {
+        readyToGoMain();
+    }
+
+    @Override
+    public void onAppInitFail() {
+        Toaster.showToast(this,"应用初始化失败");
+        finish();
     }
 }
