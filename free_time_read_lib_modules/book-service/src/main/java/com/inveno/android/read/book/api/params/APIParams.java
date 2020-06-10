@@ -1,5 +1,9 @@
 package com.inveno.android.read.book.api.params;
 
+import android.text.TextUtils;
+
+import com.inveno.android.api.service.InvenoServiceContext;
+
 import java.util.LinkedHashMap;
 
 /**
@@ -8,6 +12,10 @@ import java.util.LinkedHashMap;
  */
 public class APIParams {
     public static LinkedHashMap<String,Object> fillCommonParam(LinkedHashMap<String,Object> paramMap) {
+        String uid = InvenoServiceContext.uid().getUid();
+        if(!TextUtils.isEmpty(uid)){
+            paramMap.put("uid",uid);
+        }
         return paramMap;
     }
 }
