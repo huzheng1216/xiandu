@@ -20,9 +20,11 @@ object HttpUtil {
     private const val DEBUG = true
     private val logger = LoggerFactory.getLogger(HttpUtil::class.java)
     private val sExecutor: HttpExecutor = OkHttpExecutor()
+
+    @JvmStatic
     fun postForm(
         url: String,
-        args: LinkedHashMap<String?, String?>
+        args: LinkedHashMap<String, Any>
     ): StatefulCallBack<HttpResponse> {
         logger.debug(
             "postForm url:{},args:{},id:{}",

@@ -3,6 +3,7 @@ package com.inveno.xiandu.applocation;
 import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.BasicsServiceModule;
 import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.config.Keys;
@@ -33,5 +34,6 @@ public class MainApplication extends Application {
         DaoManager.getInstance(this);
         //基础服务模块
         BasicsServiceModule.Companion.onApplicationCreate(this);
+        InvenoServiceContext.init(this);
     }
 }
