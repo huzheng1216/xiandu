@@ -68,7 +68,7 @@ public class AppInitViewProxy {
                     .onFail(new Function2<Integer, String, Unit>() {
                         @Override
                         public Unit invoke(Integer integer, String s) {
-                            doWhenInitFail();
+                            doWhenAllInitDone();
                             return null;
                         }
                     })
