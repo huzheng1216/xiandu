@@ -21,6 +21,7 @@ import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.components.DividerItemDecorationStyleOne;
 import com.inveno.xiandu.view.components.content.ContentControlView;
+import com.inveno.xiandu.view.components.content.TouchView;
 import com.inveno.xiandu.view.components.content.ZoomRecyclerView;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ import io.reactivex.disposables.Disposable;
  * Date 2020-02-11
  * Des 目录页
  */
-@Route(path = ARouterPath.ACTIVITY_CONTENT_MAIN)
+//@Route(path = ARouterPath.ACTIVITY_CONTENT_MAIN)
 public class ActivityReader extends BaseActivity {
 
     //数据

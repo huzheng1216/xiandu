@@ -16,6 +16,7 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.utils.ClickUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,13 +30,19 @@ public class ShelfAdapter extends RecyclerView.Adapter {
     private List<BookShelf> data;
     private ShelfAdapterListener shelfAdapterListener;
 
-    public ShelfAdapter(Context context, List<BookShelf> data) {
+    public ShelfAdapter(Context context) {
         this.context = context;
-        this.data = data;
+        this.data = new ArrayList<>();
     }
 
     public void setShelfAdapterListener(ShelfAdapterListener shelfAdapterListener) {
         this.shelfAdapterListener = shelfAdapterListener;
+    }
+
+    public void setData(List<BookShelf> list) {
+        data.clear();
+        data.addAll(list);
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -69,17 +76,25 @@ public class ShelfAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if (shelfAdapterListener != null) {
-                        shelfAdapterListener.onBookClick(position);
+                        shelfAdapterListener.onBookClick(data.get(position));
                     }
                 }
             });
-            iholder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            iholder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View v) {
+//                    if (shelfAdapterListener != null) {
+//                        shelfAdapterListener.onBookLongClick(data.get(position));
+//                    }
+//                    return true;
+//                }
+//            });
+            iholder.more.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
+                public void onClick(View v) {
                     if (shelfAdapterListener != null) {
-                        shelfAdapterListener.onBookLongClick(position);
+                        shelfAdapterListener.onBookLongClick(data.get(position), iholder.more);
                     }
-                    return true;
                 }
             });
         }
@@ -98,12 +113,14 @@ public class ShelfAdapter extends RecyclerView.Adapter {
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         View itemView;
+        ImageView more;
         ImageView bookIc;
         TextView bookName;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
+            more = itemView.findViewById(R.id.more);
             bookIc = itemView.findViewById(R.id.adapter_bookshelf_book_img);
             bookName = itemView.findViewById(R.id.adapter_bookshelf_book_name);
         }
@@ -135,8 +152,7 @@ public class ShelfAdapter extends RecyclerView.Adapter {
 //    }
 
     public interface ShelfAdapterListener{
-//        void onAddClick();
-        void onBookClick(int position);
-        void onBookLongClick(int position);
+        void onBookClick(BookShelf  bookShelf);
+        void onBookLongClick(BookShelf  bookShelf, View parent);
     }
 }

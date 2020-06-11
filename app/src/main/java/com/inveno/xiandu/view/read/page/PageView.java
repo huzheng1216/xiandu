@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.view.read.anim.CoverPageAnim;
 import com.inveno.xiandu.view.read.anim.HorizonPageAnim;
 import com.inveno.xiandu.view.read.anim.NonePageAnim;
@@ -16,7 +17,6 @@ import com.inveno.xiandu.view.read.anim.PageAnimation;
 import com.inveno.xiandu.view.read.anim.ScrollPageAnim;
 import com.inveno.xiandu.view.read.anim.SimulationPageAnim;
 import com.inveno.xiandu.view.read.anim.SlidePageAnim;
-import com.inveno.xiandu.view.read.bean.CollBookBean;
 
 /**
  * Created by Administrator on 2016/8/29 0029.
@@ -342,7 +342,7 @@ public class PageView extends View {
      * @param collBook
      * @return
      */
-    public PageLoader getPageLoader(CollBookBean collBook) {
+    public PageLoader getPageLoader(BookShelf collBook) {
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;

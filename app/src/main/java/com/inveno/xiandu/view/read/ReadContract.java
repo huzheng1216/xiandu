@@ -1,7 +1,6 @@
 package com.inveno.xiandu.view.read;
 
-import com.inveno.xiandu.view.read.bean.BookChapterBean;
-import com.inveno.xiandu.view.read.bean.TxtChapter;
+import com.inveno.xiandu.bean.book.ChapterInfo;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
 
 public interface ReadContract extends BaseContract {
     interface View extends BaseView, com.inveno.xiandu.view.read.adapter.BaseContract.BaseView {
-        void showCategory(List<BookChapterBean> bookChapterList);
+        void showCategory(List<ChapterInfo> bookChapterList);
 
         void finishChapter();
 
@@ -21,6 +20,6 @@ public interface ReadContract extends BaseContract {
     interface Presenter extends BaseContract.BasePresenter<View> {
         void loadCategory(String bookId);
 
-        void loadChapter(String bookId, List<TxtChapter> bookChapterList);
+        void loadChapter(String bookId, List<ChapterInfo> bookChapterList);
     }
 }

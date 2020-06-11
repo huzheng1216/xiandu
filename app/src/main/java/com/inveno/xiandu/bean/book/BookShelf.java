@@ -3,6 +3,9 @@ package com.inveno.xiandu.bean.book;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Transient;
+
+import java.util.List;
 
 /**
  * Created By huzheng
@@ -44,13 +47,17 @@ public class BookShelf {
     //分类名称
     private String category_name;
 
-    //书架创建时间
-    private long time;
+    @Transient
+    private List<ChapterInfo> bookChapters;
 
-    @Generated(hash = 785792178)
+    //书架创建时间
+    private String time;
+
+    @Generated(hash = 1921484685)
     public BookShelf(Long content_id, String poster, String book_name,
             String author, float score, int popularity, int book_status,
-            long word_count, String introduction, String category_name, long time) {
+            long word_count, String introduction, String category_name,
+            String time) {
         this.content_id = content_id;
         this.poster = poster;
         this.book_name = book_name;
@@ -148,11 +155,24 @@ public class BookShelf {
         this.category_name = category_name;
     }
 
-    public long getTime() {
+    public String getTime() {
         return this.time;
     }
 
-    public void setTime(long time) {
+    public void setTime(String time) {
         this.time = time;
+    }
+
+    public void setBookChapters(List<ChapterInfo> bookChapters) {
+        if (this.bookChapters != null) {
+            this.bookChapters.clear();
+            this.bookChapters.addAll(bookChapters);
+        } else {
+            this.bookChapters = bookChapters;
+        }
+    }
+
+    public List<ChapterInfo> getBookChapters() {
+        return bookChapters;
     }
 }

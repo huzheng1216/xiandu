@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.inveno.xiandu.gen.BookShelfDao;
+import com.inveno.xiandu.gen.ChapterInfoDao;
 import com.inveno.xiandu.gen.DaoMaster;
 import com.inveno.xiandu.gen.DaoSession;
 import com.inveno.xiandu.utils.LogUtils;
@@ -25,6 +26,8 @@ public class DaoManager {
     private DaoSession daoSession;
     //书架
     public BookShelfDao bookShelfDao;
+    //章节
+    public ChapterInfoDao chapterInfoDao;
 
     public static DaoManager getInstance(Context context) {
         if (daoManager == null) {
@@ -69,5 +72,6 @@ public class DaoManager {
         daoSession = daoMaster.newSession();
 
         bookShelfDao = daoSession.getBookShelfDao();
+        chapterInfoDao = daoSession.getChapterInfoDao();
     }
 }

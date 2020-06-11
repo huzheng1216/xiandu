@@ -1,21 +1,15 @@
 package com.inveno.xiandu.view.read.adapter;
 
-import android.graphics.drawable.Drawable;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.view.read.bean.TxtChapter;
-import com.inveno.xiandu.view.read.page.BookManager;
-
-import static com.inveno.xiandu.applocation.MainApplication.getContext;
+import com.inveno.xiandu.bean.book.ChapterInfo;
 
 /**
  * Created by newbiechen on 17-5-16.
  */
 
-public class CategoryHolder extends ViewHolderImpl<TxtChapter> {
+public class CategoryHolder extends ViewHolderImpl<ChapterInfo> {
 
     private TextView mTvChapter;
 
@@ -25,7 +19,7 @@ public class CategoryHolder extends ViewHolderImpl<TxtChapter> {
     }
 
     @Override
-    public void onBind(TxtChapter value, int pos){
+    public void onBind(ChapterInfo value, int pos){
 //        //首先判断是否该章已下载
 //        Drawable drawable = null;
 //
@@ -48,7 +42,7 @@ public class CategoryHolder extends ViewHolderImpl<TxtChapter> {
         mTvChapter.setSelected(false);
         mTvChapter.setTextColor(0xFF888888);
 //        mTvChapter.setCompoundDrawablesWithIntrinsicBounds(drawable,null,null,null);
-        mTvChapter.setText(value.getTitle());
+        mTvChapter.setText(value.getChapter_name());
     }
 
     @Override

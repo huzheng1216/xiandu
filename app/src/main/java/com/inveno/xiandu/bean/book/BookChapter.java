@@ -9,9 +9,9 @@ import java.util.List;
  */
 public class BookChapter {
 
-    private int chapter_count;
-    private int book_status;
-    private List<ChapterInfo> chapter_list;
+    private int chapter_count;//小说总章节数
+    private int book_status;//小说状态(0连载 1完本)
+    private List<ChapterInfo> chapter_list;//小说章节数组
 
     public int getChapter_count() {
         return chapter_count;
