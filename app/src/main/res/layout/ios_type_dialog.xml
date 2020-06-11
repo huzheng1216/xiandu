@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_border_radius"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="center"
+        android:text="标题"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <com.inveno.xiandu.view.custom.MyScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:maxHeight="480dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dialog_context_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:text="内容"
+                android:textColor="#666666" />
+
+            <FrameLayout
+                android:id="@+id/dialog_center_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp">
+
+            </FrameLayout>
+        </LinearLayout>
+    </com.inveno.xiandu.view.custom.MyScrollView>
+
+    <View
+        android:id="@+id/dialog_bottom_view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:visibility="gone"
+        android:background="#c1c1c1" />
+
+    <LinearLayout
+        android:id="@+id/dialog_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/dialog_left_bt"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center"
+            android:text="左边按钮"
+            android:textColor="@color/gray_6"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/dialog_center_bt"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center"
+            android:text="中间按钮"
+            android:textColor="@color/gray_6"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/dialog_right_bt"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center"
+            android:text="右边按钮"
+            android:textColor="@color/base_color"
+            android:textSize="15sp" />
+    </LinearLayout>
+</LinearLayout>

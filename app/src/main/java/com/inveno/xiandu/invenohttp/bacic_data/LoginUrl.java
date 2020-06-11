@@ -1,14 +1,15 @@
-package com.inveno.xiandu.view.user.login.network;
+package com.inveno.xiandu.invenohttp.bacic_data;
 
 /**
  * @author yongji.wang
- * @date 2020/6/8 15:42
+ * @date 2020/6/8 14:54
  * @更新说明：
  * @更新时间：
  * @Version：1.0.0
  */
-public class LoginBusinessUtil {
-    private static String HOST_URI = "http://192.168.1.23:9000";//测试环境
+public class LoginUrl {
+//    private static String HOST_URI = "https://novel.inveno.com/novel";//生产环境
+    private static String HOST_URI = "http://121.201.120.128:9000";//测试环境
 
     public static String GET_CODE = "/user/get_code";
     public static String LOGIN_PHONE = "/user/login_phone";

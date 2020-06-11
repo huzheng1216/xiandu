@@ -1,18 +1,21 @@
-package com.inveno.xiandu.view.user.login.network;
+package com.inveno.xiandu.invenohttp.api;
+
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.TypeReference;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
-import com.inveno.android.basics.service.callback.common.DefaultHttpStatefulCallBack;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.android.basics.service.thread.ThreadUtil;
 import com.inveno.xiandu.bean.user.UserInfo;
+import com.inveno.xiandu.bean.user.UserInfoList;
+import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
+import com.inveno.xiandu.invenohttp.bacic_data.LoginUrl;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
-import com.inveno.xiandu.view.user.login.event.EventConstant;
-import com.inveno.xiandu.view.user.login.service.ServiceContext;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -29,15 +32,15 @@ import kotlin.jvm.functions.Function2;
  * @更新时间：
  * @Version：1.0.0
  */
-public class LoginAPI extends BaseSingleInstanceService {
+public class UpdataUserAPI extends BaseSingleInstanceService {
 
     public static String USER_DATA_KEY = "user_data_key";
-    protected static final boolean MODULE_DEBUG = true;
+    protected static final boolean MODULE_DEBUG = false;
 
-    public StatefulCallBack<UserInfo> login(String phoneNum, String verificationCode) {
-        StatefulCallBack<List<UserInfo>> realCallBack;
+    public StatefulCallBack<UserInfo> updataUser(LinkedHashMap<String, Object> updataParams) {
+        StatefulCallBack<UserInfoList> realCallBack;
         if (MODULE_DEBUG) {
-            realCallBack = new BaseStatefulCallBack<List<UserInfo>>() {
+            realCallBack = new BaseStatefulCallBack<UserInfoList>() {
                 @Override
                 public void execute() {
                     ThreadUtil.Installer.install();
@@ -46,20 +49,21 @@ public class LoginAPI extends BaseSingleInstanceService {
                         public void run() {
                             List<UserInfo> userInfos = new ArrayList<>();
                             userInfos.add(new UserInfo(666, "1", "闲读小说", ""));
-                            invokeSuccess(userInfos);
+                            UserInfoList userInfoList = new UserInfoList();
+                            userInfoList.setUser_list(userInfos);
+                            invokeSuccess(userInfoList);
                         }
                     });
                 }
             };
         } else {
-            LinkedHashMap<String, Object> getCodeData = new LinkedHashMap<>();
-            getCodeData.put("phone_num", phoneNum);
-            getCodeData.put("verification_code", verificationCode);
+            LinkedHashMap<String, Object> baseParam = ServiceContext.bacicParamService().getBaseParam();
+            baseParam.putAll(updataParams);
             realCallBack = MultiTypeHttpStatefulCallBack.INSTANCE
-                    .<List<UserInfo>>newCallBack(new TypeReference<List<UserInfo>>() {
+                    .<UserInfoList>newCallBack(new TypeReference<UserInfoList>() {
                     }.getType())
-                    .atUrl(LoginUrl.getHttpUri(LoginUrl.GET_CODE))
-                    .withArg(getCodeData)
+                    .atUrl(LoginUrl.getHttpUri(LoginUrl.UPDATA_INFO))
+                    .withArg(baseParam)
                     .buildCallerCallBack();
         }
 
@@ -69,15 +73,12 @@ public class LoginAPI extends BaseSingleInstanceService {
                 realCallBack.execute();
             }
         };
-        realCallBack.onSuccess(new Function1<List<UserInfo>, Unit>() {
+        realCallBack.onSuccess(new Function1<UserInfoList, Unit>() {
             @Override
-            public Unit invoke(List<UserInfo> userInfos) {
-                if (userInfos.size() > 0) {
-                    UserInfo userInfo = userInfos.get(0);
-                    AppPersistRepository.get().save(USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
-                    ServiceContext.userService().setUserInfo(userInfo);
-                    EventService.Companion.post(EventConstant.LOGIN_SUCCESS);
-                    uiCallBack.invokeSuccess(userInfos.get(0));
+            public Unit invoke(UserInfoList userInfoList) {
+                if (userInfoList.getUser_list().size() > 0) {
+                    EventService.Companion.post(EventConstant.REFRESH_USER_DATA);
+                    uiCallBack.invokeSuccess(userInfoList.getUser_list().get(0));
                 }
                 return null;
             }
