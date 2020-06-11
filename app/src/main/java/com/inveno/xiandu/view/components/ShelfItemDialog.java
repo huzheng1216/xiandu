@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.Book;
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.utils.ClickUtil;
 
 /**
@@ -20,7 +20,7 @@ import com.inveno.xiandu.utils.ClickUtil;
  */
 public class ShelfItemDialog extends BottomSheetDialog {
 
-    private Book book;
+    private BookShelf book;
     private int position;
     private TextView name;
     private View cancel;
@@ -101,10 +101,10 @@ public class ShelfItemDialog extends BottomSheetDialog {
         }
     }
 
-    public void setBook(Book book, int position) {
+    public void setBook(BookShelf book, int position) {
         this.book = book;
         this.position = position;
-        name.setText(book.getName());
+        name.setText(book.getBook_name());
     }
 
     public interface ShelfItemDialogListener{

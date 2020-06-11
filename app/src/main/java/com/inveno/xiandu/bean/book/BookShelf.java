@@ -7,25 +7,60 @@ import org.greenrobot.greendao.annotation.Id;
 /**
  * Created By huzheng
  * Date 2020/3/18
- * Des 自定义书架
+ * Des 书架实体
  */
 @Entity
 public class BookShelf {
 
     //书籍ID
     @Id
-    private Long id;
+    private Long content_id;
 
-    //书架名称
-    private String name;
+    //封面
+    private String poster;
+
+    //名称
+    private String book_name;
+
+    //小说作者
+    private String author;
+
+
+    //小说评分
+    private float score;
+
+    //小说人气
+    private int popularity;
+
+    //小说状态(0连载 1完本)
+    private int book_status;
+
+    //小说总字数
+    private long word_count;
+
+    //小说简介
+    private String introduction;
+
+    //分类名称
+    private String category_name;
 
     //书架创建时间
     private long time;
 
-    @Generated(hash = 1505875902)
-    public BookShelf(Long id, String name, long time) {
-        this.id = id;
-        this.name = name;
+    @Generated(hash = 785792178)
+    public BookShelf(Long content_id, String poster, String book_name,
+            String author, float score, int popularity, int book_status,
+            long word_count, String introduction, String category_name, long time) {
+        this.content_id = content_id;
+        this.poster = poster;
+        this.book_name = book_name;
+        this.author = author;
+        this.score = score;
+        this.popularity = popularity;
+        this.book_status = book_status;
+        this.word_count = word_count;
+        this.introduction = introduction;
+        this.category_name = category_name;
         this.time = time;
     }
 
@@ -33,20 +68,84 @@ public class BookShelf {
     public BookShelf() {
     }
 
-    public Long getId() {
-        return this.id;
+    public Long getContent_id() {
+        return this.content_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setContent_id(Long content_id) {
+        this.content_id = content_id;
     }
 
-    public String getName() {
-        return this.name;
+    public String getPoster() {
+        return this.poster;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    public String getBook_name() {
+        return this.book_name;
+    }
+
+    public void setBook_name(String book_name) {
+        this.book_name = book_name;
+    }
+
+    public String getAuthor() {
+        return this.author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public float getScore() {
+        return this.score;
+    }
+
+    public void setScore(float score) {
+        this.score = score;
+    }
+
+    public int getPopularity() {
+        return this.popularity;
+    }
+
+    public void setPopularity(int popularity) {
+        this.popularity = popularity;
+    }
+
+    public int getBook_status() {
+        return this.book_status;
+    }
+
+    public void setBook_status(int book_status) {
+        this.book_status = book_status;
+    }
+
+    public long getWord_count() {
+        return this.word_count;
+    }
+
+    public void setWord_count(long word_count) {
+        this.word_count = word_count;
+    }
+
+    public String getIntroduction() {
+        return this.introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getCategory_name() {
+        return this.category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
     }
 
     public long getTime() {

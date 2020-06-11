@@ -20,16 +20,22 @@ object HttpUtil {
     private const val DEBUG = true
     private val logger = LoggerFactory.getLogger(HttpUtil::class.java)
     private val sExecutor: HttpExecutor = OkHttpExecutor()
+
+    @JvmStatic
     fun postForm(
         url: String,
-        args: LinkedHashMap<String?, String?>
+        args: LinkedHashMap<String, Any>
     ): StatefulCallBack<HttpResponse> {
-        logger.debug(
-            "postForm url:{},args:{},id:{}",
-            url,
-            args,
-            args.hashCode()
-        )
+        if (DEBUG) {
+            synchronized(HttpUtil::class.java) {
+                logger.info(
+                        "postForm url:{} args:{} id:{}",
+                        url,
+                        args,
+                        args.hashCode()
+                )
+            }
+        }
         return object : BaseStatefulCallBack<HttpResponse>() {
             override fun execute() {
                 GlobalScope.launch {
@@ -49,12 +55,15 @@ object HttpUtil {
                                 "application/x-www-form-urlencoded",
                                 contentBuilder.toString().toByteArray()
                             )
-                        if (logger.isDebugEnabled) {
-                            logger.debug(
-                                "response body:{},id:{}",
-                                String(response!!.data),
-                                args.hashCode()
-                            )
+
+                        if (DEBUG) {
+                            synchronized(HttpUtil::class.java) {
+                                logger.info(
+                                        "response body:{},id:{}",
+                                        String(response!!.data),
+                                        args.hashCode()
+                                )
+                            }
                         }
                         if(response==null){
                             invokeFail(900, "response null")

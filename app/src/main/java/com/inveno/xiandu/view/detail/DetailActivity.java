@@ -7,9 +7,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -17,24 +14,17 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.Book;
-import com.inveno.xiandu.bean.book.BookCatalog;
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
-import com.inveno.xiandu.view.components.PullRecyclerViewGroup2;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created By huzheng
@@ -47,7 +37,7 @@ public class DetailActivity extends BaseActivity {
     //数据
     @Autowired(name = "json")
     protected String json;
-    private Book book;
+    private BookShelf book;
 
     //控件
     @BindView(R.id.header_bar_back_tv)
@@ -80,11 +70,11 @@ public class DetailActivity extends BaseActivity {
     //收藏
     @OnClick(R.id.bt_coll)
     void coll() {
-        boolean b = SQL.getInstance(this).insertBook(book);
-        if (b) {
-            Toaster.showToastCenter(this, "已添加到书架");
-            enableCollBt();
-        }
+//        boolean b = SQL.getInstance(this).insertBook(book);
+//        if (b) {
+//            Toaster.showToastCenter(this, "已添加到书架");
+//            enableCollBt();
+//        }
     }
 
     //立即阅读
@@ -116,20 +106,20 @@ public class DetailActivity extends BaseActivity {
     }
 
     private void initData() {
-        book = GsonUtil.gsonToObject(json, Book.class);
+        book = GsonUtil.gsonToObject(json, BookShelf.class);
 
         if (book == null) {
             Toaster.showToast(this, "无法获取书籍信息");
             return;
         }
-        Glide.with(this).load(book.getImg()).into(pic);
-        title.setText(book.getName());
-        bookName.setText(book.getName());
+        Glide.with(this).load(book.getPoster()).into(pic);
+        title.setText(book.getBook_name());
+        bookName.setText(book.getBook_name());
         bookAuthor.setText(book.getAuthor());
-        bookCategory.setText(book.getCategory());
-        if (SQL.getInstance(this).queryBookByName(book.getName()).size() > 0) {
-            enableCollBt();
-        }
+        bookCategory.setText(book.getCategory_name());
+//        if (SQL.getInstance(this).queryBookByName(book.getName()).size() > 0) {
+//            enableCollBt();
+//        }
     }
 
     //已收藏

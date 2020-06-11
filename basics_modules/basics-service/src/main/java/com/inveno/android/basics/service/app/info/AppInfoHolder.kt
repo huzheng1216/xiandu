@@ -10,6 +10,7 @@ class AppInfoHolder {
         private lateinit var appInfo:AppInfo
 
         private lateinit var webViewInfo: AppWebViewInfo
+
         fun install(context:Context){
             val packageName = context.packageName
             val packageInfo = context.packageManager.getPackageInfo(packageName,0)!!

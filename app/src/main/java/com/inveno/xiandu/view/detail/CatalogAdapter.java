@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.BookCatalog;
+import com.inveno.xiandu.bean.book.ChapterInfo;
 
 import java.util.List;
 
@@ -21,11 +21,11 @@ import java.util.List;
  */
 public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.SearchViewHolder> {
 
-    private List<BookCatalog> data;
+    private List<ChapterInfo> data;
     private Context context;
     private OnItemClickListener onItemClickListener;
 
-    public CatalogAdapter(Context context, List<BookCatalog> data) {
+    public CatalogAdapter(Context context, List<ChapterInfo> data) {
         this.data = data;
         this.context = context;
     }
@@ -43,7 +43,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.SearchVi
 
     @Override
     public void onBindViewHolder(@NonNull SearchViewHolder viewHolder, final int i) {
-        viewHolder.name.setText(data.get(i).getName());
+        viewHolder.name.setText(data.get(i).getChapter_name());
         if (onItemClickListener != null) {
 //            ClickUtil.bindSingleClick(viewHolder.itemView, 500, new View.OnClickListener() {
 //                @Override
@@ -78,7 +78,7 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.SearchVi
     }
 
     interface OnItemClickListener {
-        void onClick(BookCatalog bookCatalog);
+        void onClick(ChapterInfo bookCatalog);
     }
 
 }
