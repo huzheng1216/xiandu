@@ -54,6 +54,9 @@
             android:name=".view.main.my.UserinfoActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".view.main.welfare.MyCoinActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".view.splash.AgreementActivity"
             android:theme="@style/AppTheme" />
         <activity

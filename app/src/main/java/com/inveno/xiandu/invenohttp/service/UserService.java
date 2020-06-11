@@ -4,7 +4,7 @@ import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
-import com.inveno.xiandu.invenohttp.api.LoginAPI;
+import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 
 /**
  * @author yongji.wang

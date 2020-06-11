@@ -23,4 +23,5 @@ public class ARouterPath {
     public static final String ACTIVITY_SEND_LUCKYMONEY = BASE_URL + "SendLuckymoneyActivity";
     public static final String ACTIVITY_SETTING = BASE_URL + "SettingActivity";
     public static final String ACTIVITY_USERINFO = BASE_URL + "UserinfoActivity";
+    public static final String ACTIVITY_MY_COIN = BASE_URL + "MyCoinActivity";
 }

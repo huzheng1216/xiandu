@@ -1,16 +1,13 @@
 package com.inveno.xiandu.view.main.my;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -18,19 +15,15 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.inveno.android.basics.service.event.EventService;
-import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.config.ARouterPath;
-import com.inveno.xiandu.invenohttp.api.LoginAPI;
+import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.utils.AppInfoUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
-
-import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * @author yongji.wang

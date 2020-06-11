@@ -73,6 +73,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
+                if (position > 1) {
+                    toolbar.setVisibility(View.GONE);
+                }else{
+                    toolbar.setVisibility(View.VISIBLE);
+                }
                 if (menuItem != null) {
                     menuItem.setChecked(false);
                 } else {
@@ -103,7 +108,6 @@ public class MainActivity extends BaseActivity {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             menuItem = item;
-            toolbar.setVisibility(View.VISIBLE);
             switch (item.getItemId()) {
                 case R.id.navigation_bookrack:
                     viewPager.setCurrentItem(0);
@@ -112,10 +116,11 @@ public class MainActivity extends BaseActivity {
                     viewPager.setCurrentItem(1);
                     return true;
                 case R.id.navigation_welfare:
+//                    toolbar.setVisibility(View.GONE);
                     viewPager.setCurrentItem(2);
                     return true;
                 case R.id.navigation_mine:
-                    toolbar.setVisibility(View.GONE);
+//                    toolbar.setVisibility(View.GONE);
                     viewPager.setCurrentItem(3);
                     return true;
             }

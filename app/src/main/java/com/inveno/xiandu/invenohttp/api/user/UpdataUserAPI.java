@@ -1,6 +1,4 @@
-package com.inveno.xiandu.invenohttp.api;
-
-import android.text.TextUtils;
+package com.inveno.xiandu.invenohttp.api.user;
 
 import com.alibaba.fastjson.TypeReference;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
@@ -8,14 +6,12 @@ import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.event.EventService;
-import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.android.basics.service.thread.ThreadUtil;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.bean.user.UserInfoList;
-import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
+import com.inveno.xiandu.invenohttp.bacic_data.HttpUrl;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
-import com.inveno.xiandu.invenohttp.bacic_data.LoginUrl;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -32,12 +28,12 @@ import kotlin.jvm.functions.Function2;
  * @更新时间：
  * @Version：1.0.0
  */
-public class LoginAPI extends BaseSingleInstanceService {
+public class UpdataUserAPI extends BaseSingleInstanceService {
 
     public static String USER_DATA_KEY = "user_data_key";
     protected static final boolean MODULE_DEBUG = false;
 
-    public StatefulCallBack<UserInfo> login(String phoneNum, String verificationCode) {
+    public StatefulCallBack<UserInfo> updataUser(LinkedHashMap<String, Object> updataParams) {
         StatefulCallBack<UserInfoList> realCallBack;
         if (MODULE_DEBUG) {
             realCallBack = new BaseStatefulCallBack<UserInfoList>() {
@@ -57,14 +53,13 @@ public class LoginAPI extends BaseSingleInstanceService {
                 }
             };
         } else {
-            LinkedHashMap<String, Object> getCodeData = ServiceContext.bacicParamService().getBaseParam();
-            getCodeData.put("phone_num", phoneNum);
-            getCodeData.put("verification_code", verificationCode);
+            LinkedHashMap<String, Object> baseParam = ServiceContext.bacicParamService().getBaseParam();
+            baseParam.putAll(updataParams);
             realCallBack = MultiTypeHttpStatefulCallBack.INSTANCE
                     .<UserInfoList>newCallBack(new TypeReference<UserInfoList>() {
                     }.getType())
-                    .atUrl(LoginUrl.getHttpUri(LoginUrl.LOGIN_PHONE))
-                    .withArg(getCodeData)
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.UPDATA_INFO))
+                    .withArg(baseParam)
                     .buildCallerCallBack();
         }
 
@@ -78,13 +73,6 @@ public class LoginAPI extends BaseSingleInstanceService {
             @Override
             public Unit invoke(UserInfoList userInfoList) {
                 if (userInfoList.getUser_list().size() > 0) {
-                    UserInfo userInfo = userInfoList.getUser_list().get(0);
-                    userInfo.setPhone_num(phoneNum);
-                    if (TextUtils.isEmpty(userInfo.getUser_name())) {
-                        userInfo.setUser_name(String.format("闲读读者_%s", userInfo.getPid()));
-                    }
-                    AppPersistRepository.get().save(USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
-                    ServiceContext.userService().setUserInfo(userInfo);
                     EventService.Companion.post(EventConstant.REFRESH_USER_DATA);
                     uiCallBack.invokeSuccess(userInfoList.getUser_list().get(0));
                 }

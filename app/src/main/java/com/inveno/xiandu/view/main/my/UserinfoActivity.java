@@ -1,16 +1,11 @@
 package com.inveno.xiandu.view.main.my;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -21,20 +16,17 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bumptech.glide.Glide;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.config.ARouterPath;
-import com.inveno.xiandu.invenohttp.api.LoginAPI;
+import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
-import com.inveno.xiandu.utils.DeviceUtils;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
