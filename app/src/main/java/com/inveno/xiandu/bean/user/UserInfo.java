@@ -9,10 +9,15 @@ package com.inveno.xiandu.bean.user;
  */
 public class UserInfo {
     private int pid;
+//    性别,0-未知,1-男,2-女
     private String gender;
     private String user_name;
     private String head_url;
+    private String phone_num;
 
+    public UserInfo(){
+
+    }
     public UserInfo(int pid, String gender, String user_name, String head_url) {
         this.pid = pid;
         this.gender = gender;
@@ -50,5 +55,13 @@ public class UserInfo {
 
     public void setHead_url(String head_url) {
         this.head_url = head_url;
+    }
+
+    public String getPhone_num() {
+        return phone_num;
+    }
+
+    public void setPhone_num(String phone_num) {
+        this.phone_num = phone_num;
     }
 }

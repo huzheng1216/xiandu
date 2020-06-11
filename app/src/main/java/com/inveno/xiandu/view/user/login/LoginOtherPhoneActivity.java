@@ -12,16 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.inveno.android.basics.service.third.network.HttpUtil;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.user.UserInfo;
-import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.utils.Toaster;
-import com.inveno.xiandu.view.user.login.network.APIContext;
-import com.inveno.xiandu.view.user.login.network.VaricationCodeAPI;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -99,10 +95,11 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
         if (v.getId() == R.id.login_get_code) {
             Toaster.showToast(this, getResources().getString(R.string.login_get_code));
             // TODO: 2020/6/6 发送给验证码请求，成功后跳转
-            APIContext.varicationCode().getVaricationCode("18566639291", "3")
+            APIContext.varicationCode().getVaricationCode(login_phone_edit.getText().toString(), "3")
                     .onSuccess(new Function1<String, Unit>() {
                         @Override
                         public Unit invoke(String s) {
+                            Toaster.showToast(LoginOtherPhoneActivity.this, "验证码:"+s);
                             Intent intent = new Intent(LoginOtherPhoneActivity.this, ValiCodeActivity.class);
                             intent.putExtra(ValiCodeActivity.LOGIN_PHONE_NUM, login_phone_edit.getText().toString());
                             startActivityForResult(intent, LOGIN_VALI_CODE_REBACK);
@@ -112,6 +109,8 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                     .onFail(new Function2<Integer, String, Unit>() {
                         @Override
                         public Unit invoke(Integer integer, String s) {
+                            Log.i("wyjjjjjj", "onFail: "+s);
+                            Log.i("wyjjjjjj", "onFail: "+s);
                             Toaster.showToast(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail));
                             return null;
                         }

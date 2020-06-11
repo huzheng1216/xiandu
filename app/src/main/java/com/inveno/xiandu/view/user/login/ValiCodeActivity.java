@@ -1,11 +1,8 @@
 package com.inveno.xiandu.view.user.login;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,13 +10,9 @@ import android.widget.TextView;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.utils.CountDownTimerUtils;
-import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.utils.Toaster;
-import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
-import com.inveno.xiandu.view.user.login.network.APIContext;
-
-import java.util.List;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -117,6 +110,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                     .onSuccess(new Function1<String, Unit>() {
                         @Override
                         public Unit invoke(String s) {
+                            Toaster.showToast(ValiCodeActivity.this, "验证码:"+s);
                             return null;
                         }
                     })

@@ -1,17 +1,14 @@
-package com.inveno.xiandu.view.user.login.network;
+package com.inveno.xiandu.invenohttp.api;
 
-import com.alibaba.fastjson.TypeReference;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
 import com.inveno.android.basics.service.callback.common.DefaultHttpStatefulCallBack;
-import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.thread.ThreadUtil;
-import com.inveno.xiandu.bean.user.UserInfo;
+import com.inveno.xiandu.invenohttp.bacic_data.LoginUrl;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 /**
  * @author yongji.wang
@@ -22,7 +19,7 @@ import java.util.List;
  */
 public class VaricationCodeAPI extends BaseSingleInstanceService {
 
-    protected static final boolean MODULE_DEBUG = true;
+    protected static final boolean MODULE_DEBUG = false;
 
     public StatefulCallBack<String> getVaricationCode(String phoneNum, String type) {
         if (MODULE_DEBUG) {
@@ -39,7 +36,7 @@ public class VaricationCodeAPI extends BaseSingleInstanceService {
                 }
             };
         } else {
-            LinkedHashMap<String, Object> getCodeData = new LinkedHashMap<>();
+            LinkedHashMap<String, Object> getCodeData = ServiceContext.bacicParamService().getBaseParam();
             getCodeData.put("phone_num", phoneNum);
             getCodeData.put("type", type);
             return DefaultHttpStatefulCallBack.INSTANCE

@@ -1,7 +1,8 @@
-package com.inveno.xiandu.view.user.login.service;
+package com.inveno.xiandu.invenohttp.instancecontext;
 
 import com.inveno.android.basics.service.app.context.InstanceContext;
-import com.inveno.xiandu.view.user.login.network.VaricationCodeAPI;
+import com.inveno.xiandu.invenohttp.bacic_data.BacicParamService;
+import com.inveno.xiandu.invenohttp.service.UserService;
 
 /**
  * @author yongji.wang
@@ -13,5 +14,9 @@ import com.inveno.xiandu.view.user.login.network.VaricationCodeAPI;
 public class ServiceContext {
     public static UserService userService() {
         return InstanceContext.get().getInstance(UserService.class);
+    }
+
+    public static BacicParamService bacicParamService() {
+        return InstanceContext.get().getInstance(BacicParamService.class);
     }
 }

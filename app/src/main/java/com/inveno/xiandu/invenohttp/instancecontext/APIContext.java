@@ -1,6 +1,9 @@
-package com.inveno.xiandu.view.user.login.network;
+package com.inveno.xiandu.invenohttp.instancecontext;
 
 import com.inveno.android.basics.service.app.context.InstanceContext;
+import com.inveno.xiandu.invenohttp.api.LoginAPI;
+import com.inveno.xiandu.invenohttp.api.UpdataUserAPI;
+import com.inveno.xiandu.invenohttp.api.VaricationCodeAPI;
 
 /**
  * @author yongji.wang
@@ -17,5 +20,9 @@ public class APIContext {
 
     public static LoginAPI loginAPI() {
         return InstanceContext.get().getInstance(LoginAPI.class);
+    }
+
+    public static UpdataUserAPI updataUserAPI() {
+        return InstanceContext.get().getInstance(UpdataUserAPI.class);
     }
 }

@@ -68,7 +68,7 @@ class CommonHttpStatefulCallBack<T> {
             } else {
                 callerCallBack!!.invokeFail(
                     response.getIntValue("code"),
-                    response.getString("msg")
+                    response.getString("message")
                 )
             }
             null

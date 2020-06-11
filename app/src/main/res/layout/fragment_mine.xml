@@ -114,6 +114,7 @@
             android:layout_height="50dp"
             android:orientation="horizontal"
             android:onClick="mine_read"
+            android:visibility="gone"
             android:background="?attr/selectableItemBackground"
             tools:ignore="RtlSymmetry">
 
@@ -145,7 +146,8 @@
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
+            android:layout_height="1dp"
+            android:visibility="gone"
             android:layout_marginHorizontal="16dp"
             android:background="#88888888" />
 
@@ -251,7 +253,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="官方QQ群"
+                android:text="官方QQ群(2050587620)"
                 android:textColor="@color/gray_3"
                 android:textSize="14sp"
                 android:layout_toEndOf="@+id/image4"
