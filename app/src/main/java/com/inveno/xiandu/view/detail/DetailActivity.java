@@ -73,8 +73,15 @@ public class DetailActivity extends BaseActivity {
     //收藏
     @OnClick(R.id.bt_coll)
     void coll() {
-        SQL.getInstance().addBookShelf(book);
-        Toaster.showToastCenter(this, "已保存");
+        if (SQL.getInstance().hasBookShelf(book)) {
+            SQL.getInstance().delBookShelf(book);
+            Toaster.showToastCenter(this, "已移除");
+            collBt.setText("保存书架");
+        } else {
+            SQL.getInstance().addBookShelf(book);
+            Toaster.showToastCenter(this, "已保存");
+            collBt.setText("已保存");
+        }
     }
 
     //立即阅读
@@ -112,6 +119,12 @@ public class DetailActivity extends BaseActivity {
             Toaster.showToast(this, "无法获取书籍信息");
             return;
         }
+        if (SQL.getInstance().hasBookShelf(book)) {
+            collBt.setText("已保存");
+        } else {
+            collBt.setText("保存书架");
+        }
+
         Glide.with(this).load(book.getPoster()).into(pic);
         title.setText(book.getBook_name());
         bookName.setText(book.getBook_name());

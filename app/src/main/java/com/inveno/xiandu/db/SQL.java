@@ -36,8 +36,6 @@ public class SQL {
 
     private SQL(Context context) {
         this.context = context;
-//        bookShelfDaos = DaoManager.getInstance(context).getBookShelfDao().queryRaw("");
-//        sourceDaos = DaoManager.getInstance(context).getSourceDao().queryRaw("");
     }
 
     /**
@@ -45,6 +43,14 @@ public class SQL {
      */
     public List<BookShelf> getAllBookShelf() {
         return DaoManager.getInstance(context).bookShelfDao.queryBuilder().orderDesc(BookShelfDao.Properties.Time).list();
+    }
+
+    /**
+     * 是否包含某本书
+     */
+    public boolean hasBookShelf(BookShelf bookShelf) {
+        BookShelf bookShelf1 = DaoManager.getInstance(context).bookShelfDao.loadByRowId(bookShelf.getContent_id());
+        return bookShelf1 != null;
     }
 
     /**
@@ -56,7 +62,8 @@ public class SQL {
     public void addBookShelf(BookShelf bookShelf) {
         bookShelf.setTime(System.currentTimeMillis() + "");
         DaoManager.getInstance(context).bookShelfDao.insertOrReplace(bookShelf);
-        DaoManager.getInstance(context).chapterInfoDao.insertOrReplaceInTx(bookShelf.getBookChapters());
+        if (bookShelf.getBookChapters() != null)
+            DaoManager.getInstance(context).chapterInfoDao.insertOrReplaceInTx(bookShelf.getBookChapters());
     }
 
     /**

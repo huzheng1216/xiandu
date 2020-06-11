@@ -245,6 +245,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mDlSlide.setFocusableInTouchMode(false);
         mSettingDialog = new ReadSettingDialog(this, mPageLoader);
 
+        if (!SQL.getInstance().hasBookShelf(bookShelf)) {
+            mTvBrief.setText("保存书架");
+        } else {
+            mTvBrief.setText("已保存");
+        }
         setUpAdapter();
 
         //夜间模式按钮的状态
@@ -518,9 +523,15 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mTvBrief.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SQL.getInstance().addBookShelf(bookShelf);
-                Toaster.showToastCenter(ReadActivity.this, "已保存");
-                mTvBrief.setText("已保存");
+                if (SQL.getInstance().hasBookShelf(bookShelf)) {
+                    SQL.getInstance().delBookShelf(bookShelf);
+                    Toaster.showToastCenter(ReadActivity.this, "已移除");
+                    mTvBrief.setText("保存书架");
+                } else {
+                    SQL.getInstance().addBookShelf(bookShelf);
+                    Toaster.showToastCenter(ReadActivity.this, "已保存");
+                    mTvBrief.setText("已保存");
+                }
             }
         });
 

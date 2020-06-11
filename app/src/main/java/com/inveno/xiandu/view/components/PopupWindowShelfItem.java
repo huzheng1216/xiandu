@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.utils.Toaster;
 
 /**
@@ -20,6 +21,11 @@ public class PopupWindowShelfItem extends PopupWindow {
 
     View conentView;
     Activity context;
+    PopListener popListener;
+
+    public void setPopListener(PopListener popListener) {
+        this.popListener = popListener;
+    }
 
     public PopupWindowShelfItem(Activity context){
         this.context = context;
@@ -55,7 +61,8 @@ public class PopupWindowShelfItem extends PopupWindow {
         conentView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Toaster.showToastCenter(context, "删除");
+                popListener.onDel(bookShelf);
+                dismiss();
             }
         });
     }
@@ -66,7 +73,9 @@ public class PopupWindowShelfItem extends PopupWindow {
      *一会会列出其他方法
      * @param parent
      */
-    public void showPopupWindow(View parent) {
+    BookShelf bookShelf;
+    public void showPopupWindow(BookShelf bookShelf, View parent) {
+        this.bookShelf = bookShelf;
         if (!this.isShowing()) {
             // 以下拉方式显示popupwindow
             int[] location = new int[2];
@@ -76,5 +85,9 @@ public class PopupWindowShelfItem extends PopupWindow {
         } else {
             this.dismiss();
         }
+    }
+
+    public interface PopListener{
+        void onDel(BookShelf bookShelf);
     }
 }

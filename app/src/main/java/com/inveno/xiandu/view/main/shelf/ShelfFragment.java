@@ -74,7 +74,7 @@ public class ShelfFragment extends BaseFragment {
             @Override
             public void onBookLongClick(BookShelf bookShelf, View parent) {
                 showOption(bookShelf, parent);
-            } 
+            }
         });
         // 设置adapter
         recyclerView.setAdapter(shelfAdapter);
@@ -90,13 +90,20 @@ public class ShelfFragment extends BaseFragment {
 //        bottomSheetDialog = new ShelfItemDialog(getContext());
 //        bottomSheetDialog.setShelfItemDialogListener(this);
         popupWindowShelfItem = new PopupWindowShelfItem(getActivity());
+        popupWindowShelfItem.setPopListener(new PopupWindowShelfItem.PopListener() {
+            @Override
+            public void onDel(BookShelf bookShelf) {
+                SQL.getInstance().delBookShelf(bookShelf);
+                initData();
+            }
+        });
         return inflate;
     }
 
     private void showOption(BookShelf bookShelf, View parent) {
 //        bottomSheetDialog.setBook(data.get(position), position);
 //        bottomSheetDialog.show();
-        popupWindowShelfItem.showPopupWindow(parent);
+        popupWindowShelfItem.showPopupWindow(bookShelf, parent);
     }
 
     @Override
