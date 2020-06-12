@@ -81,7 +81,7 @@ public class SerchActivityMain extends BaseActivity {
             public void onClick(View v) {
                 history.clear();
                 historyAdapter.notifyDataSetChanged();
-                SPUtils.setInformain(Keys.SEARCH_HISTORY, "", SerchActivityMain.this);
+                SPUtils.setInformain(Keys.SEARCH_HISTORY, "");
             }
         });
         ClickUtil.bindSingleClick(back, 500, new View.OnClickListener() {
@@ -100,7 +100,7 @@ public class SerchActivityMain extends BaseActivity {
             }
         });
         //本地历史
-        String localHistory = SPUtils.getInformain(Keys.SEARCH_HISTORY, "", this);
+        String localHistory = SPUtils.getInformain(Keys.SEARCH_HISTORY, "");
         history = new ArrayList<>();
         List<String> strings = GsonUtil.gsonToList(localHistory, String.class);
         if (strings != null) {
@@ -135,7 +135,7 @@ public class SerchActivityMain extends BaseActivity {
         }
         history.add(0, title);
         historyAdapter.notifyDataSetChanged();
-        SPUtils.setInformain(Keys.SEARCH_HISTORY, GsonUtil.objectToJson(history), this);
+        SPUtils.setInformain(Keys.SEARCH_HISTORY, GsonUtil.objectToJson(history));
     }
 
     @Override

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/base_tittle_bar" />
+
+    <RelativeLayout
+        android:id="@+id/mine_set_user_pic"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="set_user_pic"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/image2"
+            android:text="头像"
+            android:textColor="@color/gray_3"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/mine_user_pic"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_header_default" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_mine_right" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginHorizontal="16dp"
+        android:background="#88888888" />
+
+    <RelativeLayout
+        android:id="@+id/mine_set_nickname"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="set_nickname"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/image2"
+            android:text="昵称"
+            android:textColor="@color/gray_3"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/mine_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:drawableRight="@drawable/ic_mine_right"
+            android:drawablePadding="10dp"
+            android:text="湾仔小芋头"
+            android:textColor="@color/gray_9"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginHorizontal="16dp"
+        android:background="#88888888" />
+
+    <RelativeLayout
+        android:id="@+id/mine_set_gender"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:onClick="set_gender"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/image2"
+            android:text="性别"
+            android:textColor="@color/gray_3"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/mine_user_gender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:drawableRight="@drawable/ic_mine_right"
+            android:drawablePadding="10dp"
+            android:text="男"
+            android:textColor="@color/gray_9"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginHorizontal="16dp"
+        android:background="#88888888" />
+
+    <RelativeLayout
+        android:id="@+id/mine_get_version"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_toEndOf="@+id/image2"
+            android:text="账号"
+            android:textColor="@color/gray_3"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/mine_user_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            android:text="123456"
+            android:textColor="@color/gray_9"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</LinearLayout>

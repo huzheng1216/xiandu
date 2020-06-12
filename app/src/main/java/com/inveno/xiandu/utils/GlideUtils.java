@@ -79,7 +79,7 @@ public class GlideUtils {
         RequestOptions options = new RequestOptions()
                 .circleCrop()
                 .placeholder(R.drawable.ic_test_ad)
-                .transform(new GlideCircleTransform(mContext, 1, mContext.getResources().getColor(R.color.white)))
+                .transform(new GlideCircleTransform(mContext, 2, mContext.getResources().getColor(R.color.white)))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         Glide.with(mContext).load(path).apply(options).into(imageview);
     }
@@ -92,7 +92,7 @@ public class GlideUtils {
         RequestOptions options = new RequestOptions()
                 .circleCrop()
                 .placeholder(R.drawable.ic_test_ad)
-                .transform(new GlideCircleTransform(mContext, 1, mContext.getResources().getColor(R.color.white)))
+                .transform(new GlideCircleTransform(mContext, 2, mContext.getResources().getColor(R.color.white)))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         Glide.with(mContext).load(url).apply(options).into(imageview);
     }
@@ -105,7 +105,7 @@ public class GlideUtils {
         RequestOptions options = new RequestOptions()
                 .circleCrop()
                 .placeholder(R.drawable.ic_test_ad)
-                .transform(new GlideCircleTransform(mContext, 1, mContext.getResources().getColor(R.color.white)))
+                .transform(new GlideCircleTransform(mContext, 2, mContext.getResources().getColor(R.color.white)))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE);
         Glide.with(mContext).load(file).apply(options).into(imageview);
     }

@@ -53,7 +53,7 @@ public class SplashActivity extends BaseActivity implements AppInitListener {
         skip = findViewById(R.id.bt_splash_skip);
 
         //是否第一次启动
-        boolean firstLaunch = SPUtils.getInformain(Keys.FIRST_LAUNCH_KEY, false, this);
+        boolean firstLaunch = SPUtils.getInformain(Keys.FIRST_LAUNCH_KEY, false);
 
         initViewProxy = new AppInitViewProxy(this, this);
 
@@ -101,7 +101,11 @@ public class SplashActivity extends BaseActivity implements AppInitListener {
         ClickUtil.bindSingleClick(btn_sure, 500, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SPUtils.setInformain(Keys.FIRST_LAUNCH_KEY, true, SplashActivity.this);
+                SPUtils.setInformain(Keys.FIRST_LAUNCH_KEY, true);
+                dialog.dismiss();
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_MAIN)
+                        .navigation();
+                finish();
                 checkAndInit();
             }
         });

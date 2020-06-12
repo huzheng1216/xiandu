@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.Book;
+import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.view.BaseActivity;
@@ -41,7 +41,7 @@ public class SerchResultActivity extends BaseActivity {
     @Autowired(name = "name")
     protected String name;
     private SearchResultAdapter searchAdapter;
-    private List<Book> data = new ArrayList<>();
+    private List<BookShelf> data = new ArrayList<>();
 
     @BindView(R.id.headerBar_search_result)
     HeaderBar headerBar;
@@ -83,7 +83,7 @@ public class SerchResultActivity extends BaseActivity {
         resultRecyclerView.setAdapter(searchAdapter);
         searchAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
             @Override
-            public void onClick(Book book, ImageView pic) {
+            public void onClick(BookShelf book, ImageView pic) {
                 Intent intent = new Intent(SerchResultActivity.this, DetailActivity.class);
                 intent.putExtra("json", GsonUtil.objectToJson(book));
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) SerchResultActivity.this, pic, "photo").toBundle();
@@ -131,26 +131,6 @@ public class SerchResultActivity extends BaseActivity {
 //        });
     }
 
-    /**
-     * 给搜索结果排序
-     *
-     * @param name
-     * @param books
-     */
-    private void sortData(String name, List<Book> books) {
-        if (books.size() > 0) {
-            for (Book book : books) {
-                if (book.getName().equals(name)) {
-                    data.add(0, book);
-                } else if (book.getName().contains(name)) {
-                    data.add(book);
-                } else if (book.getAuthor().contains(name)) {
-                    data.add(book);
-                }
-            }
-            searchAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public void finish() {

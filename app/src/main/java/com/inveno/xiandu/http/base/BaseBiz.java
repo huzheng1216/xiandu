@@ -53,7 +53,7 @@ public class BaseBiz {
                                 .addHeader("Accept-Encoding", "gzip, deflate")
                                 .addHeader("Accept-Language", "zh-CN")
                                 .addHeader("Connection", "keep-alive")
-                                .addHeader("Cookie", SPUtils.getInformain("nxck", "", context))
+                                .addHeader("Cookie", SPUtils.getInformain("nxck", ""))
                                 .addHeader("Cookie", "uid=000000")
                                 .addHeader("Accept", "*/*")
                                 .build();
@@ -85,9 +85,9 @@ public class BaseBiz {
                                             LogUtils.showLog(LogUtils.TAG_ACCOUNT, "获取到的cookie = " + cookie);
                                             if (cookie.indexOf("cuid") >= 0) {
                                                 LogUtils.showLog(LogUtils.TAG_ACCOUNT, "保存获取到的cookie");
-                                                SPUtils.setInformain("nxck", cookie, context);
+                                                SPUtils.setInformain("nxck", cookie);
                                                 String a[] = cookie.split("=");
-                                                SPUtils.setInformain("cuid", a[1], context);
+                                                SPUtils.setInformain("cuid", a[1]);
                                             }
                                         }
                                     });
