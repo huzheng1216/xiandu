@@ -11,6 +11,7 @@ import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.bean.response.ResponseChannel;
 import com.inveno.xiandu.http.base.BaseBiz;
 import com.inveno.xiandu.http.body.BaseRequest;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.view.read.setting.StringUtils;
 
 import java.util.HashMap;
@@ -43,6 +44,7 @@ public class BookBiz extends BaseBiz {
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
         }
+        param.put("pid", ServiceContext.userService().getUserPid());
         return mMRRequestService.getBookShelf(param);
     }
 
@@ -58,6 +60,7 @@ public class BookBiz extends BaseBiz {
             param.put("uid", uid);
         }
         param.put("channel_id", channel_id + "");
+        param.put("pid", ServiceContext.userService().getUserPid());
         param.put("num", num + "");
         param.put("type", type + "");
         return mMRRequestService.getRecommendList(param);
@@ -70,6 +73,7 @@ public class BookBiz extends BaseBiz {
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
         }
+        param.put("pid", ServiceContext.userService().getUserPid());
         param.put("content_id", content_id);
         param.put("page_num", page_num + "");
         return mMRRequestService.getChapterList(param);
@@ -82,6 +86,7 @@ public class BookBiz extends BaseBiz {
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
         }
+        param.put("pid", ServiceContext.userService().getUserPid());
         param.put("content_id", content_id);
         param.put("chapter_id", chapter_id);
         return mMRRequestService.getChapterInfo(param);
