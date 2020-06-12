@@ -7,6 +7,8 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "com.inveno.xiandu"
         minSdkVersion rootProject.ext.minSdkVersion
@@ -94,6 +96,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
     implementation project(path: ':free_time_read_lib_modules:android-device-service')
     implementation project(path: ':free_time_read_lib_modules:inveno-api-service')
+    implementation project(path: ':free_time_read_lib_modules:inveno-ad-service')
     implementation project(path: ':basics_modules:basics-service')
     implementation project(path: ':basics_modules:appcompat')
 }

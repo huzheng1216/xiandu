@@ -19,28 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-#穿山甲
--keep class com.bytedance.sdk.openadsdk.** { *; }
--keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
--keep class com.pgl.sys.ces.* {*;}
-#百度
--keepclassmembers class * extends android.app.Activity {
-public void *(android.view.View);
-}
--keepclassmembers enum * {
-public static **[] values();
-public static ** valueOf(java.lang.String);
-}
--keep class com.baidu.mobads.** { *; }
--keep class com.baidu.mobad.** { *; }
-
--keep class com.analytics.sdk.** {*;}
--keep class com.androidquery.** {*;}
-#广点通
--keep class com.qq.e.** {*;}
-
-#多牛
--keep class com.donews.** {*;}
-#OAID 唯一标识 如果没有使用是不用配置下面的选项
--keep class com.bun.miitmdid.core.** {*;}

@@ -3,8 +3,10 @@ package com.inveno.xiandu.view.init;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.bean.AdConfigData;
 import com.inveno.android.api.service.InvenoServiceContext;
+import com.inveno.android.basics.appcompat.context.ContextHolder;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -24,7 +26,7 @@ public class AppInitViewProxy {
         startInit();
     }
 
-    public boolean isNeedToCheckPermission(){
+    public boolean isNeedToCheckPermission() {
         return TextUtils.isEmpty(InvenoServiceContext.uid().getUid());
     }
 
@@ -55,34 +57,29 @@ public class AppInitViewProxy {
     }
 
     private void initADConfig() {
-        AdConfigData adConfigData = InvenoServiceContext.ad().getAdConfigData();
-        if (adConfigData == null) {
-            InvenoServiceContext.ad().requestAdConfig()
-                    .onSuccess(new Function1<AdConfigData, Unit>() {
-                        @Override
-                        public Unit invoke(AdConfigData configData) {
-                            doWhenAllInitDone();
-                            return null;
-                        }
-                    })
-                    .onFail(new Function2<Integer, String, Unit>() {
-                        @Override
-                        public Unit invoke(Integer integer, String s) {
-                            doWhenAllInitDone();
-                            return null;
-                        }
-                    })
-                    .execute();
-        } else {
-            doWhenAllInitDone();
-        }
+        InvenoAdServiceHolder.getService().init(ContextHolder.Companion.getAppContext())
+                .onSuccess(new Function1<String, Unit>() {
+                    @Override
+                    public Unit invoke(String s) {
+                        doWhenAllInitDone();
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        doWhenAllInitDone();
+//                        doWhenInitFail();
+                        return null;
+                    }
+                }).execute();
     }
 
     private void doWhenAllInitDone() {
         initListener.onAppInitSuccess();
     }
 
-    private void doWhenInitFail(){
+    private void doWhenInitFail() {
         initListener.onAppInitFail();
     }
 }

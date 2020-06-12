@@ -7,6 +7,7 @@ import com.inveno.android.api.bean.UidData;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
+import com.inveno.android.basics.service.persist.AppPersistRepository;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -18,6 +19,7 @@ public class UidService extends BaseSingleInstanceService {
     @Override
     protected void onCreate() {
         super.onCreate();
+        uid = AppPersistRepository.get().get("user_uid");
     }
 
     public String getUid(){
@@ -37,6 +39,7 @@ public class UidService extends BaseSingleInstanceService {
             @Override
             public Unit invoke(UidData uidData) {
                 uid = uidData.getUid();
+                saveUid();
                 if(TextUtils.isEmpty(uid)){
                     proxy.invokeFail(500,"获取UID失败");
                 }else{
@@ -55,6 +58,6 @@ public class UidService extends BaseSingleInstanceService {
     }
 
     private void saveUid(){
-
+        AppPersistRepository.get().save("user_uid",uid);
     }
 }

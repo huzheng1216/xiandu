@@ -24,7 +24,8 @@ public class DeviceUtils {
      * @return 返回当前系统语言。例如：当前设置的是“中文-中国”，则返回“zh-CN”
      */
     public static String getSystemLanguage() {
-        return Locale.getDefault().getLanguage();
+//        return Locale.getDefault().getLanguage();
+        return "zh_CN";
     }
 
     /**
