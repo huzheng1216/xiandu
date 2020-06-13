@@ -7,11 +7,17 @@ import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.gen.BookShelfDao;
 import com.inveno.xiandu.gen.ChapterInfoDao;
+import com.inveno.xiandu.http.DDManager;
+import com.inveno.xiandu.http.body.BaseRequest;
 
 import org.greenrobot.greendao.query.DeleteQuery;
 import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
+
+import io.reactivex.Scheduler;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created By huzheng
@@ -64,6 +70,27 @@ public class SQL {
         DaoManager.getInstance(context).bookShelfDao.insertOrReplace(bookShelf);
         if (bookShelf.getBookChapters() != null)
             DaoManager.getInstance(context).chapterInfoDao.insertOrReplaceInTx(bookShelf.getBookChapters());
+        //上传服务器
+        DDManager.getInstance().addBookShelf(bookShelf.getContent_id(), 1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<BaseRequest<List<BookShelf>>>() {
+                    @Override
+                    public void accept(BaseRequest<List<BookShelf>> listBaseRequest) throws Exception {
+                    }
+                });
+    }
+
+    /**
+     * 批量更新本地书架
+     * @param bookShelves
+     */
+    public void insertOrReplace(List<BookShelf> bookShelves) {
+        long l = System.currentTimeMillis();
+        for (BookShelf bookShelf : bookShelves) {
+            bookShelf.setTime(l + "");
+        }
+        DaoManager.getInstance(context).bookShelfDao.insertOrReplaceInTx(bookShelves);
     }
 
     /**
@@ -79,6 +106,15 @@ public class SQL {
         QueryBuilder<ChapterInfo> chapterInfoQueryBuilder = DaoManager.getInstance(context).chapterInfoDao.queryBuilder();
         DeleteQuery<ChapterInfo> chapterInfoDeleteQuery = chapterInfoQueryBuilder.where(ChapterInfoDao.Properties.Content_id.eq(bookShelf.getContent_id())).buildDelete();
         chapterInfoDeleteQuery.executeDeleteWithoutDetachingEntities();
+        //上传服务器
+        DDManager.getInstance().updateBookShelf(bookShelf.getContent_id(), -1)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<BaseRequest<List<BookShelf>>>() {
+                    @Override
+                    public void accept(BaseRequest<List<BookShelf>> listBaseRequest) throws Exception {
+                    }
+                });
     }
 
 }
