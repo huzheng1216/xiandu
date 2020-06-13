@@ -4,12 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
-import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.bean.user.UserInfo;
-import com.inveno.xiandu.invenohttp.api.LoginAPI;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
-import com.inveno.xiandu.invenohttp.service.UserService;
-import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 
 /**
  * @author yongji.wang

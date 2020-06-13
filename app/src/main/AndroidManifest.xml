@@ -54,6 +54,12 @@
             android:name=".view.main.my.UserinfoActivity"
             android:theme="@style/AppTheme" />
         <activity
+            android:name=".view.main.welfare.MyCoinActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.welfare.CoinTopUpActivity"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".view.splash.AgreementActivity"
             android:theme="@style/AppTheme" />
         <activity
@@ -68,5 +74,6 @@
         <activity
             android:name=".view.read.ReadActivity"
             android:theme="@style/FullScreenTheme" />
+        <activity android:name=".view.main.store.RankingActivity" />
     </application>
 </manifest>

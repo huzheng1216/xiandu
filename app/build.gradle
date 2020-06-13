@@ -101,4 +101,6 @@ dependencies {
     implementation project(path: ':free_time_read_lib_modules:inveno-ad-service')
     implementation project(path: ':basics_modules:basics-service')
     implementation project(path: ':basics_modules:appcompat')
+    implementation project (":ad_lib")
+    implementation project(path: ':free_time_read_lib_modules:book-service')
 }

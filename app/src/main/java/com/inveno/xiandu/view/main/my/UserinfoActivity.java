@@ -1,14 +1,10 @@
 package com.inveno.xiandu.view.main.my;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.database.ContentObserver;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Display;
@@ -21,20 +17,18 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.bumptech.glide.Glide;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.config.ARouterPath;
-import com.inveno.xiandu.invenohttp.api.LoginAPI;
+import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
-import com.inveno.xiandu.utils.DeviceUtils;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
@@ -91,8 +85,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
         mine_user_gender = findViewById(R.id.mine_user_gender);
         mine_user_code = findViewById(R.id.mine_user_code);
 
-        userInfo = JsonUtil.Companion.parseObject(AppPersistRepository.get().get(LoginAPI.USER_DATA_KEY), UserInfo.class);
-
+        userInfo = ServiceContext.userService().getUserInfo();
 
         if (userInfo != null && !TextUtils.isEmpty(userInfo.getHead_url())) {
             GlideUtils.LoadCircleImage(this, userInfo.getHead_url(), mine_user_pic);
@@ -282,7 +275,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
     }
 
     private void userUpdata(String key, String value) {
-        LinkedHashMap<String,Object> updata = new LinkedHashMap<>();
+        LinkedHashMap<String, Object> updata = new LinkedHashMap<>();
         updata.put("utype", "1");
         updata.put(key, value);
         APIContext.updataUserAPI().updataUser(updata).onSuccess(new Function1<UserInfo, Unit>() {

@@ -1,27 +1,26 @@
-package com.inveno.xiandu.invenohttp.api;
+package com.inveno.xiandu.invenohttp.api.coin;
 
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
 import com.inveno.android.basics.service.callback.common.DefaultHttpStatefulCallBack;
 import com.inveno.android.basics.service.thread.ThreadUtil;
-import com.inveno.xiandu.invenohttp.bacic_data.LoginUrl;
+import com.inveno.xiandu.invenohttp.bacic_data.HttpUrl;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 
 import java.util.LinkedHashMap;
 
 /**
  * @author yongji.wang
- * @date 2020/6/8 16:14
+ * @date 2020/6/11 17:46
  * @更新说明：
  * @更新时间：
  * @Version：1.0.0
  */
-public class VaricationCodeAPI extends BaseSingleInstanceService {
-
+public class QueryCoinDetailAPI extends BaseSingleInstanceService {
     protected static final boolean MODULE_DEBUG = false;
 
-    public StatefulCallBack<String> getVaricationCode(String phoneNum, String type) {
+    public StatefulCallBack<String> queryCoinDetail(int pid) {
         if (MODULE_DEBUG) {
             return new BaseStatefulCallBack<String>() {
                 @Override
@@ -36,13 +35,14 @@ public class VaricationCodeAPI extends BaseSingleInstanceService {
                 }
             };
         } else {
-            LinkedHashMap<String, Object> getCodeData = ServiceContext.bacicParamService().getBaseParam();
-            getCodeData.put("phone_num", phoneNum);
-            getCodeData.put("type", type);
+            LinkedHashMap<String, Object> earnCoinParams = ServiceContext.bacicParamService().getBaseParam();
+            LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+            mParams.put("pid", pid);
+            mParams.putAll(earnCoinParams);
             return DefaultHttpStatefulCallBack.INSTANCE
                     .newCallBack()
-                    .atUrl(LoginUrl.getHttpUri(LoginUrl.GET_CODE))
-                    .withArg(getCodeData)
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.QUERY_COIN_DETAILS))
+                    .withArg(mParams)
                     .buildCallerCallBack();
         }
     }

@@ -3,6 +3,7 @@ package com.inveno.xiandu.view;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.inveno.xiandu.R;
@@ -26,6 +27,11 @@ public abstract class TitleBarBaseActivity extends BaseActivity implements ITitt
      */
     private LinearLayout rightLayout;
 
+    /**
+     * 整个标题布局
+     */
+    private RelativeLayout tittle_bar_layout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +43,7 @@ public abstract class TitleBarBaseActivity extends BaseActivity implements ITitt
      * 设置布局文件
      */
     protected void initCreateView() {
-        if (layoutID() != 0){
+        if (layoutID() != 0) {
             setContentView(layoutID());
         }
     }
@@ -46,6 +52,7 @@ public abstract class TitleBarBaseActivity extends BaseActivity implements ITitt
 
         //添加右边按钮
         rightLayout = findViewById(R.id.base_activity_right);
+        tittle_bar_layout = findViewById(R.id.tittle_bar_layout);
         if (getRightBtn() != null) {
             rightLayout.addView(getRightBtn());
         }
@@ -63,6 +70,9 @@ public abstract class TitleBarBaseActivity extends BaseActivity implements ITitt
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        if (getBackgroundColor() != 0) {
+            tittle_bar_layout.setBackgroundColor(getBackgroundColor());
         }
     }
 
@@ -95,6 +105,15 @@ public abstract class TitleBarBaseActivity extends BaseActivity implements ITitt
      */
     protected View getRightBtn() {
         return null;
+    }
+
+    /**
+     * 设置背景颜色
+     *
+     * @return
+     */
+    protected int getBackgroundColor() {
+        return 0;
     }
 
     public abstract String getCenterText();

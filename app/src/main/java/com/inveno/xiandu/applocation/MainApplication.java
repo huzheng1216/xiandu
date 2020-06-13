@@ -6,6 +6,7 @@ import android.content.Context;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.BasicsServiceModule;
+import com.inveno.android.device.param.provider.AndroidParamProviderHolder;
 import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.config.Keys;
