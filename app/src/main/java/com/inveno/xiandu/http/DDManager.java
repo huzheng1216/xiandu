@@ -9,6 +9,7 @@ import com.inveno.xiandu.bean.book.BookChapter;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.bean.response.ResponseChannel;
+import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.http.biz.AccountBiz;
 import com.inveno.xiandu.http.biz.BookBiz;
 import com.inveno.xiandu.http.body.BaseRequest;
@@ -53,19 +54,30 @@ public class DDManager {
      *
      * @return
      */
-    public Observable<BaseRequest<List<BookShelf>>> getBookShelf() {
+    public Observable<BaseRequest<ResponseShelf>> getBookShelf() {
         return bookBiz.getBookShelf();
     }
 
     /**
      * 添加书架
      *
-     * @param uid
-     * @param pid
+     * @param content_id
+     * @param status
      * @return
      */
-    public Observable<BaseRequest<List<BookShelf>>> addBookShelf(String uid, int pid, long content_id, int status) {
-        return bookBiz.addBookShelf(uid, pid, content_id, status);
+    public Observable<BaseRequest<List<BookShelf>>> addBookShelf(long content_id, int status) {
+        return bookBiz.addBookShelf(content_id, status);
+    }
+
+    /**
+     * 移除书架
+     *
+     * @param content_id
+     * @param status
+     * @return
+     */
+    public Observable<BaseRequest<List<BookShelf>>> updateBookShelf(long content_id, int status) {
+        return bookBiz.updateBookShelf(content_id, status);
     }
 
     /**

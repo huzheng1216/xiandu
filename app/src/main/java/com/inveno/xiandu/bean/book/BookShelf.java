@@ -175,4 +175,14 @@ public class BookShelf {
     public List<ChapterInfo> getBookChapters() {
         return bookChapters;
     }
+
+
+    public int compareTo(BookShelf bookShelf) {
+        return content_id.compareTo(bookShelf.getContent_id());
+    }
+
+    @Override
+    public boolean equals(Object p) {
+        return this.compareTo((BookShelf)p) == 0;
+    }
 }
