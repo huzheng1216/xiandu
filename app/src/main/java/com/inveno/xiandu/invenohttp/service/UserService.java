@@ -29,6 +29,14 @@ public class UserService extends BaseSingleInstanceService {
         return userInfo;
     }
 
+    public int getUserPid(){
+        if(userInfo==null){
+            return 0;
+        }else{
+            return userInfo.getPid();
+        }
+    }
+
     public void setUserInfo(UserInfo userInfo) {
         this.userInfo = userInfo;
     }

@@ -8,9 +8,9 @@ import com.inveno.android.basics.service.thread.ThreadUtil
 class BasicsServiceModule {
     companion object{
         fun onApplicationCreate(context:Context){
+            ContextHolder.Companion.Operate.setAppContext(context)
             AppInfoHolder.install(context)
             ThreadUtil.Installer.install()
-            ContextHolder.Companion.Operate.setAppContext(context)
         }
     }
 }

@@ -38,7 +38,7 @@ public class DeviceParamProvider implements IDeviceParamProvider {
      */
     @Override
     public String getPlatform() {
-        return "Android";
+        return "android";
     }
 
     /**
@@ -194,6 +194,11 @@ public class DeviceParamProvider implements IDeviceParamProvider {
     @Override
     public DisplayMetrics getMetrics() {
         return DeviceUtils.getMetrics(context);
+    }
+
+    @Override
+    public String getOperator() {
+        return "CMCC";
     }
 
 }

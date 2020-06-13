@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.inveno.ad_lib">
+    package="com.inveno.android.ad">
 
 
     <!-- 基础权限，广告平台需要增加的权限 -->
@@ -11,4 +11,54 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <!-- 如果有视频相关的广告且使用textureView播放，请务必添加，否则黑屏 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application
+        android:networkSecurityConfig="@xml/network_security_config">
+        <!--直客配置-->
+        <provider
+            android:name="com.donews.zkad.ad.ZkFileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <!--广点通配置 如果使用的是androidX版本，则需要把android.support.v4
+        换成androidx.core-->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <!---百度配置-->
+        <provider
+            android:name="com.baidu.mobads.openad.BdFileProvider"
+            android:authorities="${packageName}.bd.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/bd_file_paths" />
+        </provider>
+        <!--头条配置-->
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+            android:authorities="${applicationId}.TTFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <provider
+            android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+            android:authorities="${applicationId}.TTMultiProvider"
+            android:exported="false" />
+
+    </application>
 </manifest>

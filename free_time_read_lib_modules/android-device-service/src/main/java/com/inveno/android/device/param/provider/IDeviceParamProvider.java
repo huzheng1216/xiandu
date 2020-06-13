@@ -22,4 +22,6 @@ public interface IDeviceParamProvider {
     List<String> getWiFiMacList();
     String getUserAgent();
     DisplayMetrics getMetrics();
+
+    String getOperator();
 }

@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URLEncoder
 import java.util.*
 
 object HttpUtil {
@@ -41,7 +42,8 @@ object HttpUtil {
                 GlobalScope.launch {
                     val contentBuilder = StringBuilder()
                     for ((key, value) in args) {
-                        contentBuilder.append(key).append("=").append(value)
+                        contentBuilder.append(key).append("=").append(
+                                URLEncoder.encode(value.toString(),"utf-8"))
                             .append("&")
                     }
                     if (contentBuilder.length > 0) {
