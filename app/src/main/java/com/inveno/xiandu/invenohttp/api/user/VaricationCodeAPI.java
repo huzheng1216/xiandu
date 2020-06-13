@@ -37,12 +37,14 @@ public class VaricationCodeAPI extends BaseSingleInstanceService {
             };
         } else {
             LinkedHashMap<String, Object> getCodeData = ServiceContext.bacicParamService().getBaseParam();
-            getCodeData.put("phone_num", phoneNum);
-            getCodeData.put("type", type);
+            LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+            mParams.put("phone_num", phoneNum);
+            mParams.put("type", type);
+            mParams.putAll(getCodeData);
             return DefaultHttpStatefulCallBack.INSTANCE
                     .newCallBack()
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.GET_CODE))
-                    .withArg(getCodeData)
+                    .withArg(mParams)
                     .buildCallerCallBack();
         }
     }

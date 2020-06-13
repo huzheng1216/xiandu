@@ -12,9 +12,8 @@ import android.text.TextPaint;
 
 import androidx.core.content.ContextCompat;
 
-import com.inveno.xiandu.view.read.bean.BookRecordBean;
-import com.inveno.xiandu.view.read.bean.CollBookBean;
-import com.inveno.xiandu.view.read.bean.TxtChapter;
+import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.view.read.setting.IOUtils;
 import com.inveno.xiandu.view.read.setting.ReadSettingManager;
 import com.inveno.xiandu.view.read.setting.RxUtils;
@@ -55,9 +54,9 @@ public abstract class PageLoader {
     private static final int EXTRA_TITLE_SIZE = 4;
 
     // 当前章节列表
-    protected List<TxtChapter> mChapterList;
+    protected List<ChapterInfo> mChapterList;
     // 书本对象
-    protected CollBookBean mCollBook;
+    protected BookShelf mCollBook;
     // 监听器
     protected OnPageChangeListener mPageChangeListener;
 
@@ -88,7 +87,7 @@ public abstract class PageLoader {
     // 被遮盖的页，或者认为被取消显示的页
     private TxtPage mCancelPage;
     // 存储阅读记录类
-    private BookRecordBean mBookRecord;
+//    private BookRecordBean mBookRecord;
 
     private Disposable mPreLoadDisp;
 
@@ -141,7 +140,7 @@ public abstract class PageLoader {
     private int mLastChapterPos = 0;
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, CollBookBean collBook) {
+    public PageLoader(PageView pageView, BookShelf collBook) {
         mPageView = pageView;
         mContext = pageView.getContext();
         mCollBook = collBook;
@@ -502,7 +501,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public CollBookBean getCollBook() {
+    public BookShelf getCollBook() {
         return mCollBook;
     }
 
@@ -511,7 +510,7 @@ public abstract class PageLoader {
      *
      * @return
      */
-    public List<TxtChapter> getChapterCategory() {
+    public List<ChapterInfo> getChapterCategory() {
         return mChapterList;
     }
 
@@ -547,18 +546,18 @@ public abstract class PageLoader {
      */
     public void saveRecord() {
 
-        if (mChapterList.isEmpty()) {
-            return;
-        }
-
-        mBookRecord.setBookId(mCollBook.get_id());
-        mBookRecord.setChapter(mCurChapterPos);
-
-        if (mCurPage != null) {
-            mBookRecord.setPagePos(mCurPage.position);
-        } else {
-            mBookRecord.setPagePos(0);
-        }
+//        if (mChapterList.isEmpty()) {
+//            return;
+//        }
+//
+//        mBookRecord.setBookId(mCollBook.getContent_id() + "");
+//        mBookRecord.setChapter(mCurChapterPos);
+//
+//        if (mCurPage != null) {
+//            mBookRecord.setPagePos(mCurPage.position);
+//        } else {
+//            mBookRecord.setPagePos(0);
+//        }
 
         //存储到数据库
 //        BookRepository.getInstance()
@@ -572,11 +571,11 @@ public abstract class PageLoader {
 //        mBookRecord = BookRepository.getInstance()
 //                .getBookRecord(mCollBook.get_id());
 
-        if (mBookRecord == null) {
-            mBookRecord = new BookRecordBean();
-        }
-
-        mCurChapterPos = mBookRecord.getChapter();
+//        if (mBookRecord == null) {
+//            mBookRecord = new BookRecordBean();
+//        }
+//
+        mCurChapterPos = 0;
         mLastChapterPos = mCurChapterPos;
     }
 
@@ -607,7 +606,7 @@ public abstract class PageLoader {
         if (parseCurChapter()) {
             // 如果章节从未打开
             if (!isChapterOpen) {
-                int position = mBookRecord.getPagePos();
+                int position = 0;
 
                 // 防止记录页的页号，大于当前最大页号
                 if (position >= mCurPageList.size()) {
@@ -677,7 +676,7 @@ public abstract class PageLoader {
      */
     private List<TxtPage> loadPageList(int chapterPos) throws Exception {
         // 获取章节
-        TxtChapter chapter = mChapterList.get(chapterPos);
+        ChapterInfo chapter = mChapterList.get(chapterPos);
         // 判断章节是否存在
         if (!hasChapterData(chapter)) {
             return null;
@@ -702,14 +701,14 @@ public abstract class PageLoader {
      * @param chapter
      * @return
      */
-    protected abstract BufferedReader getChapterReader(TxtChapter chapter) throws Exception;
+    protected abstract BufferedReader getChapterReader(ChapterInfo chapter) throws Exception;
 
     /**
      * 章节数据是否存在
      *
      * @return
      */
-    protected abstract boolean hasChapterData(TxtChapter chapter);
+    protected abstract boolean hasChapterData(ChapterInfo chapter);
 
     /***********************************default method***********************************************/
 
@@ -736,7 +735,7 @@ public abstract class PageLoader {
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
-                        canvas.drawText(mChapterList.get(mCurChapterPos).getTitle()
+                        canvas.drawText(mChapterList.get(mCurChapterPos).getChapter_name()
                                 , mMarginWidth, tipTop, mTipPaint);
                     }
                 } else {
@@ -1229,7 +1228,7 @@ public abstract class PageLoader {
      * @param br：章节的文本流
      * @return
      */
-    private List<TxtPage> loadPages(TxtChapter chapter, BufferedReader br) {
+    private List<TxtPage> loadPages(ChapterInfo chapter, BufferedReader br) {
         //生成的页面
         List<TxtPage> pages = new ArrayList<>();
         //使用流的方式加载
@@ -1237,7 +1236,7 @@ public abstract class PageLoader {
         int rHeight = mVisibleHeight;
         int titleLinesCount = 0;
         boolean showTitle = true; // 是否展示标题
-        String paragraph = chapter.getTitle();//默认展示标题
+        String paragraph = chapter.getChapter_name();//默认展示标题
         try {
             while (showTitle || (paragraph = br.readLine()) != null) {
                 paragraph = StringUtils.convertCC(paragraph, mContext);
@@ -1265,7 +1264,7 @@ public abstract class PageLoader {
                         // 创建Page
                         TxtPage page = new TxtPage();
                         page.position = pages.size();
-                        page.title = StringUtils.convertCC(chapter.getTitle(), mContext);
+                        page.title = StringUtils.convertCC(chapter.getChapter_name(), mContext);
                         page.lines = new ArrayList<>(lines);
                         page.titleLines = titleLinesCount;
                         pages.add(page);
@@ -1318,7 +1317,7 @@ public abstract class PageLoader {
                 //创建Page
                 TxtPage page = new TxtPage();
                 page.position = pages.size();
-                page.title = StringUtils.convertCC(chapter.getTitle(), mContext);
+                page.title = StringUtils.convertCC(chapter.getChapter_name(), mContext);
                 page.lines = new ArrayList<>(lines);
                 page.titleLines = titleLinesCount;
                 pages.add(page);
@@ -1422,14 +1421,14 @@ public abstract class PageLoader {
          *
          * @param requestChapters:需要下载的章节列表
          */
-        void requestChapters(List<TxtChapter> requestChapters);
+        void requestChapters(List<ChapterInfo> requestChapters);
 
         /**
          * 作用：章节目录加载完成时候回调
          *
          * @param chapters：返回章节目录
          */
-        void onCategoryFinish(List<TxtChapter> chapters);
+        void onCategoryFinish(List<ChapterInfo> chapters);
 
         /**
          * 作用：章节页码数量改变之后的回调。==> 字体大小的调整，或者是否关闭虚拟按钮功能都会改变页面的数量。

@@ -36,14 +36,16 @@ public class ConsumerCoinAPI extends BaseSingleInstanceService {
             };
         } else {
             LinkedHashMap<String, Object> earnCoinParams = ServiceContext.bacicParamService().getBaseParam();
-            earnCoinParams.put("uid", uid);
-            earnCoinParams.put("pid", pid);
-            earnCoinParams.put("trader_id", trader_id);
-            earnCoinParams.put("coin", coin);
+            LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+            mParams.put("pid", pid);
+            mParams.put("uid", uid);
+            mParams.put("trader_id", trader_id);
+            mParams.put("coin", coin);
+            mParams.putAll(earnCoinParams);
             return DefaultHttpStatefulCallBack.INSTANCE
                     .newCallBack()
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.CONSUMER_COIN))
-                    .withArg(earnCoinParams)
+                    .withArg(mParams)
                     .buildCallerCallBack();
         }
     }

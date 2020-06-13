@@ -54,12 +54,12 @@ public class UpdataUserAPI extends BaseSingleInstanceService {
             };
         } else {
             LinkedHashMap<String, Object> baseParam = ServiceContext.bacicParamService().getBaseParam();
-            baseParam.putAll(updataParams);
+            updataParams.putAll(baseParam);
             realCallBack = MultiTypeHttpStatefulCallBack.INSTANCE
                     .<UserInfoList>newCallBack(new TypeReference<UserInfoList>() {
                     }.getType())
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.UPDATA_INFO))
-                    .withArg(baseParam)
+                    .withArg(updataParams)
                     .buildCallerCallBack();
         }
 
@@ -72,10 +72,10 @@ public class UpdataUserAPI extends BaseSingleInstanceService {
         realCallBack.onSuccess(new Function1<UserInfoList, Unit>() {
             @Override
             public Unit invoke(UserInfoList userInfoList) {
-                if (userInfoList.getUser_list().size() > 0) {
-                    EventService.Companion.post(EventConstant.REFRESH_USER_DATA);
+                if (userInfoList.getUser_list() !=null && userInfoList.getUser_list().size() > 0) {
                     uiCallBack.invokeSuccess(userInfoList.getUser_list().get(0));
                 }
+                EventService.Companion.post(EventConstant.REFRESH_USER_DATA);
                 return null;
             }
         }).onFail(new Function2<Integer, String, Unit>() {

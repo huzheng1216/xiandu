@@ -63,6 +63,12 @@ public class AdapterChannel extends RecyclerView.Adapter<RecyclerView.ViewHolder
             vholder.catalog.setText(data.get(i).getCategory_name());
             vholder.words.setText(data.get(i).getWord_count() + "字");
             Glide.with(context).load(data.get(i).getPoster()).placeholder(R.mipmap.book_icon_default).into(vholder.pic);
+            vholder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemClick(data.get(i));
+                }
+            });
         }
     }
 
@@ -130,7 +136,7 @@ public class AdapterChannel extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
 
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(BookShelf bookShelf);
 
     }
 

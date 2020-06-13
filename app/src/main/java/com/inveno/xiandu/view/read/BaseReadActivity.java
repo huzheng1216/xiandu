@@ -24,7 +24,7 @@ public abstract class BaseReadActivity extends AppCompatActivity {
 
     protected CompositeDisposable mDisposable;
     //ButterKnife
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
 
     private Unbinder unbinder;
     /****************************abstract area*************************************/
@@ -78,16 +78,15 @@ public abstract class BaseReadActivity extends AppCompatActivity {
         initWidget();
         initClick();
         processLogic();
-
     }
 
     private void initToolbar(){
         //更严谨是通过反射判断是否存在Toolbar
-//        mToolbar = ButterKnife.(this, R.id.toolbar);
-        if (mToolbar != null){
-            supportActionBar(mToolbar);
-            setUpToolbar(mToolbar);
-        }
+//        mToolbar = ButterKnife.bind(this, R.id.toolbar);
+//        if (mToolbar != null){
+//            supportActionBar(mToolbar);
+//            setUpToolbar(mToolbar);
+//        }
     }
 
 
@@ -114,7 +113,7 @@ public abstract class BaseReadActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
-        mToolbar.setNavigationOnClickListener(
+        toolbar.setNavigationOnClickListener(
                 (v) -> finish()
         );
         return actionBar;

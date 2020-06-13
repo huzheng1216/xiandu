@@ -70,7 +70,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="205dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
@@ -94,11 +94,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="5dp"
+                android:text="0"
                 android:textColor="@color/gray_3"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:text="666666"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -107,10 +107,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
-                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:text="0"
                 android:textColor="@color/gray_other"
-                android:text="120"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -143,10 +143,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="12dp"
-                android:text="233333"
-                android:textSize="14sp"
+                android:layout_marginTop="6dp"
+                android:text="0"
                 android:textColor="@color/gray_other"
+                android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/textView29"
                 app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -175,9 +175,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
                 android:text="今日汇率：10,000金币≈1元"
-                android:textSize="12sp"
                 android:textColor="@color/gray_6"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
@@ -185,16 +187,19 @@
                 android:id="@+id/textView33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="20dp"
+                android:layout_marginBottom="7dp"
                 android:background="@drawable/get_money_bt_bg"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
+                android:onClick="coin_top_up"
                 android:paddingStart="17dp"
+                android:paddingTop="4dp"
                 android:paddingEnd="17dp"
+                android:paddingBottom="4dp"
                 android:text="充话费"
-                android:textSize="12sp"
                 android:textColor="@color/gray_3"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 

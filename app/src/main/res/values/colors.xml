@@ -100,6 +100,9 @@
     <color name="clr_normal">#4678FF</color>
     <color name="clr_pressed">#2C9ED9</color>
 
+    <color name="my_coin_top_color">#7BAFFF</color>
+
     <color name="login_bg">#ECF2FE</color>
+    <color name="ranking_bg">#F0F2F5</color>
 
 </resources>

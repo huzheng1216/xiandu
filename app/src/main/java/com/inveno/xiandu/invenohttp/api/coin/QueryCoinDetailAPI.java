@@ -36,11 +36,13 @@ public class QueryCoinDetailAPI extends BaseSingleInstanceService {
             };
         } else {
             LinkedHashMap<String, Object> earnCoinParams = ServiceContext.bacicParamService().getBaseParam();
-            earnCoinParams.put("pid", pid);
+            LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+            mParams.put("pid", pid);
+            mParams.putAll(earnCoinParams);
             return DefaultHttpStatefulCallBack.INSTANCE
                     .newCallBack()
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.QUERY_COIN_DETAILS))
-                    .withArg(earnCoinParams)
+                    .withArg(mParams)
                     .buildCallerCallBack();
         }
     }

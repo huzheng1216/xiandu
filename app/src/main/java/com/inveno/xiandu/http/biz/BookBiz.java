@@ -1,14 +1,20 @@
 package com.inveno.xiandu.http.biz;
 
 import android.content.Context;
+import android.text.TextUtils;
 
+import com.inveno.android.api.api.uid.UidParamsUtil;
+import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.xiandu.bean.book.BookChapter;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ChapterInfo;
+import com.inveno.xiandu.bean.response.ResponseChannel;
 import com.inveno.xiandu.http.base.BaseBiz;
 import com.inveno.xiandu.http.body.BaseRequest;
+import com.inveno.xiandu.view.read.setting.StringUtils;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,27 +36,54 @@ public class BookBiz extends BaseBiz {
         return mMRRequestService.getBookById(content_id);
     }
 
-    public Observable<BaseRequest<List<BookShelf>>> getBookShelf(String uid, int pid) {
-        return mMRRequestService.getBookShelf(uid, pid);
+    public Observable<BaseRequest<List<BookShelf>>> getBookShelf() {
+        LinkedHashMap<String,Object> param = new LinkedHashMap<>();
+        UidParamsUtil.fillUidParams(param);
+        String uid = InvenoServiceContext.uid().getUid();
+        if(!TextUtils.isEmpty(uid)){
+            param.put("uid", uid);
+        }
+        return mMRRequestService.getBookShelf(param);
     }
 
     public Observable<BaseRequest<List<BookShelf>>> addBookShelf(String uid, int pid, long content_id, int status) {
         return mMRRequestService.addBookShelf(uid, pid, content_id, status);
     }
 
-    public Observable<BaseRequest<List<BookShelf>>> getRecommendList(int channel_id, int num, int type) {
-        Map<String, String> map = new HashMap<String, String>(3);
-        map.put("channel_id", channel_id + "");
-        map.put("num", num + "");
-        map.put("type", type + "");
-        return mMRRequestService.getRecommendList(map);
+    public Observable<BaseRequest<ResponseChannel>> getRecommendList(int channel_id, int num, int type) {
+        LinkedHashMap<String,Object> param = new LinkedHashMap<>();
+        UidParamsUtil.fillUidParams(param);
+        String uid = InvenoServiceContext.uid().getUid();
+        if(!TextUtils.isEmpty(uid)){
+            param.put("uid", uid);
+        }
+        param.put("channel_id", channel_id + "");
+        param.put("num", num + "");
+        param.put("type", type + "");
+        return mMRRequestService.getRecommendList(param);
     }
 
-    public Observable<BaseRequest<BookChapter>> getChapterList(long content_id, int page_num) {
-        return mMRRequestService.getChapterList(content_id, page_num);
+    public Observable<BaseRequest<BookChapter>> getChapterList(String content_id, int page_num) {
+        LinkedHashMap<String,Object> param = new LinkedHashMap<>();
+        UidParamsUtil.fillUidParams(param);
+        String uid = InvenoServiceContext.uid().getUid();
+        if(!TextUtils.isEmpty(uid)){
+            param.put("uid", uid);
+        }
+        param.put("content_id", content_id);
+        param.put("page_num", page_num + "");
+        return mMRRequestService.getChapterList(param);
     }
 
-    public Observable<BaseRequest<ChapterInfo>> getChapterInfo(long content_id, long chapter_id) {
-        return mMRRequestService.getChapterInfo(content_id, chapter_id);
+    public Observable<BaseRequest<ChapterInfo>> getChapterInfo(String content_id, String chapter_id) {
+        LinkedHashMap<String,Object> param = new LinkedHashMap<>();
+        UidParamsUtil.fillUidParams(param);
+        String uid = InvenoServiceContext.uid().getUid();
+        if(!TextUtils.isEmpty(uid)){
+            param.put("uid", uid);
+        }
+        param.put("content_id", content_id);
+        param.put("chapter_id", chapter_id);
+        return mMRRequestService.getChapterInfo(param);
     }
 }

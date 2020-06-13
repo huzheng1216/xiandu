@@ -21,6 +21,7 @@ import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
+import com.inveno.xiandu.view.read.ReadActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +37,7 @@ public class DetailActivity extends BaseActivity {
 
     //数据
     @Autowired(name = "json")
-    protected String json;
+    String json;
     private BookShelf book;
 
     //控件
@@ -52,6 +53,8 @@ public class DetailActivity extends BaseActivity {
     TextView bookCategory;
     @BindView(R.id.catalog_main_booc_intro)
     TextView bookIntro;
+    @BindView(R.id.catalog_main_booc_words)
+    TextView bookWords;
     @BindView(R.id.AppBarLayout)
     AppBarLayout appBarLayout;
     @BindView(R.id.progress_bar_read)
@@ -70,11 +73,15 @@ public class DetailActivity extends BaseActivity {
     //收藏
     @OnClick(R.id.bt_coll)
     void coll() {
-//        boolean b = SQL.getInstance(this).insertBook(book);
-//        if (b) {
-//            Toaster.showToastCenter(this, "已添加到书架");
-//            enableCollBt();
-//        }
+        if (SQL.getInstance().hasBookShelf(book)) {
+            SQL.getInstance().delBookShelf(book);
+            Toaster.showToastCenter(this, "已移除");
+            collBt.setText("保存书架");
+        } else {
+            SQL.getInstance().addBookShelf(book);
+            Toaster.showToastCenter(this, "已保存");
+            collBt.setText("已保存");
+        }
     }
 
     //立即阅读
@@ -112,11 +119,19 @@ public class DetailActivity extends BaseActivity {
             Toaster.showToast(this, "无法获取书籍信息");
             return;
         }
+        if (SQL.getInstance().hasBookShelf(book)) {
+            collBt.setText("已保存");
+        } else {
+            collBt.setText("保存书架");
+        }
+
         Glide.with(this).load(book.getPoster()).into(pic);
         title.setText(book.getBook_name());
         bookName.setText(book.getBook_name());
         bookAuthor.setText(book.getAuthor());
         bookCategory.setText(book.getCategory_name());
+        bookIntro.setText(book.getIntroduction());
+        bookWords.setText("字数：" + book.getWord_count() + "  热度：" + book.getPopularity());
 //        if (SQL.getInstance(this).queryBookByName(book.getName()).size() > 0) {
 //            enableCollBt();
 //        }

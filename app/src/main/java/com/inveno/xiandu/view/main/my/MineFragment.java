@@ -1,7 +1,9 @@
 package com.inveno.xiandu.view.main.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,11 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.basics.service.event.EventCanceler;
 import com.inveno.android.basics.service.event.EventListener;
 import com.inveno.android.basics.service.event.EventService;
+import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.AppInfoUtils;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.Toaster;
@@ -29,6 +33,9 @@ import org.jetbrains.annotations.NotNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 /**
  * Created By huzheng
@@ -46,12 +53,21 @@ public class MineFragment extends Fragment {
 
     @OnClick(R.id.iv_user_pic)
     void pic() {
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        clickUser();
     }
 
     @OnClick(R.id.tv_name)
     void name() {
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        clickUser();
+    }
+
+    private void clickUser() {
+        if (isLogin) {
+            Intent intent = new Intent(getActivity(), UserinfoActivity.class);
+            startActivity(intent);
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
     }
 
 //    @OnClick(R.id.tv_des)
@@ -89,7 +105,8 @@ public class MineFragment extends Fragment {
     @OnClick(R.id.mine_read)
     void mine_read() {
         Toaster.showToastCenter(getContext(), "阅读偏好");
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_PREFERENCES).navigation();
+//        ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_PREFERENCES).navigation();
+        ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).navigation();
     }
 
     @OnClick(R.id.mine_qq)
@@ -105,6 +122,7 @@ public class MineFragment extends Fragment {
 
     private EventCanceler event_login;
     private EventCanceler event_logout;
+    private boolean isLogin = false;
 
     public static MineFragment newInstance(String name) {
 
@@ -124,17 +142,21 @@ public class MineFragment extends Fragment {
         event_login = EventService.Companion.register(EventConstant.REFRESH_USER_DATA, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
+                isLogin = true;
                 UserInfo userInfo = ServiceContext.userService().getUserInfo();
                 if (TextUtils.isEmpty(userInfo.getUser_name())) {
                     user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
                 } else {
                     user_name.setText(userInfo.getUser_name());
                 }
+                user_name.setClickable(false);
+                user_name.setEnabled(false);
             }
         });
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
+                isLogin = false;
                 user_name.setText("点我登陆");
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
             }
@@ -152,20 +174,34 @@ public class MineFragment extends Fragment {
 //            String name = bundle.get("name").toString();
 //            tv.setText(name);
 //        }
-        UserInfo userInfo = AppInfoUtils.getUserInfo();
-        if (userInfo != null){
+        isLogin = false;
+        UserInfo userInfo = ServiceContext.userService().getUserInfo();
+        if (userInfo != null) {
+            isLogin = true;
             if (TextUtils.isEmpty(userInfo.getUser_name())) {
                 user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
             } else {
                 user_name.setText(userInfo.getUser_name());
             }
 
-            if (TextUtils.isEmpty(userInfo.getHead_url())){
+            if (TextUtils.isEmpty(userInfo.getHead_url())) {
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
-            }
-            else{
+            } else {
                 setHeaderImage(userInfo.getHead_url());
             }
+        } else {
+            APIContext.getUserAPI().getUser().onSuccess(new Function1<UserInfo, Unit>() {
+                @Override
+                public Unit invoke(UserInfo userInfo) {
+                    Log.i("wyjjjjjj", "获取用户信息: "+ JsonUtil.Companion.toJson(userInfo));
+                    return null;
+                }
+            }).onFail(new Function2<Integer, String, Unit>() {
+                @Override
+                public Unit invoke(Integer integer, String s) {
+                    return null;
+                }
+            }).execute();
         }
     }
 

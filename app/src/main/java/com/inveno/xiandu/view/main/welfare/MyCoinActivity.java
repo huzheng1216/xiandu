@@ -4,8 +4,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.view.BaseActivity;
@@ -20,11 +22,12 @@ import com.inveno.xiandu.view.TitleBarBaseActivity;
  */
 @Route(path = ARouterPath.ACTIVITY_MY_COIN)
 public class MyCoinActivity extends BaseActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_coin);
-        setStatusBar(R.color.white, true);
+        setStatusBar(R.color.my_coin_top_color, true);
         initView();
     }
 
@@ -35,5 +38,9 @@ public class MyCoinActivity extends BaseActivity {
 
     public void back(View view){
         finish();
+    }
+
+    public void coin_top_up(View view){
+        ARouter.getInstance().build(ARouterPath.ACTIVITY_COIN_TOP_UP).navigation();
     }
 }

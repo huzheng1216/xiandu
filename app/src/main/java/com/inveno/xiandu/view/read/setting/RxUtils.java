@@ -1,15 +1,10 @@
 package com.inveno.xiandu.view.read.setting;
 
-import com.inveno.xiandu.view.read.bean.DetailBean;
-
-import java.util.List;
-
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function3;
 import io.reactivex.schedulers.Schedulers;
 
 /**

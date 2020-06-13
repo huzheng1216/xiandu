@@ -1,11 +1,9 @@
 package com.inveno.xiandu.view.read.page;
 
+import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.utils.FileUtils;
-import com.inveno.xiandu.view.read.bean.BookChapterBean;
-import com.inveno.xiandu.view.read.bean.CollBookBean;
-import com.inveno.xiandu.view.read.bean.TxtChapter;
-import com.inveno.xiandu.view.read.setting.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,28 +20,28 @@ import java.util.List;
 public class NetPageLoader extends PageLoader {
     private static final String TAG = "PageFactory";
 
-    public NetPageLoader(PageView pageView, CollBookBean collBook) {
+    public NetPageLoader(PageView pageView, BookShelf collBook) {
         super(pageView, collBook);
     }
 
-    private List<TxtChapter> convertTxtChapter(List<BookChapterBean> bookChapters) {
-        List<TxtChapter> txtChapters = new ArrayList<>(bookChapters.size());
-        for (BookChapterBean bean : bookChapters) {
-            TxtChapter chapter = new TxtChapter();
-            chapter.bookId = bean.getBookId();
-            chapter.title = bean.getTitle();
-            chapter.link = bean.getLink();
-            txtChapters.add(chapter);
-        }
-        return txtChapters;
-    }
+//    private List<ChapterInfo> convertTxtChapter(List<ChapterInfo> bookChapters) {
+//        List<ChapterInfo> txtChapters = new ArrayList<>(bookChapters.size());
+//        for (ChapterInfo bean : bookChapters) {
+//            TxtChapter chapter = new TxtChapter();
+//            chapter.bookId = bean.getBookId();
+//            chapter.title = bean.getChapter_name();
+//            chapter.link = bean.getLink();
+//            txtChapters.add(chapter);
+//        }
+//        return txtChapters;
+//    }
 
     @Override
     public void refreshChapterList() {
-//        if (mCollBook.getBookChapters() == null) return;
+        if (mCollBook.getBookChapters() == null) return;
 
         // 将 BookChapter 转换成当前可用的 Chapter
-//        mChapterList = convertTxtChapter(mCollBook.getBookChapters());
+        mChapterList = mCollBook.getBookChapters();
         isChapterListPrepare = true;
 
         // 目录加载完成，执行回调操作。
@@ -59,9 +57,9 @@ public class NetPageLoader extends PageLoader {
     }
 
     @Override
-    protected BufferedReader getChapterReader(TxtChapter chapter) throws Exception {
-        File file = new File(Const.BOOK_CACHE_PATH + mCollBook.get_id()
-                + File.separator + chapter.title + FileUtils.SUFFIX_NB);
+    protected BufferedReader getChapterReader(ChapterInfo chapter) throws Exception {
+        File file = new File(Const.BOOK_CACHE_PATH + mCollBook.getContent_id()
+                + File.separator + chapter.getChapter_id() + FileUtils.SUFFIX_NB);
         if (!file.exists()) return null;
 
         Reader reader = new FileReader(file);
@@ -70,8 +68,8 @@ public class NetPageLoader extends PageLoader {
     }
 
     @Override
-    protected boolean hasChapterData(TxtChapter chapter) {
-        return BookManager.isChapterCached(mCollBook.get_id(), chapter.title);
+    protected boolean hasChapterData(ChapterInfo chapter) {
+        return BookManager.isChapterCached(mCollBook.getContent_id() + "", chapter.getChapter_id());
     }
 
     // 装载上一章节的内容
@@ -190,11 +188,11 @@ public class NetPageLoader extends PageLoader {
         }
 
 
-        List<TxtChapter> chapters = new ArrayList<>();
+        List<ChapterInfo> chapters = new ArrayList<>();
 
         // 过滤，哪些数据已经加载了
         for (int i = start; i <= end; ++i) {
-            TxtChapter txtChapter = mChapterList.get(i);
+            ChapterInfo txtChapter = mChapterList.get(i);
             if (!hasChapterData(txtChapter)) {
                 chapters.add(txtChapter);
             }
@@ -210,9 +208,9 @@ public class NetPageLoader extends PageLoader {
         super.saveRecord();
         if (mCollBook != null && isChapterListPrepare) {
             //表示当前CollBook已经阅读
-            mCollBook.setIsUpdate(false);
-            mCollBook.setLastRead(StringUtils.
-                    dateConvert(System.currentTimeMillis(), Const.FORMAT_BOOK_DATE));
+//            mCollBook.setIsUpdate(false);
+//            mCollBook.setLastRead(StringUtils.
+//                    dateConvert(System.currentTimeMillis(), Const.FORMAT_BOOK_DATE));
             //直接更新
 //            BookRepository.getInstance()
 //                    .saveCollBook(mCollBook);

@@ -7,11 +7,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.response.ResponseChannel;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.http.DDManager;
@@ -64,18 +67,19 @@ public class StoreItemFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_store_item, container, false);
         recyclerView = view.findViewById(R.id.RecyclerView);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         adapterChannel = new AdapterChannel(getContext());
-//        ClickUtil.bindSingleClick(textView, 500, new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                BookShelf book = new BookShelf();
-//                book.setBook_name(title);
-//                book.setAuthor("zheng.hu");
-//                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
-//                        .withString("book", GsonUtil.objectToJson(book))
-//                        .navigation();
-//            }
-//        });
+        recyclerView.setAdapter(adapterChannel);
+        adapterChannel.setOnItemClickListener(new AdapterChannel.OnItemClickListener() {
+            @Override
+            public void onItemClick(BookShelf bookShelf) {
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                        .withString("json", GsonUtil.objectToJson(bookShelf))
+                        .navigation();
+            }
+        });
         return view;
     }
 
@@ -96,15 +100,15 @@ public class StoreItemFragment extends BaseFragment {
         DDManager.getInstance().getRecommendList(channel, 50, 0)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BaseRequest<List<BookShelf>>>() {
+                .subscribe(new Observer<BaseRequest<ResponseChannel>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                     }
 
                     @Override
-                    public void onNext(BaseRequest<List<BookShelf>> listBaseRequest) {
-                        if (listBaseRequest.getData() != null) {
-                            adapterChannel.add(listBaseRequest.getData());
+                    public void onNext(BaseRequest<ResponseChannel> listBaseRequest) {
+                        if (listBaseRequest.getData() != null && listBaseRequest.getData().getNovel_list() != null) {
+                            adapterChannel.add(listBaseRequest.getData().getNovel_list());
                         } else {
                             Toaster.showToastCenter(getContext(), "获取数据失败:" + listBaseRequest.getCode());
                         }
