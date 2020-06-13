@@ -126,7 +126,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     }
 
     private void setChoise(ViewGroup mViewGroup, TextView tv1, TextView tv2) {
-        mViewGroup.setBackground(getResources().getDrawable(R.drawable.blue_corners_bg));
+        mViewGroup.setBackground(getResources().getDrawable(R.drawable.blue_corners_bg_8));
         tv1.setTextColor(getResources().getColor(R.color.white));
         tv2.setTextColor(getResources().getColor(R.color.white));
     }

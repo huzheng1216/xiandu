@@ -42,9 +42,11 @@ object HttpUtil {
                 GlobalScope.launch {
                     val contentBuilder = StringBuilder()
                     for ((key, value) in args) {
-                        contentBuilder.append(key).append("=").append(
-                                URLEncoder.encode(value.toString(),"utf-8"))
-                            .append("&")
+                        if(value != null){
+                            contentBuilder.append(key).append("=").append(
+                                    URLEncoder.encode(value.toString(),"utf-8"))
+                                    .append("&")
+                        }
                     }
                     if (contentBuilder.length > 0) {
                         contentBuilder.setLength(contentBuilder.length - 1)

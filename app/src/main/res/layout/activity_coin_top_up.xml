@@ -99,7 +99,7 @@
                     android:layout_marginBottom="12dp"
                     android:layout_weight="1"
                     android:onClick="choise_10"
-                    android:background="@drawable/blue_corners_bg"
+                    android:background="@drawable/blue_corners_bg_8"
                     android:gravity="center"
                     android:orientation="vertical">
 
