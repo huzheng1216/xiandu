@@ -30,7 +30,8 @@ public class InvenoAdService {
     }
 
     public StatefulCallBack<String> requestSplashAd(SplashAdParam splashAdParam){
-        String adSpaceId = getAdSpaceId(ScenarioManifest.SPLASH);
+        // TODO 广告位要使用策略配置的ID
+        String adSpaceId = "4920";// getAdSpaceId(ScenarioManifest.SPLASH);
         PlaintAdParamUtil.setPositionId(splashAdParam,adSpaceId);
         return InvenoADAgent.getAdApi().requestSplashAD(splashAdParam);
     }
@@ -41,9 +42,6 @@ public class InvenoAdService {
         return InvenoADAgent.getAdApi().requestInfoAD(infoAdParam);
     }
 
-    private AdConfigData requireAdConfigData(){
-        return InvenoServiceContext.ad().getAdConfigData();
-    }
 
     private String getAdSpaceId(String scenario){
         Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);

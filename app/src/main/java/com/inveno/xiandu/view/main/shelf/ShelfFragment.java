@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
@@ -110,38 +111,52 @@ public class ShelfFragment extends BaseFragment {
     protected void onVisible(Boolean firstVisble) {
         LogUtils.H("书架可见：" + firstVisble);
         initData();
+        //加载网络数据
+        DDManager.getInstance().getBookShelf()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<BaseRequest<ResponseShelf>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(BaseRequest<ResponseShelf> listBaseRequest) {
+                        if (listBaseRequest != null && listBaseRequest.getData().getBook_list() != null) {
+                            //同步数据
+                            syncData(listBaseRequest.getData().getBook_list());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.H("hhhhh");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 对比书架数据
+     *
+     * @param data
+     */
+    private void syncData(List<BookShelf> data) {
+        //简单判断一下
+        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
+            SQL.getInstance().insertOrReplace(data);
+            initData();
+        }
     }
 
     private void initData() {
 //        data.addAll(SQL.getInstance(getContext()).getAllBookByShelfId(bookShelf.getId()));
         shelfAdapter.setData(SQL.getInstance().getAllBookShelf());
-//        DDManager.getInstance().getBookShelf()
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(new Observer<BaseRequest<List<BookShelf>>>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                    }
-//
-//                    @Override
-//                    public void onNext(BaseRequest<List<BookShelf>> listBaseRequest) {
-//                        if (listBaseRequest != null && listBaseRequest.getData() != null) {
-//                            shelfAdapter.setData(listBaseRequest.getData());
-//                        } else {
-//
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                });
+
 //        shelfAdapter.notifyDataSetChanged();
     }
 

@@ -4,6 +4,7 @@ import com.inveno.xiandu.bean.book.BookChapter;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.response.ResponseChannel;
+import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.http.body.BaseRequest;
 
 import java.util.List;
@@ -22,12 +23,14 @@ import retrofit2.http.POST;
  */
 public interface MRRequestService {
 
-    @POST("behavior/BookShelf/list")
-    Observable<BaseRequest<List<BookShelf>>> getBookShelf(@Body Map<String, Object> map);
+    @POST("behavior/book_shelf/list")
+    Observable<BaseRequest<ResponseShelf>> getBookShelf(@Body Map<String, Object> map);
 
-    @FormUrlEncoded
-    @POST("behavior/BookShelf/add")
-    Observable<BaseRequest<List<BookShelf>>> addBookShelf(@Field("uid") String uid, @Field("pid") int pid, @Field("content_id") long content_id, @Field("status") int status);
+    @POST("behavior/book_shelf/add")
+    Observable<BaseRequest<List<BookShelf>>> addBookShelf(@Body Map<String, Object> map);
+
+    @POST("behavior/book_shelf/update")
+    Observable<BaseRequest<List<BookShelf>>> updateBookShelf(@Body Map<String, Object> map);
 
     @FormUrlEncoded
     @POST("content/novel/info")
