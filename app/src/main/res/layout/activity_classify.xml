@@ -9,8 +9,7 @@
     <RelativeLayout
         android:id="@+id/tittle_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        tools:ignore="UselessParent">
+        android:layout_height="65dp">
 
         <ImageView
             android:id="@+id/title_bar_back"
@@ -22,14 +21,61 @@
             android:padding="5dp"
             android:src="@drawable/black_back_arrow" />
 
-        <TextView
-            android:id="@+id/base_activity_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="方正字体"
-            android:textColor="#000"
-            android:textSize="16sp" />
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/classify_woman_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
+                android:onClick="click_woman"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/classify_woman_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="女生"
+                    android:textColor="@color/base_color"
+                    android:textSize="20sp" />
+                <View
+                    android:id="@+id/classify_woman_bottom_view"
+                    android:layout_width="20dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@drawable/blue_corners_bg_8" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/classify_man_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="click_man"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/classify_man_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="男生"
+                    android:textColor="@color/gray_3"
+                    android:textSize="14sp" />
+                <View
+                    android:id="@+id/classify_man_bottom_view"
+                    android:layout_width="20dp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="2dp"
+                    android:visibility="gone"
+                    android:background="@drawable/blue_corners_bg_8" />
+            </LinearLayout>
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/base_activity_right"
@@ -38,7 +84,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="10dp"
-            android:src="@drawable/ic_search"/>
+            android:src="@drawable/ic_search" />
     </RelativeLayout>
 
     <LinearLayout
@@ -83,34 +129,35 @@
                     android:id="@+id/ranking_man_bt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/blue_round_bg_15"
+                    android:onClick="click_man"
                     android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
                     android:paddingTop="8dp"
+                    android:paddingEnd="20dp"
                     android:paddingBottom="8dp"
                     android:text="男频"
-                    android:onClick="click_man"
-                    android:background="@drawable/blue_round_bg_15"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white" />
 
                 <TextView
                     android:id="@+id/ranking_woman_bt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="20dp"
-                    android:paddingEnd="20dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
                     android:layout_marginStart="20dp"
-                    android:text="女频"
-                    android:onClick="click_woman"
                     android:background="@drawable/gray_round_bg_15"
-                    android:textColor="@color/gray_6"/>
+                    android:onClick="click_woman"
+                    android:paddingStart="20dp"
+                    android:paddingTop="8dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="8dp"
+                    android:text="女频"
+                    android:textColor="@color/gray_6" />
             </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ranking_data_recycle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="12dp"/>
+                android:layout_marginTop="12dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

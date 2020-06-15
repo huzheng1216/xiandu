@@ -45,6 +45,7 @@ public class ClassifyActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStatusBar(R.color.ranking_bg, true);
+        setContentView(R.layout.activity_classify);
         initView();
     }
 
