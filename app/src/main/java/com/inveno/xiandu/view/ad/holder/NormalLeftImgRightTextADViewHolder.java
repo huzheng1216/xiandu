@@ -17,11 +17,9 @@ import com.inveno.xiandu.R;
 import java.util.ArrayList;
 import java.util.List;
 
-//
-public class NormalAdViewHolder extends RecyclerView.ViewHolder {
-
-    public static NormalAdViewHolder create(Context context) {
-        return new NormalAdViewHolder(View.inflate(context, R.layout.ad_normal_item_layout,null));
+public class NormalLeftImgRightTextADViewHolder extends RecyclerView.ViewHolder {
+    public static NormalLeftImgRightTextADViewHolder create(Context context) {
+        return new NormalLeftImgRightTextADViewHolder(View.inflate(context, R.layout.ad_left_img_right_text_layout,null));
     }
 
     RelativeLayout child_rl;
@@ -31,12 +29,10 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
     ImageView iv_ad_iamge;//背景图片
     ImageView iv_ad_logo;//logo
 
-    public NormalAdViewHolder(View itemView) {
+    public NormalLeftImgRightTextADViewHolder(View itemView) {
         super(itemView);
         // R.layout.ad_normal_item_layout
-        child_rl = itemView.findViewById(R.id.child_rl);
         tv_ad_title = itemView.findViewById(R.id.tv_ad_title);
-        rl_ad_content = itemView.findViewById(R.id.rl_ad_content);
         iv_ad_iamge = itemView.findViewById(R.id.iv_ad_image);
         iv_ad_logo = itemView.findViewById(R.id.iv_ad_logo);
         tv_ad_desc = itemView.findViewById(R.id.tv_ad_desc);
@@ -80,6 +76,6 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
             //设置一个标识，用来item点击事件获取数据
             itemView.setTag(position);
         }
-       
+
     }
 }
