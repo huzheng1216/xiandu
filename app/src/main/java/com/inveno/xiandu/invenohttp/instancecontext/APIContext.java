@@ -1,6 +1,7 @@
 package com.inveno.xiandu.invenohttp.instancecontext;
 
 import com.inveno.android.basics.service.app.context.InstanceContext;
+import com.inveno.xiandu.invenohttp.api.book.GetBookCityAPi;
 import com.inveno.xiandu.invenohttp.api.coin.ConsumerCoinAPI;
 import com.inveno.xiandu.invenohttp.api.coin.EarnCoinAPI;
 import com.inveno.xiandu.invenohttp.api.coin.QueryCoinAPI;
@@ -50,6 +51,10 @@ public class APIContext {
 
     public static QueryCoinDetailAPI queryCoinDetailAPI() {
         return InstanceContext.get().getInstance(QueryCoinDetailAPI.class);
+    }
+
+    public static GetBookCityAPi getRecommendAPi() {
+        return InstanceContext.get().getInstance(GetBookCityAPi.class);
     }
 
 }

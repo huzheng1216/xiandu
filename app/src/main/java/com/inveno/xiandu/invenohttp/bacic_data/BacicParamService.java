@@ -3,6 +3,8 @@ package com.inveno.xiandu.invenohttp.bacic_data;
 import android.text.TextUtils;
 
 import com.inveno.android.api.service.InvenoServiceContext;
+import com.inveno.android.api.service.product.IProductService;
+import com.inveno.android.api.service.product.ProductService;
 import com.inveno.android.basics.service.BasicsServiceModule;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.app.info.AppInfoHolder;
@@ -27,19 +29,23 @@ public class BacicParamService extends BaseSingleInstanceService {
     @Override
     protected void onCreate() {
         super.onCreate();
-        baseParam.put("product_id", "111111");
+        IProductService iProductService = InvenoServiceContext.product();
+        baseParam.put("product_id", iProductService.getProductId());
         if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0)
             baseParam.put("pid", ServiceContext.userService().getUserInfo().getPid());
+        else{
+            baseParam.put("pid", 0);
+        }
         if (!TextUtils.isEmpty(InvenoServiceContext.uid().getUid()))
             baseParam.put("uid", InvenoServiceContext.uid().getUid());
         baseParam.put("request_time", String.valueOf(System.currentTimeMillis()));
         baseParam.put("app_ver", AppInfoHolder.Companion.getAppInfo().getVersionName());
         baseParam.put("api_ver", "1.0");
         baseParam.put("network", AndroidParamProviderHolder.get().device().getNetwork());
-//        baseParam.put("platform","");
-//        baseParam.put("brand","");
-//        baseParam.put("model","");
-//        baseParam.put("tk","");
+        baseParam.put("platform", "android");
+        baseParam.put("brand", AndroidParamProviderHolder.get().device().getBrand());
+        baseParam.put("model", AndroidParamProviderHolder.get().device().getModel());
+        baseParam.put("tk", iProductService.createTkWithoutData(String.valueOf(System.currentTimeMillis())));
 
     }
 

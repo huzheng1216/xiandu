@@ -11,7 +11,8 @@ import java.util.List;
  * Date 2020-02-28
  * Des 主界面适配
  */
-public class MainViewPagerAdapter extends FragmentPagerAdapter {private List<Fragment> list;
+public class MainViewPagerAdapter extends FragmentPagerAdapter {
+    private List<Fragment> list;
 
     public void setList(List<Fragment> list) {
         this.list = list;

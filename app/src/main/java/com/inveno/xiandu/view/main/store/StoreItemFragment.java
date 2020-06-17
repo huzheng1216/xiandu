@@ -1,6 +1,7 @@
 package com.inveno.xiandu.view.main.store;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,27 +14,39 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.BookShelfList;
+import com.inveno.xiandu.bean.book.EditorRecommendList;
+import com.inveno.xiandu.bean.book.RecommendName;
 import com.inveno.xiandu.bean.response.ResponseChannel;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
+import com.inveno.xiandu.view.adapter.BookCityAdapter;
+import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
 import com.inveno.xiandu.view.main.AdapterChannel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 /**
  * Created By huzheng
@@ -42,9 +55,14 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class StoreItemFragment extends BaseFragment {
 
-    int channel;
-    RecyclerView recyclerView;
-    AdapterChannel adapterChannel;
+    private int channel;
+    private RecyclerView recyclerView;
+    private AdapterChannel adapterChannel;
+    private BookCityAdapter bookCityAdapter;
+
+    private ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
+    private ArrayList<BaseDataBean> topDataBeans = new ArrayList<>();
+    private ArrayList<BaseDataBean> bottomDataBeans = new ArrayList<>();
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -66,18 +84,23 @@ public class StoreItemFragment extends BaseFragment {
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_store_item, container, false);
+        ButterKnife.bind(this, view);
         recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapterChannel = new AdapterChannel(getContext());
-        recyclerView.setAdapter(adapterChannel);
-        adapterChannel.setOnItemClickListener(new AdapterChannel.OnItemClickListener() {
+
+        bookCityAdapter = new BookCityAdapter(getContext(), getActivity(), mDataBeans);
+        recyclerView.setAdapter(bookCityAdapter);
+        bookCityAdapter.setOnItemClickListener(new BookCityAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(BookShelf bookShelf) {
-                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
-                        .withString("json", GsonUtil.objectToJson(bookShelf))
-                        .navigation();
+            public void onItemClick(BaseDataBean baseDataBean) {
+                if (baseDataBean instanceof BookShelf) {
+                    BookShelf bookShelf = (BookShelf) baseDataBean;
+                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                            .withString("json", GsonUtil.objectToJson(bookShelf))
+                            .navigation();
+                }
             }
         });
         return view;
@@ -91,9 +114,51 @@ public class StoreItemFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         //第一次加载数据
+        Log.i("wyjjjjjjj", "页面: "+ channel);
+        Log.i("wyjjjjjjj", "是否第一次: "+ firstVisble);
         if (firstVisble) {
-            initData();
+//            initData();
+            APIContext.getRecommendAPi().getBookCity(channel)
+                    .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
+                        @Override
+                        public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
+                            mDataBeans = baseDataBeans;
+                            bookCityAdapter.setDataList(mDataBeans);
+                            return null;
+                        }
+                    })
+                    .onFail(new Function2<Integer, String, Unit>() {
+                        @Override
+                        public Unit invoke(Integer integer, String s) {
+                            Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                            return null;
+                        }
+                    }).execute();
         }
+    }
+
+    //获取推荐数据
+    private void getRecommendData(int channel_id, int type, int num) {
+        APIContext.getRecommendAPi().getRecommend(channel_id, type, num)
+                .onSuccess(new Function1<BookShelfList, Unit>() {
+                    @Override
+                    public Unit invoke(BookShelfList bookShelfList) {
+                        if (!topDataBeans.isEmpty() && !bottomDataBeans.isEmpty()){
+                            mDataBeans.clear();
+                            mDataBeans.addAll(topDataBeans);
+                            mDataBeans.addAll(bottomDataBeans);
+                            bookCityAdapter.setDataList(mDataBeans);
+                        }
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                        return null;
+                    }
+                }).execute();
     }
 
     private void initData() {
@@ -124,4 +189,22 @@ public class StoreItemFragment extends BaseFragment {
                     }
                 });
     }
+//
+//    @OnClick(R.id.classify)
+//    void startClassify() {
+//        Toaster.showToast(getActivity(), "分类");
+//        ARouter.getInstance().build(ARouterPath.ACTIVITY_CLASSIFY).navigation();
+//    }
+//
+//    @OnClick(R.id.rankiing)
+//    void startRanking() {
+//        Toaster.showToast(getActivity(), "排行榜");
+//        ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).navigation();
+//    }
+//
+//    @OnClick(R.id.the_end)
+//    void startTheEnd() {
+//        Toaster.showToast(getActivity(), "完结");
+//
+//    }
 }

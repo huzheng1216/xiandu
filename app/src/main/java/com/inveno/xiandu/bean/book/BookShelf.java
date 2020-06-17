@@ -1,5 +1,7 @@
 package com.inveno.xiandu.bean.book;
 
+import com.inveno.xiandu.bean.BaseDataBean;
+
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
@@ -13,7 +15,7 @@ import java.util.List;
  * Des 书架实体
  */
 @Entity
-public class BookShelf {
+public class BookShelf extends BaseDataBean {
 
     //书籍ID
     @Id

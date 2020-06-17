@@ -21,6 +21,12 @@ public class HttpUrl {
     public static String QUERY_COIN = "/coin/query_coin"; //用户金币查询
     public static String QUERY_COIN_DETAILS = "/coin/query_coin_details"; //用户金币明细查询
 
+    //书城相关
+    public static String EDITOR_LIST = "/content/novel/editor/list"; //小编推荐
+    public static String RECOMMEND_LIST = "/content/novel/recommend/list"; //获取相关推荐
+    public static String RELEVANT_LIST = "/content/novel/relevant/list"; //获取推荐小说
+
+
     public static String getHttpUri(String url){
         return HOST_URI + url;
     }

@@ -36,9 +36,9 @@ public class MainActivity extends BaseActivity {
     private MainViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
     private MenuItem menuItem;
-    private Toolbar toolbar;
-    View searchLayout;
-    ImageView pic;
+//    private Toolbar toolbar;
+//    View searchLayout;
+//    ImageView pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +47,20 @@ public class MainActivity extends BaseActivity {
         requestMyPermissions();
         setContentView(R.layout.activity_main);
         setStatusBar(R.color.white, true);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
-        searchLayout = findViewById(R.id.home_toolbar_search);
-        pic = findViewById(R.id.home_tallbar_search_ic);
-        ClickUtil.bindSingleClick(searchLayout, 200, new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SerchActivityMain.class);
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pic, "photo").toBundle();
-                startActivity(intent, bundle);
-            }
-        });
+//        searchLayout = findViewById(R.id.home_toolbar_search);
+//        pic = findViewById(R.id.home_tallbar_search_ic);
+//        ClickUtil.bindSingleClick(searchLayout, 200, new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(MainActivity.this, SerchActivityMain.class);
+//                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pic, "photo").toBundle();
+//                startActivity(intent, bundle);
+//            }
+//        });
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -73,11 +73,11 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (position > 1) {
-                    toolbar.setVisibility(View.GONE);
-                }else{
-                    toolbar.setVisibility(View.VISIBLE);
-                }
+//                if (position > 1) {
+//                    toolbar.setVisibility(View.GONE);
+//                }else{
+//                    toolbar.setVisibility(View.VISIBLE);
+//                }
                 if (menuItem != null) {
                     menuItem.setChecked(false);
                 } else {

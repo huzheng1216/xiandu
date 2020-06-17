@@ -27,6 +27,7 @@ import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.view.splash.ChoiseGenderActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,8 +49,10 @@ public class MineFragment extends Fragment {
     ImageView pic;
     @BindView(R.id.tv_name)
     TextView user_name;
-//    @BindView(R.id.tv_des)
+    //    @BindView(R.id.tv_des)
 //    TextView user_des;
+    @BindView(R.id.mine_read_gender_tv)
+    TextView mine_read_gender_tv;
 
     @OnClick(R.id.iv_user_pic)
     void pic() {
@@ -70,26 +73,6 @@ public class MineFragment extends Fragment {
         }
     }
 
-//    @OnClick(R.id.tv_des)
-//    void des() {
-//        Toaster.showToastCenter(getContext(), "登陆");
-//        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
-//    }
-
-    //    @OnClick(R.id.bt_source)
-//    void source() {
-//        Toaster.showToastCenter(getContext(), "设置源");
-//    }
-//
-//    @OnClick(R.id.bt_charts)
-//    void charts() {
-//        Toaster.showToastCenter(getContext(), "排行榜");
-//    }
-//
-//    @OnClick(R.id.bt_setting)
-//    void setting() {
-//        Toaster.showToastCenter(getContext(), "设置");
-//    }
     @OnClick(R.id.mine_send_luckymoney)
     void mine_send_luckymoney() {
         Toaster.showToastCenter(getContext(), "分红包");
@@ -106,7 +89,9 @@ public class MineFragment extends Fragment {
     void mine_read() {
         Toaster.showToastCenter(getContext(), "阅读偏好");
 //        ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_PREFERENCES).navigation();
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).navigation();
+        Intent intent = new Intent(getActivity(), ChoiseGenderActivity.class);
+        intent.putExtra("request_code", ChoiseGenderActivity.MINE_REQUEST_CODE);
+        startActivityForResult(intent, ChoiseGenderActivity.MINE_REQUEST_CODE);
     }
 
     @OnClick(R.id.mine_qq)
@@ -193,7 +178,7 @@ public class MineFragment extends Fragment {
             APIContext.getUserAPI().getUser().onSuccess(new Function1<UserInfo, Unit>() {
                 @Override
                 public Unit invoke(UserInfo userInfo) {
-                    Log.i("wyjjjjjj", "获取用户信息: "+ JsonUtil.Companion.toJson(userInfo));
+                    Log.i("wyjjjjjj", "获取用户信息: " + JsonUtil.Companion.toJson(userInfo));
                     return null;
                 }
             }).onFail(new Function2<Integer, String, Unit>() {
@@ -220,5 +205,24 @@ public class MineFragment extends Fragment {
     private void setHeaderImage(String url) {
 //        Glide.with(this).load(R.drawable.ic_test_ad).centerCrop().placeholder(R.drawable.ic_header_default).into(pic);
         GlideUtils.LoadCircleImage(this.getContext(), R.drawable.ic_header_default, pic);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ChoiseGenderActivity.MINE_REQUEST_CODE && resultCode == ChoiseGenderActivity.MINE_REQUEST_CODE) {
+            int gender = 0;
+            if (data != null) {
+                gender = data.getIntExtra("gender", 0);
+
+                if (gender == 0) {
+                    mine_read_gender_tv.setText("");
+                }else if (gender == 1){
+                    mine_read_gender_tv.setText("男");
+                }else if (gender == 2){
+                    mine_read_gender_tv.setText("女");
+                }
+            }
+        }
     }
 }
