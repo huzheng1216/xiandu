@@ -9,8 +9,7 @@
     <RelativeLayout
         android:id="@+id/tittle_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        tools:ignore="UselessParent">
+        android:layout_height="65dp">
 
         <ImageView
             android:id="@+id/title_bar_back"
