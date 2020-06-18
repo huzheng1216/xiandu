@@ -13,6 +13,8 @@ import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
 
+import java.util.List;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
@@ -30,16 +32,20 @@ public class InvenoAdService {
     }
 
     public StatefulCallBack<String> requestSplashAd(SplashAdParam splashAdParam){
-        // TODO 广告位要使用策略配置的ID
-        String adSpaceId = "4920";// getAdSpaceId(ScenarioManifest.SPLASH);
+        String adSpaceId =  getAdSpaceId(ScenarioManifest.SPLASH);
         PlaintAdParamUtil.setPositionId(splashAdParam,adSpaceId);
         return InvenoADAgent.getAdApi().requestSplashAD(splashAdParam);
     }
 
-    public StatefulCallBack<ADInfoWrapper> requestInfoAd(String scenario, InfoAdParam infoAdParam){
-        String adSpaceId = getAdSpaceId(scenario);
-        PlaintAdParamUtil.setPositionId(infoAdParam,adSpaceId);
-        return InvenoADAgent.getAdApi().requestInfoAD(infoAdParam);
+
+    public Rule_list requestInfoAdRuleList(String scenario){
+        return InvenoServiceContext.ad().getRuleList(scenario);
+    }
+
+    public StatefulCallBack<ADInfoWrapper> requestInfoAd(List<InfoAdParam> infoAdParam){
+        // TODO
+        return null;
+        //        return InvenoADAgent.getAdApi().requestInfoAD(infoAdParam);
     }
 
 

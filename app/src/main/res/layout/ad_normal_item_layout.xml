@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/parent_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+        <RelativeLayout
+            android:id="@+id/child_rl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_ad_title"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="好好好"
+                android:textColor="@android:color/black"
+                android:textSize="18sp" />
+
+            <FrameLayout
+                android:id="@+id/rl_ad_content"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/tv_ad_title"
+                android:layout_marginTop="10dp">
+
+                <ImageView
+                    android:id="@+id/iv_ad_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <ImageView
+                    android:id="@+id/iv_ad_logo"
+                    android:layout_width="80dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|right"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_ad_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rl_ad_content"
+                android:layout_centerInParent="true"
+                android:text="太好了"
+                android:textColor="@android:color/black" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>
