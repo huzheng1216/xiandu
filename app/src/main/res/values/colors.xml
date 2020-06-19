@@ -105,4 +105,6 @@
     <color name="login_bg">#ECF2FE</color>
     <color name="ranking_bg">#F0F2F5</color>
 
+    <color name="delete_red">#FA5150</color>
+
 </resources>

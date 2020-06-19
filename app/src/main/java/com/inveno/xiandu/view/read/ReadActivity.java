@@ -35,6 +35,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.appbar.AppBarLayout;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
@@ -49,6 +50,7 @@ import com.inveno.xiandu.view.read.setting.ReadSettingManager;
 import com.inveno.xiandu.view.read.setting.ScreenUtils;
 import com.inveno.xiandu.view.read.setting.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -126,6 +128,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private Animation mBottomOutAnim;
     private CategoryAdapter mCategoryAdapter;
     private BookShelf bookShelf;
+    private Bookbrack bookbrack = new Bookbrack();
+    ;
     //控制屏幕常亮
     private PowerManager.WakeLock mWakeLock;
     private Handler mHandler = new Handler() {
@@ -211,6 +215,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         super.initData(savedInstanceState);
         String json = getIntent().getStringExtra("json");
         bookShelf = GsonUtil.gsonToObject(json, BookShelf.class);
+        bookbrack.setContent_id(bookShelf.getContent_id());
+        bookbrack.setBook_name(bookShelf.getBook_name());
+        bookbrack.setPoster(bookShelf.getPoster());
+        bookbrack.setWords_num(bookShelf.getWords_num());
+        bookbrack.setChapter_name(bookShelf.getChapter_name());
+        bookbrack.setChapter_id(bookShelf.getChapter_id());
+
         isCollected = false;
         isNightMode = ReadSettingManager.getInstance().isNightMode();
         isFullScreen = ReadSettingManager.getInstance().isFullScreen();
@@ -245,7 +256,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mDlSlide.setFocusableInTouchMode(false);
         mSettingDialog = new ReadSettingDialog(this, mPageLoader);
 
-        if (!SQL.getInstance().hasBookShelf(bookShelf)) {
+        if (!SQL.getInstance().hasBookbrack(bookbrack)) {
             mTvBrief.setText("保存书架");
         } else {
             mTvBrief.setText("已保存");
@@ -523,12 +534,25 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mTvBrief.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (SQL.getInstance().hasBookShelf(bookShelf)) {
                     SQL.getInstance().delBookShelf(bookShelf);
+//                    Toaster.showToastCenter(ReadActivity.this, "已移除");
+//                    mTvBrief.setText("保存书架");
+                } else {
+                    SQL.getInstance().addBookShelf(bookShelf);
+//                    Toaster.showToastCenter(ReadActivity.this, "已保存");
+//                    mTvBrief.setText("已保存");
+                }
+
+                if (SQL.getInstance().hasBookbrack(bookbrack)) {
+                    ArrayList<Bookbrack> bookbracks = new ArrayList<>();
+                    bookbracks.add(bookbrack);
+                    SQL.getInstance().delBookbrack(bookbracks);
                     Toaster.showToastCenter(ReadActivity.this, "已移除");
                     mTvBrief.setText("保存书架");
                 } else {
-                    SQL.getInstance().addBookShelf(bookShelf);
+                    SQL.getInstance().addBookbrack(bookbrack);
                     Toaster.showToastCenter(ReadActivity.this, "已保存");
                     mTvBrief.setText("已保存");
                 }

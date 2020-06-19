@@ -3,13 +3,11 @@ package com.inveno.xiandu.view.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,10 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
-import com.inveno.xiandu.bean.store.RankingBean;
+import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.RankingData;
+import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.view.holder.BaseHolder;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yongji.wang
@@ -33,12 +33,12 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     private Context mContext;
     private Activity mActivity;
-    private ArrayList<BaseDataBean> mDataList;
+    private List<BaseDataBean> mDataList;
     private int lastChoise = 0;
     private OnItemClickListener mListener;
 
 
-    public RightDataAdapter(Context context, Activity activity, ArrayList<BaseDataBean> dataList) {
+    public RightDataAdapter(Context context, Activity activity, List<BaseDataBean> dataList) {
         mContext = context;
         mActivity = activity;
         mDataList = dataList;
@@ -90,13 +90,19 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         if (holder instanceof HeaderViewHolder) {
 
         } else if (holder instanceof ContentViewHolder) {
+            ContentViewHolder mHolder = (ContentViewHolder) holder;
             int dataPosition = position;
             if (getHeaderView() != null) {
                 dataPosition = position - 1;
             }
-            RankingBean rankingBean = (RankingBean) mDataList.get(dataPosition);
-            rankingBean.setRankingNum(dataPosition);
-            ((ContentViewHolder) holder).setData(mContext, (RankingBean) mDataList.get(dataPosition));
+            mHolder.setData(mContext, mDataList.get(dataPosition));
+            int finalDataPosition = dataPosition;
+            mHolder.rightDataView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onItemClick(mDataList.get(finalDataPosition));
+                }
+            });
 
         } else if (holder instanceof FooterViewHolder) {
 
@@ -151,7 +157,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         }
     }
 
-    public static class ContentViewHolder extends BaseHolder<RankingBean> {
+    public static class ContentViewHolder extends BaseHolder<BaseDataBean> {
 
         View rightDataView;
         ImageView ranking_book_pic;
@@ -161,6 +167,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
         public ContentViewHolder(View itemView) {
             super(itemView);
+            rightDataView = itemView;
             ranking_book_pic = itemView.findViewById(R.id.ranking_book_pic);
             ranking_book_name = itemView.findViewById(R.id.ranking_book_name);
             ranking_book_type = itemView.findViewById(R.id.ranking_book_type);
@@ -168,19 +175,30 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         }
 
         @Override
-        public void setData(Context context, RankingBean object) {
-            ranking_book_name.setText(object.getRankBookname());
-            ranking_book_type.setText(object.getRankBookType());
-            ranking_book_ranking.setText("");
-            if (object.getRankingNum() == 0) {
-                ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_one));
-            } else if (object.getRankingNum() == 1) {
-                ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_two));
-            } else if (object.getRankingNum() == 2) {
-                ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_three));
-            } else {
-                ranking_book_ranking.setBackground(null);
-                ranking_book_ranking.setText(String.valueOf(object.getRankingNum()));
+        public void setData(Context context, BaseDataBean baseDataBean) {
+            if (baseDataBean instanceof RankingData) {
+                RankingData rankingData = (RankingData) baseDataBean;
+                ranking_book_name.setText(rankingData.getBook_name());
+                ranking_book_type.setText(rankingData.getCategory_name());
+                ranking_book_ranking.setText("");
+                if (rankingData.getRank_sort() == 1) {
+                    ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_one));
+                } else if (rankingData.getRank_sort() == 2) {
+                    ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_two));
+                } else if (rankingData.getRank_sort() == 3) {
+                    ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_three));
+                } else {
+                    ranking_book_ranking.setBackground(null);
+                    ranking_book_ranking.setText(String.valueOf(rankingData.getRank_sort()));
+                }
+                GlideUtils.LoadImage(context, rankingData.getPoster(), ranking_book_pic);
+            } else if (baseDataBean instanceof BookShelf) {
+                BookShelf bookShelf = (BookShelf) baseDataBean;
+                ranking_book_name.setText(bookShelf.getBook_name());
+                ranking_book_type.setText(bookShelf.getAuthor());
+                ranking_book_ranking.setTextColor(Color.parseColor("#F5A623"));
+                ranking_book_ranking.setText(String.format("%s分", bookShelf.getScore()));
+                GlideUtils.LoadImage(context, bookShelf.getPoster(), R.drawable.background_bookshelf_adapter_foot, ranking_book_pic);
             }
         }
     }
@@ -213,7 +231,12 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         return mVIewHoder;
     }
 
+    public void setmDataList(List<BaseDataBean> dataList) {
+        mDataList = dataList;
+        notifyDataSetChanged();
+    }
+
     public interface OnItemClickListener {
-        void onItemClick(String name);
+        void onItemClick(BaseDataBean baseDataBean);
     }
 }

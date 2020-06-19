@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:paddingTop="30dp"
     android:layout_height="match_parent">
 
 
@@ -38,7 +39,7 @@
             app:srcCompat="@drawable/ic_search" />
     </RelativeLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.inveno.xiandu.view.custom.MSwipeRefreshLayout
         android:id="@+id/SwipeRefreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -51,6 +52,6 @@
             android:id="@+id/ViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.inveno.xiandu.view.custom.MSwipeRefreshLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

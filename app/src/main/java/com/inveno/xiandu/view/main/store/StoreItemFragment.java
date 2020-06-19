@@ -17,6 +17,7 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.BookShelfList;
+import com.inveno.xiandu.bean.book.EditorRecommend;
 import com.inveno.xiandu.bean.book.EditorRecommendList;
 import com.inveno.xiandu.bean.book.RecommendName;
 import com.inveno.xiandu.bean.response.ResponseChannel;
@@ -61,8 +62,6 @@ public class StoreItemFragment extends BaseFragment {
     private BookCityAdapter bookCityAdapter;
 
     private ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
-    private ArrayList<BaseDataBean> topDataBeans = new ArrayList<>();
-    private ArrayList<BaseDataBean> bottomDataBeans = new ArrayList<>();
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -100,6 +99,26 @@ public class StoreItemFragment extends BaseFragment {
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                             .withString("json", GsonUtil.objectToJson(bookShelf))
                             .navigation();
+                } else if (baseDataBean instanceof EditorRecommend) {
+                    //小编推荐需要去请求书本数据
+                    EditorRecommend editorRecommend = (EditorRecommend) baseDataBean;
+                    APIContext.getBookCityAPi().getBook(editorRecommend.getContent_id())
+                            .onSuccess(new Function1<BookShelf, Unit>() {
+                                @Override
+                                public Unit invoke(BookShelf bookShelf) {
+                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                                            .withString("json", GsonUtil.objectToJson(bookShelf))
+                                            .navigation();
+                                    return null;
+                                }
+                            })
+                            .onFail(new Function2<Integer, String, Unit>() {
+                                @Override
+                                public Unit invoke(Integer integer, String s) {
+                                    Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                                    return null;
+                                }
+                            }).execute();
                 }
             }
         });
@@ -114,11 +133,11 @@ public class StoreItemFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         //第一次加载数据
-        Log.i("wyjjjjjjj", "页面: "+ channel);
-        Log.i("wyjjjjjjj", "是否第一次: "+ firstVisble);
+        Log.i("wyjjjjjjj", "页面: " + channel);
+        Log.i("wyjjjjjjj", "是否第一次: " + firstVisble);
         if (firstVisble) {
 //            initData();
-            APIContext.getRecommendAPi().getBookCity(channel)
+            APIContext.getBookCityAPi().getBookCity(channel)
                     .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
                         @Override
                         public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
@@ -135,30 +154,6 @@ public class StoreItemFragment extends BaseFragment {
                         }
                     }).execute();
         }
-    }
-
-    //获取推荐数据
-    private void getRecommendData(int channel_id, int type, int num) {
-        APIContext.getRecommendAPi().getRecommend(channel_id, type, num)
-                .onSuccess(new Function1<BookShelfList, Unit>() {
-                    @Override
-                    public Unit invoke(BookShelfList bookShelfList) {
-                        if (!topDataBeans.isEmpty() && !bottomDataBeans.isEmpty()){
-                            mDataBeans.clear();
-                            mDataBeans.addAll(topDataBeans);
-                            mDataBeans.addAll(bottomDataBeans);
-                            bookCityAdapter.setDataList(mDataBeans);
-                        }
-                        return null;
-                    }
-                })
-                .onFail(new Function2<Integer, String, Unit>() {
-                    @Override
-                    public Unit invoke(Integer integer, String s) {
-                        Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
-                        return null;
-                    }
-                }).execute();
     }
 
     private void initData() {

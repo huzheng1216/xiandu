@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".view.main.MainActivity">
 
-    <androidx.viewpager.widget.ViewPager
+    <com.inveno.xiandu.view.custom.MViewPager
         android:id="@+id/viewpage_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.utils.DensityUtil;
@@ -22,6 +23,8 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.read.ReadActivity;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +42,8 @@ public class DetailActivity extends BaseActivity {
     @Autowired(name = "json")
     String json;
     private BookShelf book;
+    private Bookbrack bookbrack = new Bookbrack();
+    private ArrayList<Bookbrack> bookbracks = new ArrayList<>();
 
     //控件
     @BindView(R.id.header_bar_back_tv)
@@ -75,10 +80,22 @@ public class DetailActivity extends BaseActivity {
     void coll() {
         if (SQL.getInstance().hasBookShelf(book)) {
             SQL.getInstance().delBookShelf(book);
+//            Toaster.showToastCenter(this, "已移除");
+//            collBt.setText("保存书架");
+        } else {
+            SQL.getInstance().addBookShelf(book);
+//            Toaster.showToastCenter(this, "已保存");
+//            collBt.setText("已保存");
+        }
+
+        if (SQL.getInstance().hasBookbrack(bookbrack)) {
+            bookbracks.clear();
+            bookbracks.add(bookbrack);
+            SQL.getInstance().delBookbrack(bookbracks);
             Toaster.showToastCenter(this, "已移除");
             collBt.setText("保存书架");
         } else {
-            SQL.getInstance().addBookShelf(book);
+            SQL.getInstance().addBookbrack(bookbrack);
             Toaster.showToastCenter(this, "已保存");
             collBt.setText("已保存");
         }
@@ -114,12 +131,18 @@ public class DetailActivity extends BaseActivity {
 
     private void initData() {
         book = GsonUtil.gsonToObject(json, BookShelf.class);
+        bookbrack.setContent_id(book.getContent_id());
+        bookbrack.setBook_name(book.getBook_name());
+        bookbrack.setPoster(book.getPoster());
+        bookbrack.setWords_num(book.getWords_num());
+        bookbrack.setChapter_name(book.getChapter_name());
+        bookbrack.setChapter_id(book.getChapter_id());
 
         if (book == null) {
             Toaster.showToast(this, "无法获取书籍信息");
             return;
         }
-        if (SQL.getInstance().hasBookShelf(book)) {
+        if (SQL.getInstance().hasBookbrack(bookbrack)) {
             collBt.setText("已保存");
         } else {
             collBt.setText("保存书架");

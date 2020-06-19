@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class EditorRecommend extends BaseDataBean {
 
-    private long id;
+    private long content_id;
     private ArrayList<String> list_images;
     private String book_name;
     private String title;
@@ -22,12 +22,16 @@ public class EditorRecommend extends BaseDataBean {
     public EditorRecommend() {
     }
 
-    public long getId() {
-        return id;
+    public long getContent_id() {
+        return content_id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setContent_id(long content_id) {
+        this.content_id = content_id;
+    }
+
+    public String getBook_name() {
+        return book_name;
     }
 
     public ArrayList<String> getList_images() {

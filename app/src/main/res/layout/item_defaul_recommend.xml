@@ -14,7 +14,7 @@
         android:scaleType="fitXY"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_test_ad" />
+        app:srcCompat="@drawable/background_bookshelf_adapter_foot" />
 
     <TextView
         android:id="@+id/default_image_book_name"

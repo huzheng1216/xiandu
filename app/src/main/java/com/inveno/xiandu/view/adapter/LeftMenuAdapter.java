@@ -12,8 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.book.ClassifyMenu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author yongji.wang
@@ -25,11 +27,11 @@ import java.util.ArrayList;
 public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
-    private ArrayList<String> mMenus;
+    private List<ClassifyMenu> mMenus;
     private int lastChoise = 0;
     private OnItemClickListener mListener;
 
-    public LeftMenuAdapter(Context context, ArrayList<String> menus) {
+    public LeftMenuAdapter(Context context, List<ClassifyMenu> menus) {
         mContext = context;
         mMenus = menus;
 
@@ -49,7 +51,7 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof LeftMenusHolder) {
             LeftMenusHolder vholder = (LeftMenusHolder) holder;
-            vholder.left_menu_name.setText(mMenus.get(position));
+            vholder.left_menu_name.setText(mMenus.get(position).getCategory_name());
             if (position == lastChoise) {
                 vholder.left_menu_name.setBackground(mContext.getResources().getDrawable(R.drawable.left_menu_select_bg));
                 vholder.left_menu_name.setTextColor(mContext.getResources().getColor(R.color.clr_normal));
@@ -71,7 +73,7 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     notifyItemChanged(lastChoise);
                     notifyItemChanged(position);
                     lastChoise = position;
-                    mListener.onItemClick(mMenus.get(position));
+                    mListener.onItemClick(position);
                 }
             });
         }
@@ -102,6 +104,11 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String name);
+        void onItemClick(int position);
+    }
+
+    public void setMenusData(List<ClassifyMenu> menus){
+        mMenus = menus;
+        notifyDataSetChanged();
     }
 }

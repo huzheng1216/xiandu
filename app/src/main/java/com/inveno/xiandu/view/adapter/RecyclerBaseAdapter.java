@@ -18,7 +18,7 @@ public abstract class RecyclerBaseAdapter extends RecyclerView.Adapter<RecyclerV
     public static final int EMPTY_ITEM_TYPE = -1;
 
     //0-10 公共使用
-    public static final int HEADER_ITEM_TYPE = 0;
+    public static final int HEADER_ITEM_TYPE = 3;
     public static final int FOOTER_ITEM_TYPE = 1;
     public static final int CONTENT_ITEM_TYPE = 2;
 
@@ -29,7 +29,7 @@ public abstract class RecyclerBaseAdapter extends RecyclerView.Adapter<RecyclerV
     public static final int SMALL_IMAGE = 14;//小图
     public static final int NOT_IMAGE = 15;//无图
     public static final int PEOPLE_RECOMMEND = 16;//男女生精选
-    public static final int DEFAUL_RECOMMEND = 17;//人气精选
+    public static final int DEFAUL_RECOMMEND = 0;//人气精选
     //101-200广告使用
     public static final int AD_ITEM_TYPE_1 = 101;
     public static final int AD_ITEM_TYPE_2 = 102;

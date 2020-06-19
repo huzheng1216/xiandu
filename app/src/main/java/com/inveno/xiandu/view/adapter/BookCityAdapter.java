@@ -23,6 +23,8 @@ import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.holder.BaseHolder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 /**
@@ -53,9 +55,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getHeaderView() {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_store_header, null);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        view.setLayoutParams(lp);
+        View view = getViewHolderView(mContext, R.layout.item_store_header);
         return view;
     }
 
@@ -99,9 +99,21 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             mHolder.the_end.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toaster.showToast(mActivity, "完结");
+                    //跳转到排行榜的完结榜
+                    ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).withBoolean("isEndRanking", true).navigation();
                 }
             });
+        } else if (holder instanceof BookCityAdapter.DefaulRemmendViewHolder) {
+            if (mDataList.size() > dataPosition) {
+                ((DefaulRemmendViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
+                int finalDataPosition = dataPosition;
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onItemClick(mDataList.get(finalDataPosition));
+                    }
+                });
+            }
         } else if (holder instanceof BookCityAdapter.CenterTItleViewHolder) {
             ((CenterTItleViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
         } else if (holder instanceof BookCityAdapter.BigImageViewHolder) {
@@ -145,23 +157,12 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                     mListener.onItemClick(mDataList.get(finalDataPosition));
                 }
             });
-        } else if (holder instanceof BookCityAdapter.DefaulRemmendViewHolder) {
-            if (mDataList.size() > dataPosition) {
-                ((DefaulRemmendViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
-                int finalDataPosition = dataPosition;
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mListener.onItemClick(mDataList.get(finalDataPosition));
-                    }
-                });
-            }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mDataList.size() == 0){
+        if (mDataList.size() == 0) {
             return 0;
         }
         if (getHeaderView() != null && getFooterView() != null) {
@@ -202,34 +203,22 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         if (viewType == HEADER_ITEM_TYPE) {
             mVIewHoder = new BookCityAdapter.HeaderViewHolder(getHeaderView());
         } else if (viewType == RecyclerBaseAdapter.CENTER_TITLE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_text, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getViewHolderView(parent.getContext(), R.layout.recommend_text);
             mVIewHoder = new BookCityAdapter.CenterTItleViewHolder(view);
         } else if (viewType == BIG_IMAGE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_big_image, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getViewHolderView(parent.getContext(), R.layout.item_big_image);
             mVIewHoder = new BookCityAdapter.BigImageViewHolder(view);
         } else if (viewType == MORE_IMAGE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_more_image, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getViewHolderView(parent.getContext(), R.layout.item_more_image);
             mVIewHoder = new BookCityAdapter.MoreImageViewHolder(view);
         } else if (viewType == SMALL_IMAGE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_small_image, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getView(parent);
             mVIewHoder = new BookCityAdapter.SmallImageViewHolder(view);
         } else if (viewType == NOT_IMAGE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_not_image, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getViewHolderView(parent.getContext(), R.layout.item_not_image);
             mVIewHoder = new BookCityAdapter.NotImageViewHolder(view);
         } else if (viewType == DEFAUL_RECOMMEND) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_defaul_recommend, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getViewHolderView(parent.getContext(), R.layout.item_defaul_recommend);
             mVIewHoder = new BookCityAdapter.DefaulRemmendViewHolder(view);
         } else if (viewType == FOOTER_ITEM_TYPE) {
 //            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_text, null);
@@ -237,12 +226,24 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 //            view.setLayoutParams(lp);
 //            mVIewHoder = new BookCityAdapter.ContentViewHolder(view);
         } else {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_defaul_recommend, null);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            view.setLayoutParams(lp);
+            View view = getViewHolderView(parent.getContext(), R.layout.item_defaul_recommend);
             mVIewHoder = new BookCityAdapter.DefaulRemmendViewHolder(view);
         }
         return mVIewHoder;
+    }
+
+    @NotNull
+    private View getViewHolderView(Context context, int p) {
+        View view = LayoutInflater.from(context).inflate(p, null);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        return view;
+    }
+
+    @NotNull
+    private View getView(ViewGroup parent) {
+        View view = getViewHolderView(parent.getContext(), R.layout.item_small_image);
+        return view;
     }
 
     public static class HeaderViewHolder extends BaseHolder {
@@ -426,7 +427,17 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                 } else {
                     bookStatusStr = "已完结";
                 }
-                default_image_words.setText(String.format("%s字·" + bookStatusStr, bookShelf.getWord_count()));
+                String wordsCountStr = String.format("%s字·" + bookStatusStr, bookShelf.getWord_count());
+                if (bookShelf.getWord_count() > 1000 && bookShelf.getWord_count() < 10000) {
+                    wordsCountStr = String.format("%s千字·" + bookStatusStr, bookShelf.getWord_count() / 1000);
+                } else if (bookShelf.getWord_count() > 10000) {
+                    wordsCountStr = String.format("%s万字·" + bookStatusStr, bookShelf.getWord_count() / 10000);
+                } else if (bookShelf.getWord_count() > 1000000) {
+                    wordsCountStr = String.format("%s百万字·" + bookStatusStr, bookShelf.getWord_count() / 1000000);
+                } else if (bookShelf.getWord_count() > 10000000) {
+                    wordsCountStr = String.format("%s千万字·" + bookStatusStr, bookShelf.getWord_count() / 10000000);
+                }
+                default_image_words.setText(wordsCountStr);
                 default_image_score.setText(String.format("%s分", bookShelf.getScore()));
                 GlideUtils.LoadImage(context, bookShelf.getPoster(), default_image_img);
             }

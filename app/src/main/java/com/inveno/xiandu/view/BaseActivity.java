@@ -1,6 +1,7 @@
 package com.inveno.xiandu.view;
 
 import android.Manifest;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -78,10 +79,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         int mColor = isResource ? getResources().getColor(color) : color;
         //5.0及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            View decorView = getWindow().getDecorView();
+//            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //根据上面设置是否对状态栏单独设置颜色
-            getWindow().setStatusBarColor(mColor);
+//            getWindow().setStatusBarColor(color);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //4.4到5.0
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();

@@ -2,22 +2,32 @@ package com.inveno.xiandu.db;
 
 import android.content.Context;
 
+import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.xiandu.applocation.MainApplication;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.gen.BookShelfDao;
+import com.inveno.xiandu.gen.BookbrackDao;
 import com.inveno.xiandu.gen.ChapterInfoDao;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.Toaster;
 
 import org.greenrobot.greendao.query.DeleteQuery;
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Scheduler;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 /**
  * Created By huzheng
@@ -52,10 +62,32 @@ public class SQL {
     }
 
     /**
+     * 获取全部书架书架
+     */
+    public List<Bookbrack> getAllBookbrack() {
+        return DaoManager.getInstance(context).bookbrackDao.queryBuilder().orderDesc(BookbrackDao.Properties.Time).list();
+    }
+
+    /**
+     * 根据id获取某本书
+     */
+    public BookShelf getBookShelf(long content_id) {
+        return DaoManager.getInstance(context).bookShelfDao.queryBuilder().where(BookShelfDao.Properties.Content_id.eq(content_id)).unique();
+    }
+
+    /**
      * 是否包含某本书
      */
     public boolean hasBookShelf(BookShelf bookShelf) {
         BookShelf bookShelf1 = DaoManager.getInstance(context).bookShelfDao.loadByRowId(bookShelf.getContent_id());
+        return bookShelf1 != null;
+    }
+
+    /**
+     * 是否包含某本书
+     */
+    public boolean hasBookbrack(Bookbrack bookbrack) {
+        Bookbrack bookShelf1 = DaoManager.getInstance(context).bookbrackDao.loadByRowId(bookbrack.getContent_id());
         return bookShelf1 != null;
     }
 
@@ -71,18 +103,44 @@ public class SQL {
         if (bookShelf.getBookChapters() != null)
             DaoManager.getInstance(context).chapterInfoDao.insertOrReplaceInTx(bookShelf.getBookChapters());
         //上传服务器
-        DDManager.getInstance().addBookShelf(bookShelf.getContent_id(), 1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(new Consumer<BaseRequest<List<BookShelf>>>() {
+//        DDManager.getInstance().addBookShelf(bookShelf.getContent_id(), 1)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.io())
+//                .subscribe(new Consumer<BaseRequest<List<BookShelf>>>() {
+//                    @Override
+//                    public void accept(BaseRequest<List<BookShelf>> listBaseRequest) throws Exception {
+//                    }
+//                });
+    }
+
+    /**
+     * 添加书架书籍
+     *
+     * @param bookbrack
+     * @return
+     */
+    public void addBookbrack(Bookbrack bookbrack) {
+        bookbrack.setTime(System.currentTimeMillis() + "");
+        DaoManager.getInstance(context).bookbrackDao.insertOrReplace(bookbrack);
+        //上传服务器
+        APIContext.bookbrackApi().addBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), bookbrack.getContent_id())
+                .onSuccess(new Function1<String, Unit>() {
                     @Override
-                    public void accept(BaseRequest<List<BookShelf>> listBaseRequest) throws Exception {
+                    public Unit invoke(String s) {
+                        return null;
                     }
-                });
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
     }
 
     /**
      * 批量更新本地书架
+     *
      * @param bookShelves
      */
     public void insertOrReplace(List<BookShelf> bookShelves) {
@@ -91,6 +149,19 @@ public class SQL {
             bookShelf.setTime(l + "");
         }
         DaoManager.getInstance(context).bookShelfDao.insertOrReplaceInTx(bookShelves);
+    }
+
+    /**
+     * 批量更新本地书架
+     *
+     * @param bookbracks
+     */
+    public void insertOrReplaceBookbrack(List<Bookbrack> bookbracks) {
+        long l = System.currentTimeMillis();
+        for (Bookbrack bookShelf : bookbracks) {
+            bookShelf.setTime(l + "");
+        }
+        DaoManager.getInstance(context).bookbrackDao.insertOrReplaceInTx(bookbracks);
     }
 
     /**
@@ -107,14 +178,46 @@ public class SQL {
         DeleteQuery<ChapterInfo> chapterInfoDeleteQuery = chapterInfoQueryBuilder.where(ChapterInfoDao.Properties.Content_id.eq(bookShelf.getContent_id())).buildDelete();
         chapterInfoDeleteQuery.executeDeleteWithoutDetachingEntities();
         //上传服务器
-        DDManager.getInstance().updateBookShelf(bookShelf.getContent_id(), -1)
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
-                .subscribe(new Consumer<BaseRequest<List<BookShelf>>>() {
-                    @Override
-                    public void accept(BaseRequest<List<BookShelf>> listBaseRequest) throws Exception {
-                    }
-                });
+//        DDManager.getInstance().updateBookShelf(bookShelf.getContent_id(), -1)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(Schedulers.io())
+//                .subscribe(new Consumer<BaseRequest<List<BookShelf>>>() {
+//                    @Override
+//                    public void accept(BaseRequest<List<BookShelf>> listBaseRequest) throws Exception {
+//                    }
+//                });
     }
 
+    /**
+     * 移除书架上的书籍
+     *
+     * @param bookbracks
+     * @return
+     */
+    public void delBookbrack(List<Bookbrack> bookbracks) {
+        ArrayList<Long> contentIds = new ArrayList<>();
+        for (Bookbrack bookbrack : bookbracks) {
+            //删除书籍
+            DaoManager.getInstance(context).bookbrackDao.delete(bookbrack);
+            //删除章节
+            QueryBuilder<ChapterInfo> chapterInfoQueryBuilder = DaoManager.getInstance(context).chapterInfoDao.queryBuilder();
+            DeleteQuery<ChapterInfo> chapterInfoDeleteQuery = chapterInfoQueryBuilder.where(ChapterInfoDao.Properties.Content_id.eq(bookbrack.getContent_id())).buildDelete();
+            chapterInfoDeleteQuery.executeDeleteWithoutDetachingEntities();
+
+            contentIds.add(bookbrack.getContent_id());
+        }
+        APIContext.bookbrackApi().updataBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), contentIds, 0)
+                .onSuccess(new Function1<String, Unit>() {
+                    @Override
+                    public Unit invoke(String s) {
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
 }

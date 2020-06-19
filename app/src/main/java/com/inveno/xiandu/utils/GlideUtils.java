@@ -39,8 +39,24 @@ public class GlideUtils {
      */
     public static void LoadImage(Context mContext, String path,
                                  ImageView imageview) {
-        Glide.with(mContext).load(path).centerCrop().placeholder(R.drawable.ic_header_default)
+        Glide.with(mContext).load(path).centerCrop().placeholder(R.drawable.background_bookshelf_adapter_foot)
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageview);
+    }
+
+    /**
+     * 加载网络图片
+     *
+     * @param mContext
+     * @param path
+     * @param imageview
+     */
+    public static void LoadImage(Context mContext, String path, int dafaulImg, ImageView imageview) {
+        if (dafaulImg != 0) {
+            Glide.with(mContext).load(path).centerCrop().placeholder(dafaulImg).diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageview);
+        }else{
+            Glide.with(mContext).load(path).centerCrop().placeholder(R.drawable.ic_header_default)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageview);
+        }
     }
 
     /**

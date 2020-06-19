@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
@@ -46,12 +47,6 @@ public class ShelfFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private ShelfAdapter shelfAdapter;
 
-    //书籍选项
-//    private ShelfItemDialog bottomSheetDialog;
-    PopupWindowShelfItem popupWindowShelfItem;
-
-    //数据
-
     public ShelfFragment() {
         super();
 //        this.bookShelf = bookShelf;
@@ -66,15 +61,19 @@ public class ShelfFragment extends BaseFragment {
         shelfAdapter.setShelfAdapterListener(new ShelfAdapter.ShelfAdapterListener() {
 
             @Override
-            public void onBookClick(BookShelf bookShelf) {
+            public void onBookReadContinue(Bookbrack Bookbrack) {
+
+            }
+
+            @Override
+            public void onBookClick(Bookbrack bookShelf) {
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                         .withString("json", GsonUtil.objectToJson(bookShelf))
                         .navigation();
             }
 
             @Override
-            public void onBookLongClick(BookShelf bookShelf, View parent) {
-                showOption(bookShelf, parent);
+            public void onBookLongClick(Bookbrack bookShelf, View parent) {
             }
         });
         // 设置adapter
@@ -86,25 +85,7 @@ public class ShelfFragment extends BaseFragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(3, getResources().getDimensionPixelSize(R.dimen.adapter_search_history), true));
         recyclerView.setLayoutManager(linearLayoutManager);
-
-        //初始化书籍操作
-//        bottomSheetDialog = new ShelfItemDialog(getContext());
-//        bottomSheetDialog.setShelfItemDialogListener(this);
-        popupWindowShelfItem = new PopupWindowShelfItem(getActivity());
-        popupWindowShelfItem.setPopListener(new PopupWindowShelfItem.PopListener() {
-            @Override
-            public void onDel(BookShelf bookShelf) {
-                SQL.getInstance().delBookShelf(bookShelf);
-                initData();
-            }
-        });
         return inflate;
-    }
-
-    private void showOption(BookShelf bookShelf, View parent) {
-//        bottomSheetDialog.setBook(data.get(position), position);
-//        bottomSheetDialog.show();
-        popupWindowShelfItem.showPopupWindow(bookShelf, parent);
     }
 
     @Override
@@ -112,32 +93,32 @@ public class ShelfFragment extends BaseFragment {
         LogUtils.H("书架可见：" + firstVisble);
         initData();
         //加载网络数据
-        DDManager.getInstance().getBookShelf()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<BaseRequest<ResponseShelf>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(BaseRequest<ResponseShelf> listBaseRequest) {
-                        if (listBaseRequest != null && listBaseRequest.getData().getBook_list() != null) {
-                            //同步数据
-                            syncData(listBaseRequest.getData().getBook_list());
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtils.H("hhhhh");
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+//        DDManager.getInstance().getBookShelf()
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(new Observer<BaseRequest<ResponseShelf>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                    }
+//
+//                    @Override
+//                    public void onNext(BaseRequest<ResponseShelf> listBaseRequest) {
+//                        if (listBaseRequest != null && listBaseRequest.getData().getBook_list() != null) {
+//                            //同步数据
+//                            syncData(listBaseRequest.getData().getBook_list());
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        LogUtils.H("hhhhh");
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                });
     }
 
     /**
@@ -145,17 +126,21 @@ public class ShelfFragment extends BaseFragment {
      *
      * @param data
      */
-    private void syncData(List<BookShelf> data) {
-        //简单判断一下
-        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
-            SQL.getInstance().insertOrReplace(data);
+    private void syncData(List<Bookbrack> data) {
+//        //简单判断一下
+//        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
+//            SQL.getInstance().insertOrReplace(data);
+//            initData();
+//        }
+        if (SQL.getInstance().getAllBookbrack().size() != data.size()) {
+            SQL.getInstance().insertOrReplaceBookbrack(data);
             initData();
         }
     }
 
     private void initData() {
 //        data.addAll(SQL.getInstance(getContext()).getAllBookByShelfId(bookShelf.getId()));
-        shelfAdapter.setData(SQL.getInstance().getAllBookShelf());
+        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
 
 //        shelfAdapter.notifyDataSetChanged();
     }

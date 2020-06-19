@@ -4,8 +4,11 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +22,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.utils.ClickUtil;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
+import com.inveno.xiandu.view.custom.MViewPager;
 import com.inveno.xiandu.view.main.my.MineFragment;
 import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.main.store.StoreFragment;
@@ -34,7 +39,7 @@ public class MainActivity extends BaseActivity {
 
     private BottomNavigationView bottomNavigationView;
     private MainViewPagerAdapter viewPagerAdapter;
-    private ViewPager viewPager;
+    private MViewPager viewPager;
     private MenuItem menuItem;
 //    private Toolbar toolbar;
 //    View searchLayout;
@@ -127,4 +132,54 @@ public class MainActivity extends BaseActivity {
             return false;
         }
     };
+
+    private long firstTime;// 记录点击返回时第一次的时间毫秒值
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {// 点击了返回按键
+            exitApp(2000);// 退出应用
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    //书架全选，需要隐藏底部tab
+    public void setBottomVisiable(){
+
+        if (bottomNavigationView.isShown()) {
+            Animation animBottomOut = AnimationUtils.loadAnimation(this,
+                    R.anim.bottom_out);
+            animBottomOut.setDuration(200);
+            bottomNavigationView.setVisibility(View.GONE);
+            bottomNavigationView.startAnimation(animBottomOut);
+
+            //禁止左右滑动
+            viewPager.setScrollable(false);
+        }else{
+            Animation animBottomIn = AnimationUtils.loadAnimation(this,
+                    R.anim.bottom_in);
+            animBottomIn.setDuration(200);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            bottomNavigationView.startAnimation(animBottomIn);
+
+            //允许左右滑动
+            viewPager.setScrollable(true);
+        }
+    }
+
+    /**
+     * 退出应用
+     *
+     * @param timeInterval 设置第二次点击退出的时间间隔
+     */
+    private void exitApp(long timeInterval) {
+        if (System.currentTimeMillis() - firstTime >= timeInterval) {
+            Toaster.showToast(this, "再按一次退出程序");
+            firstTime = System.currentTimeMillis();
+        } else {
+            finish();// 销毁当前activity
+            System.exit(0);// 完全退出应用
+        }
+    }
 }
