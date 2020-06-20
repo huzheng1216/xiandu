@@ -17,29 +17,34 @@ import com.inveno.xiandu.R;
 import java.util.ArrayList;
 import java.util.List;
 
-//
+
 public class NormalAdViewHolder extends RecyclerView.ViewHolder {
 
+    int holderViewType;
+
     public static NormalAdViewHolder create(Context context) {
-        return new NormalAdViewHolder(View.inflate(context, R.layout.ad_normal_item_layout,null));
+//        return new NormalAdViewHolder(View.inflate(context, R.layout.ad_normal_item_layout,null));
+        return null;
     }
 
     RelativeLayout child_rl;
     TextView tv_ad_title;//标题
     TextView tv_ad_desc;//描述
-    FrameLayout rl_ad_content;
+//    FrameLayout rl_ad_content;
     ImageView iv_ad_iamge;//背景图片
     ImageView iv_ad_logo;//logo
 
     public NormalAdViewHolder(View itemView) {
         super(itemView);
         // R.layout.ad_normal_item_layout
-        child_rl = itemView.findViewById(R.id.child_rl);
-        tv_ad_title = itemView.findViewById(R.id.tv_ad_title);
-        rl_ad_content = itemView.findViewById(R.id.rl_ad_content);
-        iv_ad_iamge = itemView.findViewById(R.id.iv_ad_image);
-        iv_ad_logo = itemView.findViewById(R.id.iv_ad_logo);
-        tv_ad_desc = itemView.findViewById(R.id.tv_ad_desc);
+//        child_rl = itemView.findViewById(R.id.child_rl);
+//        tv_ad_title = itemView.findViewById(R.id.tv_ad_title);
+//        rl_ad_content = itemView.findViewById(R.id.rl_ad_content);
+//        iv_ad_iamge = itemView.findViewById(R.id.iv_ad_image);
+//        iv_ad_logo = itemView.findViewById(R.id.iv_ad_logo);
+//        tv_ad_desc = itemView.findViewById(R.id.tv_ad_desc);
+
+        holderViewType = -1;
     }
 
     public void onBindViewHolder(Context context,Object adValue,int position) {
@@ -48,7 +53,9 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
             List<View> clickableViews = new ArrayList<>();
             clickableViews.add(child_rl);
             tv_ad_title.setText(doNewsAdNativeData.getTitle());
-            tv_ad_desc.setText(doNewsAdNativeData.getDese());
+            if (tv_ad_desc!=null) {
+                tv_ad_desc.setText(doNewsAdNativeData.getDese());
+            }
             if (null != doNewsAdNativeData.getImgUrl() && !"".equals(doNewsAdNativeData.getImgUrl())) {//如果返回的大图不为null
                 Glide.with(context).load(doNewsAdNativeData.getImgUrl()).into(iv_ad_iamge);
             } else {//如果没有返回大图，则用小图渲染
@@ -65,8 +72,10 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
                 public void onADClicked() {
                 }
             });
-            iv_ad_logo.setVisibility(View.VISIBLE);
-            Glide.with(context).load(doNewsAdNativeData.getLogoUrl()).into(iv_ad_logo);
+            if (iv_ad_logo!=null) {
+                iv_ad_logo.setVisibility(View.VISIBLE);
+                Glide.with(context).load(doNewsAdNativeData.getLogoUrl()).into(iv_ad_logo);
+            }
             //如果非广点通的，需要添加点击事件和广告标识 强烈建议这样处理，体验曝光都很棒
             if (doNewsAdNativeData.getAdFrom() != 5) {
                 doNewsAdNativeData.onADExposed(child_rl);//曝光上报
@@ -81,5 +90,9 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
             itemView.setTag(position);
         }
        
+    }
+
+    public int getHolderViewType() {
+        return holderViewType;
     }
 }

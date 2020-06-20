@@ -13,8 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
+import com.inveno.android.ad.bean.IndexedAdValueWrapper;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.BookShelfList;
 import com.inveno.xiandu.bean.book.EditorRecommend;
@@ -49,6 +53,8 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.EDITOR_RECOMMEND;
+
 /**
  * Created By huzheng
  * Date 2020/6/5
@@ -62,6 +68,7 @@ public class StoreItemFragment extends BaseFragment {
     private BookCityAdapter bookCityAdapter;
 
     private ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
+    private AdModel mAdModel;
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -142,6 +149,9 @@ public class StoreItemFragment extends BaseFragment {
                         @Override
                         public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
                             mDataBeans = baseDataBeans;
+                            if (mAdModel!=null){
+                                mDataBeans.add(mAdModel.getWrapper().getIndex(),mAdModel);
+                            }
                             bookCityAdapter.setDataList(mDataBeans);
                             return null;
                         }
@@ -153,6 +163,24 @@ public class StoreItemFragment extends BaseFragment {
                             return null;
                         }
                     }).execute();
+
+            //TODO scenario值暂时写了一个
+            InvenoAdServiceHolder.getService().requestInfoAd(EDITOR_RECOMMEND, getContext())
+                    .onSuccess(wrapper -> {
+                        Log.i("requestInfoAd", "onSuccess wrapper "+ wrapper.toString());
+
+                        if (mDataBeans.size()>0){
+                            mAdModel = new AdModel(wrapper);
+                            mDataBeans.add(mAdModel.getWrapper().getIndex(),mAdModel);
+                            bookCityAdapter.setDataList(mDataBeans);
+                        }
+                        return null;
+                    })
+                    .onFail((integer, s) -> {
+                        Log.i("requestInfoAd", "onFail s:"+s + " integer:"+integer);
+                        return null;
+                    })
+                    .execute();
         }
     }
 
