@@ -18,7 +18,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/read_setting_ll_menu"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="300dp"
     android:clickable="true"
     android:layout_alignParentBottom="true"
     android:background="@color/nb.read.menu.bg"
@@ -122,6 +122,65 @@
             android:background="@drawable/selector_btn_read_setting"
             style="@style/NB.Theme.TextAppearance.Read.BottomMenu" />
     </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/read_setting_rg_page_compose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/nb.read_setting.divider">
+
+        <RadioButton
+            android:id="@+id/read_setting_rb_compose_4"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/nb.read_setting.btn_height"
+            android:layout_weight="1"
+            android:text="+++"
+            android:textSize="14dp"
+            android:layout_marginRight="18dp"
+            android:gravity="center"
+            android:button="@null"
+            android:background="@drawable/selector_btn_read_setting"
+            style="@style/NB.Theme.TextAppearance.Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_setting_rb_compose_3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/nb.read_setting.btn_height"
+            android:layout_weight="1"
+            android:text="+ +"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:layout_marginRight="18dp"
+            android:button="@null"
+            android:background="@drawable/selector_btn_read_setting"
+            style="@style/NB.Theme.TextAppearance.Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_setting_rb_compose_2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/nb.read_setting.btn_height"
+            android:layout_weight="1"
+            android:text="+"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:layout_marginRight="18dp"
+            android:button="@null"
+            android:background="@drawable/selector_btn_read_setting"
+            style="@style/NB.Theme.TextAppearance.Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_setting_rb_compose_0"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/nb.read_setting.btn_height"
+            android:layout_weight="1"
+            android:text="默认排版"
+            android:textSize="14dp"
+            android:gravity="center"
+            android:button="@null"
+            android:background="@drawable/selector_btn_read_setting"
+            style="@style/NB.Theme.TextAppearance.Read.BottomMenu"/>
+    </RadioGroup>
     
     <RadioGroup
         android:id="@+id/read_setting_rg_page_mode"
@@ -204,13 +263,4 @@
         android:layout_marginRight="5dp"
         android:layout_marginTop="@dimen/nb.read_setting.divider"
         android:scrollbars="none" />
-    
-    <TextView
-        android:id="@+id/read_setting_tv_more"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="更多设置 >>"
-        android:textColor="@color/nb.read.menu.text"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"/>
 </LinearLayout>

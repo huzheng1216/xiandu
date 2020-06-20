@@ -124,4 +124,13 @@ public class DDManager {
     }
 
 
+    /**
+     * 阅读心跳
+     * @return
+     */
+    public Observable<BaseRequest> postReadTime() {
+        return bookBiz.postReadTime();
+    }
+
+
 }

@@ -27,18 +27,22 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.appbar.AppBarLayout;
+import com.inveno.android.device.param.provider.tools.LogTools;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
+import com.inveno.xiandu.http.DDManager;
+import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.utils.SystemBarUtils;
@@ -52,8 +56,15 @@ import com.inveno.xiandu.view.read.setting.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 import static android.view.View.LAYER_TYPE_SOFTWARE;
@@ -129,7 +140,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private CategoryAdapter mCategoryAdapter;
     private BookShelf bookShelf;
     private Bookbrack bookbrack = new Bookbrack();
-    ;
+
+    //心跳
+    private Disposable subscribe;
+
     //控制屏幕常亮
     private PowerManager.WakeLock mWakeLock;
     private Handler mHandler = new Handler() {
@@ -272,6 +286,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
         registerReceiver(mReceiver, intentFilter);
 
+        //心跳
+        startPostRead();
+
         //设置当前Activity的Brightness
         if (ReadSettingManager.getInstance().isBrightnessAuto()) {
             BrightnessUtils.setDefaultBrightness(this);
@@ -293,6 +310,21 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
         //初始化BottomMenu
         initBottomMenu();
+    }
+
+    private void startPostRead() {
+        //记录是否在阅读
+        lastTouch = System.currentTimeMillis();
+        //定时50秒调用一次
+        subscribe = Flowable.interval(0, 50, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(@NonNull Long aLong) throws Exception {
+                        postReadTime();
+                    }
+                });
     }
 
     private void initTopMenu() {
@@ -456,6 +488,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mPvPage.setTouchListener(new PageView.TouchListener() {
             @Override
             public boolean onTouch() {
+                stopHeart();
                 return !hideReadMenu();
             }
 
@@ -778,6 +811,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onResume() {
         super.onResume();
         mWakeLock.acquire();
+
+        //启动心跳
+        if (subscribe.isDisposed()) {
+            startPostRead();
+        }
     }
 
     @Override
@@ -793,6 +831,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onStop() {
         super.onStop();
         unregisterBrightObserver();
+        //结束心跳
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
+        }
     }
 
     @Override
@@ -805,6 +847,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
         mPageLoader.closeBook();
         mPageLoader = null;
+
+        //结束心跳
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
+        }
     }
 
     @Override
@@ -846,4 +893,39 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             }
         }
     }
+
+    /**
+     * 上报心跳
+     */
+    private void postReadTime() {
+        long now = System.currentTimeMillis();
+        if (now - lastTouch < 60000) {
+            DDManager.getInstance().postReadTime()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.io())
+                    .subscribe(new Consumer<BaseRequest>() {
+                        @Override
+                        public void accept(BaseRequest baseRequest) throws Exception {
+                            LogUtils.H("上传心跳：" + baseRequest.getCode() + "-" + baseRequest.getMessage());
+                        }
+                    });
+        } else {
+            LogUtils.H("未阅读，心跳任务暂停！");
+            subscribe.dispose();
+        }
+    }
+
+    /**
+     * 记录是否还在阅读
+     */
+    long lastTouch;
+
+    private void stopHeart() {
+        lastTouch = System.currentTimeMillis();
+        //如果心跳已经停止了，则重启心跳
+        if (subscribe.isDisposed()) {
+            startPostRead();
+        }
+    }
+
 }
