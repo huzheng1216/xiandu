@@ -4,6 +4,20 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('E:\\workspace\\xiandu\\keystore\\inveno_keys.jks')
+            storePassword '123456'
+            keyAlias = 'xiandu'
+            keyPassword '123456'
+        }
+        debug {
+            storeFile file('E:\\workspace\\xiandu\\keystore\\inveno_keys.jks')
+            storePassword '123456'
+            keyAlias = 'xiandu'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 

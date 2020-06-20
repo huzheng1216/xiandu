@@ -1,11 +1,14 @@
 package com.inveno.xiandu.view.main.shelf;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
+import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.utils.ClickUtil;
+import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +31,17 @@ import java.util.List;
  * Date 2020/3/5
  * Des 书架适配
  */
-public class ShelfAdapter extends RecyclerView.Adapter {
+public class ShelfAdapter extends RecyclerBaseAdapter {
 
     private Context context;
-    private List<BookShelf> data;
+    private List<Bookbrack> data;
     private ShelfAdapterListener shelfAdapterListener;
+
+    private String headerTime;
+    private String headerCoin;
+
+    //是否在选择状态
+    private boolean isSelect = false;
 
     public ShelfAdapter(Context context) {
         this.context = context;
@@ -39,62 +52,169 @@ public class ShelfAdapter extends RecyclerView.Adapter {
         this.shelfAdapterListener = shelfAdapterListener;
     }
 
-    public void setData(List<BookShelf> list) {
+    public void setData(List<Bookbrack> list) {
         data.clear();
         data.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void setHeaderData(String time, String coinNum) {
+        headerTime = time;
+        headerCoin = coinNum;
+        notifyDataSetChanged();
+    }
+
+    public void selectAll() {
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).setSelect(true);
+        }
+        notifyDataSetChanged();
+    }
+
+    public void deleteSelect() {
+        ArrayList<Bookbrack> bookbracks = new ArrayList<>();
+        for (Bookbrack bookbrack : data) {
+            if (bookbrack.isSelect()) {
+                bookbracks.add(bookbrack);
+                BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                if (bookShelf != null) {
+                    SQL.getInstance().delBookShelf(bookShelf);
+                }
+                data.remove(bookbrack);
+            }
+        }
+
+        SQL.getInstance().delBookbrack(bookbracks);
+        setSelect(false);
+        notifyDataSetChanged();
+        Toaster.showToastCenterShort(context, String.format("已删除%s本书", bookbracks.size()));
+    }
+
+    public void setSelect(boolean isSelect) {
+        this.isSelect = isSelect;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        if (Const.ADAPTER_TYPE_FOOT == viewType) {
-//            return onCreateFootViewHolder(parent, viewType);
-//        } else {
-            return onCreateDataViewHolder(parent, viewType);
-//        }
+        return onCreateDataViewHolder(parent, viewType);
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (getHeaderView() == null && getFooterView() == null) {
+            return CONTENT_ITEM_TYPE;
+        } else {
+            if (getFooterView() != null && position == getItemCount() - 1) {
+                return FOOTER_ITEM_TYPE;
+            }
+            if (getHeaderView() != null) {
+                if (position == 0) {
+                    return HEADER_ITEM_TYPE;
+                }
+                return CONTENT_ITEM_TYPE;
+            } else {
+                return CONTENT_ITEM_TYPE;
+            }
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
         if (holder instanceof FootViewHolder) {
-//            ClickUtil.bindSingleClick(holder.itemView, 500, new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (shelfAdapterListener != null) {
-//                        shelfAdapterListener.onAddClick();
-//                    }
-//                }
-//            });
+
+        } else if (holder instanceof HeaderViewHolder) {
+            HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
+            if (TextUtils.isEmpty(headerTime)) {
+                headerViewHolder.bookrack_read_time.setText("0");
+            } else {
+                headerViewHolder.bookrack_read_time.setText(headerTime);
+            }
+
+            if (TextUtils.isEmpty(headerCoin)) {
+                headerViewHolder.bookrack_coin_num.setText("0");
+            } else {
+                headerViewHolder.bookrack_coin_num.setText(headerCoin);
+            }
         } else {
 
+            int realPosition = position;
+            if (getHeaderView() != null) {
+                realPosition = position - 1;
+            }
+            int finalRealPosition = realPosition;
             ItemViewHolder iholder = (ItemViewHolder) holder;
-            iholder.bookName.setText(data.get(position).getBook_name());
-            Glide.with(context).load(data.get(position).getPoster()).into(iholder.bookIc);
-            ClickUtil.bindSingleClick(iholder.itemView, 500, new View.OnClickListener() {
+            iholder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (shelfAdapterListener != null) {
-                        shelfAdapterListener.onBookClick(data.get(position));
+                    data.get(finalRealPosition).setSelect(true);
+                    deleteSelect();
+                }
+            });
+            if (isSelect) {
+                iholder.bookbrack_checkbox.setVisibility(View.VISIBLE);
+                if (data.get(realPosition).isSelect()) {
+                    iholder.bookbrack_checkbox.setChecked(true);
+                }
+                iholder.bookbrack_checkbox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!iholder.bookbrack_checkbox.isChecked()) {
+                            data.get(finalRealPosition).setSelect(false);
+                        } else {
+                            data.get(finalRealPosition).setSelect(true);
+                        }
+                    }
+                });
+            } else {
+                iholder.bookbrack_checkbox.setVisibility(View.GONE);
+            }
+            iholder.adapter_bookshelf_book_name.setText(data.get(realPosition).getBook_name());
+            if (TextUtils.isEmpty(data.get(realPosition).getChapter_name())) {
+
+                iholder.adapter_bookshelf_read_name.setText("还未开始阅读");
+            } else {
+                iholder.adapter_bookshelf_read_name.setText(data.get(realPosition).getChapter_name());
+            }
+            if (realPosition == 0) {
+                iholder.adapter_bookshelf_continue.setVisibility(View.VISIBLE);
+            } else {
+                iholder.adapter_bookshelf_continue.setVisibility(View.GONE);
+            }
+            iholder.adapter_bookshelf_continue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //继续阅读
+                    shelfAdapterListener.onBookReadContinue(data.get(finalRealPosition));
+                }
+            });
+            Glide.with(context).load(data.get(realPosition).getPoster()).into(iholder.adapter_bookshelf_book_img);
+
+            ClickUtil.bindSingleClick(iholder.bookbrack_itemView, 500, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isSelect) {
+                        if (shelfAdapterListener != null) {
+                            shelfAdapterListener.onBookClick(data.get(finalRealPosition));
+                        }
+                    } else {
+                        iholder.bookbrack_checkbox.setChecked(!iholder.bookbrack_checkbox.isChecked());
+                        data.get(finalRealPosition).setSelect(iholder.bookbrack_checkbox.isChecked());
                     }
                 }
             });
-//            iholder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    if (shelfAdapterListener != null) {
-//                        shelfAdapterListener.onBookLongClick(data.get(position));
-//                    }
-//                    return true;
-//                }
-//            });
-            iholder.more.setOnClickListener(new View.OnClickListener() {
+            iholder.bookbrack_itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public void onClick(View v) {
-                    if (shelfAdapterListener != null) {
-                        shelfAdapterListener.onBookLongClick(data.get(position), iholder.more);
+                public boolean onLongClick(View v) {
+                    //不再选择状态要变成选择状态
+                    if (!isSelect) {
+                        if (shelfAdapterListener != null) {
+                            shelfAdapterListener.onBookLongClick(data.get(finalRealPosition), iholder.itemView);
+                        }
                     }
+                    return false;
                 }
             });
         }
@@ -102,8 +222,32 @@ public class ShelfAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return data.size();
+        if (getHeaderView() != null && getFooterView() != null) {
+            return data.size() + 2;
+        } else if (getHeaderView() != null || getFooterView() != null) {
+            return data.size() + 1;
+        } else {
+            return data.size();
+        }
     }
+
+    @Override
+    protected View getHeaderView() {
+        if (headerView != null)
+            return headerView;
+        return null;
+    }
+
+    @Override
+    protected View getFooterView() {
+        return null;
+    }
+
+    public void setHeaderView(View view) {
+        headerView = view;
+        notifyItemChanged(0);
+    }
+
 
 //    @Override
 //    public int getItemViewType(int position) {
@@ -113,16 +257,24 @@ public class ShelfAdapter extends RecyclerView.Adapter {
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
 
         View itemView;
-        ImageView more;
-        ImageView bookIc;
-        TextView bookName;
+        RelativeLayout bookbrack_itemView;
+        ImageView adapter_bookshelf_book_img;
+        TextView adapter_bookshelf_book_name;
+        TextView adapter_bookshelf_read_name;
+        TextView adapter_bookshelf_continue;
+        CheckBox bookbrack_checkbox;
+        View delete;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             this.itemView = itemView;
-            more = itemView.findViewById(R.id.more);
-            bookIc = itemView.findViewById(R.id.adapter_bookshelf_book_img);
-            bookName = itemView.findViewById(R.id.adapter_bookshelf_book_name);
+            bookbrack_itemView = itemView.findViewById(R.id.bookbrack_itemView);
+            adapter_bookshelf_book_img = itemView.findViewById(R.id.adapter_bookshelf_book_img);
+            adapter_bookshelf_book_name = itemView.findViewById(R.id.adapter_bookshelf_book_name);
+            adapter_bookshelf_read_name = itemView.findViewById(R.id.adapter_bookshelf_read_name);
+            adapter_bookshelf_continue = itemView.findViewById(R.id.adapter_bookshelf_continue);
+            bookbrack_checkbox = itemView.findViewById(R.id.bookbrack_checkbox);
+            delete = itemView.findViewById(R.id.delete);
         }
     }
 
@@ -137,22 +289,39 @@ public class ShelfAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf, null);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        view.setLayoutParams(lp);
-        return new ItemViewHolder(view);
+    class HeaderViewHolder extends RecyclerView.ViewHolder {
+
+        private View rootView;
+
+        TextView bookrack_read_time;
+        TextView bookrack_coin_num;
+
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            rootView = itemView;
+            bookrack_read_time = itemView.findViewById(R.id.bookrack_read_time);
+            bookrack_coin_num = itemView.findViewById(R.id.bookrack_coin_num);
+        }
     }
 
-//    public RecyclerView.ViewHolder onCreateFootViewHolder(ViewGroup parent, int viewType) {
-//        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_foot, null);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        view.setLayoutParams(lp);
-//        return new FootViewHolder(view);
-//    }
+    public RecyclerView.ViewHolder onCreateDataViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == HEADER_ITEM_TYPE) {
+            return new HeaderViewHolder(getHeaderView());
+        } else if (viewType == FOOTER_ITEM_TYPE) {
+            return new FootViewHolder(getFooterView());
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_item, null);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            view.setLayoutParams(lp);
+            return new ItemViewHolder(view);
+        }
+    }
 
-    public interface ShelfAdapterListener{
-        void onBookClick(BookShelf  bookShelf);
-        void onBookLongClick(BookShelf  bookShelf, View parent);
+    public interface ShelfAdapterListener {
+        void onBookReadContinue(Bookbrack Bookbrack);
+
+        void onBookClick(Bookbrack Bookbrack);
+
+        void onBookLongClick(Bookbrack Bookbrack, View parent);
     }
 }

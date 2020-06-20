@@ -5,68 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <RelativeLayout-->
-<!--        android:id="@+id/main_search_layout"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="30dp"-->
-<!--        android:layout_marginHorizontal="24dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        android:background="@drawable/background_search_main_toolbar"-->
-<!--        android:focusable="true"-->
-<!--        android:focusableInTouchMode="true"-->
-<!--        android:gravity="center_vertical"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/bt_search_main_search"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:paddingLeft="15dp"-->
-<!--            android:paddingTop="8dp"-->
-<!--            android:paddingRight="15dp"-->
-<!--            android:paddingBottom="8dp"-->
-<!--            android:src="@drawable/ic_search_bt_24dp"-->
-<!--            android:tint="#ff707070" />-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/bt_search_main_back"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentLeft="true"-->
-<!--            android:layout_centerVertical="true"-->
-<!--            android:padding="7dp"-->
-<!--            android:transitionName="photo"-->
-<!--            android:src="@mipmap/ic_toolbar_back"-->
-<!--            android:tint="#ff707070" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/edit_search_main"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_toLeftOf="@+id/bt_search_main_search"-->
-<!--            android:layout_toRightOf="@+id/bt_search_main_back"-->
-<!--            android:background="@null"-->
-<!--            android:gravity="center_vertical"-->
-<!--            android:hint="输入书名或作者"-->
-<!--            android:imeOptions="actionSearch"-->
-<!--            android:inputType="text"-->
-<!--            android:singleLine="true"-->
-<!--            android:textSize="14sp"></TextView>-->
-<!--    </RelativeLayout>-->
-
     <com.inveno.xiandu.view.components.tablayout.MyTabLayout
         android:id="@+id/tablelayout_fragment_bookrack_main"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="8dp"
         android:layout_marginHorizontal="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"
+        app:layout_constraintTop_toTopOf="parent"
         app:tabBackground="@color/transparent"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/base_color"

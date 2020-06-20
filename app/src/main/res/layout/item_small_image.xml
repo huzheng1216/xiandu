@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/small_image_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxLines="2"
+        android:paddingBottom="8dp"
+        android:text="标题标题标题标题标题标题标标题标题标标题标题标"
+        android:textColor="@color/gray_3"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@+id/small_image_img"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/small_image_book_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="《小说名称》"
+        android:textColor="@color/gray_9"
+        android:layout_alignBottom="@+id/small_image_img"
+        android:layout_marginBottom="8dp"
+        android:textSize="12sp"/>
+
+    <ImageView
+        android:id="@+id/small_image_img"
+        android:layout_width="80dp"
+        android:layout_height="100dp"
+        android:src="@drawable/background_bookshelf_adapter_foot"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>

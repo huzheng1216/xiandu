@@ -21,7 +21,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="220dp"
+                    android:layout_height="265dp"
+                    android:paddingTop="30dp"
                     android:background="@drawable/welfare_top_bg"
                     android:orientation="vertical">
 
@@ -93,7 +94,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="190dp"
+                    android:layout_marginTop="220dp"
                     android:background="@drawable/pop_top_radius"
                     android:orientation="vertical">
 

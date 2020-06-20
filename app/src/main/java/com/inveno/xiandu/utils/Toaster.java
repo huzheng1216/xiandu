@@ -21,6 +21,18 @@ public class Toaster {
         }
     }
 
+    public static void showToastShort(Context context, String str) {
+        try {
+            if (toast == null) {
+                toast = Toast.makeText(context, str, Toast.LENGTH_SHORT);
+            }
+            toast.setText(str);
+            toast.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void showToastCenter(Context context, String str) {
 
@@ -28,6 +40,17 @@ public class Toaster {
             toastCenter.cancel();
         }
         toastCenter = Toast.makeText(context, str, Toast.LENGTH_LONG);
+        toastCenter.setGravity(Gravity.CENTER, 0, 0);
+        toastCenter.setText(str);
+        toastCenter.show();
+    }
+
+    public static void showToastCenterShort(Context context, String str) {
+
+        if (toastCenter != null) {
+            toastCenter.cancel();
+        }
+        toastCenter = Toast.makeText(context, str, Toast.LENGTH_SHORT);
         toastCenter.setGravity(Gravity.CENTER, 0, 0);
         toastCenter.setText(str);
         toastCenter.show();

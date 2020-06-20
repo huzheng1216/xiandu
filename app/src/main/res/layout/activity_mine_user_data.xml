@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_toEndOf="@+id/image2"
             android:text="头像"
             android:textColor="@color/gray_3"
             android:textSize="14sp" />
@@ -64,7 +63,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_toEndOf="@+id/image2"
             android:text="昵称"
             android:textColor="@color/gray_3"
             android:textSize="14sp" />
@@ -103,7 +101,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_toEndOf="@+id/image2"
             android:text="性别"
             android:textColor="@color/gray_3"
             android:textSize="14sp" />
@@ -141,7 +138,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_toEndOf="@+id/image2"
             android:text="账号"
             android:textColor="@color/gray_3"
             android:textSize="14sp" />

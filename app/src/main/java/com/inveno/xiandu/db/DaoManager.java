@@ -3,7 +3,9 @@ package com.inveno.xiandu.db;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.gen.BookShelfDao;
+import com.inveno.xiandu.gen.BookbrackDao;
 import com.inveno.xiandu.gen.ChapterInfoDao;
 import com.inveno.xiandu.gen.DaoMaster;
 import com.inveno.xiandu.gen.DaoSession;
@@ -26,6 +28,8 @@ public class DaoManager {
     private DaoSession daoSession;
     //书架
     public BookShelfDao bookShelfDao;
+    //真实书架
+    public BookbrackDao bookbrackDao;
     //章节
     public ChapterInfoDao chapterInfoDao;
 
@@ -72,6 +76,7 @@ public class DaoManager {
         daoSession = daoMaster.newSession();
 
         bookShelfDao = daoSession.getBookShelfDao();
+        bookbrackDao = daoSession.getBookbrackDao();
         chapterInfoDao = daoSession.getChapterInfoDao();
     }
 }

@@ -27,4 +27,6 @@ public class ARouterPath {
     public static final String ACTIVITY_COIN_TOP_UP = BASE_URL + "CoinTopUpActivity";
     public static final String ACTIVITY_CLASSIFY = BASE_URL + "ClassifyActivity";
     public static final String ACTIVITY_RANKING = BASE_URL + "RankingActivity";
+
+    public static final String ACTIVITY_READ_GENDER = BASE_URL + "ChoiseGenderActivity";
 }

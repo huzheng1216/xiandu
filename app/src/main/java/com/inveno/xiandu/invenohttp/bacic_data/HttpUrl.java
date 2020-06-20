@@ -21,6 +21,21 @@ public class HttpUrl {
     public static String QUERY_COIN = "/coin/query_coin"; //用户金币查询
     public static String QUERY_COIN_DETAILS = "/coin/query_coin_details"; //用户金币明细查询
 
+    //书城相关
+    public static String EDITOR_LIST = "/content/novel/editor/list"; //小编推荐
+    public static String RECOMMEND_LIST = "/content/novel/recommend/list"; //获取相关推荐
+    public static String RELEVANT_LIST = "/content/novel/relevant/list"; //获取推荐小说
+    public static String CLASSIFY_MENU_LIST = "/content/channel/category"; //获取分类列表
+    public static String CLASSIFY_DATA_LIST = "/content/novel/category/list"; //获取分类数据
+    public static String RANKING_MENU_LIST = "/content/ranking/list"; //获取排行榜列表
+    public static String RANKING_DATA_LIST = "/content/ranking/content"; //获取排行榜数据
+
+    public static String BOOKBRACK_DATA_LIST = "/behavior/book_shelf/list"; //书架查询
+    public static String BOOKBRACK_ADD = "/behavior/book_shelf/add"; //书架添加
+    public static String BOOKBRACK_UPDATA = "/behavior/book_shelf/update"; //书架更新与删除
+
+
+
     public static String getHttpUri(String url){
         return HOST_URI + url;
     }

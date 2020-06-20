@@ -169,4 +169,8 @@
 
     <!--Common-->
     <style name="NB.Theme" parent="AppTheme"/>
+
+    <style name="checkbox">
+        <item name="android:button">@drawable/checkbox_style_bg</item>
+    </style>
 </resources>
