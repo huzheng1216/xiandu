@@ -1,15 +1,13 @@
 package com.inveno.android.ad.bean;
 
-import java.util.List;
-
 public class ADInfoWrapper {
-    private List<IndexedAdValueWrapper> adValueList;
+    private IndexedAdValueWrapper adValue;
 
-    public List<IndexedAdValueWrapper> getAdValueList() {
-        return adValueList;
+    public IndexedAdValueWrapper getAdValue() {
+        return adValue;
     }
 
-    public void setAdValueList(List<IndexedAdValueWrapper> adValueList) {
-        this.adValueList = adValueList;
+    public void setAdValue(IndexedAdValueWrapper adValue) {
+        this.adValue = adValue;
     }
 }

@@ -15,17 +15,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.EditorRecommend;
 import com.inveno.xiandu.bean.book.RecommendName;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.holder.BaseHolder;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import static com.inveno.android.ad.config.AdViewType.*;
 
 /**
  * @author yongji.wang
@@ -157,6 +162,8 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                     mListener.onItemClick(mDataList.get(finalDataPosition));
                 }
             });
+        } else if (holder instanceof NormalAdViewHolder) {
+            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), dataPosition);
         }
     }
 
@@ -225,6 +232,8 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 //            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 //            view.setLayoutParams(lp);
 //            mVIewHoder = new BookCityAdapter.ContentViewHolder(view);
+        } else if (viewType == AD_EDITOR_RECOMMEND_TYPE_1 || viewType == AD_EDITOR_RECOMMEND_TYPE_2 || viewType == AD_GUESS_YOU_LIKE_TYPE_1 || viewType == AD_BOY_GIRL_BOTTOM_TYPE) {
+            mVIewHoder = ADViewHolderFactory.create(mContext, viewType);
         } else {
             View view = getViewHolderView(parent.getContext(), R.layout.item_defaul_recommend);
             mVIewHoder = new BookCityAdapter.DefaulRemmendViewHolder(view);

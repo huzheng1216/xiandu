@@ -320,4 +320,7 @@
     <string name="login_success">登录成功</string>
     <string name="logout">退出登录</string>
 
+    <!--ad-->
+    <string name="ad_tag_string">广告</string>
+
 </resources>

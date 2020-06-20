@@ -1,6 +1,8 @@
 package com.inveno.android.ad.contract.impl;
 
+import android.app.Activity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.donews.b.main.DoNewsAdNative;
@@ -23,15 +25,15 @@ import java.util.List;
 
 public class DonewsAdApiImpl implements IAdApi {
     @Override
-    public StatefulCallBack<ADInfoWrapper> requestInfoAD(final InfoAdParam adParam) {
-        final BaseStatefulCallBack<ADInfoWrapper> adInfoWrapperBaseStatefulCallBack = new BaseStatefulCallBack<ADInfoWrapper>() {
+    public StatefulCallBack<IndexedAdValueWrapper> requestInfoAD(final InfoAdParam adParam) {
+        final BaseStatefulCallBack<IndexedAdValueWrapper> adInfoWrapperBaseStatefulCallBack = new BaseStatefulCallBack<IndexedAdValueWrapper>() {
             @Override
             public void execute() {
                 try {
                     executeLoadInfoAd(adParam, this);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    invokeFail(600,e.getMessage());
+                    invokeFail(600, e.getMessage());
                 }
             }
         };
@@ -69,7 +71,7 @@ public class DonewsAdApiImpl implements IAdApi {
                         invokeFail(400, "position_id is empty");
                     } else {
                         executeLoadSplashAd(splashAdParam);
-                        invokeSuccess("ok");
+                        invokeSuccess("--------------------------- ok");
                     }
                 } catch (Exception e) {
                     invokeFail(400, e.getMessage());
@@ -79,43 +81,46 @@ public class DonewsAdApiImpl implements IAdApi {
     }
 
 
-    private void executeLoadInfoAd(final InfoAdParam adParam, final BaseStatefulCallBack<ADInfoWrapper> adInfoWrapperBaseStatefulCallBack) {
+    private void executeLoadInfoAd(final InfoAdParam adParam, final BaseStatefulCallBack<IndexedAdValueWrapper> adInfoWrapperBaseStatefulCallBack) {
         DoNewsAD doNewsAD = new DoNewsAD.Builder()
                 .setPositionid(adParam.getPositionId())
                 .setExpressViewWidth(adParam.getWidth().floatValue())
                 .setExpressViewHeight(adParam.getHeight().floatValue())
-                .setAdCount(adParam.getAdIndexList().size())
+                .setAdCount(1)
                 .build();
         DoNewsAdNative doNewsAdNative = DoNewsAdManagerHolder.get().createDoNewsAdNative();
-        doNewsAdNative.onCreateAdInformation(adParam.getActivity(), doNewsAD, new DoNewsAdNative.DoNewsNativesListener() {
+        doNewsAdNative.onCreateAdInformation(adParam.getContext(), doNewsAD, new DoNewsAdNative.DoNewsNativesListener() {
             @Override
             public void OnFailed(String s) {//请求广告失败
-                adInfoWrapperBaseStatefulCallBack.invokeFail(500,s);
+                adInfoWrapperBaseStatefulCallBack.invokeFail(500, s);
             }
 
             @Override
             public void Success(List<DoNewsAdNativeData> list) {//请求信息流广告成功
                 try {
-                    List<Object> callBackList = new ArrayList<>();
-                    callBackList.addAll(list);
-                    adParam.getAdTemplateListener().Success(callBackList);
-                    ADInfoWrapper adInfoWrapper = new ADInfoWrapper();
-                    List<IndexedAdValueWrapper> indexedAdValueWrappers = new ArrayList<>();
-                    adInfoWrapper.setAdValueList(indexedAdValueWrappers);
-                    for (int index = 0; index<list.size();index++){
-                        if(index < adParam.getAdIndexList().size()){
-                            IndexedAdValueWrapper indexedAdValueWrapper = new IndexedAdValueWrapper();
-                            int adShowIndex = adParam.getAdIndexList().get(index);
-                            Object adValue = list.get(index);
-                            indexedAdValueWrapper.setAdValue(adValue);
-                            indexedAdValueWrapper.setIndex(adShowIndex);
-                            indexedAdValueWrappers.add(indexedAdValueWrapper);
-                        }
+                    Log.i("requestInfoAd","Success list"+list);
+                    if (list.size() > 0) {
+//                        List<Object> callBackList = new ArrayList<>();
+//                        callBackList.addAll(list);
+//                        adParam.getAdTemplateListener().Success(callBackList);
+
+                        IndexedAdValueWrapper indexedAdValueWrapper = new IndexedAdValueWrapper();
+                        int adShowIndex = adParam.getIndex();
+                        DoNewsAdNativeData adValue = list.get(0);
+                        indexedAdValueWrapper.setAdValue(adValue);
+                        indexedAdValueWrapper.setIndex(adShowIndex);
+                        indexedAdValueWrapper.setScenario(adParam.getScenario());
+                        indexedAdValueWrapper.setAdSpaceId(adParam.getAdSpaceId());
+                        indexedAdValueWrapper.setDisplayType(adParam.getDisplayType());
+                        indexedAdValueWrapper.setViewType(adParam.getViewType());
+
+                        adInfoWrapperBaseStatefulCallBack.invokeSuccess(indexedAdValueWrapper);
+                    } else {
+                        adInfoWrapperBaseStatefulCallBack.invokeFail(401, "adlist is emptry");
                     }
-                    adInfoWrapperBaseStatefulCallBack.invokeSuccess(adInfoWrapper);
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
-                    adInfoWrapperBaseStatefulCallBack.invokeFail(600,e.getMessage());
+                    adInfoWrapperBaseStatefulCallBack.invokeFail(600, e.getMessage());
                 }
 
             }
@@ -172,6 +177,7 @@ public class DonewsAdApiImpl implements IAdApi {
         doNewsAdNative.onCreateAdSplash(splashAdParam.getActivity(), doNewsAD, new DoNewsAdNative.SplashListener() {
             @Override
             public void onNoAD(String s) {
+                Log.i("splashad","onNoAD "+s);
                 splashAdParam.getSplashAdListener().onNoAD(s);
             }
 
@@ -198,6 +204,7 @@ public class DonewsAdApiImpl implements IAdApi {
             @Override
             public void extendExtra(String s) {
                 splashAdParam.getSplashAdListener().extendExtra(s);
+                Log.i("splashad","extendExtra "+s);
             }
         });
     }

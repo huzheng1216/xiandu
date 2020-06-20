@@ -163,7 +163,7 @@ public class SplashActivity extends BaseActivity implements AppInitListener {
 
     private void readyToDo(){
         InvenoAdServiceHolder.getService().requestSplashAd(
-                new SplashAdParam.SplashAdParamBuilder()
+                SplashAdParam.SplashAdParamBuilder.aSplashAdParam()
                         .withActivity(SplashActivity.this)
                         .withContainerView(adContainerView)
                         .withSplashAdListener(mSplashAdListener).build()
