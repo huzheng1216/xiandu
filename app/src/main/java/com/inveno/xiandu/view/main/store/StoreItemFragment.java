@@ -53,6 +53,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.BOY_GIRL_BOTTOM;
 import static com.inveno.android.ad.config.ScenarioManifest.EDITOR_RECOMMEND;
 
 /**
@@ -69,20 +70,25 @@ public class StoreItemFragment extends BaseFragment {
 
     private ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
     private AdModel mAdModel;
+    private String mScenario;
 
     public StoreItemFragment(String title) {
         switch (title) {
             case "推荐":
                 channel = 0;
+                mScenario = EDITOR_RECOMMEND;
                 break;
             case "男频":
                 channel = 1;
+                mScenario = BOY_GIRL_BOTTOM;
                 break;
             case "女频":
                 channel = 2;
+                mScenario = BOY_GIRL_BOTTOM;
                 break;
             case "出版":
                 channel = 3;
+                mScenario = BOY_GIRL_BOTTOM;//TODO 暂时写这个
                 break;
         }
     }
@@ -164,8 +170,8 @@ public class StoreItemFragment extends BaseFragment {
                         }
                     }).execute();
 
-            //TODO scenario值暂时写了一个
-            InvenoAdServiceHolder.getService().requestInfoAd(EDITOR_RECOMMEND, getContext())
+            //TODO scenario值暂时写了几个
+            InvenoAdServiceHolder.getService().requestInfoAd(mScenario, getContext())
                     .onSuccess(wrapper -> {
                         Log.i("requestInfoAd", "onSuccess wrapper "+ wrapper.toString());
 

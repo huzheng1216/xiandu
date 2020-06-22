@@ -83,19 +83,19 @@ public class AllotAdViewType {
 
             case ScenarioManifest.SEARCH:
                 // 搜索框广告
-                break;
+                return AD_SEARCH_TYPE;
 
             case ScenarioManifest.RANKING_LIST:
                 // 排行榜广告
-                break;
+                return AD_RANKING_LIST_TYPE;
 
             case ScenarioManifest.CATEGORY:
                 // 分类页广告
-                break;
+                return AD_CATEGORY_TYPE;
 
             case ScenarioManifest.BOOK_SHELF:
                 // 书架广告
-                break;
+                return AD_BOOK_SHELF_TYPE;
 
             case ScenarioManifest.READ_FOOT_TRACE:
                 // 阅读足迹广告

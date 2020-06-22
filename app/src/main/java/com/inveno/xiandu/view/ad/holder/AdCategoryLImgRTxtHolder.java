@@ -10,13 +10,13 @@ import static com.inveno.android.ad.config.AdViewType.AD_BOY_GIRL_BOTTOM_TYPE;
 /**
  * 男生/女生
  */
-public class AdBGRTxtLImgHolder extends NormalAdViewHolder {
+public class AdCategoryLImgRTxtHolder extends NormalAdViewHolder {
 
     public static NormalAdViewHolder create(Context context) {
-        return new AdBGRTxtLImgHolder(View.inflate(context, R.layout.ad_bg_r_text_l_img_layout,null));
+        return new AdCategoryLImgRTxtHolder(View.inflate(context, R.layout.ad_category_l_img_r_text_layout,null));
     }
 
-    public AdBGRTxtLImgHolder(View itemView) {
+    public AdCategoryLImgRTxtHolder(View itemView) {
         super(itemView);
                 child_rl = itemView.findViewById(R.id.ad_bg_r_text_l_img_rl_id);
         tv_ad_title = itemView.findViewById(R.id.ad_r_text_id);
