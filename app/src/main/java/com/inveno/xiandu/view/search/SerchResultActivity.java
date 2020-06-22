@@ -13,11 +13,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.BookShelfList;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.GsonUtil;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
+import com.inveno.xiandu.view.adapter.BookCityAdapter;
+import com.inveno.xiandu.view.adapter.SearchDataAdapter;
+import com.inveno.xiandu.view.custom.MRecycleScrollListener;
 import com.inveno.xiandu.view.detail.DetailActivity;
 import com.inveno.xiandu.view.components.HeaderBar;
 import com.inveno.xiandu.view.components.PullRecyclerViewGroup2;
@@ -29,6 +37,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 /**
  * Created By huzheng
@@ -40,8 +51,10 @@ public class SerchResultActivity extends BaseActivity {
 
     @Autowired(name = "name")
     protected String name;
-    private SearchResultAdapter searchAdapter;
+    //    private SearchResultAdapter searchAdapter;
+    private SearchDataAdapter searchDataAdapter;
     private List<BookShelf> data = new ArrayList<>();
+    private ArrayList<BaseDataBean> mData = new ArrayList<>();
 
     @BindView(R.id.headerBar_search_result)
     HeaderBar headerBar;
@@ -51,11 +64,12 @@ public class SerchResultActivity extends BaseActivity {
     View loadingView;
     @BindView(R.id.iv_no_data)
     View noDataView;
-    @BindView(R.id.recyclerView_layout)
-    PullRecyclerViewGroup2 pullRecyclerViewGroup2;
+//    @BindView(R.id.recyclerView_layout)
+//    PullRecyclerViewGroup2 pullRecyclerViewGroup2;
 
     //搜索任务
     private Subscription subscription;
+    private int page_num = 0;//搜索的页数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,24 +87,36 @@ public class SerchResultActivity extends BaseActivity {
                 }
             }
         });
-        pullRecyclerViewGroup2.isTopVisible = true;
+//        pullRecyclerViewGroup2.isTopVisible = true;
         //数据
-        searchAdapter = new SearchResultAdapter(this, data, name);
+        searchDataAdapter = new SearchDataAdapter(this, this, mData);
         resultRecyclerView.setItemAnimator(new DefaultItemAnimator());
 //        resultRecyclerView.addItemDecoration(new DividerItemDecorationStyleOne(this, DividerItemDecorationStyleOne.VERTICAL_LIST, R.drawable.divider_recycleview, 0));
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         resultRecyclerView.setLayoutManager(linearLayoutManager);
-        resultRecyclerView.setAdapter(searchAdapter);
-        searchAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
+        resultRecyclerView.setAdapter(searchDataAdapter);
+        searchDataAdapter.setOnItemClickListener(new SearchDataAdapter.OnItemClickListener() {
             @Override
-            public void onClick(BookShelf book, ImageView pic) {
-                Intent intent = new Intent(SerchResultActivity.this, DetailActivity.class);
-                intent.putExtra("json", GsonUtil.objectToJson(book));
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation((Activity) SerchResultActivity.this, pic, "photo").toBundle();
-                startActivity(intent, bundle);
+            public void onItemClick(BaseDataBean baseDataBean) {
+                if (baseDataBean instanceof BookShelf) {
+                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                            .withString("json", GsonUtil.objectToJson(baseDataBean))
+                            .navigation();
+                }
+            }
+        });
+        resultRecyclerView.addOnScrollListener(new MRecycleScrollListener() {
+            @Override
+            public void onLoadMore() {
+                Toaster.showToastShort(SerchResultActivity.this, "上拉加载");
+                if (!searchDataAdapter.isNotMore()) {
+                    page_num++;
+                    startBookSearch();
+                }
             }
         });
 
+        startBookSearch();
         //执行搜索任务
 //        SearchTool.getInstance().search(name).subscribe(new Subscriber<List<Book>>() {
 //            @Override
@@ -131,6 +157,28 @@ public class SerchResultActivity extends BaseActivity {
 //        });
     }
 
+    private void startBookSearch() {
+        APIContext.SearchBookApi().searchBook(name, page_num)
+                .onSuccess(new Function1<BookShelfList, Unit>() {
+                    @Override
+                    public Unit invoke(BookShelfList bookShelfList) {
+                        if (bookShelfList.getNovel_list().size() > 0) {
+                            ArrayList<BaseDataBean> baseDataBeans = new ArrayList<>(bookShelfList.getNovel_list());
+                            mData.addAll(baseDataBeans);
+                            searchDataAdapter.setDataList(mData);
+                        } else {
+                            searchDataAdapter.setNotDataFooter();
+                        }
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
 
     @Override
     public void finish() {

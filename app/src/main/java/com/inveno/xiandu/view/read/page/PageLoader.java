@@ -140,12 +140,11 @@ public abstract class PageLoader {
     private int mLastChapterPos = 0;
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, BookShelf collBook) {
+    public PageLoader(PageView pageView, BookShelf collBook, int curChapterPos) {
         mPageView = pageView;
         mContext = pageView.getContext();
         mCollBook = collBook;
         mChapterList = new ArrayList<>(1);
-
         // 初始化数据
         initData();
         // 初始化画笔
@@ -153,7 +152,7 @@ public abstract class PageLoader {
         // 初始化PageView
         initPageView();
         // 初始化书籍
-        prepareBook();
+        prepareBook(curChapterPos);
     }
 
     private void initData() {
@@ -567,7 +566,7 @@ public abstract class PageLoader {
     /**
      * 初始化书籍
      */
-    private void prepareBook() {
+    private void prepareBook(int curChapterPos) {
 //        mBookRecord = BookRepository.getInstance()
 //                .getBookRecord(mCollBook.get_id());
 
@@ -575,8 +574,12 @@ public abstract class PageLoader {
 //            mBookRecord = new BookRecordBean();
 //        }
 //
-        mCurChapterPos = 0;
-        mLastChapterPos = mCurChapterPos;
+        mCurChapterPos = curChapterPos;
+        if (mCurChapterPos == 0) {
+            mLastChapterPos = mCurChapterPos;
+        } else {
+            mLastChapterPos = mCurChapterPos - 1;
+        }
     }
 
     /**

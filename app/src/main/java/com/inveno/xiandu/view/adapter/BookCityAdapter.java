@@ -38,9 +38,9 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     private Context mContext;
     public Activity mActivity;
-    private ArrayList<BaseDataBean> mDataList;
     private int lastChoise = 0;
     private BookCityAdapter.OnItemClickListener mListener;
+    private String footerStr = "正在努力加载...";
 
 
     public BookCityAdapter(Context context, Activity activity, ArrayList<BaseDataBean> dataList) {
@@ -55,19 +55,22 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getHeaderView() {
-        View view = getViewHolderView(mContext, R.layout.item_store_header);
-        return view;
+        return getViewHolderView(mContext, R.layout.item_store_header);
     }
 
     @Override
     protected View getFooterView() {
-        return null;
+        return getViewHolderView(mContext, R.layout.item_load_more);
     }
 
 
     public void setDataList(ArrayList<BaseDataBean> dataList) {
         mDataList = dataList;
         notifyDataSetChanged();
+    }
+
+    public void setFooterText(String footerStr) {
+        this.footerStr = footerStr;
     }
 
     @NonNull
@@ -157,21 +160,14 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                     mListener.onItemClick(mDataList.get(finalDataPosition));
                 }
             });
+        } else if (holder instanceof FooterViewHolder) {
+            ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
         }
     }
 
     @Override
     public int getItemCount() {
-        if (mDataList.size() == 0) {
-            return 0;
-        }
-        if (getHeaderView() != null && getFooterView() != null) {
-            return mDataList.size() + 2;
-        } else if (getHeaderView() != null || getFooterView() != null) {
-            return mDataList.size() + 1;
-        } else {
-            return mDataList.size();
-        }
+        return super.getItemCount();
     }
 
     @Override
@@ -221,10 +217,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             View view = getViewHolderView(parent.getContext(), R.layout.item_defaul_recommend);
             mVIewHoder = new BookCityAdapter.DefaulRemmendViewHolder(view);
         } else if (viewType == FOOTER_ITEM_TYPE) {
-//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recommend_text, null);
-//            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            view.setLayoutParams(lp);
-//            mVIewHoder = new BookCityAdapter.ContentViewHolder(view);
+            mVIewHoder = new BookCityAdapter.FooterViewHolder(getFooterView());
         } else {
             View view = getViewHolderView(parent.getContext(), R.layout.item_defaul_recommend);
             mVIewHoder = new BookCityAdapter.DefaulRemmendViewHolder(view);
@@ -257,6 +250,22 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             classify = itemView.findViewById(R.id.classify);
             rankiing = itemView.findViewById(R.id.rankiing);
             the_end = itemView.findViewById(R.id.the_end);
+
+        }
+
+        @Override
+        public void setData(Context context, Object object) {
+
+        }
+    }
+
+    public static class FooterViewHolder extends BaseHolder {
+
+        TextView load_more_tv;
+
+        public FooterViewHolder(@NonNull View itemView) {
+            super(itemView);
+            load_more_tv = itemView.findViewById(R.id.load_more_tv);
 
         }
 

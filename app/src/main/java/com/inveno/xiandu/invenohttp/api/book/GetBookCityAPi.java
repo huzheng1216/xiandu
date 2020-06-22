@@ -44,7 +44,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
     protected static final boolean MODULE_DEBUG = false;
 
-    private static final int GET_DATA_PAGE_NUM = 20;//单次请求条数
+    public static final int GET_DATA_PAGE_NUM = 10;//单次请求条数
 
     /**
      * 小编推荐
@@ -175,11 +175,36 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         mParams.put("content_id", content_id);
         mParams.putAll(bacicParams);
 
-        StatefulCallBack<BookShelfList> realCallback;
         if (MODULE_DEBUG) {
 
         } else {
-            realCallback = MultiTypeHttpStatefulCallBack.INSTANCE
+            return MultiTypeHttpStatefulCallBack.INSTANCE
+                    .<BookShelf>newCallBack(new TypeReference<BookShelf>() {
+                    }.getType())
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.GET_BOOK))
+                    .withArg(mParams)
+                    .buildCallerCallBack();
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取推荐的小说详情
+     *
+     * @param content_id 小说id
+     * @return
+     */
+    public StatefulCallBack<BookShelfList> getRelevantBook(long content_id) {
+        LinkedHashMap<String, Object> bacicParams = ServiceContext.bacicParamService().getBaseParam();
+        LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+        mParams.put("content_id", content_id);
+        mParams.putAll(bacicParams);
+
+        if (MODULE_DEBUG) {
+
+        } else {
+            return MultiTypeHttpStatefulCallBack.INSTANCE
                     .<BookShelfList>newCallBack(new TypeReference<BookShelfList>() {
                     }.getType())
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.RELEVANT_LIST))
@@ -187,31 +212,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
                     .buildCallerCallBack();
         }
 
-        BaseStatefulCallBack<BookShelf> uiCallback = new BaseStatefulCallBack<BookShelf>() {
-            @Override
-            public void execute() {
-                realCallback.execute();
-            }
-        };
-        realCallback.onSuccess(new Function1<BookShelfList, Unit>() {
-            @Override
-            public Unit invoke(BookShelfList bookShelfList) {
-                if (bookShelfList.getNovel_list() != null && bookShelfList.getNovel_list().size() > 0) {
-                    uiCallback.invokeSuccess(bookShelfList.getNovel_list().get(0));
-                } else {
-                    uiCallback.invokeFail(-1, "查无此小说");
-                }
-                return null;
-            }
-        });
-        realCallback.onFail(new Function2<Integer, String, Unit>() {
-            @Override
-            public Unit invoke(Integer integer, String s) {
-                uiCallback.invokeFail(integer, s);
-                return null;
-            }
-        });
-        return uiCallback;
+        return null;
     }
 
     /**
@@ -423,9 +424,10 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
     /**
      * 获取指定分类下的小说列表
-     * @param category_id  分类ID
+     *
+     * @param category_id 分类ID
      * @param book_status 小说状态(默认传-1表示全部，0:连载 ,1:完本)
-     * @param page_num 当前页码(默认从第一页开始)
+     * @param page_num    当前页码(默认从第一页开始)
      * @return
      */
     public StatefulCallBack<ClassifyData> getClassifyData(int category_id, int book_status, int page_num) {
@@ -523,6 +525,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
     /**
      * 获取排行榜下的小说
+     *
      * @param ranking_id 排行榜id
      * @param channel_id 频道id
      * @return

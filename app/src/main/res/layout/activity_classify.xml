@@ -7,6 +7,10 @@
     android:background="#F0F2F5"
     android:orientation="vertical">
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
     <RelativeLayout
         android:id="@+id/my_title"
         android:layout_width="match_parent"
@@ -16,6 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/title_bar_back"
             android:layout_width="32dp"
@@ -46,7 +51,7 @@
                 app:tabMode="scrollable"
                 app:tabRippleColor="@color/transparent"
                 app:tabSelectedTextColor="@color/base_color"
-                app:tabTextColor="@color/gray_3"/>
+                app:tabTextColor="@color/gray_3" />
         </LinearLayout>
 
         <ImageView

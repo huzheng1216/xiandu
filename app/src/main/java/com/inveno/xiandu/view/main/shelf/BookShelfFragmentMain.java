@@ -177,7 +177,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                shelfAdapter.setHeaderData("60", "1000");
+                shelfAdapter.setHeaderData("--", "--");
             }
         }, 8000);
 

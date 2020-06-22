@@ -198,6 +198,8 @@ public class UserinfoActivity extends TitleBarBaseActivity {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
                 return true;
+            }else{
+                finish();
             }
         }
         return false;

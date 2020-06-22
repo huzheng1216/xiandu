@@ -248,8 +248,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             mPvPage.setLayerType(LAYER_TYPE_SOFTWARE, null);
         }
 
+        int capterPos = getIntent().getIntExtra("capter", 0);
         //获取页面加载器
-        mPageLoader = mPvPage.getPageLoader(bookShelf);
+        mPageLoader = mPvPage.getPageLoader(bookShelf, capterPos);
         //禁止滑动展示DrawerLayout
         mDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //侧边打开后，返回键能够起作用

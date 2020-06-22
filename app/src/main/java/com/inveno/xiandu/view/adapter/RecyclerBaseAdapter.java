@@ -6,6 +6,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.inveno.xiandu.bean.BaseDataBean;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author yongji.wang
  * @date 2020/6/13 13:46
@@ -39,7 +44,23 @@ public abstract class RecyclerBaseAdapter extends RecyclerView.Adapter<RecyclerV
     protected View headerView;
     protected View footerView;
 
+    protected List<BaseDataBean> mDataList = new ArrayList<>();
+
     protected abstract View getHeaderView();
 
     protected abstract View getFooterView();
+
+    @Override
+    public int getItemCount() {
+        if (mDataList.size() == 0) {
+            return 0;
+        }
+        if (getHeaderView() != null && getFooterView() != null) {
+            return mDataList.size() + 2;
+        } else if (getHeaderView() != null || getFooterView() != null) {
+            return mDataList.size() + 1;
+        } else {
+            return mDataList.size();
+        }
+    }
 }

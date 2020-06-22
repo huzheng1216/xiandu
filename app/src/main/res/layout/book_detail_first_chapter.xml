@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/first_capter_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:lineSpacingExtra="6dp"
+        android:maxLines="4"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="第一章"
+        android:textColor="@color/gray_3"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/first_capter_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:lineSpacingExtra="6dp"
+        android:maxLines="10"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="花垣城大城上，商户云集，行人如织，看 起来一派繁华。但若是看得仔细的话，就会发 现，街上女子居多，衣饰华丽奔放，行为举止 也都十分洒脱，并无半分扭捏。 而在大街之上一列车队缓缓行进，马车纹 饰绣着玄虎图腾，而身着同色铠甲的玄虎侍卫 秩序森然，护卫着最中央的一辆宽大马车徐徐 行进。 街头民众涌动，纷纷驻足观看着这一幕， 并且交头接耳的小声议论。 民妇甲看着这一幕，不禁说道：“听说是 玄虎城的少城主，来咱们花垣城联姻，也不知 道会许给哪位郡主……”"
+        android:textColor="@color/gray_3"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/open_first_more"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="展开更多"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/gray_9"/>
+</LinearLayout>

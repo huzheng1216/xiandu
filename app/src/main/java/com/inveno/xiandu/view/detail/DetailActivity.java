@@ -35,7 +35,6 @@ import butterknife.OnClick;
  * Date 2020-02-11
  * Des 目录页
  */
-@Route(path = ARouterPath.ACTIVITY_DETAIL_MAIN)
 public class DetailActivity extends BaseActivity {
 
     //数据

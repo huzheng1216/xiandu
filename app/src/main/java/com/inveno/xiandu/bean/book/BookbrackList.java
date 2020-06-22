@@ -12,6 +12,10 @@ import java.util.List;
 public class BookbrackList {
     private List<Bookbrack> book_list;
 
+    public BookbrackList() {
+
+    }
+
     public List<Bookbrack> getBook_list() {
         return book_list;
     }

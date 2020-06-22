@@ -29,6 +29,11 @@ public class BacicParamService extends BaseSingleInstanceService {
     @Override
     protected void onCreate() {
         super.onCreate();
+        putParams();
+
+    }
+
+    private void putParams() {
         IProductService iProductService = InvenoServiceContext.product();
         baseParam.put("product_id", iProductService.getProductId());
         if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0)
@@ -46,7 +51,11 @@ public class BacicParamService extends BaseSingleInstanceService {
         baseParam.put("brand", AndroidParamProviderHolder.get().device().getBrand());
         baseParam.put("model", AndroidParamProviderHolder.get().device().getModel());
         baseParam.put("tk", iProductService.createTkWithoutData(String.valueOf(System.currentTimeMillis())));
+    }
 
+    //更新公共参数
+    public void refreshBaseParam(){
+        putParams();
     }
 
     public LinkedHashMap<String, Object> getBaseParam() {

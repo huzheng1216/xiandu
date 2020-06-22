@@ -87,6 +87,7 @@ public class LoginAPI extends BaseSingleInstanceService {
                     }
                     AppPersistRepository.get().save(USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
                     ServiceContext.userService().setUserInfo(userInfo);
+                    ServiceContext.bacicParamService().refreshBaseParam();
                     EventService.Companion.post(EventConstant.REFRESH_USER_DATA);
                     uiCallBack.invokeSuccess(userInfoList.getUser_list().get(0));
                 }

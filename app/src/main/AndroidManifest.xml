@@ -74,8 +74,17 @@
         <activity
             android:name=".view.read.ReadActivity"
             android:theme="@style/FullScreenTheme" />
-        <activity android:name=".view.main.store.RankingActivity" />
-        <activity android:name=".view.splash.ChoiseGenderActivity" />
-        <activity android:name=".view.main.store.ClassifyActivity" />
+        <activity
+            android:name=".view.main.store.RankingActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.splash.ChoiseGenderActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.main.store.ClassifyActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".view.detail.BookDetailActivity"
+            android:theme="@style/AppTheme" />
     </application>
 </manifest>

@@ -11,7 +11,7 @@
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
         android:background="#44666666"
-        android:visibility="gone"></View>
+        android:visibility="gone"/>
 
     <LinearLayout
         android:id="@+id/header_bar_title_layout"
@@ -28,7 +28,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:padding="8dp"
-            android:src="@mipmap/ic_header_bar_back"
+            android:src="@drawable/black_back_arrow"
             android:tint="#ff888888"
             android:visibility="gone"/>
 
@@ -106,7 +106,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:padding="8dp"
-            android:src="@mipmap/ic_header_bar_back"
+            android:src="@drawable/black_back_arrow"
             android:tint="#ff888888" />
 
         <TextView

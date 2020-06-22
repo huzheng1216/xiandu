@@ -206,7 +206,7 @@ public class SQL {
 
             contentIds.add(bookbrack.getContent_id());
         }
-        APIContext.bookbrackApi().updataBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), contentIds, 0)
+        APIContext.bookbrackApi().updataBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), contentIds, -1)
                 .onSuccess(new Function1<String, Unit>() {
                     @Override
                     public Unit invoke(String s) {

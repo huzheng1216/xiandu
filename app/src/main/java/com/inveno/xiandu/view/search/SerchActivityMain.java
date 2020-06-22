@@ -48,8 +48,8 @@ public class SerchActivityMain extends BaseActivity {
     View del;
     @BindView(R.id.bt_search_main_back)
     View back;
-    @BindView(R.id.bt_search_main_search)
-    View search;
+    @BindView(R.id.bt_search_main_cancel)
+    View bt_search_main_cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +90,10 @@ public class SerchActivityMain extends BaseActivity {
                 ActivityCompat.finishAfterTransition(SerchActivityMain.this);
             }
         });
-        ClickUtil.bindSingleClick(search, 500, new View.OnClickListener() {
+        ClickUtil.bindSingleClick(bt_search_main_cancel, 500, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = editText.getText().toString();
-                if (StringTools.isNotEmpty(s)) {
-                    search(s);
-                }
+                ActivityCompat.finishAfterTransition(SerchActivityMain.this);
             }
         });
         //本地历史
@@ -137,6 +134,7 @@ public class SerchActivityMain extends BaseActivity {
         historyAdapter.notifyDataSetChanged();
         SPUtils.setInformain(Keys.SEARCH_HISTORY, GsonUtil.objectToJson(history));
     }
+
 
     @Override
     public void onBackPressed() {

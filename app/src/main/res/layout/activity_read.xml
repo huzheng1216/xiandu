@@ -190,7 +190,7 @@
                 android:id="@+id/read_iv_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"></ListView>
+                android:scrollbars="vertical"/>
         </RelativeLayout>
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

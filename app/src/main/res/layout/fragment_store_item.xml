@@ -5,8 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/RecyclerView"
+
+    <com.inveno.xiandu.view.custom.MSwipeRefreshLayout
+        android:id="@+id/store_refresh_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.inveno.xiandu.view.custom.MSwipeRefreshLayout>
 </LinearLayout>

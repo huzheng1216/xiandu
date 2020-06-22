@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#F4F5F5"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <TextView
+        android:id="@+id/load_more_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="正在努力加载..."
+        android:textColor="@color/gray_6"
+        android:textSize="12sp" />
+</LinearLayout>
