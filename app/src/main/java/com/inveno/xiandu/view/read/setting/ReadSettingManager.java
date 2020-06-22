@@ -1,6 +1,7 @@
 package com.inveno.xiandu.view.read.setting;
 
 import com.inveno.xiandu.utils.SPUtils;
+import com.inveno.xiandu.view.read.page.ComposeMode;
 import com.inveno.xiandu.view.read.page.PageMode;
 import com.inveno.xiandu.view.read.page.PageStyle;
 
@@ -24,6 +25,7 @@ public class ReadSettingManager {
     public static final String SHARED_READ_TEXT_SIZE = "shared_read_text_size";
     public static final String SHARED_READ_IS_TEXT_DEFAULT = "shared_read_text_default";
     public static final String SHARED_READ_PAGE_MODE = "shared_read_mode";
+    public static final String SHARED_READ_COMPOSE_MODE = "shared_compose_mode";
     public static final String SHARED_READ_NIGHT_MODE = "shared_night_mode";
     public static final String SHARED_READ_VOLUME_TURN_PAGE = "shared_read_volume_turn_page";
     public static final String SHARED_READ_FULL_SCREEN = "shared_read_full_screen";
@@ -69,6 +71,15 @@ public class ReadSettingManager {
         SPUtils.setInformain(SHARED_READ_PAGE_MODE, mode.ordinal());
     }
 
+    public void setComposeMode(ComposeMode mode) {
+        SPUtils.setInformain(SHARED_READ_COMPOSE_MODE, mode.ordinal());
+    }
+
+    public ComposeMode getComposeMode() {
+        int mode = SPUtils.getInformain(SHARED_READ_COMPOSE_MODE, ComposeMode.MODE_0.ordinal());
+        return ComposeMode.values()[mode];
+    }
+
     public void setNightMode(boolean isNight) {
         SPUtils.setInformain(SHARED_READ_NIGHT_MODE, isNight);
     }
@@ -82,7 +93,7 @@ public class ReadSettingManager {
     }
 
     public int getTextSize() {
-        return SPUtils.getInformain(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(28));
+        return SPUtils.getInformain(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(14));
     }
 
     public boolean isDefaultTextSize() {

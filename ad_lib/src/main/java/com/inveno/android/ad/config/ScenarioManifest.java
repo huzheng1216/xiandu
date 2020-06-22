@@ -1,4 +1,4 @@
-package com.inveno.android.ad.service;
+package com.inveno.android.ad.config;
 
 public interface ScenarioManifest {
     // 阅读器底部广告

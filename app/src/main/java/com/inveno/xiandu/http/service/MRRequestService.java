@@ -44,4 +44,7 @@ public interface MRRequestService {
 
     @POST("content/novel/recommend/list")
     Observable<BaseRequest<ResponseChannel>> getRecommendList(@Body Map<String, Object> map);
+
+    @POST("behavior/heat_beat/report")
+    Observable<BaseRequest> postReadTime(@Body Map<String, Object> map);
 }

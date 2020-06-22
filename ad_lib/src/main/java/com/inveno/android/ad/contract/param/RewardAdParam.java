@@ -40,7 +40,7 @@ public class RewardAdParam extends PlaintAdParam {
 
         public RewardAdParam build() {
             RewardAdParam rewardAdParam = new RewardAdParam();
-            rewardAdParam.setActivity(activity);
+            rewardAdParam.setContext(activity);
             rewardAdParam.setRewardVideoAdListener(rewardVideoAdListener);
             return rewardAdParam;
         }

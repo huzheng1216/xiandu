@@ -15,8 +15,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
+import com.alibaba.fastjson.JSON;
+import com.inveno.android.ad.bean.IndexedAdValueWrapper;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.BookShelfList;
 import com.inveno.xiandu.bean.book.EditorRecommend;
@@ -54,6 +58,9 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.BOY_GIRL_BOTTOM;
+import static com.inveno.android.ad.config.ScenarioManifest.EDITOR_RECOMMEND;
+
 /**
  * Created By huzheng
  * Date 2020/6/5
@@ -74,6 +81,8 @@ public class StoreItemFragment extends BaseFragment {
 
     private StatefulCallBack<BookShelfList> topRequest;
     private StatefulCallBack<BookShelfList> bottomRequest;
+    private AdModel mAdModel;
+    private String mScenario;
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -96,6 +105,7 @@ public class StoreItemFragment extends BaseFragment {
                 channel = 3;
                 topTitle = "精选畅销";
                 bottomTitle = "人气精选";
+                mScenario = EDITOR_RECOMMEND;
                 break;
         }
     }
@@ -186,6 +196,43 @@ public class StoreItemFragment extends BaseFragment {
 //            initData();
             getData();
             initLoadData();
+            APIContext.getBookCityAPi().getBookCity(channel)
+                    .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
+                        @Override
+                        public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
+                            mDataBeans = baseDataBeans;
+                            if (mAdModel!=null){
+                                mDataBeans.add(mAdModel.getWrapper().getIndex(),mAdModel);
+                            }
+                            bookCityAdapter.setDataList(mDataBeans);
+                            return null;
+                        }
+                    })
+                    .onFail(new Function2<Integer, String, Unit>() {
+                        @Override
+                        public Unit invoke(Integer integer, String s) {
+                            Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                            return null;
+                        }
+                    }).execute();
+
+            //TODO scenario值暂时写了几个
+            InvenoAdServiceHolder.getService().requestInfoAd(mScenario, getContext())
+                    .onSuccess(wrapper -> {
+                        Log.i("requestInfoAd", "onSuccess wrapper "+ wrapper.toString());
+
+                        if (mDataBeans.size()>0){
+                            mAdModel = new AdModel(wrapper);
+                            mDataBeans.add(mAdModel.getWrapper().getIndex(),mAdModel);
+                            bookCityAdapter.setDataList(mDataBeans);
+                        }
+                        return null;
+                    })
+                    .onFail((integer, s) -> {
+                        Log.i("requestInfoAd", "onFail s:"+s + " integer:"+integer);
+                        return null;
+                    })
+                    .execute();
         }
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 public class NormalLeftImgRightTextADViewHolder extends RecyclerView.ViewHolder {
     public static NormalLeftImgRightTextADViewHolder create(Context context) {
-        return new NormalLeftImgRightTextADViewHolder(View.inflate(context, R.layout.ad_left_img_right_text_layout,null));
+        return new NormalLeftImgRightTextADViewHolder(View.inflate(context, R.layout.ad_bg_r_text_l_img_layout,null));
     }
 
     RelativeLayout child_rl;

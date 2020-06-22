@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.text.TextPaint;
 
 import androidx.core.content.ContextCompat;
@@ -35,7 +36,6 @@ import io.reactivex.disposables.Disposable;
 /**
  * Created by newbiechen on 17-7-1.
  */
-
 public abstract class PageLoader {
     private static final String TAG = "PageLoader";
 
@@ -103,6 +103,8 @@ public abstract class PageLoader {
     private boolean isClose;
     // 页面的翻页效果模式
     private PageMode mPageMode;
+    // 页面的排版模式
+    private ComposeMode mComposeMode;
     // 加载器的颜色主题
     private PageStyle mPageStyle;
     //当前是否是夜间模式
@@ -122,6 +124,8 @@ public abstract class PageLoader {
     private int mTitleSize;
     //字体的大小
     private int mTextSize;
+    //字间距
+    private float mLetterSpacing;
     //行间距
     private int mTextInterval;
     //标题的行间距
@@ -160,6 +164,7 @@ public abstract class PageLoader {
         mSettingManager = ReadSettingManager.getInstance();
         // 获取配置参数
         mPageMode = mSettingManager.getPageMode();
+        mComposeMode = mSettingManager.getComposeMode();
         mPageStyle = mSettingManager.getPageStyle();
         // 初始化参数
         mMarginWidth = ScreenUtils.dpToPx(DEFAULT_MARGIN_WIDTH);
@@ -177,12 +182,42 @@ public abstract class PageLoader {
         // 文字大小
         mTextSize = textSize;
         mTitleSize = mTextSize + ScreenUtils.spToPx(EXTRA_TITLE_SIZE);
-        // 行间距(大小为字体的一半)
-        mTextInterval = mTextSize / 2;
-        mTitleInterval = mTitleSize / 2;
-        // 段落间距(大小为字体的高度)
-        mTextPara = mTextSize;
-        mTitlePara = mTitleSize;
+        // 排版
+        setUpTextCompose(mComposeMode);
+    }
+
+    /**
+     * 作用：设置字间距/行间距/段落间距
+     *
+     * @param composeMode
+     */
+    private void setUpTextCompose(ComposeMode composeMode) {
+        // 文字排版
+        mComposeMode = composeMode;
+        float size = 2;
+        switch (mComposeMode) {
+            case MODE_4:
+                size = 12;
+                break;
+            case MODE_3:
+                size = 2;
+                break;
+            case MODE_2:
+                size = 0.6f;
+                break;
+            case MODE_0:
+                size = 1;
+                break;
+            default:
+        }
+        //字间距
+        mLetterSpacing = size / 16;
+        // 行间距
+        mTextInterval = (int) (mTextSize / size);
+        mTitleInterval = (int) (mTitleSize / size);
+        // 段落间距
+        mTextPara = (int) (mTextSize / size);
+        mTitlePara = (int) (mTitleSize / (size / 2));
     }
 
     private void initPaint() {
@@ -198,6 +233,9 @@ public abstract class PageLoader {
         mTextPaint = new TextPaint();
         mTextPaint.setColor(mTextColor);
         mTextPaint.setTextSize(mTextSize);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            mTextPaint.setLetterSpacing(mLetterSpacing);
+//        }
         mTextPaint.setAntiAlias(true);
 
         // 绘制标题的画笔
@@ -434,6 +472,37 @@ public abstract class PageLoader {
         mTextPaint.setColor(mTextColor);
 
         mBgPaint.setColor(mBgColor);
+
+        mPageView.drawCurPage(false);
+    }
+
+    /**
+     * 文字排版
+     *
+     * @param composeMode:排版模式
+     * @see PageMode
+     */
+    public void setComposeMode(ComposeMode composeMode) {
+        // 设置文字相关参数
+        setUpTextCompose(composeMode);
+        mSettingManager.setComposeMode(composeMode);
+        // 取消缓存
+        mPrePageList = null;
+        mNextPageList = null;
+
+        // 如果当前已经显示数据
+        if (isChapterListPrepare && mStatus == STATUS_FINISH) {
+            // 重新计算当前页面
+            dealLoadPageList(mCurChapterPos);
+
+            // 防止在最后一页，通过修改字体，以至于页面数减少导致崩溃的问题
+            if (mCurPage.position >= mCurPageList.size()) {
+                mCurPage.position = mCurPageList.size() - 1;
+            }
+
+            // 重新获取指定页面
+            mCurPage = mCurPageList.get(mCurPage.position);
+        }
 
         mPageView.drawCurPage(false);
     }

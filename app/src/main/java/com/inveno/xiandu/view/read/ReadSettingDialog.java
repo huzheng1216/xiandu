@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.view.read.adapter.PageStyleAdapter;
+import com.inveno.xiandu.view.read.page.ComposeMode;
 import com.inveno.xiandu.view.read.page.PageLoader;
 import com.inveno.xiandu.view.read.page.PageMode;
 import com.inveno.xiandu.view.read.page.PageStyle;
@@ -60,6 +61,8 @@ public class ReadSettingDialog extends Dialog {
     CheckBox mCbFontDefault;
     @BindView(R.id.read_setting_rg_page_mode)
     RadioGroup mRgPageMode;
+    @BindView(R.id.read_setting_rg_page_compose)
+    RadioGroup mRgPageCompose;
 
     @BindView(R.id.read_setting_rb_simulation)
     RadioButton mRbSimulation;
@@ -73,8 +76,17 @@ public class ReadSettingDialog extends Dialog {
     RadioButton mRbNone;
     @BindView(R.id.read_setting_rv_bg)
     RecyclerView mRvBg;
-    @BindView(R.id.read_setting_tv_more)
-    TextView mTvMore;
+
+    @BindView(R.id.read_setting_rb_compose_4)
+    RadioButton mRbCompose4;
+    @BindView(R.id.read_setting_rb_compose_3)
+    RadioButton mRbCompose3;
+    @BindView(R.id.read_setting_rb_compose_2)
+    RadioButton mRbCompose2;
+    @BindView(R.id.read_setting_rb_compose_0)
+    RadioButton mRbCompose0;
+//    @BindView(R.id.read_setting_tv_more)
+//    TextView mTvMore;
     /************************************/
     private PageStyleAdapter mPageStyleAdapter;
     private ReadSettingManager mSettingManager;
@@ -82,6 +94,7 @@ public class ReadSettingDialog extends Dialog {
     private Activity mActivity;
 
     private PageMode mPageMode;
+    private ComposeMode mComposeMode;
     private PageStyle mPageStyle;
 
     private int mBrightness;
@@ -126,6 +139,7 @@ public class ReadSettingDialog extends Dialog {
         mTextSize = mSettingManager.getTextSize();
         isTextDefault = mSettingManager.isDefaultTextSize();
         mPageMode = mSettingManager.getPageMode();
+        mComposeMode = mSettingManager.getComposeMode();
         mPageStyle = mSettingManager.getPageStyle();
     }
 
@@ -135,6 +149,7 @@ public class ReadSettingDialog extends Dialog {
         mCbBrightnessAuto.setChecked(isBrightnessAuto);
         mCbFontDefault.setChecked(isTextDefault);
         initPageMode();
+        initPageCompose();
         //RecyclerView
         setUpAdapter();
     }
@@ -172,6 +187,23 @@ public class ReadSettingDialog extends Dialog {
                 break;
             case SCROLL:
                 mRbScroll.setChecked(true);
+                break;
+        }
+    }
+
+    private void initPageCompose() {
+        switch (mComposeMode) {
+            case MODE_4:
+                mRbCompose4.setChecked(true);
+                break;
+            case MODE_3:
+                mRbCompose3.setChecked(true);
+                break;
+            case MODE_2:
+                mRbCompose2.setChecked(true);
+                break;
+            case MODE_0:
+                mRbCompose0.setChecked(true);
                 break;
         }
     }
@@ -306,20 +338,45 @@ public class ReadSettingDialog extends Dialog {
                 }
         );
 
+        //Page Compose 切换
+        mRgPageCompose.setOnCheckedChangeListener(
+                (group, checkedId) -> {
+                    ComposeMode composeMode;
+                    switch (checkedId) {
+                        case R.id.read_setting_rb_compose_4:
+                            composeMode = ComposeMode.MODE_4;
+                            break;
+                        case R.id.read_setting_rb_compose_3:
+                            composeMode = ComposeMode.MODE_3;
+                            break;
+                        case R.id.read_setting_rb_compose_2:
+                            composeMode = ComposeMode.MODE_2;
+                            break;
+                        case R.id.read_setting_rb_compose_0:
+                            composeMode = ComposeMode.MODE_0;
+                            break;
+                        default:
+                            composeMode = ComposeMode.MODE_0;
+                            break;
+                    }
+                    mPageLoader.setComposeMode(composeMode);
+                }
+        );
+
         //背景的点击事件
         mPageStyleAdapter.setOnItemClickListener(
                 (view, pos) -> mPageLoader.setPageStyle(PageStyle.values()[pos])
         );
 
         //更多设置
-        mTvMore.setOnClickListener(
-                (v) -> {
+//        mTvMore.setOnClickListener(
+//                (v) -> {
 //                    Intent intent = new Intent(getContext(), MoreSettingActivity.class);
 //                    mActivity.startActivityForResult(intent, ReadActivity.REQUEST_MORE_SETTING);
 //                    //关闭当前设置
 //                    dismiss();
-                }
-        );
+//                }
+//        );
     }
 
     public boolean isBrightFollowSystem() {
