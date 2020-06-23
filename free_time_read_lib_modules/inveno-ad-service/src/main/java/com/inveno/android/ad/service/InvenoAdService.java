@@ -1,7 +1,9 @@
 package com.inveno.android.ad.service;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.inveno.android.ad.InvenoADAgent;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.config.AdViewType;
@@ -16,6 +18,9 @@ import com.inveno.android.api.bean.Rule_list;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -53,12 +58,14 @@ public class InvenoAdService {
     }
 
 
-    public StatefulCallBack<IndexedAdValueWrapper> requestInfoAd(String scenario,Context context) {
+    public StatefulCallBack<IndexedAdValueWrapper> requestInfoAd(String scenario, Context context) {
         try {
 
             Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);
-            if (rule_list!=null) {
+            if (rule_list != null) {
                 Rule rule = rule_list.getRule().get(0).get(0);
+                Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
+
                 zheShiGeKeng(scenario, rule);
                 InfoAdParam infoAdParam = InfoAdParam.InfoAdParamBuilder.newBuilder()
                         .withContext(context)
@@ -91,7 +98,51 @@ public class InvenoAdService {
         };
     }
 
-    private void zheShiGeKeng(String scenario , Rule rule){
+    public List<StatefulCallBack<IndexedAdValueWrapper>> requestInfoAdList(String scenario, Context context) {
+        List<StatefulCallBack<IndexedAdValueWrapper>> resultList = new ArrayList<>();
+        try {
+            Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);
+            Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
+            if (rule_list != null) {
+                List<Rule> rules = rule_list.getRule().get(0);
+                for (int i = 0; i < rules.size(); i++) {
+                    Rule rule = rules.get(i);
+                    zheShiGeKeng(scenario, rule);
+                    InfoAdParam infoAdParam = InfoAdParam.InfoAdParamBuilder.newBuilder()
+                            .withContext(context)
+                            .withAdIndex(rule.getPos())
+                            .withWidth(rule.getWidth())
+                            .withHeight(rule.getHeight())
+                            .withAdSpaceId(rule.getAdspace_id())
+                            .withDisplayType(rule.getDisplay_type())
+                            .withScenario(scenario)
+                            .withViewType(AllotAdViewType.allot(scenario, rule.getDisplay_type()))
+                            .build();
+                    PlaintAdParamUtil.setPositionId(infoAdParam, rule.getAdspace_id());
+
+                    resultList.add(InvenoADAgent.getAdApi().requestInfoAD(infoAdParam));
+                }
+            }else {
+                resultList.add(new BaseStatefulCallBack<IndexedAdValueWrapper>() {
+                    @Override
+                    public void execute() {
+                        invokeFail(600, "no config");
+                    }
+                });
+            }
+        } catch (Exception e) {
+            final String errorMsg = e.getMessage();
+            resultList.add(new BaseStatefulCallBack<IndexedAdValueWrapper>() {
+                @Override
+                public void execute() {
+                    invokeFail(600, errorMsg);
+                }
+            });
+        }
+        return resultList;
+    }
+
+    private void zheShiGeKeng(String scenario, Rule rule) {
         int displayType = rule.getDisplay_type();
         switch (scenario) {
             case READER_BOTTOM:
@@ -101,10 +152,10 @@ public class InvenoAdService {
                 break;
             case EDITOR_RECOMMEND:
                 // 小编推荐模块广告
-                if (displayType==1){
+                if (displayType == 1) {
                     rule.setWidth(104);
                     rule.setHeight(70);
-                }else {
+                } else {
                     rule.setWidth(320);
                     rule.setHeight(188);
                 }

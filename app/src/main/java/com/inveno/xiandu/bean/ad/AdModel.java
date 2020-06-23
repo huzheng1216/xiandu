@@ -7,6 +7,9 @@ public class AdModel extends BaseDataBean {
 
     private IndexedAdValueWrapper wrapper;
 
+    public AdModel() {
+    }
+
     public AdModel(IndexedAdValueWrapper wrapper) {
         this.wrapper = wrapper;
     }

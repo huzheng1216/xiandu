@@ -4,14 +4,14 @@
     android:layout_height="74dp"
     android:id="@+id/ad_bg_r_text_l_img_rl_id"
     android:paddingLeft="12.33dp"
-    android:paddingRight="25.33dp">
+    android:paddingRight="25.33dp"
+    android:paddingBottom="12dp">
 
     <ImageView
         android:id="@+id/ad_l_img_id"
         android:layout_width="38dp"
         android:layout_height="50dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
         android:src="@drawable/ic_header_default"
         android:scaleType="centerCrop"/>
 
@@ -34,7 +34,6 @@
         android:text="@string/ad_tag_string"
         android:textColor="#ffffffff"
         android:textSize="10sp"
-        android:layout_marginBottom="12dp"
         android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/ad_l_img_id"
         android:gravity="center"

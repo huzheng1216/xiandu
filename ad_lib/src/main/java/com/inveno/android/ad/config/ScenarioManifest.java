@@ -10,7 +10,7 @@ public interface ScenarioManifest {
     // 开屏广告
     String SPLASH = "0x060100";
 
-    // 男生/女生热文底部广告
+    // 男生/女生热文/精选畅销底部广告
     String BOY_GIRL_BOTTOM = "0x0004fe";
 
     // 人气精选/猜你喜欢广告

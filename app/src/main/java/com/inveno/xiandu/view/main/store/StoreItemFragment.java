@@ -196,43 +196,7 @@ public class StoreItemFragment extends BaseFragment {
 //            initData();
             getData();
             initLoadData();
-            APIContext.getBookCityAPi().getBookCity(channel)
-                    .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
-                        @Override
-                        public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
-                            mDataBeans = baseDataBeans;
-                            if (mAdModel!=null){
-                                mDataBeans.add(mAdModel.getWrapper().getIndex(),mAdModel);
-                            }
-                            bookCityAdapter.setDataList(mDataBeans);
-                            return null;
-                        }
-                    })
-                    .onFail(new Function2<Integer, String, Unit>() {
-                        @Override
-                        public Unit invoke(Integer integer, String s) {
-                            Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
-                            return null;
-                        }
-                    }).execute();
 
-            //TODO scenario值暂时写了几个
-            InvenoAdServiceHolder.getService().requestInfoAd(mScenario, getContext())
-                    .onSuccess(wrapper -> {
-                        Log.i("requestInfoAd", "onSuccess wrapper "+ wrapper.toString());
-
-                        if (mDataBeans.size()>0){
-                            mAdModel = new AdModel(wrapper);
-                            mDataBeans.add(mAdModel.getWrapper().getIndex(),mAdModel);
-                            bookCityAdapter.setDataList(mDataBeans);
-                        }
-                        return null;
-                    })
-                    .onFail((integer, s) -> {
-                        Log.i("requestInfoAd", "onFail s:"+s + " integer:"+integer);
-                        return null;
-                    })
-                    .execute();
         }
     }
 
@@ -289,7 +253,7 @@ public class StoreItemFragment extends BaseFragment {
     }
 
     private void getData() {
-        APIContext.getBookCityAPi().getBookCity(channel)
+        APIContext.getBookCityAPi().getBookCity(channel,getContext())
                 .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
                     @Override
                     public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
@@ -307,5 +271,7 @@ public class StoreItemFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+
+
     }
 }
