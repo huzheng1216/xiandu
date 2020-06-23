@@ -37,6 +37,9 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
     private int lastChoise = 0;
     private OnItemClickListener mListener;
 
+    private String footerStr = "正在努力加载...";
+    private boolean isNotMore = false;
+
 
     public RightDataAdapter(Context context, Activity activity, List<BaseDataBean> dataList) {
         mContext = context;
@@ -95,28 +98,40 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
             if (getHeaderView() != null) {
                 dataPosition = position - 1;
             }
-            mHolder.setData(mContext, mDataList.get(dataPosition));
-            int finalDataPosition = dataPosition;
-            mHolder.rightDataView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mListener.onItemClick(mDataList.get(finalDataPosition));
-                }
-            });
+            if (mDataList.size() > dataPosition) {
+                mHolder.setData(mContext, mDataList.get(dataPosition));
+                int finalDataPosition = dataPosition;
+                mHolder.rightDataView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mListener.onItemClick(mDataList.get(finalDataPosition));
+                    }
+                });
+            }
 
         } else if (holder instanceof FooterViewHolder) {
+            ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
+            if (mDataList.size() < 10 || isNotMore) {
+                ((FooterViewHolder) holder).load_more_tv.setText("沒有跟多数据");
+            } else {
 
+                ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        if (getHeaderView() != null && getFooterView() != null) {
-            return mDataList.size() + 2;
-        } else if (getHeaderView() != null || getFooterView() != null) {
-            return mDataList.size() + 1;
+        if (mDataList.size() > 0) {
+            if (getHeaderView() != null && getFooterView() != null) {
+                return mDataList.size() + 2;
+            } else if (getHeaderView() != null || getFooterView() != null) {
+                return mDataList.size() + 1;
+            } else {
+                return mDataList.size();
+            }
         } else {
-            return mDataList.size();
+            return 0;
         }
     }
 
@@ -130,6 +145,15 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         notifyItemChanged(getItemCount() - 1);
     }
 
+    public void setNotDataFooter() {
+        isNotMore = true;
+        notifyItemChanged(getItemCount() - 1);
+    }
+
+    public boolean isNotMore() {
+        return isNotMore;
+    }
+
     @Override
     protected View getHeaderView() {
         return null;
@@ -137,12 +161,11 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getFooterView() {
-        if (footerView != null) {
+        if (footerView!=null){
             return footerView;
         }
         return null;
     }
-
 
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
@@ -151,9 +174,20 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         }
     }
 
-    public static class FooterViewHolder extends RecyclerView.ViewHolder {
-        public FooterViewHolder(View itemView) {
+    public static class FooterViewHolder extends BaseHolder {
+        View itemView;
+        TextView load_more_tv;
+
+        public FooterViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
+            load_more_tv = itemView.findViewById(R.id.load_more_tv);
+
+        }
+
+        @Override
+        public void setData(Context context, Object object) {
+
         }
     }
 

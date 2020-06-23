@@ -6,11 +6,16 @@ import com.alibaba.fastjson.TypeReference;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
+import com.inveno.android.basics.service.callback.common.CommonHttpStatefulCallBack;
+import com.inveno.android.basics.service.callback.common.DefaultHttpStatefulCallBack;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.thread.ThreadUtil;
 import com.inveno.xiandu.bean.coin.CoinDetail;
 import com.inveno.xiandu.bean.coin.MissionDataList;
+import com.inveno.xiandu.bean.coin.ReadTime;
 import com.inveno.xiandu.bean.coin.UserCoin;
+import com.inveno.xiandu.bean.coin.UserCoinOut;
+import com.inveno.xiandu.invenohttp.api.user.VaricationCodeAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.HttpUrl;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 
@@ -28,17 +33,15 @@ import java.util.LinkedHashMap;
 public class CoinApi extends BaseSingleInstanceService {
     protected static final boolean MODULE_DEBUG = false;
 
-    public StatefulCallBack<UserCoin> queryCoin() {
+    public StatefulCallBack<UserCoinOut> queryCoin() {
         if (MODULE_DEBUG) {
-            return new BaseStatefulCallBack<UserCoin>() {
+            return new BaseStatefulCallBack<UserCoinOut>() {
                 @Override
                 public void execute() {
                     ThreadUtil.Installer.install();
                     ThreadUtil.runOnUi(new Runnable() {
                         @Override
                         public void run() {
-                            UserCoin userCoin = new UserCoin(5888, 500, 600, 800);
-                            invokeSuccess(userCoin);
                         }
                     });
                 }
@@ -46,7 +49,7 @@ public class CoinApi extends BaseSingleInstanceService {
         } else {
             LinkedHashMap<String, Object> mParams = ServiceContext.bacicParamService().getBaseParam();
             return MultiTypeHttpStatefulCallBack.INSTANCE
-                    .<UserCoin>newCallBack(new TypeReference<UserCoin>() {
+                    .<UserCoinOut>newCallBack(new TypeReference<UserCoinOut>() {
                     }.getType())
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.QUERY_COIN))
                     .withArg(mParams)
@@ -85,7 +88,7 @@ public class CoinApi extends BaseSingleInstanceService {
         }
     }
 
-    public StatefulCallBack<MissionDataList> getMission(JSONArray type_id) {
+    public StatefulCallBack<MissionDataList> getMission(int[] type_ids) {
         if (MODULE_DEBUG) {
             return new BaseStatefulCallBack<MissionDataList>() {
                 @Override
@@ -102,7 +105,7 @@ public class CoinApi extends BaseSingleInstanceService {
         } else {
             LinkedHashMap<String, Object> mBaseParams = ServiceContext.bacicParamService().getBaseParam();
             LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
-            mParams.put("type_id", type_id);
+            mParams.put("type_ids", type_ids);
             mParams.putAll(mBaseParams);
 
             return MultiTypeHttpStatefulCallBack.INSTANCE
@@ -113,7 +116,6 @@ public class CoinApi extends BaseSingleInstanceService {
                     .buildCallerCallBack();
         }
     }
-
 
     public StatefulCallBack<MissionDataList> completeMission(String mission_id) {
         if (MODULE_DEBUG) {
@@ -140,6 +142,33 @@ public class CoinApi extends BaseSingleInstanceService {
                     }.getType())
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.COMPLETE_MISSION))
                     .withArg(mParams)
+                    .buildCallerCallBack();
+        }
+    }
+
+
+    public StatefulCallBack<ReadTime> readTime() {
+        if (MODULE_DEBUG) {
+            return new BaseStatefulCallBack<ReadTime>() {
+                @Override
+                public void execute() {
+                    ThreadUtil.Installer.install();
+                    ThreadUtil.runOnUi(new Runnable() {
+                        @Override
+                        public void run() {
+                            CoinDetail userCoin = new CoinDetail();
+                        }
+                    });
+                }
+            };
+        } else {
+            LinkedHashMap<String, Object> mBaseParams = ServiceContext.bacicParamService().getBaseParam();
+
+            return MultiTypeHttpStatefulCallBack.INSTANCE
+                    .<ReadTime>newCallBack(new TypeReference<ReadTime>() {
+                    }.getType())
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.READ_TIME))
+                    .withArg(mBaseParams)
                     .buildCallerCallBack();
         }
     }

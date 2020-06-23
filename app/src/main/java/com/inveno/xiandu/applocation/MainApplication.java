@@ -10,6 +10,7 @@ import com.inveno.android.device.param.provider.AndroidParamProviderHolder;
 import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.config.Keys;
+import com.inveno.xiandu.crash.CrashHandler;
 import com.inveno.xiandu.db.DaoManager;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.utils.SPUtils;
@@ -31,6 +32,8 @@ public class MainApplication extends Application {
             ARouter.openLog();// 打印日志
             ARouter.openDebug();// 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
+        initCrash();
+
         ARouter.init(this);
         //初始化sp存储
         SPUtils.init(Keys.SP_KEY, this);
@@ -41,6 +44,11 @@ public class MainApplication extends Application {
         //基础服务模块
         BasicsServiceModule.Companion.onApplicationCreate(this);
         InvenoServiceContext.init(this);
+    }
+
+    public void initCrash(){
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
     }
 
     public static Context getContext() {

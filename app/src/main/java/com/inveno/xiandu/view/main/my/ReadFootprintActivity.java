@@ -29,5 +29,6 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStatusBar(R.color.white, true);
     }
 }

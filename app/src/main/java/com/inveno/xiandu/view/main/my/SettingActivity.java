@@ -163,7 +163,7 @@ public class SettingActivity extends TitleBarBaseActivity {
     }
 
     public void get_version(View view) {
-        Toaster.showToastCenter(this, "检查更新");
+//        Toaster.showToastCenter(this, "检查更新");
     }
 
     public void logout(View view) {

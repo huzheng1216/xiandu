@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -14,11 +16,14 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.MissionData;
 import com.inveno.xiandu.bean.coin.MissionDataList;
 import com.inveno.xiandu.bean.coin.UserCoin;
+import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.adapter.MissionAdapter;
+import com.inveno.xiandu.view.main.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,26 +53,62 @@ public class WelfareFragment extends BaseFragment {
     @BindView(R.id.welfare_mission_recycle)
     RecyclerView welfare_mission_recycle;
 
+    @BindView(R.id.welfare_coin_today)
+    TextView welfare_coin_today;
+
+    @BindView(R.id.welfare_coin_scroll)
+    ScrollView welfare_coin_scroll;
+
     private MissionAdapter missionAdapter;
     private List<MissionData> missionDataList = new ArrayList<>();
+    private UserCoin mUserCoin;
 
     @Override
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragmen_welfare, container, false);
         ButterKnife.bind(this, view);
 
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        welfare_mission_recycle.setLayoutManager(linearLayoutManager);
+
         missionAdapter = new MissionAdapter(getContext(), missionDataList);
         welfare_mission_recycle.setAdapter(missionAdapter);
+        missionAdapter.setOnitemClickListener(new MissionAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (getActivity() instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.setCheckViewPager(1);
+                }
+            }
+        });
         return view;
     }
 
     @Override
     protected void onVisible(Boolean firstVisble) {
-        //第一次加载，获取金币和任务
+        //第一次加载，获取金币
+        if (firstVisble) {
+            get_coin();
+        }
+        get_mission();
+    }
+
+    @OnClick(R.id.welfare_my_coin)
+    public void jump_my_coin() {
+        ARouter.getInstance().build(ARouterPath.ACTIVITY_MY_COIN)
+                .withString("mUserCoin", GsonUtil.objectToJson(mUserCoin))
+                .navigation();
+    }
+
+    //今日金币
+    public void get_coin() {
         APIContext.coinApi().queryCoin()
-                .onSuccess(new Function1<UserCoin, Unit>() {
+                .onSuccess(new Function1<UserCoinOut, Unit>() {
                     @Override
-                    public Unit invoke(UserCoin userCoin) {
+                    public Unit invoke(UserCoinOut userCoin) {
+                        mUserCoin = userCoin.getCoin();
+                        welfare_coin_today.setText(String.format("已领取：%s", mUserCoin.getCurrent_coin()));
                         return null;
                     }
                 })
@@ -77,25 +118,25 @@ public class WelfareFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+    }
 
-        JSONArray typeIds = new JSONArray();
-        typeIds.put(4);
-        typeIds.put(3);
+    public void get_mission() {
+        int[] typeIds = {4, 3};
         APIContext.coinApi().getMission(typeIds)
                 .onSuccess(new Function1<MissionDataList, Unit>() {
                     @Override
                     public Unit invoke(MissionDataList missionDataList) {
-
+                        missionAdapter.setsData(missionDataList.getMission_list());
                         return null;
                     }
                 })
                 .onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
+                        Toaster.showToastShort(getContext(), "获取任务失败:" + s);
                         return null;
                     }
                 }).execute();
-
     }
 
 }

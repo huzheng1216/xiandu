@@ -16,7 +16,7 @@
             android:id="@+id/adapter_bookshelf_book_img"
             android:layout_width="60dp"
             android:layout_height="83dp"
-            android:background="@drawable/background_bookshelf_adapter_foot" />
+            android:src="@drawable/background_bookshelf_adapter_foot"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,6 +84,7 @@
             android:layout_height="match_parent"
             android:background="@color/delete_red"
             android:text="删除"
+            android:gravity="center"
             android:textColor="#ffffff"
             android:textSize="16sp" />
     </LinearLayout>

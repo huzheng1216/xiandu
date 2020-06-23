@@ -1,8 +1,11 @@
 package com.inveno.xiandu.view.search;
 
+import android.app.Dialog;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
@@ -22,6 +25,7 @@ import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.components.DelayerEditText;
 import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
+import com.inveno.xiandu.view.dialog.IosTypeDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +55,8 @@ public class SerchActivityMain extends BaseActivity {
     @BindView(R.id.bt_search_main_cancel)
     View bt_search_main_cancel;
 
+    private IosTypeDialog iosTypeDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +85,33 @@ public class SerchActivityMain extends BaseActivity {
         ClickUtil.bindSingleClick(del, 300, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                history.clear();
-                historyAdapter.notifyDataSetChanged();
-                SPUtils.setInformain(Keys.SEARCH_HISTORY, "");
+                //删除搜索历史二次确认弹窗
+                IosTypeDialog.Builder builder = new IosTypeDialog.Builder(SerchActivityMain.this);
+                builder.setContext("确定要删除搜索历史吗？");
+                builder.setTitle("提示");
+                builder.setLeftButton("确定", new IosTypeDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iosTypeDialog.dismiss();
+                        iosTypeDialog=null;
+                        history.clear();
+                        historyAdapter.notifyDataSetChanged();
+                        del.setVisibility(View.GONE);
+                        SPUtils.setInformain(Keys.SEARCH_HISTORY, "");
+                    }
+                });
+                builder.setRightButton("取消", new IosTypeDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iosTypeDialog.dismiss();
+                        iosTypeDialog=null;
+                    }
+                });
+
+                iosTypeDialog = builder.create();
+
+                iosTypeDialog.show();
+                setDialogWindowAttr(iosTypeDialog);
             }
         });
         ClickUtil.bindSingleClick(back, 500, new View.OnClickListener() {
@@ -102,6 +132,11 @@ public class SerchActivityMain extends BaseActivity {
         List<String> strings = GsonUtil.gsonToList(localHistory, String.class);
         if (strings != null) {
             history.addAll(strings);
+        }
+        if (history.size()<1){
+            del.setVisibility(View.GONE);
+        }else{
+            del.setVisibility(View.VISIBLE);
         }
         historyAdapter = new HistoryAdapter(history);
         historyAdapter.setClickListener(new HistoryAdapter.OnHistoryClickListener() {
@@ -132,9 +167,19 @@ public class SerchActivityMain extends BaseActivity {
         }
         history.add(0, title);
         historyAdapter.notifyDataSetChanged();
+        del.setVisibility(View.VISIBLE);
         SPUtils.setInformain(Keys.SEARCH_HISTORY, GsonUtil.objectToJson(history));
     }
 
+    //在dialog.show()之后调用
+    public void setDialogWindowAttr(Dialog dlg) {
+        // 将对话框的大小按屏幕大小的百分比设置
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        lp.width = (int)(windowManager.getDefaultDisplay().getWidth()* 0.8); //设置宽度
+        dlg.getWindow().setAttributes(lp);
+    }
 
     @Override
     public void onBackPressed() {

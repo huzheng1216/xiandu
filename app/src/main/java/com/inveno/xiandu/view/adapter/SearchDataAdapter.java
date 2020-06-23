@@ -37,9 +37,9 @@ public class SearchDataAdapter extends RecyclerBaseAdapter {
 
     private Context mContext;
     public Activity mActivity;
-    private int lastChoise = 0;
     private SearchDataAdapter.OnItemClickListener mListener;
     private String footerStr = "正在努力加载...";
+    private boolean isNotMore = false;
 
 
     public SearchDataAdapter(Context context, Activity activity, ArrayList<BaseDataBean> dataList) {
@@ -97,7 +97,7 @@ public class SearchDataAdapter extends RecyclerBaseAdapter {
             }
         } else if (holder instanceof FooterViewHolder) {
             ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
-            if (mDataList.size() < 5 || isNotMore) {
+            if (mDataList.size() < 10 || isNotMore) {
                 ((FooterViewHolder) holder).load_more_tv.setText("沒有跟多数据");
             } else {
 
@@ -105,8 +105,6 @@ public class SearchDataAdapter extends RecyclerBaseAdapter {
             }
         }
     }
-
-    private boolean isNotMore = false;
 
     public void setNotDataFooter() {
         isNotMore = true;

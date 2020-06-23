@@ -149,6 +149,19 @@ public class BookDetailActivity extends BaseActivity {
 
     private void initData() {
         book = GsonUtil.gsonToObject(json, BookShelf.class);
+        if (book == null){
+            showErrorPopwindow(NO_BOOK_ERROR, new OnClickListener() {
+                @Override
+                public void onBackClick() {
+
+                }
+
+                @Override
+                public void onRefreshClick() {
+                    finish();
+                }
+            });
+        }
         bookbrack.setContent_id(book.getContent_id());
         bookbrack.setBook_name(book.getBook_name());
         bookbrack.setPoster(book.getPoster());
@@ -471,7 +484,7 @@ public class BookDetailActivity extends BaseActivity {
     @OnClick(R.id.book_detail_coll)
     void coll() {
         if (SQL.getInstance().hasBookShelf(book)) {
-            SQL.getInstance().delBookShelf(book);
+//            SQL.getInstance().delBookShelf(book);
 //            Toaster.showToastCenter(this, "已移除");
 //            collBt.setText("保存书架");
         } else {
@@ -481,11 +494,11 @@ public class BookDetailActivity extends BaseActivity {
         }
 
         if (SQL.getInstance().hasBookbrack(bookbrack)) {
-            bookbracks.clear();
-            bookbracks.add(bookbrack);
-            SQL.getInstance().delBookbrack(bookbracks);
-            Toaster.showToastCenter(this, "已移除");
-            book_detail_coll.setText("加入书架");
+//            bookbracks.clear();
+//            bookbracks.add(bookbrack);
+//            SQL.getInstance().delBookbrack(bookbracks);
+//            Toaster.showToastCenter(this, "已移除");
+//            book_detail_coll.setText("加入书架");
         } else {
             SQL.getInstance().addBookbrack(bookbrack);
             Toaster.showToastCenter(this, "已保存");

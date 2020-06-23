@@ -20,14 +20,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
+import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
 import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.search.SerchActivityMain;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +88,15 @@ public class StoreFragment extends BaseFragment {
                 startActivity(intent, bundle);
             }
         });
+
         return view;
+    }
+
+    @Override
+    protected void onVisible(Boolean firstVisble) {
+        super.onVisible(firstVisble);
+        int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
+        setDefaultItem(gender);
     }
 
     @Override
@@ -122,5 +133,22 @@ public class StoreFragment extends BaseFragment {
         public CharSequence getPageTitle(int position) {
             return strings[position];
         }
+    }
+
+
+    private void setDefaultItem(int position) {
+        //我这里mViewpager是viewpager子类的实例。如果你是viewpager的实例，也可以这么干。
+        try {
+            Class c = Class.forName("android.support.v4.view.ViewPager");
+            Field field = c.getDeclaredField("mCurItem");
+            field.setAccessible(true);
+            field.setInt(viewPager, position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        myAdapter.notifyDataSetChanged();
+
+        viewPager.setCurrentItem(position);
     }
 }

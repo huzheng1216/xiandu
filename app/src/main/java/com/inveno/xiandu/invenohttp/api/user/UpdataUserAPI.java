@@ -4,6 +4,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.inveno.android.basics.service.app.context.BaseSingleInstanceService;
 import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
+import com.inveno.android.basics.service.callback.common.CommonHttpStatefulCallBack;
+import com.inveno.android.basics.service.callback.common.DefaultHttpStatefulCallBack;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.android.basics.service.thread.ThreadUtil;
@@ -86,5 +88,28 @@ public class UpdataUserAPI extends BaseSingleInstanceService {
             }
         });
         return uiCallBack;
+    }
+
+    public StatefulCallBack<String> addPreference(int channel_id) {
+        if (MODULE_DEBUG) {
+            LinkedHashMap<String, Object> getCodeData = ServiceContext.bacicParamService().getBaseParam();
+            LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+            mParams.put("channel_id", channel_id);
+            mParams.putAll(getCodeData);
+            return CommonHttpStatefulCallBack.Companion.newCallBack(new VaricationCodeAPI.DefaultStringResponse())
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.ADD_PREFERENCE))
+                    .withArg(mParams)
+                    .buildCallerCallBack();
+        } else {
+            LinkedHashMap<String, Object> getCodeData = ServiceContext.bacicParamService().getBaseParam();
+            LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+            mParams.put("channel_id", channel_id);
+            mParams.putAll(getCodeData);
+            return DefaultHttpStatefulCallBack.INSTANCE
+                    .newCallBack()
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.ADD_PREFERENCE))
+                    .withArg(mParams)
+                    .buildCallerCallBack();
+        }
     }
 }

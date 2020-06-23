@@ -19,14 +19,19 @@ import com.inveno.android.basics.service.event.EventListener;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.coin.UserCoin;
+import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.AppInfoUtils;
 import com.inveno.xiandu.utils.GlideUtils;
+import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.splash.ChoiseGenderActivity;
 
 import org.jetbrains.annotations.NotNull;
@@ -43,7 +48,7 @@ import kotlin.jvm.functions.Function2;
  * Date 2020-02-28
  * Des
  */
-public class MineFragment extends Fragment {
+public class MineFragment extends BaseFragment {
 
     @BindView(R.id.iv_user_pic)
     ImageView pic;
@@ -53,6 +58,12 @@ public class MineFragment extends Fragment {
 //    TextView user_des;
     @BindView(R.id.mine_read_gender_tv)
     TextView mine_read_gender_tv;
+
+    @BindView(R.id.mine_my_coin)
+    TextView mine_my_coin;
+
+    @BindView(R.id.mine_today_coin)
+    TextView mine_today_coin;
 
     @OnClick(R.id.iv_user_pic)
     void pic() {
@@ -75,19 +86,16 @@ public class MineFragment extends Fragment {
 
     @OnClick(R.id.mine_send_luckymoney)
     void mine_send_luckymoney() {
-        Toaster.showToastCenter(getContext(), "分红包");
         ARouter.getInstance().build(ARouterPath.ACTIVITY_SEND_LUCKYMONEY).navigation();
     }
 
     @OnClick(R.id.mine_readed)
     void mine_readed() {
-        Toaster.showToastCenter(getContext(), "阅读足迹");
         ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_FOOTPRINT).navigation();
     }
 
     @OnClick(R.id.mine_read)
     void mine_read() {
-        Toaster.showToastCenter(getContext(), "阅读偏好");
 //        ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_PREFERENCES).navigation();
         Intent intent = new Intent(getActivity(), ChoiseGenderActivity.class);
         intent.putExtra("request_code", ChoiseGenderActivity.MINE_REQUEST_CODE);
@@ -96,7 +104,6 @@ public class MineFragment extends Fragment {
 
     @OnClick(R.id.mine_qq)
     void mine_qq() {
-        Toaster.showToastCenter(getContext(), "qq");
     }
 
     @OnClick(R.id.mine_setting)
@@ -118,9 +125,35 @@ public class MineFragment extends Fragment {
         return fragment;
     }
 
-    @Nullable
+    //今日金币
+    public void get_coin() {
+        APIContext.coinApi().queryCoin()
+                .onSuccess(new Function1<UserCoinOut, Unit>() {
+                    @Override
+                    public Unit invoke(UserCoinOut userCoin) {
+                        UserCoin mUserCoin = userCoin.getCoin();
+                        mine_my_coin.setText(String.valueOf(mUserCoin.getBalance()));
+                        mine_today_coin.setText(String.valueOf(mUserCoin.getCurrent_coin()));
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public void onDestroy() {
+        super.onDestroy();
+        event_login.cancel();
+        event_logout.cancel();
+    }
+
+    @Override
+    public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         ButterKnife.bind(this, view);
         setHeaderImage(R.drawable.ic_header_default);
@@ -146,55 +179,60 @@ public class MineFragment extends Fragment {
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
             }
         });
+        int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
+        if (gender == 0) {
+            mine_read_gender_tv.setText("");
+        } else if (gender == 1) {
+            mine_read_gender_tv.setText("男");
+        } else if (gender == 2) {
+            mine_read_gender_tv.setText("女");
+        }
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-//        tv = (TextView) view.findViewById(R.id.fragment_test_tv);
-
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String name = bundle.get("name").toString();
-//            tv.setText(name);
-//        }
-        isLogin = false;
-        UserInfo userInfo = ServiceContext.userService().getUserInfo();
-        if (userInfo != null) {
-            isLogin = true;
-            if (TextUtils.isEmpty(userInfo.getUser_name())) {
-                user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
-            } else {
-                user_name.setText(userInfo.getUser_name());
-            }
-
-            if (TextUtils.isEmpty(userInfo.getHead_url())) {
-                setHeaderImage(R.drawable.ic_header_default);//默认头像
-            } else {
-                setHeaderImage(userInfo.getHead_url());
-            }
-        } else {
-            APIContext.getUserAPI().getUser().onSuccess(new Function1<UserInfo, Unit>() {
-                @Override
-                public Unit invoke(UserInfo userInfo) {
-                    Log.i("wyjjjjjj", "获取用户信息: " + JsonUtil.Companion.toJson(userInfo));
-                    return null;
+    protected void onVisible(Boolean firstVisble) {
+        if (firstVisble) {
+            isLogin = false;
+            UserInfo userInfo = ServiceContext.userService().getUserInfo();
+            if (userInfo != null) {
+                isLogin = true;
+                if (TextUtils.isEmpty(userInfo.getUser_name())) {
+                    user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+                } else {
+                    user_name.setText(userInfo.getUser_name());
                 }
-            }).onFail(new Function2<Integer, String, Unit>() {
-                @Override
-                public Unit invoke(Integer integer, String s) {
-                    return null;
+
+                if (TextUtils.isEmpty(userInfo.getHead_url())) {
+                    setHeaderImage(R.drawable.ic_header_default);//默认头像
+                } else {
+                    setHeaderImage(userInfo.getHead_url());
                 }
-            }).execute();
+            } else {
+                APIContext.getUserAPI().getUser().onSuccess(new Function1<UserInfo, Unit>() {
+                    @Override
+                    public Unit invoke(UserInfo userInfo) {
+                        if (TextUtils.isEmpty(userInfo.getUser_name())) {
+                            user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+                        } else {
+                            user_name.setText(userInfo.getUser_name());
+                        }
+                        if (TextUtils.isEmpty(userInfo.getHead_url())) {
+                            setHeaderImage(R.drawable.ic_header_default);//默认头像
+                        } else {
+                            setHeaderImage(userInfo.getHead_url());
+                        }
+                        return null;
+                    }
+                }).onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+            }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        event_login.cancel();
-        event_logout.cancel();
+        get_coin();
     }
 
     private void setHeaderImage(int defaul) {
@@ -217,9 +255,9 @@ public class MineFragment extends Fragment {
 
                 if (gender == 0) {
                     mine_read_gender_tv.setText("");
-                }else if (gender == 1){
+                } else if (gender == 1) {
                     mine_read_gender_tv.setText("男");
-                }else if (gender == 2){
+                } else if (gender == 2) {
                     mine_read_gender_tv.setText("女");
                 }
             }

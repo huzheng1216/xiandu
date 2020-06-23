@@ -58,8 +58,12 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void setHeaderData(String time, String coinNum) {
+    public void setHeaderTime(String time) {
         headerTime = time;
+        notifyDataSetChanged();
+    }
+
+    public void setCoinNum(String coinNum) {
         headerCoin = coinNum;
         notifyDataSetChanged();
     }
@@ -73,8 +77,9 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
 
     public void deleteSelect() {
         ArrayList<Bookbrack> bookbracks = new ArrayList<>();
-        for (Bookbrack bookbrack : data) {
-            if (bookbrack.isSelect()) {
+        for (int i = data.size() - 1; i >= 0; i--) {
+            if (data.get(i).isSelect()) {
+                Bookbrack bookbrack = data.get(i);
                 bookbracks.add(bookbrack);
                 BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
                 if (bookShelf != null) {
@@ -92,6 +97,11 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
 
     public void setSelect(boolean isSelect) {
         this.isSelect = isSelect;
+        if (!isSelect) {
+            for (int i = 0; i < data.size(); i++) {
+                data.get(i).setSelect(false);
+            }
+        }
         notifyDataSetChanged();
     }
 
@@ -124,17 +134,24 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
         if (holder instanceof FootViewHolder) {
+            FootViewHolder footViewHolder = (FootViewHolder) holder;
+            footViewHolder.rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shelfAdapterListener.onFooterClick();
+                }
+            });
 
         } else if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
             if (TextUtils.isEmpty(headerTime)) {
-                headerViewHolder.bookrack_read_time.setText("0");
+                headerViewHolder.bookrack_read_time.setText("--");
             } else {
                 headerViewHolder.bookrack_read_time.setText(headerTime);
             }
 
             if (TextUtils.isEmpty(headerCoin)) {
-                headerViewHolder.bookrack_coin_num.setText("0");
+                headerViewHolder.bookrack_coin_num.setText("--");
             } else {
                 headerViewHolder.bookrack_coin_num.setText(headerCoin);
             }
@@ -150,7 +167,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                 @Override
                 public void onClick(View v) {
                     data.get(finalRealPosition).setSelect(true);
-                    deleteSelect();
+                    shelfAdapterListener.onBookDelete(data.get(finalRealPosition));
                 }
             });
             if (isSelect) {
@@ -176,7 +193,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
 
                 iholder.adapter_bookshelf_read_name.setText("还未开始阅读");
             } else {
-                iholder.adapter_bookshelf_read_name.setText(data.get(realPosition).getChapter_name());
+                iholder.adapter_bookshelf_read_name.setText(String.format("读到：%s", data.get(realPosition).getChapter_name()));
             }
             if (realPosition == 0) {
                 iholder.adapter_bookshelf_continue.setVisibility(View.VISIBLE);
@@ -240,6 +257,8 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getFooterView() {
+        if (footerView != null)
+            return footerView;
         return null;
     }
 
@@ -248,6 +267,10 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         notifyItemChanged(0);
     }
 
+    public void setFooterView(View view) {
+        footerView = view;
+        notifyItemChanged(getItemCount() - 1);
+    }
 
 //    @Override
 //    public int getItemViewType(int position) {
@@ -320,8 +343,12 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     public interface ShelfAdapterListener {
         void onBookReadContinue(Bookbrack Bookbrack);
 
+        void onBookDelete(Bookbrack Bookbrack);
+
         void onBookClick(Bookbrack Bookbrack);
 
         void onBookLongClick(Bookbrack Bookbrack, View parent);
+
+        void onFooterClick();
     }
 }

@@ -27,10 +27,6 @@ import java.util.List;
  */
 public class MissionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    //任务完成显示类型，0去完成，1已完成，2去领取
-    public static final int MISSION_DISFINISH = 0;
-    public static final int MISSION_FINISH = 1;
-    public static final int MISSION_GET = 2;
     private int mission_type = 0;
     private Context mContext;
     private List<MissionData> missionDatas;
@@ -65,40 +61,37 @@ public class MissionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             vholder.welfare_coin_num.setText(String.format("+%s", missionData.getGold_num()));
 
+            boolean isFinish = false;
             if (missionData.getMax_times() < 2) {
                 if (missionData.getCompleted_times() <= 0) {
-                    if (missionData.isEnable()) {
-                        vholder.welfare_sign_in_tv.setText("去领取");
-                        mission_type = MISSION_GET;
-                    } else {
-                        vholder.welfare_sign_in_tv.setText("去完成");
-                        mission_type = MISSION_DISFINISH;
-                    }
+                    vholder.welfare_sign_in_tv.setText("去完成");
                     vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.blue_round_bg_15));
                     vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.white));
                 } else {
+                    isFinish = true;
                     vholder.welfare_sign_in_tv.setText("已完成");
-                    mission_type = MISSION_FINISH;
                     vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_finish_bg));
                     vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.gray_9));
                 }
             } else {
                 if (missionData.getCompleted_times() < missionData.getMax_times()) {
                     vholder.welfare_sign_in_tv.setText("去完成");
-                    mission_type = MISSION_DISFINISH;
                     vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_video_ad_bg));
                     vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.white));
                 } else {
+                    isFinish = true;
                     vholder.welfare_sign_in_tv.setText("已完成");
-                    mission_type = MISSION_FINISH;
                     vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_finish_bg));
                     vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.gray_9));
                 }
             }
+            boolean finalIsFinish = isFinish;
             vholder.welfare_sign_in_tv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemClick(position, mission_type);
+                    if (!finalIsFinish) {
+                        mListener.onItemClick(position);
+                    }
                 }
             });
         }
@@ -133,7 +126,7 @@ public class MissionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnItemClickListener {
-        void onItemClick(int position, int missionType);
+        void onItemClick(int position);
     }
 
     public void setsData(List<MissionData> missionDatas) {

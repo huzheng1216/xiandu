@@ -16,9 +16,11 @@ import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.coin.CoinDetail;
 import com.inveno.xiandu.bean.coin.CoinDetailData;
 import com.inveno.xiandu.bean.coin.UserCoin;
+import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.view.adapter.CoinDetailAdapter;
@@ -48,12 +50,16 @@ public class MyCoinActivity extends BaseActivity {
     private ArrayList<BaseDataBean> coinDetailDatas = new ArrayList<>();
 
     private int pageKnow = 0;
+    private UserCoin mUserCoin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_coin);
         setStatusBar(R.color.my_coin_top_color, true);
+
+        String json = getIntent().getStringExtra("mUserCoin");
+        mUserCoin = GsonUtil.gsonToObject(json, UserCoin.class);
         initView();
     }
 
@@ -71,49 +77,61 @@ public class MyCoinActivity extends BaseActivity {
         coin_detail_recycleview.setLayoutManager(dataLayoutManager);
         coin_detail_recycleview.setAdapter(coinDetailAdapter);
 
-        getData();
+        if (mUserCoin != null) {
+            coin_balance.setText(String.valueOf(mUserCoin.getBalance()));
+            coin_today.setText(String.valueOf(mUserCoin.getCurrent_coin()));
+            coin_sum_get.setText(String.valueOf(mUserCoin.getTotal_coin()));
+            coin_exchange_rate.setText(mUserCoin.getExchage_rate());
+        } else {
+            if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0) {
+                getCoin();
+                getCoinDetail();
+            }
+        }
     }
 
     /**
      * 获取金币和明细
      */
-    private void getData() {
-        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0) {
-            APIContext.coinApi().queryCoin()
-                    .onSuccess(new Function1<UserCoin, Unit>() {
-                        @Override
-                        public Unit invoke(UserCoin userCoin) {
-                            coin_balance.setText(String.valueOf(userCoin.getBalance()));
-                            coin_today.setText(String.valueOf(userCoin.getCurrent_coin()));
-                            coin_sum_get.setText(String.valueOf(userCoin.getTotal_coin()));
-                            coin_exchange_rate.setText(userCoin.getExchage_rate());
-                            return null;
-                        }
-                    })
-                    .onFail(new Function2<Integer, String, Unit>() {
-                        @Override
-                        public Unit invoke(Integer integer, String s) {
-                            return null;
-                        }
-                    }).execute();
-            APIContext.coinApi().getCoinDetail(pageKnow)
-                    .onSuccess(new Function1<CoinDetail, Unit>() {
-                        @Override
-                        public Unit invoke(CoinDetail coinDetail) {
-                            pageKnow = coinDetail.getPageSize() + 1;
+    public void getCoin(){
+        APIContext.coinApi().queryCoin()
+                .onSuccess(new Function1<UserCoinOut, Unit>() {
+                    @Override
+                    public Unit invoke(UserCoinOut userCoinOut) {
+                        UserCoin userCoin = userCoinOut.getCoin();
+                        coin_balance.setText(String.valueOf(userCoin.getBalance()));
+                        coin_today.setText(String.valueOf(userCoin.getCurrent_coin()));
+                        coin_sum_get.setText(String.valueOf(userCoin.getTotal_coin()));
+                        coin_exchange_rate.setText(userCoin.getExchage_rate());
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
 
-                            coinDetailDatas.addAll(coinDetail.getCoin_detail());
-                            coinDetailAdapter.setData(coinDetailDatas);
-                            return null;
-                        }
-                    })
-                    .onFail(new Function2<Integer, String, Unit>() {
-                        @Override
-                        public Unit invoke(Integer integer, String s) {
-                            return null;
-                        }
-                    }).execute();
-        }
+    public void getCoinDetail(){
+        APIContext.coinApi().getCoinDetail(pageKnow)
+                .onSuccess(new Function1<CoinDetail, Unit>() {
+                    @Override
+                    public Unit invoke(CoinDetail coinDetail) {
+                        pageKnow = coinDetail.getPageSize() + 1;
+
+                        coinDetailDatas.addAll(coinDetail.getCoin_detail());
+                        coinDetailAdapter.setData(coinDetailDatas);
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
     }
 
     public void back(View view) {

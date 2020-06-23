@@ -1,10 +1,14 @@
 package com.inveno.xiandu.view.main.shelf;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -26,8 +30,12 @@ import com.inveno.android.basics.service.app.info.AppInfo;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
+import com.inveno.xiandu.bean.coin.ReadTime;
+import com.inveno.xiandu.bean.coin.UserCoin;
+import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
@@ -37,14 +45,18 @@ import com.inveno.xiandu.invenohttp.service.UserService;
 import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
+import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
 import com.inveno.xiandu.view.components.PopupWindowShelfItem;
 import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.custom.SwipeItemLayout;
+import com.inveno.xiandu.view.dialog.IosTypeDialog;
 import com.inveno.xiandu.view.main.MainActivity;
+import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import org.greenrobot.greendao.annotation.Id;
 
@@ -75,6 +87,8 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     private TextView bookbrack_delete_all_select_all;
     private TextView bookbrack_delete_all_delete;
 
+    private IosTypeDialog iosTypeDialog;
+
     public void SearchFragmentMain() {
     }
 
@@ -94,12 +108,12 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(false);
                 //从网络加载书籍
                 APIContext.bookbrackApi().getBookbrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
                         .onSuccess(new Function1<List<Bookbrack>, Unit>() {
                             @Override
                             public Unit invoke(List<Bookbrack> bookbracks) {
+                                swipeRefreshLayout.setRefreshing(false);
 //                            //同步数据
                                 syncData(bookbracks);
                                 return null;
@@ -108,6 +122,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                         .onFail(new Function2<Integer, String, Unit>() {
                             @Override
                             public Unit invoke(Integer integer, String s) {
+                                swipeRefreshLayout.setRefreshing(false);
                                 return null;
                             }
                         }).execute();
@@ -121,7 +136,34 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
             @Override
             public void onBookReadContinue(Bookbrack Bookbrack) {
-                Toaster.showToast(getActivity(),"继续阅读");
+            }
+
+            @Override
+            public void onBookDelete(Bookbrack Bookbrack) {
+                IosTypeDialog.Builder builder = new IosTypeDialog.Builder(getActivity());
+                builder.setContext("确定要删除这本书？");
+                builder.setTitle("提示");
+                builder.setLeftButton("确定", new IosTypeDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iosTypeDialog.dismiss();
+                        iosTypeDialog=null;
+
+                        shelfAdapter.deleteSelect();
+                    }
+                });
+                builder.setRightButton("取消", new IosTypeDialog.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        iosTypeDialog.dismiss();
+                        iosTypeDialog=null;
+                    }
+                });
+
+                iosTypeDialog = builder.create();
+
+                iosTypeDialog.show();
+                setDialogWindowAttr(iosTypeDialog);
             }
 
             @Override
@@ -129,16 +171,19 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                 // TODO: 2020/6/17  去数据库查书，查到了就跳转，没查到就请求后跳转
                 BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
                 if (bookShelf != null) {
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                    //这里需要跳转到小说阅读
+                    ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                             .withString("json", GsonUtil.objectToJson(bookShelf))
+                            .withInt("capter", bookbrack.getChapter_id())
                             .navigation();
                 } else {
                     APIContext.getBookCityAPi().getBook(bookbrack.getContent_id())
                             .onSuccess(new Function1<BookShelf, Unit>() {
                                 @Override
                                 public Unit invoke(BookShelf bookShelf) {
-                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                                             .withString("json", GsonUtil.objectToJson(bookShelf))
+                                            .withInt("capter", bookbrack.getChapter_id())
                                             .navigation();
                                     return null;
                                 }
@@ -151,6 +196,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                             }).execute();
                 }
             }
+
 
             @Override
             public void onBookLongClick(Bookbrack bookbrack, View parent) {
@@ -165,6 +211,14 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                 bookbrack_delete_all_line.startAnimation(animBottomIn);
                 shelfAdapter.setSelect(true);
             }
+
+            @Override
+            public void onFooterClick() {
+                if (getActivity() instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity) getActivity();
+                    mainActivity.setCheckViewPager(1);
+                }
+            }
         });
         // 设置adapter
         bookrack_recyclerview.setAdapter(shelfAdapter);
@@ -174,13 +228,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(getActivity());
         bookrack_recyclerview.setLayoutManager(dataLayoutManager);
         initHeaderView();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                shelfAdapter.setHeaderData("--", "--");
-            }
-        }, 8000);
-
+        initFooterView();
         return inflate;
     }
 
@@ -191,26 +239,35 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         shelfAdapter.setHeaderView(view);
     }
 
+    private void initFooterView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.adapter_bookshelf_foot, null);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        shelfAdapter.setFooterView(view);
+    }
+
     @Override
     protected void onVisible(Boolean firstVisble) {
         LogUtils.H("书架可见：" + firstVisble);
         initData();
-        //从网络加载书籍
-        APIContext.bookbrackApi().getBookbrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
-                .onSuccess(new Function1<List<Bookbrack>, Unit>() {
-                    @Override
-                    public Unit invoke(List<Bookbrack> bookbracks) {
+        if (firstVisble) {
+            //从网络加载书籍
+            APIContext.bookbrackApi().getBookbrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
+                    .onSuccess(new Function1<List<Bookbrack>, Unit>() {
+                        @Override
+                        public Unit invoke(List<Bookbrack> bookbracks) {
 //                            //同步数据
-                        syncData(bookbracks);
-                        return null;
-                    }
-                })
-                .onFail(new Function2<Integer, String, Unit>() {
-                    @Override
-                    public Unit invoke(Integer integer, String s) {
-                        return null;
-                    }
-                }).execute();
+                            syncData(bookbracks);
+                            return null;
+                        }
+                    })
+                    .onFail(new Function2<Integer, String, Unit>() {
+                        @Override
+                        public Unit invoke(Integer integer, String s) {
+                            return null;
+                        }
+                    }).execute();
+        }
     }
 
     /**
@@ -229,8 +286,49 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     }
 
     private void initData() {
+        //获取今日已读和今日金币
+        get_coin();
+        get_read_time();
         shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
     }
+
+    //今日金币
+    private void get_coin() {
+        APIContext.coinApi().queryCoin()
+                .onSuccess(new Function1<UserCoinOut, Unit>() {
+                    @Override
+                    public Unit invoke(UserCoinOut userCoin) {
+                        UserCoin mUserCoin = userCoin.getCoin();
+                        shelfAdapter.setCoinNum(String.valueOf(mUserCoin.getCurrent_coin()));
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
+
+    //今日已读
+    public void get_read_time() {
+        APIContext.coinApi().readTime()
+                .onSuccess(new Function1<ReadTime, Unit>() {
+                    @Override
+                    public Unit invoke(ReadTime readTime) {
+                        shelfAdapter.setHeaderTime(String.valueOf(readTime.getRead_time() / 60));
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -251,17 +349,50 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         } else if (id == R.id.bookbrack_delete_all_select_all) {
             shelfAdapter.selectAll();
         } else if (id == R.id.bookbrack_delete_all_delete) {
-            shelfAdapter.deleteSelect();
-            //隐藏与显示父类底部tab
-            if (getActivity() instanceof MainActivity) {
-                ((MainActivity) getActivity()).setBottomVisiable();
-            }
+            IosTypeDialog.Builder builder = new IosTypeDialog.Builder(getActivity());
+            builder.setContext("确定要删除收藏的全部书籍？");
+            builder.setTitle("提示");
+            builder.setLeftButton("确定", new IosTypeDialog.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iosTypeDialog.dismiss();
+                    iosTypeDialog=null;
 
-            Animation animBottomOut = AnimationUtils.loadAnimation(getActivity(),
-                    R.anim.bottom_out);
-            animBottomOut.setDuration(500);
-            bookbrack_delete_all_line.setVisibility(View.GONE);
-            bookbrack_delete_all_line.startAnimation(animBottomOut);
+                    shelfAdapter.deleteSelect();
+                    //隐藏与显示父类底部tab
+                    if (getActivity() instanceof MainActivity) {
+                        ((MainActivity) getActivity()).setBottomVisiable();
+                    }
+
+                    Animation animBottomOut = AnimationUtils.loadAnimation(getActivity(),
+                            R.anim.bottom_out);
+                    animBottomOut.setDuration(500);
+                    bookbrack_delete_all_line.setVisibility(View.GONE);
+                    bookbrack_delete_all_line.startAnimation(animBottomOut);
+                }
+            });
+            builder.setRightButton("取消", new IosTypeDialog.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    iosTypeDialog.dismiss();
+                    iosTypeDialog=null;
+                }
+            });
+
+            iosTypeDialog = builder.create();
+
+            iosTypeDialog.show();
+            setDialogWindowAttr(iosTypeDialog);
         }
+    }
+
+    //在dialog.show()之后调用
+    public void setDialogWindowAttr(Dialog dlg) {
+        // 将对话框的大小按屏幕大小的百分比设置
+        WindowManager windowManager = getActivity().getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
+        lp.width = (int)(windowManager.getDefaultDisplay().getWidth()* 0.8); //设置宽度
+        dlg.getWindow().setAttributes(lp);
     }
 }

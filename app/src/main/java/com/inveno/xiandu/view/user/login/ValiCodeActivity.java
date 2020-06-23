@@ -61,7 +61,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
         vali_login.setOnClickListener(this);
 
         editListener();
-        countDownTimerUtils = new CountDownTimerUtils(this, vali_time, 120 * 1000, 1000);
+        countDownTimerUtils = new CountDownTimerUtils(this, vali_time, 60 * 1000, 1000);
         countDownTimerUtils.start();
     }
 
@@ -110,7 +110,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                     .onSuccess(new Function1<String, Unit>() {
                         @Override
                         public Unit invoke(String s) {
-                            Toaster.showToast(ValiCodeActivity.this, "验证码:"+s);
+                            Toaster.showToast(ValiCodeActivity.this, "验证码:" + s);
                             return null;
                         }
                     })

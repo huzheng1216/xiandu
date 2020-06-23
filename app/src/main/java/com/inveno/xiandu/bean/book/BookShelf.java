@@ -56,16 +56,20 @@ public class BookShelf extends BaseDataBean {
 
     private String chapter_name;//阅读到的章节名称
 
-    private String chapter_id;//阅读到的章节id
+    private int chapter_id;//阅读到的章节id
 
     //书架创建时间
     private String time;
 
-    @Generated(hash = 730209899)
+    @Generated(hash = 547688644)
+    public BookShelf() {
+    }
+
+    @Generated(hash = 1267319505)
     public BookShelf(Long content_id, String poster, String book_name,
             String author, float score, int popularity, int book_status,
             long word_count, String introduction, String category_name,
-            int words_num, String chapter_name, String chapter_id, String time) {
+            int words_num, String chapter_name, int chapter_id, String time) {
         this.content_id = content_id;
         this.poster = poster;
         this.book_name = book_name;
@@ -80,10 +84,6 @@ public class BookShelf extends BaseDataBean {
         this.chapter_name = chapter_name;
         this.chapter_id = chapter_id;
         this.time = time;
-    }
-
-    @Generated(hash = 547688644)
-    public BookShelf() {
     }
 
     public Long getContent_id() {
@@ -213,11 +213,11 @@ public class BookShelf extends BaseDataBean {
         this.chapter_name = chapter_name;
     }
 
-    public String getChapter_id() {
+    public int getChapter_id() {
         return this.chapter_id;
     }
 
-    public void setChapter_id(String chapter_id) {
+    public void setChapter_id(int chapter_id) {
         this.chapter_id = chapter_id;
     }
 }

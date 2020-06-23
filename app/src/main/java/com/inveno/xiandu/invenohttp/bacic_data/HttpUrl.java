@@ -8,20 +8,22 @@ package com.inveno.xiandu.invenohttp.bacic_data;
  * @Version：1.0.0
  */
 public class HttpUrl {
-//    private static String HOST_URI = "https://novel.inveno.com/novel";//生产环境
+    //    private static String HOST_URI = "https://novel.inveno.com/novel";//生产环境
     private static String HOST_URI = "http://121.201.120.128:9000";//测试环境
 
     public static String GET_CODE = "/user/get_code";
     public static String LOGIN_PHONE = "/user/login_phone";
     public static String UPDATA_INFO = "/user/update_info";
     public static String GET_INFO = "/user/get_info";
+    public static String ADD_PREFERENCE = "/behavior/preference/add";
 
     public static String EARN_COIN = "/coin/earn_coin"; //获取金币
     public static String CONSUMER_COIN = "/coin/consumer_coin"; //消费金币
     public static String QUERY_COIN = "/coin/query_coin"; //用户金币查询
     public static String QUERY_COIN_DETAILS = "/coin/query_coin_details"; //用户金币明细查询
-    public static String GET_MISSION = "/novel/mission/list"; //获取任务接口
+    public static String GET_MISSION = "/mission/list"; //获取任务接口
     public static String COMPLETE_MISSION = "/novel/mission/complete"; //完成任务接口
+    public static String READ_TIME = "/behavior/heat_beat/read/time";//阅读时长
 
 
     //书城相关
@@ -42,7 +44,7 @@ public class HttpUrl {
     public static String SEARCH_BOOK = "/search/novel"; //搜索
 
 
-    public static String getHttpUri(String url){
+    public static String getHttpUri(String url) {
         return HOST_URI + url;
     }
 }

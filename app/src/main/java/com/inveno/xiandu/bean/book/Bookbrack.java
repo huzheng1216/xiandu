@@ -25,25 +25,13 @@ public class Bookbrack {
 
     private String chapter_name;//阅读到的章节名称
 
-    private String chapter_id;//阅读到的章节id
+    private int chapter_id;//阅读到的章节id
 
     //书架创建时间
     private String time;
 
     @Transient
     private boolean isSelect;
-
-    @Generated(hash = 1180125635)
-    public Bookbrack(Long content_id, String book_name, String poster,
-            int words_num, String chapter_name, String chapter_id, String time) {
-        this.content_id = content_id;
-        this.book_name = book_name;
-        this.poster = poster;
-        this.words_num = words_num;
-        this.chapter_name = chapter_name;
-        this.chapter_id = chapter_id;
-        this.time = time;
-    }
 
     public boolean isSelect() {
         return isSelect;
@@ -55,6 +43,18 @@ public class Bookbrack {
 
     @Generated(hash = 1260541532)
     public Bookbrack() {
+    }
+
+    @Generated(hash = 189409290)
+    public Bookbrack(Long content_id, String book_name, String poster,
+            int words_num, String chapter_name, int chapter_id, String time) {
+        this.content_id = content_id;
+        this.book_name = book_name;
+        this.poster = poster;
+        this.words_num = words_num;
+        this.chapter_name = chapter_name;
+        this.chapter_id = chapter_id;
+        this.time = time;
     }
 
     public Long getContent_id() {
@@ -97,11 +97,11 @@ public class Bookbrack {
         this.chapter_name = chapter_name;
     }
 
-    public String getChapter_id() {
+    public int getChapter_id() {
         return this.chapter_id;
     }
 
-    public void setChapter_id(String chapter_id) {
+    public void setChapter_id(int chapter_id) {
         this.chapter_id = chapter_id;
     }
 

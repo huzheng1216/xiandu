@@ -63,14 +63,8 @@
             app:srcCompat="@drawable/ic_search" />
     </RelativeLayout>
 
-    <com.inveno.xiandu.view.custom.MSwipeRefreshLayout
-        android:id="@+id/SwipeRefreshLayout"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/ViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/ViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </com.inveno.xiandu.view.custom.MSwipeRefreshLayout>
+        android:layout_height="match_parent" />
 </LinearLayout>

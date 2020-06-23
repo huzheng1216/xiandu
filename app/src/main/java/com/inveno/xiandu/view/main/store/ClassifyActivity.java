@@ -43,7 +43,6 @@ public class ClassifyActivity extends BaseActivity {
     private ImageView classify_search_img;
 
     private MyTabLayout myTabLayout;
-    private SwipeRefreshLayout swipeRefreshLayout;
     private ViewPager viewPager;
 
     private List<Fragment> fragments = new ArrayList<>();
@@ -61,7 +60,6 @@ public class ClassifyActivity extends BaseActivity {
 
     protected void initView() {
         myTabLayout = findViewById(R.id.MyTabLayout);
-        swipeRefreshLayout = findViewById(R.id.SwipeRefreshLayout);
         viewPager = findViewById(R.id.ViewPager);
 
         classify_search_img = findViewById(R.id.classify_search_img);

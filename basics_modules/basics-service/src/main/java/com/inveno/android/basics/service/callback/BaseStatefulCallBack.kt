@@ -10,7 +10,11 @@ abstract class BaseStatefulCallBack<B> : StatefulCallBack<B> {
 
     fun invokeSuccess(data: B){
         GlobalScope.launch(Dispatchers.Main.immediate){
-            successCallBack(data)
+            try {
+                successCallBack(data)
+            }catch (e: Exception){
+                invokeFail(900, e.message.toString())
+            }
         }
     }
 

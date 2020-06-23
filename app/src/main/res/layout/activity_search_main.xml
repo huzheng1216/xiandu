@@ -97,7 +97,7 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_delete_bt_64dp"
         app:layout_constraintEnd_toEndOf="@+id/main_search_layout"
-        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"></ImageView>
+        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleview_search_main_history"
@@ -109,6 +109,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"></androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

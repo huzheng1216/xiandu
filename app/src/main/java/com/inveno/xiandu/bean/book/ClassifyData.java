@@ -13,6 +13,7 @@ public class ClassifyData {
     private int category_id;
     private int novel_count;
     private List<BookShelf> novel_list;
+    private int pageNum;
 
     public ClassifyData() {
     }
@@ -43,5 +44,13 @@ public class ClassifyData {
 
     public void setNovel_list(List<BookShelf> novel_list) {
         this.novel_list = novel_list;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
     }
 }

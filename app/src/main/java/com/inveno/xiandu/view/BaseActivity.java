@@ -2,22 +2,33 @@ package com.inveno.xiandu.view;
 
 import android.Manifest;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.xiandu.R;
+import com.inveno.xiandu.view.detail.BookDetailActivity;
 import com.inveno.xiandu.view.event.EventNetChange;
 import com.inveno.xiandu.view.event.EventNightModeChange;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.lang.reflect.Field;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -28,8 +39,13 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    //1 服务器错误，2 加载失败，3没有书，4，网络错误
+    public static final int SERVICE_ERROR = 1;
+    public static final int LOAD_ERROR = 2;
+    public static final int NO_BOOK_ERROR = 3;
+    public static final int NETWORK_ERROR = 4;
     //权限列表
-    public final static String[] PERMS_WRITE ={Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    public final static String[] PERMS_WRITE = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,5 +117,125 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
             }
         }
+    }
+
+    private PopupWindow errorPopup;
+
+    public void showErrorPopwindow(int errorType, OnClickListener listener) {
+        View view;
+        if (errorType == SERVICE_ERROR) {
+            view = getServiceErrorView(listener);
+        } else if (errorType == LOAD_ERROR) {
+            view = getLoadErrorView(listener);
+        } else if (errorType == NO_BOOK_ERROR) {
+            view = getnoBookErrorView(listener);
+        } else if (errorType == NETWORK_ERROR) {
+            view = getnetworkErrorView(listener);
+        } else {
+            view = getnetworkErrorView(listener);
+        }
+        errorPopup = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        errorPopup.setFocusable(true);// 取得焦点
+        //点击外部消失
+        errorPopup.setOutsideTouchable(false);
+        //设置可以点击
+        errorPopup.setTouchable(true);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            try {
+                Field mLayoutInScreen = PopupWindow.class.getDeclaredField("mLayoutInScreen");
+                mLayoutInScreen.setAccessible(true);
+                mLayoutInScreen.set(errorPopup, true);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        // 按下android回退物理键 PopipWindow消失解决
+        //从底部显示
+        errorPopup.showAtLocation(view, Gravity.NO_GRAVITY, 0, 0);
+//        errorPopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+    }
+
+    private void getNetWork(){
+
+    }
+
+    private View getServiceErrorView(OnClickListener listener) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_service_error_view, null);
+        TextView error_refresh = contentView.findViewById(R.id.error_refresh);
+        TextView error_back = contentView.findViewById(R.id.error_back);
+        error_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onRefreshClick();
+            }
+        });
+        error_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorPopup.dismiss();
+                listener.onBackClick();
+            }
+        });
+        return contentView;
+    }
+
+    private View getLoadErrorView(OnClickListener listener) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_load_error_view, null);
+        TextView error_refresh = contentView.findViewById(R.id.error_refresh);
+        TextView error_back = contentView.findViewById(R.id.error_back);
+        error_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onRefreshClick();
+            }
+        });
+        error_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorPopup.dismiss();
+                listener.onBackClick();
+            }
+        });
+        return contentView;
+    }
+
+    private View getnoBookErrorView(OnClickListener listener) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_not_book_error_view, null);
+        TextView error_back = contentView.findViewById(R.id.error_back);
+        error_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorPopup.dismiss();
+                listener.onBackClick();
+            }
+        });
+        return contentView;
+    }
+
+    private View getnetworkErrorView(OnClickListener listener) {
+        View contentView = LayoutInflater.from(this).inflate(R.layout.pop_network_error_view, null);
+        TextView error_refresh = contentView.findViewById(R.id.error_refresh);
+        TextView error_back = contentView.findViewById(R.id.error_back);
+        error_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onRefreshClick();
+            }
+        });
+        error_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorPopup.dismiss();
+                listener.onBackClick();
+            }
+        });
+        return contentView;
+    }
+
+    public interface OnClickListener {
+        void onBackClick();
+
+        void onRefreshClick();
     }
 }

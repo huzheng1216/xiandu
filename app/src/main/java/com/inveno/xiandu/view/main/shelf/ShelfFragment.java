@@ -66,6 +66,11 @@ public class ShelfFragment extends BaseFragment {
             }
 
             @Override
+            public void onBookDelete(Bookbrack Bookbrack) {
+
+            }
+
+            @Override
             public void onBookClick(Bookbrack bookShelf) {
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                         .withString("json", GsonUtil.objectToJson(bookShelf))
@@ -74,6 +79,11 @@ public class ShelfFragment extends BaseFragment {
 
             @Override
             public void onBookLongClick(Bookbrack bookShelf, View parent) {
+            }
+
+            @Override
+            public void onFooterClick() {
+
             }
         });
         // 设置adapter

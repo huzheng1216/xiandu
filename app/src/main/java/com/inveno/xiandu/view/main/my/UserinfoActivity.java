@@ -20,6 +20,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
@@ -87,27 +88,34 @@ public class UserinfoActivity extends TitleBarBaseActivity {
 
         userInfo = ServiceContext.userService().getUserInfo();
 
-        if (userInfo != null && !TextUtils.isEmpty(userInfo.getHead_url())) {
-            GlideUtils.LoadCircleImage(this, userInfo.getHead_url(), mine_user_pic);
-        } else {
-            GlideUtils.LoadCircleImage(this, R.drawable.ic_header_default, mine_user_pic);
-        }
-        if (!TextUtils.isEmpty(userInfo.getUser_name())) {
-            mine_user_name.setText(userInfo.getUser_name());
-        } else {
-            mine_user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
-        }
+        if (userInfo != null) {
+            if (!TextUtils.isEmpty(userInfo.getHead_url())) {
+                GlideUtils.LoadCircleImage(this, userInfo.getHead_url(), mine_user_pic);
+            } else {
+                GlideUtils.LoadCircleImage(this, R.drawable.ic_header_default, mine_user_pic);
+            }
+            if (!TextUtils.isEmpty(userInfo.getUser_name())) {
+                mine_user_name.setText(userInfo.getUser_name());
+            } else {
+                mine_user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+            }
 
-        if (userInfo.getGender().equals("1")) {
-            mine_user_gender.setText("男");
-        } else if (userInfo.getGender().equals("2")) {
-            mine_user_gender.setText("女");
-        } else {
-            mine_user_gender.setText("未知");
-        }
-        mine_user_code.setText(String.valueOf(userInfo.getPid()));
+            if (userInfo.getGender().equals("1")) {
+                mine_user_gender.setText("男");
+            } else if (userInfo.getGender().equals("2")) {
+                mine_user_gender.setText("女");
+            } else {
+                mine_user_gender.setText("未知");
+            }
+            mine_user_code.setText(String.valueOf(userInfo.getPid()));
 
-        showPopwindow();
+            showPopwindow();
+        }
+        else{
+            //未登录，则跳转到登录页
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+            finish();
+        }
     }
 
     public void set_user_pic(View view) {
@@ -198,7 +206,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
             if (popupWindow != null && popupWindow.isShowing()) {
                 popupWindow.dismiss();
                 return true;
-            }else{
+            } else {
                 finish();
             }
         }

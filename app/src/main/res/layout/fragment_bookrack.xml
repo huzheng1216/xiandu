@@ -32,7 +32,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="取消"
-            android:onClick="clickCancel"
             android:textColor="@color/gray_3"
             android:textSize="16sp" />
 
@@ -43,7 +42,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="全选"
-            android:onClick="clickSelectAll"
             android:textColor="@color/gray_3"
             android:textSize="16sp" />
 
@@ -54,7 +52,6 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="删除"
-            android:onClick="clickDelete"
             android:textColor="@color/delete_red"
             android:textSize="16sp" />
     </LinearLayout>

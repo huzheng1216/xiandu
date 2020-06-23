@@ -19,11 +19,13 @@ public class AdService extends BaseSingleInstanceService {
     private AdConfigData adConfigData;
 
     @Nullable
-    public Rule_list getRuleList(String scenario){
-        List<Rule_list> ruleList = adConfigData.getRule_list();
-        for(Rule_list item : ruleList){
-            if(item.getScenario().equals(scenario)){
-                return item;
+    public Rule_list getRuleList(String scenario) {
+        if (adConfigData != null) {
+            List<Rule_list> ruleList = adConfigData.getRule_list();
+            for (Rule_list item : ruleList) {
+                if (item.getScenario().equals(scenario)) {
+                    return item;
+                }
             }
         }
         return null;
@@ -33,7 +35,7 @@ public class AdService extends BaseSingleInstanceService {
         return adConfigData;
     }
 
-    public StatefulCallBack<AdConfigData> requestAdConfig(){
+    public StatefulCallBack<AdConfigData> requestAdConfig() {
         final StatefulCallBack<AdConfigData> uidDataStatefulCallBack =
                 InvenoAPIContext.ad().requestAdConfig();
         final BaseStatefulCallBack<AdConfigData> proxy = new BaseStatefulCallBack<AdConfigData>() {
@@ -52,7 +54,7 @@ public class AdService extends BaseSingleInstanceService {
         }).onFail(new Function2<Integer, String, Unit>() {
             @Override
             public Unit invoke(Integer integer, String s) {
-                proxy.invokeFail(integer,s);
+                proxy.invokeFail(integer, s);
                 return null;
             }
         });

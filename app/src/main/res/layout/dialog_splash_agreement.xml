@@ -2,42 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/background_dialog_splash_agreement"
+    android:background="@drawable/white_round_bg_15"
     android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/agreement_title"
         android:gravity="center"
-        android:textSize="18dp"
-        android:textColor="#000000"
         android:paddingTop="30dp"
-        android:paddingBottom="10dp"></TextView>
+        android:paddingBottom="10dp"
+        android:text="@string/agreement_title"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/bt_splash_agreement_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/agreement_title"
-        android:textSize="14dp"
-        android:textColor="#888888"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
-        android:paddingBottom="10dp"></TextView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="#88888888"></View>
+        android:paddingBottom="10dp"
+        android:text="@string/agreement_title"
+        android:lineSpacingExtra="6dp"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/bt_splash_agreement_ok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/blue_round_bg_25"
+        android:gravity="center"
+        android:paddingStart="35dp"
+        android:paddingTop="13dp"
+        android:paddingEnd="35dp"
+        android:paddingBottom="13dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/agreement_ok"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/bt_splash_agreement_cancel"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/agreement_ok"
-        android:textColor="@color/base_color"
-        android:textSize="18dp"
-        android:gravity="center"></TextView>
+        android:gravity="center"
+        android:text="@string/agreement_cancel"
+        android:textColor="@color/gray_6"
+        android:textSize="14sp" />
 
 </LinearLayout>

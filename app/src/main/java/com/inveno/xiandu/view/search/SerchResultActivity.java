@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -64,12 +65,14 @@ public class SerchResultActivity extends BaseActivity {
     View loadingView;
     @BindView(R.id.iv_no_data)
     View noDataView;
+    @BindView(R.id.no_book_show)
+    TextView no_book_show;
 //    @BindView(R.id.recyclerView_layout)
 //    PullRecyclerViewGroup2 pullRecyclerViewGroup2;
 
     //搜索任务
     private Subscription subscription;
-    private int page_num = 0;//搜索的页数
+    private int page_num = 1;//搜索的页数
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,7 @@ public class SerchResultActivity extends BaseActivity {
         ButterKnife.bind(this);
         setStatusBar(R.color.white, true);
 
+        no_book_show.setVisibility(View.GONE);
         //头部
         headerBar.setTitle(name).showBackImg().setListener(new HeaderBar.OnActionListener() {
             @Override
@@ -108,7 +112,7 @@ public class SerchResultActivity extends BaseActivity {
         resultRecyclerView.addOnScrollListener(new MRecycleScrollListener() {
             @Override
             public void onLoadMore() {
-                Toaster.showToastShort(SerchResultActivity.this, "上拉加载");
+//                Toaster.showToastShort(SerchResultActivity.this, "上拉加载");
                 if (!searchDataAdapter.isNotMore()) {
                     page_num++;
                     startBookSearch();
@@ -167,6 +171,9 @@ public class SerchResultActivity extends BaseActivity {
                             mData.addAll(baseDataBeans);
                             searchDataAdapter.setDataList(mData);
                         } else {
+                            if (mData.size()<1) {
+                                no_book_show.setVisibility(View.VISIBLE);
+                            }
                             searchDataAdapter.setNotDataFooter();
                         }
                         return null;

@@ -99,7 +99,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                     .onSuccess(new Function1<String, Unit>() {
                         @Override
                         public Unit invoke(String s) {
-                            Toaster.showToast(LoginOtherPhoneActivity.this, "验证码:"+s);
+                            Toaster.showToast(LoginOtherPhoneActivity.this, "验证码:" + s);
                             Intent intent = new Intent(LoginOtherPhoneActivity.this, ValiCodeActivity.class);
                             intent.putExtra(ValiCodeActivity.LOGIN_PHONE_NUM, login_phone_edit.getText().toString());
                             startActivityForResult(intent, LOGIN_VALI_CODE_REBACK);
@@ -109,8 +109,8 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                     .onFail(new Function2<Integer, String, Unit>() {
                         @Override
                         public Unit invoke(Integer integer, String s) {
-                            Log.i("wyjjjjjj", "onFail: "+s);
-                            Toaster.showToast(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail));
+                            Log.i("wyjjjjjj", "onFail: " + s);
+                            Toaster.showToast(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail) + ":" + s);
                             return null;
                         }
                     })
