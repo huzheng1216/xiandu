@@ -15,12 +15,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.RankingData;
 import com.inveno.xiandu.utils.GlideUtils;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.holder.BaseHolder;
 
 import java.util.List;
+
+import static com.inveno.android.ad.config.AdViewType.AD_BOY_GIRL_BOTTOM_TYPE;
+import static com.inveno.android.ad.config.AdViewType.AD_CATEGORY_TYPE;
+import static com.inveno.android.ad.config.AdViewType.AD_EDITOR_RECOMMEND_TYPE_1;
+import static com.inveno.android.ad.config.AdViewType.AD_EDITOR_RECOMMEND_TYPE_2;
+import static com.inveno.android.ad.config.AdViewType.AD_GUESS_YOU_LIKE_TYPE_1;
 
 /**
  * @author yongji.wang
@@ -106,6 +115,12 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
         } else if (holder instanceof FooterViewHolder) {
 
+        } else if (holder instanceof NormalAdViewHolder) {
+            int dataPosition = position;
+            if (getHeaderView() != null && position > 0) {
+                dataPosition = position - 1;
+            }
+            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), dataPosition);
         }
     }
 
@@ -227,6 +242,8 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
         } else if (viewType == FOOTER_ITEM_TYPE) {
             mVIewHoder = new FooterViewHolder(getFooterView());
+        }else if (viewType == AD_CATEGORY_TYPE) {
+            mVIewHoder = ADViewHolderFactory.create(mContext, viewType);
         }
         return mVIewHoder;
     }

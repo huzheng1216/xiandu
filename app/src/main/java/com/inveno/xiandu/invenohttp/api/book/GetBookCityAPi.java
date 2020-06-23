@@ -412,9 +412,10 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         topAdRequest.onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModelTop.setWrapper(wrapper);
-            if (mDataBeans.size() > wrapper.getIndex()+1 && topDataBeans.size() >= wrapper.getIndex()+1) {
-                topDataBeans.add(wrapper.getIndex()+1 , adModelTop);
-                mDataBeans.add(wrapper.getIndex() +1, adModelTop);
+            int adIndex = wrapper.getIndex()+1;
+            if (mDataBeans.size() >= adIndex && topDataBeans.size() >= adIndex) {
+                topDataBeans.add(adIndex , adModelTop);
+                mDataBeans.add(adIndex, adModelTop);
                 uiCallback.invokeSuccess(mDataBeans);
             }
             return null;
@@ -426,7 +427,8 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         bottomAdRequest.onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModelBottom.setWrapper(wrapper);
-            if (mDataBeans.size() > wrapper.getIndex()+1 && bottomDataBeans.size() >= wrapper.getIndex()+1) {
+            int adIndex = wrapper.getIndex()+1;
+            if (mDataBeans.size() >= adIndex && bottomDataBeans.size() >= adIndex) {
                 mDataBeans.add(wrapper.getIndex() + topDataBeans.size() + 1, adModelBottom);
                 uiCallback.invokeSuccess(mDataBeans);
             }
@@ -445,7 +447,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         }
 
         if (adModelBottom.getWrapper() != null && bottomDataBeans.size() >= adModelBottom.getWrapper().getIndex() + 1) {
-            bottomDataBeans.add(adModelBottom.getWrapper().getIndex(), adModelBottom);
+            bottomDataBeans.add(adModelBottom.getWrapper().getIndex()+1, adModelBottom);
         }
     }
 

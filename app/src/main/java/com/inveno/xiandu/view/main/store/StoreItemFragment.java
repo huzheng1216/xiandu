@@ -170,7 +170,10 @@ public class StoreItemFragment extends BaseFragment {
                     public Unit invoke(BookShelfList bookShelfList) {
                         mMoreData[0] = new ArrayList<>(bookShelfList.getNovel_list());
                         if (flag[0] == true) {
-                            mMoreData[0].add(adModel.getWrapper().getIndex() + 1, adModel);
+                            int adIndex = adModel.getWrapper().getIndex();
+                            if (mMoreData[0].size() >=  adIndex) {
+                                mMoreData[0].add(adIndex, adModel);
+                            }
                             mDataBeans.addAll(mMoreData[0]);
                             bookCityAdapter.setDataList(mDataBeans);
                         }

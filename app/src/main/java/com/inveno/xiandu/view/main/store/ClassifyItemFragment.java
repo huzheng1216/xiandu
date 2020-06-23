@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ClassifyData;
 import com.inveno.xiandu.bean.book.ClassifyMenu;
@@ -58,6 +59,8 @@ public class ClassifyItemFragment extends BaseFragment {
     private int page_num = 1;
 
     private HashMap<Integer, ClassifyData> mClassifyDatas = new HashMap<>();
+
+    private AdModel adModel;
 
     public ClassifyItemFragment(String title) {
         switch (title) {
@@ -107,9 +110,13 @@ public class ClassifyItemFragment extends BaseFragment {
                     mBookself.clear();
                     rightDataAdapter.setmDataList(mBookself);
                     book_sum.setText("共计0本");
+                    initAd();//先展示广告
                     ClassifyData classifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id());
                     if (classifyData != null) {
                         mBookself = new ArrayList<>(classifyData.getNovel_list());
+                        if (adModel != null && mBookself.size() >= adModel.getWrapper().getIndex()) {
+                            mBookself.add(adModel.getWrapper().getIndex(), adModel);
+                        }
                         rightDataAdapter.setmDataList(mBookself);
                     } else {
                         getClassifyData();
@@ -117,6 +124,7 @@ public class ClassifyItemFragment extends BaseFragment {
                 }
             }
         });
+
         return view;
     }
 
@@ -139,6 +147,7 @@ public class ClassifyItemFragment extends BaseFragment {
                             mMenus = classifyMenus;
                             leftMenuAdapter.setMenusData(mMenus);
                             knowClassifyPosition = 0;
+                            initAd();//先展示广告
                             getClassifyData();
                             return null;
                         }
@@ -166,6 +175,10 @@ public class ClassifyItemFragment extends BaseFragment {
                         // TODO: 2020/6/17 这里先缓存记录分类数据，后续更改使用数据库存储
                         mClassifyDatas.put(classifyData.getCategory_id(), classifyData);
                         List<BaseDataBean> mData = new ArrayList<>(classifyData.getNovel_list());
+                        //加广告
+                        if (adModel != null && mData.size() >= adModel.getWrapper().getIndex()) {
+                            mData.add(adModel.getWrapper().getIndex(), adModel);
+                        }
                         rightDataAdapter.setmDataList(mData);
                         return null;
                     }
@@ -176,6 +189,27 @@ public class ClassifyItemFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+    }
 
+    public void notifyAdSetChanged(AdModel adModel) {
+        this.adModel = adModel;
+        int index = adModel.getWrapper().getIndex();
+        if (mBookself != null && mBookself.size() >= index) {
+            mBookself.add(index, adModel);
+            rightDataAdapter.setmDataList(mBookself);
+        }
+    }
+
+    /**
+     * 固定广告位置
+     */
+    private void initAd(){
+        if (adModel!=null) {
+            int index = adModel.getWrapper().getIndex();
+            if (mBookself != null && mBookself.size() == 0 && index == 0) {
+                mBookself.add(index, adModel);
+                rightDataAdapter.setmDataList(mBookself);
+            }
+        }
     }
 }
