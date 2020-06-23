@@ -402,7 +402,6 @@ public class SearchDataAdapter extends RecyclerBaseAdapter {
         }
     }
 
-
     public interface OnItemClickListener {
         void onItemClick(BaseDataBean baseDataBean);
     }

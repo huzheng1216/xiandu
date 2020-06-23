@@ -16,6 +16,7 @@ import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BaseDataBeanList;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.BookShelfList;
+import com.inveno.xiandu.bean.book.CapterDetail;
 import com.inveno.xiandu.bean.book.ClassifyData;
 import com.inveno.xiandu.bean.book.ClassifyMenu;
 import com.inveno.xiandu.bean.book.ClassifyMenuList;
@@ -647,5 +648,31 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
             }
         });
         return uiCallback;
+    }
+
+    /**
+     * 获取阅读进度
+     *
+     * @param content_id 小说id
+     * @return
+     */
+    public StatefulCallBack<CapterDetail> getReadProgress(long content_id) {
+        LinkedHashMap<String, Object> bacicParams = ServiceContext.bacicParamService().getBaseParam();
+        LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+        mParams.put("content_id", content_id);
+        mParams.putAll(bacicParams);
+
+        if (MODULE_DEBUG) {
+
+        } else {
+            return MultiTypeHttpStatefulCallBack.INSTANCE
+                    .<CapterDetail>newCallBack(new TypeReference<CapterDetail>() {
+                    }.getType())
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.GET_READ_PROGRESS))
+                    .withArg(mParams)
+                    .buildCallerCallBack();
+        }
+
+        return null;
     }
 }
