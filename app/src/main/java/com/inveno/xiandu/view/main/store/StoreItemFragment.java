@@ -60,6 +60,7 @@ import kotlin.jvm.functions.Function2;
 
 import static com.inveno.android.ad.config.ScenarioManifest.BOY_GIRL_BOTTOM;
 import static com.inveno.android.ad.config.ScenarioManifest.EDITOR_RECOMMEND;
+import static com.inveno.android.ad.config.ScenarioManifest.GUESS_YOU_LIKE;
 
 /**
  * Created By huzheng
@@ -81,8 +82,6 @@ public class StoreItemFragment extends BaseFragment {
 
     private StatefulCallBack<BookShelfList> topRequest;
     private StatefulCallBack<BookShelfList> bottomRequest;
-    private AdModel mAdModel;
-    private String mScenario;
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -105,7 +104,6 @@ public class StoreItemFragment extends BaseFragment {
                 channel = 3;
                 topTitle = "精选畅销";
                 bottomTitle = "人气精选";
-                mScenario = EDITOR_RECOMMEND;
                 break;
         }
     }
@@ -162,20 +160,43 @@ public class StoreItemFragment extends BaseFragment {
         recyclerView.addOnScrollListener(new MRecycleScrollListener() {
             @Override
             public void onLoadMore() {
+
+                final List<BaseDataBean>[] mMoreData = new List[1];
+                final boolean[] flag = new boolean[1];
+                AdModel adModel = new AdModel();
+
                 bottomRequest.onSuccess(new Function1<BookShelfList, Unit>() {
                     @Override
                     public Unit invoke(BookShelfList bookShelfList) {
-                        List<BaseDataBean> mMoreData = new ArrayList<>(bookShelfList.getNovel_list());
-                        mDataBeans.addAll(mMoreData);
-                        bookCityAdapter.setDataList(mDataBeans);
+                        mMoreData[0] = new ArrayList<>(bookShelfList.getNovel_list());
+                        if (flag[0] == true) {
+                            mMoreData[0].add(adModel.getWrapper().getIndex() + 1, adModel);
+                            mDataBeans.addAll(mMoreData[0]);
+                            bookCityAdapter.setDataList(mDataBeans);
+                        }
                         return null;
                     }
                 }).onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
-                        Toaster.showToastShort(getActivity(), "请求出错了："+ integer);
+                        Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
                         return null;
                     }
+                }).execute();
+                InvenoAdServiceHolder.getService().requestInfoAd(GUESS_YOU_LIKE, getContext()).onSuccess(wrapper -> {
+                    Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                    adModel.setWrapper(wrapper);
+                    if (mMoreData[0]!=null && mMoreData[0].size() >= wrapper.getIndex()) {
+                        mMoreData[0].add(wrapper.getIndex(), adModel);
+                        mDataBeans.addAll(mMoreData[0]);
+                        bookCityAdapter.setDataList(mDataBeans);
+                    }
+                    flag[0] = true;
+                    return null;
+                }).onFail((integer, s) -> {
+                    Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                    flag[0] = true;
+                    return null;
                 }).execute();
             }
         });
@@ -253,7 +274,7 @@ public class StoreItemFragment extends BaseFragment {
     }
 
     private void getData() {
-        APIContext.getBookCityAPi().getBookCity(channel,getContext())
+        APIContext.getBookCityAPi().getBookCity(channel, getContext())
                 .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
                     @Override
                     public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
@@ -271,7 +292,5 @@ public class StoreItemFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
-
-
     }
 }

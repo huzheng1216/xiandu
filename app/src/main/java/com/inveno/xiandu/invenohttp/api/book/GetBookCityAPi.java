@@ -411,10 +411,10 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
         topAdRequest.onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            if (topDataBeans.size() >= wrapper.getIndex()) {
-                adModelTop.setWrapper(wrapper);
-                topDataBeans.add(wrapper.getIndex() , adModelTop);
-                mDataBeans.add(wrapper.getIndex() , adModelTop);
+            adModelTop.setWrapper(wrapper);
+            if (mDataBeans.size() > wrapper.getIndex()+1 && topDataBeans.size() >= wrapper.getIndex()+1) {
+                topDataBeans.add(wrapper.getIndex()+1 , adModelTop);
+                mDataBeans.add(wrapper.getIndex() +1, adModelTop);
                 uiCallback.invokeSuccess(mDataBeans);
             }
             return null;
@@ -425,8 +425,8 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
         bottomAdRequest.onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            if (bottomDataBeans.size() >= wrapper.getIndex()+1) {
-                adModelBottom.setWrapper(wrapper);
+            adModelBottom.setWrapper(wrapper);
+            if (mDataBeans.size() > wrapper.getIndex()+1 && bottomDataBeans.size() >= wrapper.getIndex()+1) {
                 mDataBeans.add(wrapper.getIndex() + topDataBeans.size() + 1, adModelBottom);
                 uiCallback.invokeSuccess(mDataBeans);
             }
@@ -440,8 +440,8 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
     }
 
     private void addAd(ArrayList<BaseDataBean> topDataBeans, ArrayList<BaseDataBean> bottomDataBeans, AdModel adModelTop, AdModel adModelBottom) {
-        if (adModelTop.getWrapper() != null && topDataBeans.size() >= adModelTop.getWrapper().getIndex()) {
-            topDataBeans.add(adModelTop.getWrapper().getIndex(), adModelTop);
+        if (adModelTop.getWrapper() != null && topDataBeans.size() >= adModelTop.getWrapper().getIndex()+1) {
+            topDataBeans.add(adModelTop.getWrapper().getIndex()+1, adModelTop);
         }
 
         if (adModelBottom.getWrapper() != null && bottomDataBeans.size() >= adModelBottom.getWrapper().getIndex() + 1) {

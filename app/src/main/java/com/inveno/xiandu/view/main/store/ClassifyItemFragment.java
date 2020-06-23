@@ -176,5 +176,6 @@ public class ClassifyItemFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+
     }
 }
