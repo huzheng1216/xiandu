@@ -78,6 +78,16 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/search_ad_ll"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="@+id/main_search_layout"
+        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"
+        android:layout_marginTop="7.33dp"
+        android:visibility="gone"/>
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -87,8 +97,8 @@
         android:textColor="#444444"
         android:textSize="14dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/main_search_layout"
-        app:layout_constraintTop_toBottomOf="@+id/main_search_layout" />
+        app:layout_constraintStart_toStartOf="@id/main_search_layout"
+        app:layout_constraintTop_toBottomOf="@id/search_ad_ll" />
 
     <ImageView
         android:id="@+id/bt_search_main_history_del"
@@ -97,7 +107,7 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_delete_bt_64dp"
         app:layout_constraintEnd_toEndOf="@+id/main_search_layout"
-        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"></ImageView>
+        app:layout_constraintTop_toBottomOf="@+id/search_ad_ll"></ImageView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleview_search_main_history"
