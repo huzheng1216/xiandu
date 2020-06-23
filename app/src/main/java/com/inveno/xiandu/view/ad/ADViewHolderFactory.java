@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.view.ad.holder.AdBGRTxtLImgHolder;
+import com.inveno.xiandu.view.ad.holder.AdBookShelfLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdCategoryLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdGuessLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdLTxtRImgHolder;
@@ -37,6 +38,9 @@ public class ADViewHolderFactory {
                 break;
             case AD_RANKING_LIST_TYPE:
                 holder = AdRankingListLImgRTxtHolder.create(context);
+                break;
+            case AD_BOOK_SHELF_TYPE:
+                holder = AdBookShelfLImgRTxtHolder.create(context);
                 break;
             default:
                 break;

@@ -2,6 +2,7 @@ package com.inveno.xiandu.view.main.shelf;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.ad.bean.IndexedAdValueWrapper;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.app.info.AppInfo;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdBookModel;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.response.ResponseShelf;
@@ -59,6 +64,8 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+
 /**
  * Created By huzheng
  * Date 2020-02-28
@@ -74,6 +81,8 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     private TextView bookbrack_delete_all_cancel;
     private TextView bookbrack_delete_all_select_all;
     private TextView bookbrack_delete_all_delete;
+
+    private AdBookModel adBookModel;
 
     public void SearchFragmentMain() {
     }
@@ -181,6 +190,8 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             }
         }, 8000);
 
+        loadAd();
+
         return inflate;
     }
 
@@ -229,7 +240,14 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     }
 
     private void initData() {
-        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
+        List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
+        if (adBookModel!=null){
+            int index = adBookModel.getIndex();
+            if (list.size()>= index){
+                list.add(index,adBookModel);
+            }
+        }
+        shelfAdapter.setData(list);
     }
 
     @Override
@@ -263,5 +281,26 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             bookbrack_delete_all_line.setVisibility(View.GONE);
             bookbrack_delete_all_line.startAnimation(animBottomOut);
         }
+    }
+
+    /**
+     * 加载广告
+     */
+    private void loadAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+            @Override
+            public Unit invoke(IndexedAdValueWrapper wrapper) {
+                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                adBookModel = new AdBookModel(wrapper);
+                shelfAdapter.addAd(adBookModel);
+                return null;
+            }
+        }).onFail(new Function2<Integer, String, Unit>() {
+            @Override
+            public Unit invoke(Integer integer, String s) {
+                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                return null;
+            }
+        }).execute();
     }
 }

@@ -16,15 +16,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdBookModel;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.inveno.android.ad.config.AdViewType.AD_BOOK_SHELF_TYPE;
 
 /**
  * Created By huzheng
@@ -56,6 +62,13 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         data.clear();
         data.addAll(list);
         notifyDataSetChanged();
+    }
+
+    public void addAd(AdBookModel adBookModel){
+        if (data.size()>=adBookModel.getIndex()){
+            data.add(adBookModel.getIndex(),adBookModel);
+            notifyDataSetChanged();
+        }
     }
 
     public void setHeaderData(String time, String coinNum) {
@@ -104,6 +117,9 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     @Override
     public int getItemViewType(int position) {
         if (getHeaderView() == null && getFooterView() == null) {
+            if (data.get(position-1) instanceof AdBookModel){
+                return AD_BOOK_SHELF_TYPE;
+            }
             return CONTENT_ITEM_TYPE;
         } else {
             if (getFooterView() != null && position == getItemCount() - 1) {
@@ -113,8 +129,14 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                 if (position == 0) {
                     return HEADER_ITEM_TYPE;
                 }
+                if (data.get(position-1) instanceof AdBookModel){
+                    return AD_BOOK_SHELF_TYPE;
+                }
                 return CONTENT_ITEM_TYPE;
             } else {
+                if (data.get(position-1) instanceof AdBookModel){
+                    return AD_BOOK_SHELF_TYPE;
+                }
                 return CONTENT_ITEM_TYPE;
             }
         }
@@ -138,6 +160,12 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             } else {
                 headerViewHolder.bookrack_coin_num.setText(headerCoin);
             }
+        } else if (holder instanceof NormalAdViewHolder) {
+            int realPosition = position;
+            if (getHeaderView() != null) {
+                realPosition = position - 1;
+            }
+            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), realPosition);
         } else {
 
             int realPosition = position;
@@ -309,7 +337,9 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             return new HeaderViewHolder(getHeaderView());
         } else if (viewType == FOOTER_ITEM_TYPE) {
             return new FootViewHolder(getFooterView());
-        } else {
+        } else if(viewType == AD_BOOK_SHELF_TYPE){
+            return ADViewHolderFactory.create(context, viewType);
+        }else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_item, null);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(lp);
