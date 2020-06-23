@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.RankingData;
 import com.inveno.xiandu.bean.book.RankingMenu;
@@ -37,6 +40,9 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.CATEGORY;
+import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+
 /**
  * @author yongji.wang
  * @date 2020/6/12 16:43
@@ -57,6 +63,11 @@ public class RankingActivity extends TitleBarBaseActivity {
     private int channel_id = 1;
     private boolean isBookEnd = false;
     private HashMap<String, List<RankingData>> mRankingDatas = new HashMap<>();
+
+    /**
+     * 这个页面只有一个广告
+     */
+    private AdModel adModel;
 
     @Override
     public String getCenterText() {
@@ -130,6 +141,7 @@ public class RankingActivity extends TitleBarBaseActivity {
             }
         });
         getRankingMenu();
+        loadAd();
     }
 
     @Override
@@ -199,6 +211,7 @@ public class RankingActivity extends TitleBarBaseActivity {
                         String dataKey = String.format("%s-%s", mMenus.get(knowRankingPosition).getRanking_id(), channel_id);
                         mRankingDatas.put(dataKey, rankingData);
                         List<BaseDataBean> mData = new ArrayList<>(rankingData);
+                        addAd(mData);
                         rightDataAdapter.setmDataList(mData);
                         return null;
                     }
@@ -238,13 +251,41 @@ public class RankingActivity extends TitleBarBaseActivity {
     public void choiseRanking() {
         rankingBooks.clear();
         rightDataAdapter.setmDataList(rankingBooks);
+        rightDataAdapter.addAd(adModel);//先展示广告
         String dataKey = String.format("%s-%s", mMenus.get(knowRankingPosition).getRanking_id(), channel_id);
         List<RankingData> rankingDatas = mRankingDatas.get(dataKey);
         if (rankingDatas != null) {
             ArrayList<BaseDataBean> mData = new ArrayList<>(rankingDatas);
+            addAd(mData);
             rightDataAdapter.setmDataList(mData);
         } else {
             getRankingData();
         }
     }
+
+
+    /**
+     * 加载广告
+     */
+    private void loadAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            adModel = new AdModel(wrapper);
+            rightDataAdapter.addAd(adModel);
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+    }
+
+    private void addAd(List<BaseDataBean> mData){
+        if (adModel!=null) {
+            int index = adModel.getWrapper().getIndex();
+            if (mData.size() >= index){
+                mData.add(index,adModel);
+            }
+        }
+    }
+
 }

@@ -207,7 +207,7 @@ public class ClassifyItemFragment extends BaseFragment {
         if (adModel!=null) {
             int index = adModel.getWrapper().getIndex();
             if (mBookself != null && mBookself.size() == 0 && index == 0) {
-                mBookself.add(index, adModel);
+                mBookself.add(adModel);
                 rightDataAdapter.setmDataList(mBookself);
             }
         }

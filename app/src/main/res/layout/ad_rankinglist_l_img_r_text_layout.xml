@@ -17,14 +17,14 @@
 
     <TextView
         android:id="@+id/ad_r_text_id"
-        android:layout_width="196dp"
+        android:layout_width="match_parent"
         android:layout_height="34dp"
-        android:text="新加坡留学，新加坡这些福利
-政策给你安排的明明又白白"
         android:textColor="#ff333333"
         android:textSize="14sp"
         android:layout_marginTop="20dp"
+        android:layout_marginLeft="8.33dp"
         android:gravity="center_vertical"
+        android:layout_toRightOf="@id/ad_l_img_id"
         android:layout_alignParentRight="true"/>
 
     <TextView

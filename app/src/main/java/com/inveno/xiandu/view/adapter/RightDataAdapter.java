@@ -23,13 +23,10 @@ import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.holder.BaseHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.inveno.android.ad.config.AdViewType.AD_BOY_GIRL_BOTTOM_TYPE;
-import static com.inveno.android.ad.config.AdViewType.AD_CATEGORY_TYPE;
-import static com.inveno.android.ad.config.AdViewType.AD_EDITOR_RECOMMEND_TYPE_1;
-import static com.inveno.android.ad.config.AdViewType.AD_EDITOR_RECOMMEND_TYPE_2;
-import static com.inveno.android.ad.config.AdViewType.AD_GUESS_YOU_LIKE_TYPE_1;
+import static com.inveno.android.ad.config.AdViewType.*;
 
 /**
  * @author yongji.wang
@@ -242,7 +239,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
         } else if (viewType == FOOTER_ITEM_TYPE) {
             mVIewHoder = new FooterViewHolder(getFooterView());
-        }else if (viewType == AD_CATEGORY_TYPE) {
+        } else if (viewType == AD_CATEGORY_TYPE || viewType == AD_RANKING_LIST_TYPE) {
             mVIewHoder = ADViewHolderFactory.create(mContext, viewType);
         }
         return mVIewHoder;
@@ -250,6 +247,17 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     public void setmDataList(List<BaseDataBean> dataList) {
         mDataList = dataList;
+        notifyDataSetChanged();
+    }
+
+    public void addAd(AdModel adModel) {
+        int index = adModel.getWrapper().getIndex();
+        if (mDataList != null && mDataList.size() >= index) {
+            mDataList.add(index, adModel);
+        } else if (mDataList == null && index == 0) {
+            mDataList = new ArrayList<>();
+            mDataList.add(adModel);
+        }
         notifyDataSetChanged();
     }
 
