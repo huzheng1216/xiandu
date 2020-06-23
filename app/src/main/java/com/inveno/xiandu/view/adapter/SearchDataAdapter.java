@@ -110,7 +110,8 @@ public class SearchDataAdapter extends RecyclerBaseAdapter {
         isNotMore = true;
         notifyItemChanged(getItemCount() - 1);
     }
-    public boolean isNotMore(){
+
+    public boolean isNotMore() {
         return isNotMore;
     }
 
@@ -386,15 +387,13 @@ public class SearchDataAdapter extends RecyclerBaseAdapter {
                 } else {
                     bookStatusStr = "已完结";
                 }
-                String wordsCountStr = String.format("%s字·" + bookStatusStr, bookShelf.getWord_count());
-                if (bookShelf.getWord_count() > 1000 && bookShelf.getWord_count() < 10000) {
+                String wordsCountStr;
+                if (bookShelf.getWord_count() < 1000) {
+                    wordsCountStr = String.format("%s字·" + bookStatusStr, bookShelf.getWord_count());
+                } else if (bookShelf.getWord_count() > 1000 && bookShelf.getWord_count() < 10000) {
                     wordsCountStr = String.format("%s千字·" + bookStatusStr, bookShelf.getWord_count() / 1000);
-                } else if (bookShelf.getWord_count() > 10000) {
+                } else {
                     wordsCountStr = String.format("%s万字·" + bookStatusStr, bookShelf.getWord_count() / 10000);
-                } else if (bookShelf.getWord_count() > 1000000) {
-                    wordsCountStr = String.format("%s百万字·" + bookStatusStr, bookShelf.getWord_count() / 1000000);
-                } else if (bookShelf.getWord_count() > 10000000) {
-                    wordsCountStr = String.format("%s千万字·" + bookStatusStr, bookShelf.getWord_count() / 10000000);
                 }
                 default_image_words.setText(wordsCountStr);
                 default_image_score.setText(String.format("%s分", bookShelf.getScore()));

@@ -196,12 +196,8 @@ public class BookDetailActivity extends BaseActivity {
             wordsCountStr = String.format(bookType + "-%s字", book.getWord_count());
         } else if (book.getWord_count() >= 1000 && book.getWord_count() < 10000) {
             wordsCountStr = String.format(bookType + "-%s千字", book.getWord_count() / 1000);
-        } else if (book.getWord_count() >= 10000 && book.getWord_count() < 1000000) {
+        } else{
             wordsCountStr = String.format(bookType + "-%s万字", book.getWord_count() / 10000);
-        } else if (book.getWord_count() >= 1000000 && book.getWord_count() < 10000000) {
-            wordsCountStr = String.format(bookType + "-%s百万字", book.getWord_count() / 1000000);
-        } else {
-            wordsCountStr = String.format(bookType + "-%s千万字", book.getWord_count() / 10000000);
         }
         book_detail_type.setText(wordsCountStr);
 
@@ -211,12 +207,8 @@ public class BookDetailActivity extends BaseActivity {
             popularityStr = String.format("%s+", book.getPopularity());
         } else if (book.getPopularity() >= 1000 && book.getPopularity() < 10000) {
             popularityStr = String.format("%s千+", book.getPopularity() / 1000);
-        } else if (book.getPopularity() >= 10000 && book.getPopularity() < 1000000) {
-            popularityStr = String.format("%s万+", book.getPopularity() / 10000);
-        } else if (book.getPopularity() >= 1000000 && book.getPopularity() < 10000000) {
-            popularityStr = String.format("%s百万+", book.getPopularity() / 1000000);
         } else {
-            popularityStr = String.format("%s千万+", book.getPopularity() / 10000000);
+            popularityStr = String.format("%s万+", book.getPopularity() / 10000);
         }
         book_detail_popularity.setText(popularityStr);
 

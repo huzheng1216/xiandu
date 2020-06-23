@@ -103,9 +103,23 @@ public class SerchResultActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseDataBean baseDataBean) {
                 if (baseDataBean instanceof BookShelf) {
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
-                            .withString("json", GsonUtil.objectToJson(baseDataBean))
-                            .navigation();
+                    //请求完整图书数据后跳转
+                    APIContext.getBookCityAPi().getBook(((BookShelf) baseDataBean).getContent_id())
+                            .onSuccess(new Function1<BookShelf, Unit>() {
+                                @Override
+                                public Unit invoke(BookShelf bookShelf) {
+                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                                            .withString("json", GsonUtil.objectToJson(bookShelf))
+                                            .navigation();
+                                    return null;
+                                }
+                            })
+                            .onFail(new Function2<Integer, String, Unit>() {
+                                @Override
+                                public Unit invoke(Integer integer, String s) {
+                                    return null;
+                                }
+                            }).execute();
                 }
             }
         });
@@ -171,7 +185,7 @@ public class SerchResultActivity extends BaseActivity {
                             mData.addAll(baseDataBeans);
                             searchDataAdapter.setDataList(mData);
                         } else {
-                            if (mData.size()<1) {
+                            if (mData.size() < 1) {
                                 no_book_show.setVisibility(View.VISIBLE);
                             }
                             searchDataAdapter.setNotDataFooter();
