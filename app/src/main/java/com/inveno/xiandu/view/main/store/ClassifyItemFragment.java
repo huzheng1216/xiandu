@@ -18,6 +18,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ClassifyData;
@@ -64,6 +65,8 @@ public class ClassifyItemFragment extends BaseFragment {
     private int book_status = -1;
 
     private HashMap<Integer, ClassifyData> mClassifyDatas = new HashMap<>();
+
+    private AdModel adModel;
 
     public ClassifyItemFragment(String title) {
         switch (title) {
@@ -118,6 +121,7 @@ public class ClassifyItemFragment extends BaseFragment {
                     mBookselfs.clear();
                     rightDataAdapter.setmDataList(mBookselfs);
                     book_sum.setText("共计0本");
+                    initAd();//先展示广告
                     //先从缓存里面拿
                     ClassifyData classifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id());
 
@@ -161,12 +165,18 @@ public class ClassifyItemFragment extends BaseFragment {
                     ClassifyData mClassifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id());
                     if (mClassifyData != null) {
                         getClassifyData(mClassifyData.getPageNum());
+                        mBookselfs = new ArrayList<>(mClassifyData.getNovel_list());
+                        if (adModel != null && mBookselfs.size() >= adModel.getWrapper().getIndex()) {
+                            mBookselfs.add(adModel.getWrapper().getIndex(), adModel);
+                        }
+                        rightDataAdapter.setmDataList(mBookselfs);
                     } else {
                         getClassifyData(1);
                     }
                 }
             }
         });
+
         return view;
     }
 
@@ -197,6 +207,7 @@ public class ClassifyItemFragment extends BaseFragment {
                             leftMenuAdapter.setMenusData(mMenus);
                             knowClassifyPosition = 0;
                             getClassifyData(1);
+                            initAd();//先展示广告
                             return null;
                         }
                     })
@@ -263,6 +274,13 @@ public class ClassifyItemFragment extends BaseFragment {
                             }
                             rightDataAdapter.setmDataList(mData);
                         }
+                        mClassifyDatas.put(classifyData.getCategory_id(), classifyData);
+                        List<BaseDataBean> mData = new ArrayList<>(classifyData.getNovel_list());
+                        //加广告
+                        if (adModel != null && mData.size() >= adModel.getWrapper().getIndex()) {
+                            mData.add(adModel.getWrapper().getIndex(), adModel);
+                        }
+                        rightDataAdapter.setmDataList(mData);
                         return null;
                     }
                 })
@@ -282,5 +300,27 @@ public class ClassifyItemFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+    }
+
+    public void notifyAdSetChanged(AdModel adModel) {
+        this.adModel = adModel;
+        int index = adModel.getWrapper().getIndex();
+        if (mBookselfs != null && mBookselfs.size() >= index) {
+            mBookselfs.add(index, adModel);
+            rightDataAdapter.setmDataList(mBookselfs);
+        }
+    }
+
+    /**
+     * 固定广告位置
+     */
+    private void initAd() {
+        if (adModel != null) {
+            int index = adModel.getWrapper().getIndex();
+            if (mBookselfs != null && mBookselfs.size() == 0 && index == 0) {
+                mBookselfs.add(adModel);
+                rightDataAdapter.setmDataList(mBookselfs);
+            }
+        }
     }
 }

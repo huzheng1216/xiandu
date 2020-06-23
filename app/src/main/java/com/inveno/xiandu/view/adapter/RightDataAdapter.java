@@ -15,12 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.RankingData;
 import com.inveno.xiandu.utils.GlideUtils;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.holder.BaseHolder;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.inveno.android.ad.config.AdViewType.*;
 
 /**
  * @author yongji.wang
@@ -114,9 +120,14 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
             if (mDataList.size() < 10 || isNotMore) {
                 ((FooterViewHolder) holder).load_more_tv.setText("沒有跟多数据");
             } else {
-
                 ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
             }
+        } else if (holder instanceof NormalAdViewHolder) {
+            int dataPosition = position;
+            if (getHeaderView() != null && position > 0) {
+                dataPosition = position - 1;
+            }
+            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), dataPosition);
         }
     }
 
@@ -161,7 +172,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getFooterView() {
-        if (footerView!=null){
+        if (footerView != null) {
             return footerView;
         }
         return null;
@@ -261,12 +272,25 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
         } else if (viewType == FOOTER_ITEM_TYPE) {
             mVIewHoder = new FooterViewHolder(getFooterView());
+        } else if (viewType == AD_CATEGORY_TYPE || viewType == AD_RANKING_LIST_TYPE) {
+            mVIewHoder = ADViewHolderFactory.create(mContext, viewType);
         }
         return mVIewHoder;
     }
 
     public void setmDataList(List<BaseDataBean> dataList) {
         mDataList = dataList;
+        notifyDataSetChanged();
+    }
+
+    public void addAd(AdModel adModel) {
+        int index = adModel.getWrapper().getIndex();
+        if (mDataList != null && mDataList.size() >= index) {
+            mDataList.add(index, adModel);
+        } else if (mDataList == null && index == 0) {
+            mDataList = new ArrayList<>();
+            mDataList.add(adModel);
+        }
         notifyDataSetChanged();
     }
 

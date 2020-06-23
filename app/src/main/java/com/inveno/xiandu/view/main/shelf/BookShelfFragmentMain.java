@@ -3,8 +3,8 @@ package com.inveno.xiandu.view.main.shelf;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.view.Display;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +25,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.ad.bean.IndexedAdValueWrapper;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.app.info.AppInfo;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdBookModel;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.coin.ReadTime;
@@ -71,6 +75,8 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+
 /**
  * Created By huzheng
  * Date 2020-02-28
@@ -88,6 +94,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     private TextView bookbrack_delete_all_delete;
 
     private IosTypeDialog iosTypeDialog;
+    private AdBookModel adBookModel;
 
     public void SearchFragmentMain() {
     }
@@ -147,7 +154,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                     @Override
                     public void onClick(View v) {
                         iosTypeDialog.dismiss();
-                        iosTypeDialog=null;
+                        iosTypeDialog = null;
 
                         shelfAdapter.deleteSelect();
                     }
@@ -156,7 +163,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                     @Override
                     public void onClick(View v) {
                         iosTypeDialog.dismiss();
-                        iosTypeDialog=null;
+                        iosTypeDialog = null;
                     }
                 });
 
@@ -229,6 +236,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         bookrack_recyclerview.setLayoutManager(dataLayoutManager);
         initHeaderView();
         initFooterView();
+        loadAd();
         return inflate;
     }
 
@@ -290,6 +298,14 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         get_coin();
         get_read_time();
         shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
+        List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
+        if (adBookModel != null) {
+            int index = adBookModel.getIndex();
+            if (list.size() >= index) {
+                list.add(index, adBookModel);
+            }
+        }
+        shelfAdapter.setData(list);
     }
 
     //今日金币
@@ -356,7 +372,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                 @Override
                 public void onClick(View v) {
                     iosTypeDialog.dismiss();
-                    iosTypeDialog=null;
+                    iosTypeDialog = null;
 
                     shelfAdapter.deleteSelect();
                     //隐藏与显示父类底部tab
@@ -375,7 +391,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                 @Override
                 public void onClick(View v) {
                     iosTypeDialog.dismiss();
-                    iosTypeDialog=null;
+                    iosTypeDialog = null;
                 }
             });
 
@@ -392,7 +408,28 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         WindowManager windowManager = getActivity().getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
-        lp.width = (int)(windowManager.getDefaultDisplay().getWidth()* 0.8); //设置宽度
+        lp.width = (int) (windowManager.getDefaultDisplay().getWidth() * 0.8); //设置宽度
         dlg.getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 加载广告
+     */
+    private void loadAd() {
+        InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+            @Override
+            public Unit invoke(IndexedAdValueWrapper wrapper) {
+                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                adBookModel = new AdBookModel(wrapper);
+                shelfAdapter.addAd(adBookModel);
+                return null;
+            }
+        }).onFail(new Function2<Integer, String, Unit>() {
+            @Override
+            public Unit invoke(Integer integer, String s) {
+                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                return null;
+            }
+        }).execute();
     }
 }

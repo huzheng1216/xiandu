@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,7 +18,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
@@ -29,6 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+
+import static com.inveno.android.ad.config.ScenarioManifest.CATEGORY;
+import static com.inveno.android.ad.config.ScenarioManifest.GUESS_YOU_LIKE;
 
 /**
  * @author yongji.wang
@@ -47,6 +53,11 @@ public class ClassifyActivity extends BaseActivity {
 
     private List<Fragment> fragments = new ArrayList<>();
     private String[] strings = new String[]{"女生", "男生"};
+
+    /**
+     * 这个页面只有一个广告
+     */
+    private AdModel adModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +94,8 @@ public class ClassifyActivity extends BaseActivity {
         myTabLayout.setSelectedTabIndicatorHeight(DensityUtil.dip2px(this, 2));
         myTabLayout.setNeedSwitchAnimation(true);
         myTabLayout.setupWithViewPager(viewPager);
+
+        loadAd();
     }
 
     public void click_back(View view) {
@@ -111,4 +124,23 @@ public class ClassifyActivity extends BaseActivity {
             return strings[position];
         }
     }
+
+    /**
+     * 加载广告
+     */
+    private void loadAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(CATEGORY, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            adModel = new AdModel(wrapper);
+            for (int i = 0; i < fragments.size(); i++) {
+                ClassifyItemFragment classifyItemFragment = (ClassifyItemFragment) fragments.get(i);
+                classifyItemFragment.notifyAdSetChanged(adModel);
+            }
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+    }
+
 }

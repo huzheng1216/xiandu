@@ -6,7 +6,12 @@ import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -15,7 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.utils.ClickUtil;
@@ -23,6 +30,8 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.view.BaseActivity;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.components.DelayerEditText;
 import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
@@ -32,6 +41,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.inveno.android.ad.config.AdViewType.AD_SEARCH_TYPE;
+import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+import static com.inveno.android.ad.config.ScenarioManifest.SEARCH;
 
 /**
  * Created By huzheng
@@ -54,6 +67,10 @@ public class SerchActivityMain extends BaseActivity {
     View back;
     @BindView(R.id.bt_search_main_cancel)
     View bt_search_main_cancel;
+    @BindView(R.id.search_ad_ll)
+    LinearLayout search_ad_ll;
+
+    private AdModel adModel;
 
     private IosTypeDialog iosTypeDialog;
 
@@ -155,6 +172,7 @@ public class SerchActivityMain extends BaseActivity {
         historyRecyclerView.setAdapter(historyAdapter);
         historyAdapter.notifyDataSetChanged();
         editText.requestFocus();
+        loadAd();
     }
 
     private void search(String title) {
@@ -185,5 +203,24 @@ public class SerchActivityMain extends BaseActivity {
     public void onBackPressed() {
         super.onBackPressed();
         ActivityCompat.finishAfterTransition(SerchActivityMain.this);
+    }
+
+    /**
+     * 加载广告
+     */
+    private void loadAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(SEARCH, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            adModel = new AdModel(wrapper);
+            NormalAdViewHolder holder = ((NormalAdViewHolder)ADViewHolderFactory.create(SerchActivityMain.this, AD_SEARCH_TYPE));
+            holder.onBindViewHolder(SerchActivityMain.this,adModel.getWrapper().getAdValue(),0);
+            ViewGroup view = holder.getViewGroup();
+            search_ad_ll.addView(view);
+            search_ad_ll.setVisibility(View.VISIBLE);
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
     }
 }

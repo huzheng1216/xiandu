@@ -2,6 +2,7 @@ package com.inveno.xiandu.view.ad.holder;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -94,5 +95,9 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
 
     public int getHolderViewType() {
         return holderViewType;
+    }
+
+    public ViewGroup getViewGroup(){
+        return child_rl;
     }
 }

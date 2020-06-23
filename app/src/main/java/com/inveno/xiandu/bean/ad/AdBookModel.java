@@ -1,16 +1,16 @@
 package com.inveno.xiandu.bean.ad;
 
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
-import com.inveno.xiandu.bean.BaseDataBean;
+import com.inveno.xiandu.bean.book.Bookbrack;
 
-public class AdModel extends BaseDataBean {
+public class AdBookModel extends Bookbrack {
 
     private IndexedAdValueWrapper wrapper;
 
-    public AdModel() {
+    public AdBookModel() {
     }
 
-    public AdModel(IndexedAdValueWrapper wrapper) {
+    public AdBookModel(IndexedAdValueWrapper wrapper) {
         this.wrapper = wrapper;
     }
 
@@ -22,8 +22,10 @@ public class AdModel extends BaseDataBean {
         this.wrapper = wrapper;
     }
 
-    @Override
-    public int getType() {
-        return wrapper.getViewType();
+    public int getIndex(){
+        if (wrapper!=null){
+            return wrapper.getIndex();
+        }
+        return 0;
     }
 }

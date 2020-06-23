@@ -4,14 +4,14 @@
     android:layout_height="100dp"
     android:id="@+id/ad_bg_r_text_l_img_rl_id"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    android:paddingBottom="15dp">
 
     <ImageView
         android:id="@+id/ad_l_img_id"
         android:layout_width="104dp"
         android:layout_height="70dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
         android:src="@drawable/ic_header_default"
         android:scaleType="centerCrop"/>
 
@@ -19,8 +19,6 @@
         android:id="@+id/ad_r_text_id"
         android:layout_width="208dp"
         android:layout_height="44dp"
-        android:text="新加坡留学，新加坡这些福利
-政策给你安排的明明又白白"
         android:textColor="#ff333333"
         android:textSize="16sp"
         android:layout_marginTop="28dp"
@@ -34,9 +32,8 @@
         android:text="@string/ad_tag_string"
         android:textColor="#ffffffff"
         android:textSize="10sp"
-        android:layout_marginBottom="12dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignEnd="@+id/ad_l_img_id"
+        android:layout_alignEnd="@id/ad_l_img_id"
         android:gravity="center"
         android:background="@drawable/ad_tag_background"/>
 

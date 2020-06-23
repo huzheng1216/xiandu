@@ -4,7 +4,8 @@
     android:layout_height="94dp"
     android:id="@+id/ad_l_text_r_img_rl_id"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp">
+    android:paddingRight="20dp"
+    android:paddingBottom="12dp">
 
     <ImageView
         android:id="@+id/ad_r_img_id"
@@ -12,7 +13,6 @@
         android:layout_height="70dp"
         android:layout_alignParentRight="true"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
         android:scaleType="centerCrop"/>
 
     <TextView
@@ -32,7 +32,6 @@
         android:textColor="#ffffffff"
         android:textSize="10sp"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="12dp"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:background="@drawable/ad_tag_background"/>
