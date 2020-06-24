@@ -135,6 +135,7 @@ public class ClassifyItemFragment extends BaseFragment {
                         } else {
                             no_book_show.setVisibility(View.GONE);
                         }
+                        addAd();//先展示广告
                     } else {
                         //缓存没数据，需要去请求
                         getClassifyData(1);
@@ -150,6 +151,7 @@ public class ClassifyItemFragment extends BaseFragment {
                 //点击后列表初始化，准备填充新数据
                 mBookselfs.clear();
                 rightDataAdapter.setmDataList(mBookselfs);
+                initAd();//先展示广告
                 book_sum.setText("共计0本");
                 mClassifyDatas.remove(mMenus.get(knowClassifyPosition).getCategory_id());
                 //刷新请求新数据
@@ -206,8 +208,8 @@ public class ClassifyItemFragment extends BaseFragment {
                             mMenus = classifyMenus;
                             leftMenuAdapter.setMenusData(mMenus);
                             knowClassifyPosition = 0;
-                            getClassifyData(1);
                             initAd();//先展示广告
+                            getClassifyData(1);
                             return null;
                         }
                     })
@@ -304,6 +306,14 @@ public class ClassifyItemFragment extends BaseFragment {
 
     public void notifyAdSetChanged(AdModel adModel) {
         this.adModel = adModel;
+        int index = adModel.getWrapper().getIndex();
+        if (mBookselfs != null && mBookselfs.size() >= index) {
+            mBookselfs.add(index, adModel);
+            rightDataAdapter.setmDataList(mBookselfs);
+        }
+    }
+
+    private void addAd(){
         int index = adModel.getWrapper().getIndex();
         if (mBookselfs != null && mBookselfs.size() >= index) {
             mBookselfs.add(index, adModel);
