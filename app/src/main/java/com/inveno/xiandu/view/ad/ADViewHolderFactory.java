@@ -9,6 +9,7 @@ import com.inveno.xiandu.view.ad.holder.AdBookDetailLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdBookDetailPopLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdBookShelfLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdCategoryLImgRTxtHolder;
+import com.inveno.xiandu.view.ad.holder.AdFootTraceLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdGuessLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdLTxtRImgHolder;
 import com.inveno.xiandu.view.ad.holder.AdRankingListLImgRTxtHolder;
@@ -49,6 +50,9 @@ public class ADViewHolderFactory {
                 break;
             case AD_BOOK_DETAIL_POP_TYPE:
                 holder = AdBookDetailPopLImgRTxtHolder.create(context);
+                break;
+            case AD_READ_FOOT_TRACE_TYPE:
+                holder = AdFootTraceLImgRTxtHolder.create(context);
                 break;
             default:
                 break;

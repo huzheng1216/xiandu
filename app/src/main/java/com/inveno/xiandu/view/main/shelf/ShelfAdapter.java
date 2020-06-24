@@ -127,8 +127,8 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     @Override
     public int getItemViewType(int position) {
         if (getHeaderView() == null && getFooterView() == null) {
-            if (data.size() > position - 1 && position > 0) {
-                if (data.get(position - 1) instanceof AdBookModel) {
+            if (data.size() > position) {
+                if (data.get(position) instanceof AdBookModel) {
                     return AD_BOOK_SHELF_TYPE;
                 }
             }
@@ -146,7 +146,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                 }
                 return CONTENT_ITEM_TYPE;
             } else {
-                if (data.get(position - 1) instanceof AdBookModel) {
+                if (data.get(position) instanceof AdBookModel) {
                     return AD_BOOK_SHELF_TYPE;
                 }
                 return CONTENT_ITEM_TYPE;

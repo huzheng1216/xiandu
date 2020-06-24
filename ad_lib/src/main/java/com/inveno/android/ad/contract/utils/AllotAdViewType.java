@@ -8,7 +8,7 @@ import static com.inveno.android.ad.config.AdViewType.*;
 public class AllotAdViewType {
 
     public static int allot(IndexedAdValueWrapper wrapper) {
-        return allot(wrapper.getScenario(),wrapper.getDisplayType());
+        return allot(wrapper.getScenario(), wrapper.getDisplayType());
     }
 
     /**
@@ -50,7 +50,7 @@ public class AllotAdViewType {
      *
      * @return
      */
-    public static int allot(String scenario,int desplayType) {
+    public static int allot(String scenario, int desplayType) {
 
         switch (scenario) {
             case ScenarioManifest.READER_BOTTOM:
@@ -99,7 +99,7 @@ public class AllotAdViewType {
 
             case ScenarioManifest.READ_FOOT_TRACE:
                 // 阅读足迹广告
-                break;
+                return AD_READ_FOOT_TRACE_TYPE;
 
             default:
                 break;
