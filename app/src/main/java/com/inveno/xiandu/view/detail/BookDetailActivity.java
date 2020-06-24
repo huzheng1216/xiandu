@@ -70,6 +70,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.AdViewType.AD_BOOK_DETAIL_POP_TYPE;
 import static com.inveno.android.ad.config.AdViewType.AD_BOOK_DETAIL_TYPE;
 import static com.inveno.android.ad.config.ScenarioManifest.BOOK_DETAIL;
 
@@ -143,6 +144,8 @@ public class BookDetailActivity extends BaseActivity {
 
     @BindView(R.id.ad_bottom_viewgroup)
     LinearLayout ad_bottom_viewgroup;
+
+    LinearLayout ad_pop_viewgroup;
 
     private AdModel adModel;
     private AdModel adBottomModel;
@@ -315,6 +318,7 @@ public class BookDetailActivity extends BaseActivity {
         pop_directory_capter_num = contentView.findViewById(R.id.pop_directory_capter_num);
         pop_directory_capter_order = contentView.findViewById(R.id.pop_directory_capter_order);
         pop_directory_category_list = contentView.findViewById(R.id.pop_directory_category_list);
+        ad_pop_viewgroup = contentView.findViewById(R.id.ad_pop_viewgroup);
     }
 
     private void openPopWindow() {
@@ -322,6 +326,7 @@ public class BookDetailActivity extends BaseActivity {
         popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
         //添加数据填充
         setData();
+        loadPopAd();
         //添加pop窗口关闭事件，主要是实现关闭时改变背景的透明度
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -587,7 +592,7 @@ public class BookDetailActivity extends BaseActivity {
     private void loadAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            adModel = setAdData(ad_viewgroup , wrapper);
+            adModel = setAdData(ad_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
             return null;
         }).onFail((integer, s) -> {
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
@@ -596,7 +601,7 @@ public class BookDetailActivity extends BaseActivity {
 
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            adBottomModel = setAdData(ad_bottom_viewgroup , wrapper);
+            adBottomModel = setAdData(ad_bottom_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
             return null;
         }).onFail((integer, s) -> {
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
@@ -604,13 +609,27 @@ public class BookDetailActivity extends BaseActivity {
         }).execute();
     }
 
-    private AdModel setAdData(ViewGroup viewGroup , IndexedAdValueWrapper wrapper){
+    private AdModel setAdData(ViewGroup viewGroup , IndexedAdValueWrapper wrapper , int type){
         AdModel adModel = new AdModel(wrapper);
-        NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(BookDetailActivity.this, AD_BOOK_DETAIL_TYPE));
+        NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(BookDetailActivity.this, type));
         holder.onBindViewHolder(BookDetailActivity.this,wrapper.getAdValue(),0);
         ViewGroup view = holder.getViewGroup();
         viewGroup.addView(view);
         viewGroup.setVisibility(View.VISIBLE);
         return adModel;
     }
+
+    private void loadPopAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            if(ad_pop_viewgroup!=null) {
+                setAdData(ad_pop_viewgroup, wrapper,AD_BOOK_DETAIL_POP_TYPE);
+            }
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+    }
+
 }

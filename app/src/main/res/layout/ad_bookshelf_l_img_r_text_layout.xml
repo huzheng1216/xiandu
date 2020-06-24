@@ -18,27 +18,27 @@
         android:id="@+id/ad_r_text_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="12dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
-        android:layout_toRightOf="@id/ad_l_img_id"
+        android:layout_toEndOf="@id/ad_l_img_id"
         android:gravity="center_vertical"
-        android:text="新加坡留学"
         android:textColor="#ff333333"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        />
 
     <TextView
         android:id="@+id/tv_ad_desc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="44dp"
-        android:layout_toRightOf="@id/ad_l_img_id"
-        android:text="新加坡这些福利政策给你安排的明明又白
-白吧啦吧啦吧"
+        android:layout_height="45dp"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@id/ad_l_img_id"
         android:textColor="#ffa3a9b3"
         android:textSize="14sp"
-        android:maxLines="2"/>
+        android:maxLines="2"
+        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"
+        />
 
     <TextView
         android:id="@+id/ad_l_tag_id"
