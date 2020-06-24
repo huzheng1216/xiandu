@@ -19,6 +19,7 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.AppInfoUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
@@ -107,7 +108,7 @@ public class SettingActivity extends TitleBarBaseActivity {
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
-        lp.width = (int)(windowManager.getDefaultDisplay().getWidth()* 0.8); //设置宽度
+        lp.width = (int) (windowManager.getDefaultDisplay().getWidth() * 0.8); //设置宽度
         dlg.getWindow().setAttributes(lp);
     }
 
@@ -175,6 +176,7 @@ public class SettingActivity extends TitleBarBaseActivity {
             public void onClick(View v) {
                 Toaster.showToastCenter(SettingActivity.this, "退出登录");
                 AppPersistRepository.get().save(LoginAPI.USER_DATA_KEY, "");
+                ServiceContext.userService().setUserInfo(null);
                 EventService.Companion.post(EventConstant.LOGOUT);
                 finish();
             }

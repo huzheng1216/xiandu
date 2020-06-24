@@ -49,6 +49,7 @@
             android:background="@drawable/mine_card_bg"
             android:orientation="horizontal">
             <LinearLayout
+                android:id="@+id/mine_my_coin_line"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -73,6 +74,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/mine_today_coin_line"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

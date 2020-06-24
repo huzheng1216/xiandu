@@ -31,8 +31,8 @@
 
     <ImageView
         android:id="@+id/small_image_img"
-        android:layout_width="80dp"
-        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
         android:src="@drawable/background_bookshelf_adapter_foot"
         android:layout_alignParentEnd="true"/>
 </RelativeLayout>

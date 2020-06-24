@@ -464,7 +464,6 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         }
     }
 
-
     public interface OnItemClickListener {
         void onItemClick(BaseDataBean baseDataBean);
     }

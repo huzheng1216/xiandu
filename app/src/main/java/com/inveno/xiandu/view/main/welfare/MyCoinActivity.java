@@ -45,12 +45,12 @@ public class MyCoinActivity extends BaseActivity {
     private TextView coin_today;
     private TextView coin_sum_get;
     private TextView coin_exchange_rate;
-    private RecyclerView coin_detail_recycleview;
     private CoinDetailAdapter coinDetailAdapter;
     private ArrayList<BaseDataBean> coinDetailDatas = new ArrayList<>();
 
     private int pageKnow = 0;
     private UserCoin mUserCoin;
+    private String mUserCoinStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +58,8 @@ public class MyCoinActivity extends BaseActivity {
         setContentView(R.layout.activity_my_coin);
         setStatusBar(R.color.my_coin_top_color, true);
 
-        String json = getIntent().getStringExtra("mUserCoin");
-        mUserCoin = GsonUtil.gsonToObject(json, UserCoin.class);
+        mUserCoinStr = getIntent().getStringExtra("mUserCoin");
+        mUserCoin = GsonUtil.gsonToObject(mUserCoinStr, UserCoin.class);
         initView();
     }
 
@@ -71,7 +71,7 @@ public class MyCoinActivity extends BaseActivity {
         coin_sum_get = findViewById(R.id.coin_sum_get);
         coin_exchange_rate = findViewById(R.id.coin_exchange_rate);
 
-        coin_detail_recycleview = findViewById(R.id.coin_detail_recycleview);
+        RecyclerView coin_detail_recycleview = findViewById(R.id.coin_detail_recycleview);
         coinDetailAdapter = new CoinDetailAdapter(this, this, coinDetailDatas);
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(this);
         coin_detail_recycleview.setLayoutManager(dataLayoutManager);
@@ -93,7 +93,7 @@ public class MyCoinActivity extends BaseActivity {
     /**
      * 获取金币和明细
      */
-    public void getCoin(){
+    public void getCoin() {
         APIContext.coinApi().queryCoin()
                 .onSuccess(new Function1<UserCoinOut, Unit>() {
                     @Override
@@ -114,7 +114,7 @@ public class MyCoinActivity extends BaseActivity {
                 }).execute();
     }
 
-    public void getCoinDetail(){
+    public void getCoinDetail() {
         APIContext.coinApi().getCoinDetail(pageKnow)
                 .onSuccess(new Function1<CoinDetail, Unit>() {
                     @Override
@@ -139,6 +139,6 @@ public class MyCoinActivity extends BaseActivity {
     }
 
     public void coin_top_up(View view) {
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_COIN_TOP_UP).navigation();
+        ARouter.getInstance().build(ARouterPath.ACTIVITY_COIN_TOP_UP).withString("mUserCoin", mUserCoinStr).navigation();
     }
 }

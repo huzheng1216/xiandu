@@ -19,6 +19,7 @@ import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
@@ -76,9 +77,13 @@ public class WelfareFragment extends BaseFragment {
         missionAdapter.setOnitemClickListener(new MissionAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (getActivity() instanceof MainActivity) {
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    mainActivity.setCheckViewPager(1);
+                if (ServiceContext.userService().isLogin()) {
+                    if (getActivity() instanceof MainActivity) {
+                        MainActivity mainActivity = (MainActivity) getActivity();
+                        mainActivity.setCheckViewPager(1);
+                    }
+                } else {
+                    ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
                 }
             }
         });
@@ -96,9 +101,13 @@ public class WelfareFragment extends BaseFragment {
 
     @OnClick(R.id.welfare_my_coin)
     public void jump_my_coin() {
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_MY_COIN)
-                .withString("mUserCoin", GsonUtil.objectToJson(mUserCoin))
-                .navigation();
+        if (ServiceContext.userService().isLogin()) {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_MY_COIN)
+                    .withString("mUserCoin", GsonUtil.objectToJson(mUserCoin))
+                    .navigation();
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
     }
 
     //今日金币

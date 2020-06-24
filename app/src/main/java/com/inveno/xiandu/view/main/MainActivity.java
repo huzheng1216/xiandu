@@ -69,7 +69,6 @@ public class MainActivity extends BaseActivity {
     private UserCoin userCoin;
 
     private Dialog dialog;
-    private boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +138,6 @@ public class MainActivity extends BaseActivity {
             //用户协议
             agreementDialog();
         }
-
-        isLogin = ServiceContext.userService().getUserPid() != 0;
     }
 
     private Handler handler = new Handler();

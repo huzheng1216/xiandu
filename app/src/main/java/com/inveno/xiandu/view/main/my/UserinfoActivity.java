@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -181,7 +180,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
     private void showPopwindow() {
         //加载弹出框的布局
         contentView = LayoutInflater.from(UserinfoActivity.this).inflate(
-                R.layout.edit_gender_view, null);
+                R.layout.pop_edit_gender_view, null);
 
         popupWindow = new PopupWindow(contentView,
                 ViewGroup.LayoutParams.MATCH_PARENT,

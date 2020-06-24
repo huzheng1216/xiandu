@@ -9,10 +9,20 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.coin.UserCoin;
+import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
+
+import java.text.DecimalFormat;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.functions.Function2;
 
 /**
  * @author yongji.wang
@@ -44,6 +54,8 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     private EditText coin_top_up_phone_num;
 
+    private UserCoin mUserCoin;
+
     @Override
     public String getCenterText() {
         return "我要提现";
@@ -58,6 +70,8 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setStatusBar(R.color.white, true);
+        String mUserCoinStr = getIntent().getStringExtra("mUserCoin");
+        mUserCoin = GsonUtil.gsonToObject(mUserCoinStr, UserCoin.class);
     }
 
     @Override
@@ -84,10 +98,44 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
         coin_top_up_phone_num = findViewById(R.id.coin_top_up_phone_num);
 
-        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPhone_num() != null){
+        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPhone_num() != null) {
             coin_top_up_phone_num.setText(ServiceContext.userService().getUserInfo().getPhone_num());
-        }else{
+        } else {
             coin_top_up_phone_num.setHint("请输入电话号码");
+        }
+
+        if (mUserCoin != null) {
+            setView();
+        } else {
+            APIContext.coinApi().queryCoin()
+                    .onSuccess(new Function1<UserCoinOut, Unit>() {
+                        @Override
+                        public Unit invoke(UserCoinOut userCoin) {
+                            mUserCoin = userCoin.getCoin();
+                            setView();
+                            return null;
+                        }
+                    })
+                    .onFail(new Function2<Integer, String, Unit>() {
+                        @Override
+                        public Unit invoke(Integer integer, String s) {
+                            return null;
+                        }
+                    }).execute();
+        }
+
+    }
+
+    private void setView() {
+        coin_top_up_sum.setText(String.valueOf(mUserCoin.getBalance()));
+        int rate = 10000;
+        try {
+            DecimalFormat df = new DecimalFormat("######0.00");
+            rate = Integer.parseInt(mUserCoin.getExchage_rate().split("金币")[0]);
+            String rnbStr = df.format(mUserCoin.getBalance() / (double) rate);
+            coin_top_up_rnb.setText(String.format("约%s元", rnbStr));
+        } catch (Exception e) {
+
         }
     }
 
@@ -148,11 +196,11 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     }
 
     public void exchange(View view) {
-        Toaster.showToastCenter(this, "功能暂未开放，敬请期待");
+        Toaster.showToastCenter(this, "金币余额不足");
     }
 
     public void coinRecord(View view) {
-        Toaster.showToastCenter(this, "功能暂未开放，敬请期待");
+        Toaster.showToastCenter(this, "您没有充值记录");
     }
 
 }

@@ -72,8 +72,22 @@ public class MineFragment extends BaseFragment {
         clickUser();
     }
 
+    @OnClick(R.id.mine_my_coin_line)
+    void my_coin(){
+        if (!ServiceContext.userService().isLogin()){
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
+    }
+
+    @OnClick(R.id.mine_today_coin_line)
+    void today_coin(){
+        if (!ServiceContext.userService().isLogin()){
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
+    }
+
     private void clickUser() {
-        if (isLogin) {
+        if (ServiceContext.userService().isLogin()) {
             Intent intent = new Intent(getActivity(), UserinfoActivity.class);
             startActivity(intent);
         } else {
@@ -112,7 +126,6 @@ public class MineFragment extends BaseFragment {
 
     private EventCanceler event_login;
     private EventCanceler event_logout;
-    private boolean isLogin = false;
 
     public static MineFragment newInstance(String name) {
 
@@ -158,7 +171,6 @@ public class MineFragment extends BaseFragment {
         event_login = EventService.Companion.register(EventConstant.REFRESH_USER_DATA, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
-                isLogin = true;
                 UserInfo userInfo = ServiceContext.userService().getUserInfo();
                 if (TextUtils.isEmpty(userInfo.getUser_name())) {
                     user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
@@ -172,7 +184,6 @@ public class MineFragment extends BaseFragment {
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
-                isLogin = false;
                 user_name.setText("点我登陆");
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
             }
@@ -191,10 +202,8 @@ public class MineFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         if (firstVisble) {
-            isLogin = false;
             UserInfo userInfo = ServiceContext.userService().getUserInfo();
             if (userInfo != null) {
-                isLogin = true;
                 if (TextUtils.isEmpty(userInfo.getUser_name())) {
                     user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
                 } else {

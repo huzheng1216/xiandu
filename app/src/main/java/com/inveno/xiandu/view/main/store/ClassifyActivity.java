@@ -45,7 +45,7 @@ import static com.inveno.android.ad.config.ScenarioManifest.GUESS_YOU_LIKE;
  */
 @Route(path = ARouterPath.ACTIVITY_CLASSIFY)
 public class ClassifyActivity extends BaseActivity {
-
+    private OnBackPressedClickListener backPressedClickListener;
     private ImageView classify_search_img;
 
     private MyTabLayout myTabLayout;
@@ -102,6 +102,9 @@ public class ClassifyActivity extends BaseActivity {
         finish();
     }
 
+    public void setBackPressedClickListener(OnBackPressedClickListener backPressedClickListener) {
+        this.backPressedClickListener = backPressedClickListener;
+    }
 
     public class MyAdapter extends FragmentPagerAdapter {
         public MyAdapter(FragmentManager fm) {
@@ -128,7 +131,7 @@ public class ClassifyActivity extends BaseActivity {
     /**
      * 加载广告
      */
-    private void loadAd(){
+    private void loadAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(CATEGORY, this).onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
@@ -142,5 +145,15 @@ public class ClassifyActivity extends BaseActivity {
             return null;
         }).execute();
     }
+//
+//    @Override
+//    public void onBackPressed() {
+//        if (backPressedClickListener != null) {
+//            backPressedClickListener.onBackPressed();
+//        }
+//    }
 
+    public interface OnBackPressedClickListener {
+        void onBackPressed();
+    }
 }
