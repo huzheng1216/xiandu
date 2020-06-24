@@ -3,7 +3,6 @@ package com.inveno.xiandu.view.main.my;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.basics.service.event.EventCanceler;
 import com.inveno.android.basics.service.event.EventListener;
 import com.inveno.android.basics.service.event.EventService;
-import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.bean.coin.UserCoinOut;
@@ -25,14 +22,12 @@ import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
-import com.inveno.xiandu.utils.AppInfoUtils;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.SPUtils;
-import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.view.BaseFragment;
-import com.inveno.xiandu.view.splash.ChoiseGenderActivity;
+import com.inveno.xiandu.view.main.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -49,6 +44,8 @@ import kotlin.jvm.functions.Function2;
  * Des
  */
 public class MineFragment extends BaseFragment {
+    public static final int MINE_REQUEST_CODE = 10002;
+    public static final int RESULT_READ_PRE = 10003;
 
     @BindView(R.id.iv_user_pic)
     ImageView pic;
@@ -91,15 +88,16 @@ public class MineFragment extends BaseFragment {
 
     @OnClick(R.id.mine_readed)
     void mine_readed() {
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_FOOTPRINT).navigation();
+        Intent intent = new Intent(getActivity(), ReadFootprintActivity.class);
+        startActivityForResult(intent, MINE_REQUEST_CODE);
     }
 
     @OnClick(R.id.mine_read)
     void mine_read() {
 //        ARouter.getInstance().build(ARouterPath.ACTIVITY_READ_PREFERENCES).navigation();
         Intent intent = new Intent(getActivity(), ChoiseGenderActivity.class);
-        intent.putExtra("request_code", ChoiseGenderActivity.MINE_REQUEST_CODE);
-        startActivityForResult(intent, ChoiseGenderActivity.MINE_REQUEST_CODE);
+        intent.putExtra("request_code", MINE_REQUEST_CODE);
+        startActivityForResult(intent, MINE_REQUEST_CODE);
     }
 
     @OnClick(R.id.mine_qq)
@@ -248,7 +246,7 @@ public class MineFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ChoiseGenderActivity.MINE_REQUEST_CODE && resultCode == ChoiseGenderActivity.MINE_REQUEST_CODE) {
+        if (requestCode == MINE_REQUEST_CODE && resultCode == MINE_REQUEST_CODE) {
             int gender = 0;
             if (data != null) {
                 gender = data.getIntExtra("gender", 0);
@@ -260,6 +258,11 @@ public class MineFragment extends BaseFragment {
                 } else if (gender == 2) {
                     mine_read_gender_tv.setText("女");
                 }
+            }
+        } else if (requestCode == MINE_REQUEST_CODE && resultCode == RESULT_READ_PRE) {
+            if (getActivity() instanceof MainActivity) {
+                MainActivity mainActivity = (MainActivity) getActivity();
+                mainActivity.setCheckViewPager(1);
             }
         }
     }

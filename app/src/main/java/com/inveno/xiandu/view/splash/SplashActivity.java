@@ -1,25 +1,12 @@
 package com.inveno.xiandu.view.splash;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.UnderlineSpan;
-import android.view.LayoutInflater;
-import android.view.View;
+import android.os.Handler;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.ad.contract.listener.SplashAdListener;
@@ -28,12 +15,12 @@ import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
-import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.init.AppInitListener;
 import com.inveno.xiandu.view.init.AppInitViewProxy;
+import com.inveno.xiandu.view.main.my.ChoiseGenderActivity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +84,12 @@ public class SplashActivity extends BaseActivity implements AppInitListener {
 
         initViewProxy = new AppInitViewProxy(this, this);
 
-        checkAndInit();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkAndInit();
+            }
+        }, 1500);
     }
 
 

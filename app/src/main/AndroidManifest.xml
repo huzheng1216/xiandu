@@ -64,9 +64,6 @@
             android:name=".view.main.my.ReadFootprintActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.main.my.ReadPreferencesActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".view.main.my.SendLuckymoneyActivity"
             android:theme="@style/AppTheme" />
         <activity
@@ -100,7 +97,7 @@
             android:name=".view.main.store.RankingActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.splash.ChoiseGenderActivity"
+            android:name=".view.main.my.ChoiseGenderActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.main.store.ClassifyActivity"

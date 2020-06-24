@@ -118,7 +118,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         } else if (holder instanceof FooterViewHolder) {
             ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
             if (mDataList.size() < 10 || isNotMore) {
-                ((FooterViewHolder) holder).load_more_tv.setText("沒有跟多数据");
+                ((FooterViewHolder) holder).load_more_tv.setText("沒有更多数据");
             } else {
                 ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
             }
