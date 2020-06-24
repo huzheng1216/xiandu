@@ -12,12 +12,11 @@
         android:layout_width="50dp"
         android:layout_height="70dp"
         android:layout_marginTop="12dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_header_default" />
+        android:scaleType="centerCrop" />
 
     <TextView
         android:id="@+id/ad_r_text_id"
-        android:layout_width="80dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="12dp"
@@ -31,14 +30,15 @@
     <TextView
         android:id="@+id/tv_ad_desc"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="44dp"
         android:layout_toRightOf="@id/ad_l_img_id"
         android:text="新加坡这些福利政策给你安排的明明又白
 白吧啦吧啦吧"
         android:textColor="#ffa3a9b3"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:maxLines="2"/>
 
     <TextView
         android:id="@+id/ad_l_tag_id"
