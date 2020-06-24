@@ -93,12 +93,14 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         for (int i = data.size() - 1; i >= 0; i--) {
             if (data.get(i).isSelect()) {
                 Bookbrack bookbrack = data.get(i);
-                bookbracks.add(bookbrack);
-                BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
-                if (bookShelf != null) {
-                    SQL.getInstance().delBookShelf(bookShelf);
+                if (!(bookbrack instanceof AdBookModel)) {
+                    bookbracks.add(bookbrack);
+                    BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                    if (bookShelf != null) {
+                        SQL.getInstance().delBookShelf(bookShelf);
+                    }
+                    data.remove(bookbrack);
                 }
-                data.remove(bookbrack);
             }
         }
 

@@ -66,7 +66,7 @@ public class InvenoAdService {
                 Rule rule = rule_list.getRule().get(0).get(0);
                 Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
 
-                zheShiGeKeng(scenario, rule);
+//                zheShiGeKeng(scenario, rule);
                 InfoAdParam infoAdParam = InfoAdParam.InfoAdParamBuilder.newBuilder()
                         .withContext(context)
                         .withAdIndex(rule.getPos())
@@ -107,7 +107,7 @@ public class InvenoAdService {
                 List<Rule> rules = rule_list.getRule().get(0);
                 for (int i = 0; i < rules.size(); i++) {
                     Rule rule = rules.get(i);
-                    zheShiGeKeng(scenario, rule);
+//                    zheShiGeKeng(scenario, rule);
                     InfoAdParam infoAdParam = InfoAdParam.InfoAdParamBuilder.newBuilder()
                             .withContext(context)
                             .withAdIndex(rule.getPos())
@@ -142,67 +142,67 @@ public class InvenoAdService {
         return resultList;
     }
 
-    private void zheShiGeKeng(String scenario, Rule rule) {
-        int displayType = rule.getDisplay_type();
-        switch (scenario) {
-            case READER_BOTTOM:
-                // 阅读器底部广告
-                rule.setWidth(80);
-                rule.setHeight(60);
-                break;
-            case EDITOR_RECOMMEND:
-                // 小编推荐模块广告
-                if (displayType == 1) {
-                    rule.setWidth(104);
-                    rule.setHeight(70);
-                } else {
-                    rule.setWidth(320);
-                    rule.setHeight(188);
-                }
-                break;
-            case SPLASH:
-                // 开屏广告
-                break;
-            case BOY_GIRL_BOTTOM:
-                // 男生/女生热文底部广告
-            case SEARCH:
-                // 搜索框广告
-            case BOOK_DETAIL:
-                // 书籍详情页广告
-                rule.setWidth(104);
-                rule.setHeight(70);
-                break;
-            case GUESS_YOU_LIKE:
-                // 人气精选/猜你喜欢广告
-                rule.setWidth(70);
-                rule.setHeight(95);
-                break;
-            case READER_BETWEEN:
-                // 阅读器间隔广告
-                rule.setWidth(320);
-                rule.setHeight(188);
-                break;
-            case RANKING_LIST:
-                // 排行榜广告
-            case CATEGORY:
-                // 分类页广告
-                rule.setWidth(38);
-                rule.setHeight(50);
-                break;
-            case BOOK_SHELF:
-                // 书架广告
-                rule.setWidth(50);
-                rule.setHeight(70);
-                break;
-            case READ_FOOT_TRACE:
-                // 阅读足迹广告
-                break;
-            default:
-                break;
-        }
-
-
-    }
+//    private void zheShiGeKeng(String scenario, Rule rule) {
+//        int displayType = rule.getDisplay_type();
+//        switch (scenario) {
+//            case READER_BOTTOM:
+//                // 阅读器底部广告
+//                rule.setWidth(80);
+//                rule.setHeight(60);
+//                break;
+//            case EDITOR_RECOMMEND:
+//                // 小编推荐模块广告
+//                if (displayType == 1) {
+//                    rule.setWidth(104);
+//                    rule.setHeight(70);
+//                } else {
+//                    rule.setWidth(320);
+//                    rule.setHeight(188);
+//                }
+//                break;
+//            case SPLASH:
+//                // 开屏广告
+//                break;
+//            case BOY_GIRL_BOTTOM:
+//                // 男生/女生热文底部广告
+//            case SEARCH:
+//                // 搜索框广告
+//            case BOOK_DETAIL:
+//                // 书籍详情页广告
+//                rule.setWidth(104);
+//                rule.setHeight(70);
+//                break;
+//            case GUESS_YOU_LIKE:
+//                // 人气精选/猜你喜欢广告
+//                rule.setWidth(70);
+//                rule.setHeight(95);
+//                break;
+//            case READER_BETWEEN:
+//                // 阅读器间隔广告
+//                rule.setWidth(320);
+//                rule.setHeight(188);
+//                break;
+//            case RANKING_LIST:
+//                // 排行榜广告
+//            case CATEGORY:
+//                // 分类页广告
+//                rule.setWidth(38);
+//                rule.setHeight(50);
+//                break;
+//            case BOOK_SHELF:
+//                // 书架广告
+//                rule.setWidth(50);
+//                rule.setHeight(70);
+//                break;
+//            case READ_FOOT_TRACE:
+//                // 阅读足迹广告
+//                break;
+//            default:
+//                break;
+//        }
+//
+//
+//    }
 
     private String getAdSpaceId(String scenario) {
         Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);
