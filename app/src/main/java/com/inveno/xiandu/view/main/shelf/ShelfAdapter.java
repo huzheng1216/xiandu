@@ -186,7 +186,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             if (getHeaderView() != null) {
                 realPosition = position - 1;
             }
-            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), realPosition);
+            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), position);
         } else {
 
             int realPosition = position;

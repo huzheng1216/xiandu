@@ -127,7 +127,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
             if (getHeaderView() != null && position > 0) {
                 dataPosition = position - 1;
             }
-            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), dataPosition);
+            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), position);
         }
     }
 
