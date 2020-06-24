@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -26,7 +29,10 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
+import com.inveno.android.ad.bean.IndexedAdValueWrapper;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookChapter;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.BookShelfList;
@@ -42,9 +48,12 @@ import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseActivity;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RelevantBookAdapter;
 import com.inveno.xiandu.view.main.my.UserinfoActivity;
 import com.inveno.xiandu.view.read.CategoryAdapter;
+import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +69,10 @@ import io.reactivex.schedulers.Schedulers;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
+
+import static com.inveno.android.ad.config.AdViewType.AD_BOOK_DETAIL_POP_TYPE;
+import static com.inveno.android.ad.config.AdViewType.AD_BOOK_DETAIL_TYPE;
+import static com.inveno.android.ad.config.ScenarioManifest.BOOK_DETAIL;
 
 /**
  * @author yongji.wang
@@ -125,6 +138,17 @@ public class BookDetailActivity extends BaseActivity {
 
     @BindView(R.id.book_detail_bottom_recyclerview)
     RecyclerView book_detail_bottom_recyclerview;
+
+    @BindView(R.id.ad_viewgroup)
+    LinearLayout ad_viewgroup;
+
+    @BindView(R.id.ad_bottom_viewgroup)
+    LinearLayout ad_bottom_viewgroup;
+
+    LinearLayout ad_pop_viewgroup;
+
+    private AdModel adModel;
+    private AdModel adBottomModel;
 
     private RelevantBookAdapter relevantBookAdapter;
     private List<BookShelf> bookShelfs = new ArrayList<>();
@@ -248,6 +272,8 @@ public class BookDetailActivity extends BaseActivity {
         });
         getRelevantBook();
         initDirectoryPopwindow();
+
+        loadAd();
     }
 
     private boolean isTextView(TextView textView) {
@@ -292,6 +318,7 @@ public class BookDetailActivity extends BaseActivity {
         pop_directory_capter_num = contentView.findViewById(R.id.pop_directory_capter_num);
         pop_directory_capter_order = contentView.findViewById(R.id.pop_directory_capter_order);
         pop_directory_category_list = contentView.findViewById(R.id.pop_directory_category_list);
+        ad_pop_viewgroup = contentView.findViewById(R.id.ad_pop_viewgroup);
     }
 
     private void openPopWindow() {
@@ -299,6 +326,7 @@ public class BookDetailActivity extends BaseActivity {
         popupWindow.showAtLocation(contentView, Gravity.BOTTOM, 0, 0);
         //添加数据填充
         setData();
+        loadPopAd();
         //添加pop窗口关闭事件，主要是实现关闭时改变背景的透明度
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
@@ -557,4 +585,51 @@ public class BookDetailActivity extends BaseActivity {
         super.onBackPressed();
         ActivityCompat.finishAfterTransition(this);
     }
+
+    /**
+     * 加载广告
+     */
+    private void loadAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            adModel = setAdData(ad_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            adBottomModel = setAdData(ad_bottom_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+    }
+
+    private AdModel setAdData(ViewGroup viewGroup , IndexedAdValueWrapper wrapper , int type){
+        AdModel adModel = new AdModel(wrapper);
+        NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(BookDetailActivity.this, type));
+        holder.onBindViewHolder(BookDetailActivity.this,wrapper.getAdValue(),0);
+        ViewGroup view = holder.getViewGroup();
+        viewGroup.addView(view);
+        viewGroup.setVisibility(View.VISIBLE);
+        return adModel;
+    }
+
+    private void loadPopAd(){
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            if(ad_pop_viewgroup!=null) {
+                setAdData(ad_pop_viewgroup, wrapper,AD_BOOK_DETAIL_POP_TYPE);
+            }
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+    }
+
 }

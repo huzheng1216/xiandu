@@ -30,11 +30,18 @@
         android:layout_gravity="end"
         android:text="展开"
         android:textColor="#608694" />
+
+    <LinearLayout
+        android:id="@+id/ad_viewgroup"
+        android:layout_width="match_parent"
+        android:layout_height="94dp"
+        android:orientation="vertical"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:id="@+id/book_capter"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp">
+        android:layout_height="50dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

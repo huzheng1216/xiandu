@@ -5,6 +5,8 @@ import android.content.Context;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.inveno.xiandu.view.ad.holder.AdBGRTxtLImgHolder;
+import com.inveno.xiandu.view.ad.holder.AdBookDetailLImgRTxtHolder;
+import com.inveno.xiandu.view.ad.holder.AdBookDetailPopLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdBookShelfLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdCategoryLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdGuessLImgRTxtHolder;
@@ -41,6 +43,12 @@ public class ADViewHolderFactory {
                 break;
             case AD_BOOK_SHELF_TYPE:
                 holder = AdBookShelfLImgRTxtHolder.create(context);
+                break;
+            case AD_BOOK_DETAIL_TYPE:
+                holder = AdBookDetailLImgRTxtHolder.create(context);
+                break;
+            case AD_BOOK_DETAIL_POP_TYPE:
+                holder = AdBookDetailPopLImgRTxtHolder.create(context);
                 break;
             default:
                 break;

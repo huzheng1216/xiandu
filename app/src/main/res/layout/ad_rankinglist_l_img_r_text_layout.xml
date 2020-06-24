@@ -12,7 +12,6 @@
         android:layout_width="38dp"
         android:layout_height="50dp"
         android:layout_marginTop="12dp"
-        android:src="@drawable/ic_header_default"
         android:scaleType="centerCrop"/>
 
     <TextView

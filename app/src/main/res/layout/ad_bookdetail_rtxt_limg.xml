@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="94dp"
     android:id="@+id/ad_bg_r_text_l_img_rl_id"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="15dp">
+    android:paddingRight="20dp">
 
     <ImageView
         android:id="@+id/ad_l_img_id"
         android:layout_width="104dp"
         android:layout_height="70dp"
-        android:layout_marginTop="15dp"
+        android:layout_centerVertical="true"
         android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/ad_r_text_id"
-        android:layout_width="208dp"
+        android:layout_width="0dp"
         android:layout_height="44dp"
         android:textColor="#ff333333"
         android:textSize="16sp"
-        android:layout_marginTop="28dp"
         android:gravity="center_vertical"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ad_l_img_id"
+        android:layout_marginLeft="8dp"/>
 
     <TextView
         android:id="@+id/ad_l_tag_id"
@@ -31,9 +32,15 @@
         android:text="@string/ad_tag_string"
         android:textColor="#ffffffff"
         android:textSize="10sp"
-        android:layout_alignParentBottom="true"
         android:layout_alignEnd="@id/ad_l_img_id"
         android:gravity="center"
-        android:background="@drawable/ad_tag_background"/>
+        android:background="@drawable/ad_tag_background"
+        android:layout_marginTop="67dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.33dp"
+        android:background="#E5E5E5"
+        android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

@@ -13,7 +13,6 @@
         android:id="@+id/ad_l_img_id"
         android:layout_width="104dp"
         android:layout_height="70dp"
-        android:src="@drawable/ic_header_default"
         android:scaleType="centerCrop"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="12dp"/>
