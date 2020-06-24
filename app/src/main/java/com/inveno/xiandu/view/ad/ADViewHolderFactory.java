@@ -13,6 +13,7 @@ import com.inveno.xiandu.view.ad.holder.AdFootTraceLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdGuessLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdLTxtRImgHolder;
 import com.inveno.xiandu.view.ad.holder.AdRankingListLImgRTxtHolder;
+import com.inveno.xiandu.view.ad.holder.AdRecommendBigImgHolder;
 import com.inveno.xiandu.view.ad.holder.AdSearchLImgRTxtHolder;
 
 import static com.inveno.android.ad.config.AdViewType.*;
@@ -25,7 +26,7 @@ public class ADViewHolderFactory {
                 holder = AdLTxtRImgHolder.create(context);
                 break;
             case AD_EDITOR_RECOMMEND_TYPE_2:
-
+                holder = AdRecommendBigImgHolder.create(context);
                 break;
             case AD_GUESS_YOU_LIKE_TYPE_1:
                 holder = AdGuessLImgRTxtHolder.create(context);
