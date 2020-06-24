@@ -10,6 +10,7 @@ public class AdViewType {
     public static final int AD_SEARCH_TYPE = 106;
     public static final int AD_BOOK_SHELF_TYPE = 107;
     public static final int AD_RANKING_LIST_TYPE = 108;
+    public static final int AD_BOOK_DETAIL_TYPE = 109;
 
 
 }
