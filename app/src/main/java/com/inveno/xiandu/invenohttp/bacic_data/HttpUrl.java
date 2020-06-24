@@ -36,6 +36,7 @@ public class HttpUrl {
     public static String RANKING_DATA_LIST = "/content/ranking/content"; //获取排行榜数据
 
     public static String GET_BOOK = "/content/novel/info"; //获取小说详情
+    public static String GET_READ_PROGRESS = "/behavior/get_read_progress"; //获取小说详情
 
     public static String BOOKBRACK_DATA_LIST = "/behavior/book_shelf/list"; //书架查询
     public static String BOOKBRACK_ADD = "/behavior/book_shelf/add"; //书架添加

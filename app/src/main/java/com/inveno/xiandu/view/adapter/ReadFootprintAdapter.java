@@ -1,4 +1,4 @@
-package com.inveno.xiandu.view.main.shelf;
+package com.inveno.xiandu.view.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
-import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.db.SQL;
@@ -25,7 +24,6 @@ import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
-import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +35,7 @@ import static com.inveno.android.ad.config.AdViewType.AD_BOOK_SHELF_TYPE;
  * Date 2020/3/5
  * Des 书架适配
  */
-public class ShelfAdapter extends RecyclerBaseAdapter {
+public class ReadFootprintAdapter extends RecyclerBaseAdapter {
 
     private Context context;
     private List<Bookbrack> data;
@@ -49,7 +47,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     //是否在选择状态
     private boolean isSelect = false;
 
-    public ShelfAdapter(Context context) {
+    public ReadFootprintAdapter(Context context) {
         this.context = context;
         this.data = new ArrayList<>();
     }
@@ -88,7 +86,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void deleteSelect() {
+    public List<Bookbrack> deleteSelect() {
         ArrayList<Bookbrack> bookbracks = new ArrayList<>();
         for (int i = data.size() - 1; i >= 0; i--) {
             if (data.get(i).isSelect()) {
@@ -106,6 +104,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         setSelect(false);
         notifyDataSetChanged();
         Toaster.showToastCenterShort(context, String.format("已删除%s本书", bookbracks.size()));
+        return data;
     }
 
     public void setSelect(boolean isSelect) {
@@ -225,15 +224,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             } else {
                 iholder.adapter_bookshelf_read_name.setText(String.format("读到：%s", data.get(realPosition).getChapter_name()));
             }
-            if (realPosition == 0) {
-                if (!(data.get(realPosition) instanceof AdBookModel)) {
-                    iholder.adapter_bookshelf_continue.setVisibility(View.VISIBLE);
-                }
-            } else if (realPosition == 1 && data.get(realPosition - 1) instanceof AdBookModel) {
-                iholder.adapter_bookshelf_continue.setVisibility(View.VISIBLE);
-            } else {
-                iholder.adapter_bookshelf_continue.setVisibility(View.GONE);
-            }
+            iholder.adapter_bookshelf_continue.setVisibility(View.GONE);
             iholder.adapter_bookshelf_continue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

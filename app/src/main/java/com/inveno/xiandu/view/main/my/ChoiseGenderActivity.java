@@ -1,4 +1,4 @@
-package com.inveno.xiandu.view.splash;
+package com.inveno.xiandu.view.main.my;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -29,7 +29,6 @@ import kotlin.jvm.functions.Function2;
 @Route(path = ARouterPath.ACTIVITY_READ_GENDER)
 public class ChoiseGenderActivity extends BaseActivity {
     public static final int MAIN_REQUEST_CODE = 10001;
-    public static final int MINE_REQUEST_CODE = 10002;
 
     public static final int GENDER_MAN = 1;
     public static final int GENDER_WOMAN = 2;

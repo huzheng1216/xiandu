@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:background="#ffffff"
+    android:orientation="vertical"
     tools:context=".view.splash.SplashActivity">
-    <!-- 多牛开屏广告支持“半屏/全屏”展示，开发者可以把贵公司的Logo放在屏幕底部，
-   然后在Logo上方提供一个容器来放置半开屏广告，如果展示的是全屏广告，可以去掉次控件
-   请注意展示广告的容器高度不得小于设备高度的百分之75，宽度必须大于屏幕的百分之75，否则会影响计费 -->
-    <LinearLayout
-        android:id="@+id/ad_container_ll"
+
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/splash_img" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:gravity="center"
-        android:visibility="visible">
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:src="@mipmap/ic_splash_logo">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!-- 多牛开屏广告支持“半屏/全屏”展示，开发者可以把贵公司的Logo放在屏幕底部，
+       然后在Logo上方提供一个容器来放置半开屏广告，如果展示的是全屏广告，可以去掉次控件
+       请注意展示广告的容器高度不得小于设备高度的百分之75，宽度必须大于屏幕的百分之75，否则会影响计费 -->
+        <LinearLayout
+            android:id="@+id/ad_container_ll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical" />
 
-        </ImageView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="center"
+            android:visibility="visible">
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</FrameLayout>

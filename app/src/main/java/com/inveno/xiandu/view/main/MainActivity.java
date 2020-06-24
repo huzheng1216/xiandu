@@ -39,6 +39,7 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
@@ -68,6 +69,7 @@ public class MainActivity extends BaseActivity {
     private UserCoin userCoin;
 
     private Dialog dialog;
+    private boolean isLogin = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +139,8 @@ public class MainActivity extends BaseActivity {
             //用户协议
             agreementDialog();
         }
+
+        isLogin = ServiceContext.userService().getUserPid() != 0;
     }
 
     private Handler handler = new Handler();

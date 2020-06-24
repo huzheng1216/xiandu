@@ -53,7 +53,7 @@ public class ClassifyItemFragment extends BaseFragment {
     private int channel;
 
     private TextView book_sum;
-    private TextView no_book_show;
+//    private TextView no_book_show;
     private RightDataAdapter rightDataAdapter;
     private LeftMenuAdapter leftMenuAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -86,7 +86,7 @@ public class ClassifyItemFragment extends BaseFragment {
 
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefreshLayout);
         book_sum = view.findViewById(R.id.book_sum);
-        no_book_show = view.findViewById(R.id.no_book_show);
+//        no_book_show = view.findViewById(R.id.no_book_show);
         book_sum.setText("共计0本");
         RecyclerView ranking_data_recycle = view.findViewById(R.id.ranking_data_recycle);
         RecyclerView ranking_menu_recycle = view.findViewById(R.id.ranking_menu_recycle);
@@ -130,10 +130,10 @@ public class ClassifyItemFragment extends BaseFragment {
                         mBookselfs = new ArrayList<>(classifyData.getNovel_list());
                         rightDataAdapter.setmDataList(mBookselfs);
                         if (mBookselfs.size() < 1) {
-                            no_book_show.setVisibility(View.VISIBLE);
+//                            no_book_show.setVisibility(View.VISIBLE);
                             book_sum.setText("");
                         } else {
-                            no_book_show.setVisibility(View.GONE);
+//                            no_book_show.setVisibility(View.GONE);
                         }
                         addAd();//先展示广告
                     } else {
@@ -269,10 +269,10 @@ public class ClassifyItemFragment extends BaseFragment {
                                 mData = new ArrayList<>(knowClassifyData.getNovel_list());
                             }
                             if (mData.size() < 1) {
-                                no_book_show.setVisibility(View.VISIBLE);
+//                                no_book_show.setVisibility(View.VISIBLE);
                                 book_sum.setText("");
                             } else {
-                                no_book_show.setVisibility(View.GONE);
+//                                no_book_show.setVisibility(View.GONE);
                             }
                             rightDataAdapter.setmDataList(mData);
                         }
@@ -294,9 +294,9 @@ public class ClassifyItemFragment extends BaseFragment {
                         }
                         ClassifyData mClassifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id());
                         if (mClassifyData != null && mClassifyData.getNovel_list().size() > 0) {
-                            no_book_show.setVisibility(View.GONE);
+//                            no_book_show.setVisibility(View.GONE);
                         } else {
-                            no_book_show.setVisibility(View.VISIBLE);
+//                            no_book_show.setVisibility(View.VISIBLE);
                             book_sum.setText("");
                         }
                         return null;
