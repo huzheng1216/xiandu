@@ -13,7 +13,7 @@ import static com.inveno.android.ad.config.AdViewType.AD_EDITOR_RECOMMEND_TYPE_2
 public class AdReaderBetweenImgHolder extends NormalAdViewHolder {
 
     public static NormalAdViewHolder create(Context context) {
-        return new AdReaderBetweenImgHolder(View.inflate(context, R.layout.ad_recommend_big_img_layout,null));
+        return new AdReaderBetweenImgHolder(View.inflate(context, R.layout.ad_readerbetween_big_img_layout,null));
     }
 
     public AdReaderBetweenImgHolder(View itemView) {

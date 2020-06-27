@@ -3,9 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/ad_l_text_r_img_rl_id"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="12dp"
+    android:paddingBottom="14.7dp"
     android:paddingTop="15dp"
     android:background="#F0F0F0">
 
@@ -39,5 +37,16 @@
         android:layout_below="@+id/ad_l_text_id"
         android:layout_marginTop="182dp"
         android:background="@drawable/ad_tag_background"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="查看详情"
+        android:textColor="#ffffffff"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_below="@+id/ad_r_img_id"
+        android:layout_marginTop="18.33dp"
+        android:background="@drawable/ad_reader_between_btn_background"/>
 
 </RelativeLayout>

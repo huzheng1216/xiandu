@@ -13,6 +13,8 @@ import com.inveno.xiandu.view.ad.holder.AdFootTraceLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdGuessLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdLTxtRImgHolder;
 import com.inveno.xiandu.view.ad.holder.AdRankingListLImgRTxtHolder;
+import com.inveno.xiandu.view.ad.holder.AdReaderBetweenImgHolder;
+import com.inveno.xiandu.view.ad.holder.AdReaderBottomLImgRTxtHolder;
 import com.inveno.xiandu.view.ad.holder.AdRecommendBigImgHolder;
 import com.inveno.xiandu.view.ad.holder.AdSearchLImgRTxtHolder;
 
@@ -54,6 +56,12 @@ public class ADViewHolderFactory {
                 break;
             case AD_READ_FOOT_TRACE_TYPE:
                 holder = AdFootTraceLImgRTxtHolder.create(context);
+                break;
+            case AD_READER_BOTTOM_TYPE:
+                holder = AdReaderBottomLImgRTxtHolder.create(context);
+                break;
+            case AD_READER_BETWEEN_TYPE:
+                holder = AdReaderBetweenImgHolder.create(context);
                 break;
             default:
                 break;
