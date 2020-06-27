@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -34,8 +35,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.appbar.AppBarLayout;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.device.param.provider.tools.LogTools;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
@@ -47,12 +50,16 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.utils.SystemBarUtils;
 import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.ad.ADViewHolderFactory;
+import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.read.page.PageLoader;
+import com.inveno.xiandu.view.read.page.PageStyle;
 import com.inveno.xiandu.view.read.page.PageView;
 import com.inveno.xiandu.view.read.setting.BrightnessUtils;
 import com.inveno.xiandu.view.read.setting.ReadSettingManager;
 import com.inveno.xiandu.view.read.setting.ScreenUtils;
 import com.inveno.xiandu.view.read.setting.StringUtils;
+import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +76,12 @@ import io.reactivex.schedulers.Schedulers;
 import static android.view.View.GONE;
 import static android.view.View.LAYER_TYPE_SOFTWARE;
 import static android.view.View.VISIBLE;
+import static com.inveno.android.ad.config.AdViewType.AD_READER_BETWEEN_TYPE;
+import static com.inveno.android.ad.config.AdViewType.AD_READER_BOTTOM_TYPE;
+import static com.inveno.android.ad.config.AdViewType.AD_SEARCH_TYPE;
+import static com.inveno.android.ad.config.ScenarioManifest.READER_BETWEEN;
+import static com.inveno.android.ad.config.ScenarioManifest.READER_BOTTOM;
+import static com.inveno.android.ad.config.ScenarioManifest.SEARCH;
 
 /**
  * Created by newbiechen on 17-5-16.
@@ -110,6 +123,18 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     /***************bottom_menu_view***************************/
     @BindView(R.id.read_tv_page_tip)
     TextView mTvPageTip;
+    /***************bottom_ad***************************/
+    @BindView(R.id.ad_bottom)
+    FrameLayout adBottom;
+    @BindView(R.id.layout_background)
+    ViewGroup layoutBackground;
+    /***** 章节广告 *****/
+    @BindView(R.id.ad_chapter_layout)
+    ViewGroup layoutChapterAD;
+    @BindView(R.id.layout_ad_chapter)
+    ViewGroup layoutChapter;
+    @BindView(R.id.bt_continue)
+    View btContinue;
 
     @BindView(R.id.read_ll_bottom_menu)
     LinearLayout mLlBottomMenu;
@@ -141,8 +166,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private BookShelf bookShelf;
     private Bookbrack bookbrack = new Bookbrack();
 
-    //心跳
+    //心跳上报
     private Disposable subscribe;
+    //每30秒切换底部广告
+    private Disposable adBottomDisposable;
+    private int adIndex = 5;//滑动几页展示广告
+    private int currIndex;//滑动页数
 
     //控制屏幕常亮
     private PowerManager.WakeLock mWakeLock;
@@ -241,6 +270,77 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         isFullScreen = ReadSettingManager.getInstance().isFullScreen();
 
         mBookId = bookShelf.getContent_id() + "";
+        startBottomAd();
+        startChapterAD();
+    }
+
+    /**
+     * 执行章节广告
+     */
+    private void startChapterAD() {
+//        getChapterAd();
+    }
+
+    /**
+     * 执行30秒获取一次底部广告
+     */
+    private void startBottomAd() {
+        //定时30秒调用一次
+        adBottomDisposable = Flowable.interval(0, 30, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(@NonNull Long aLong) throws Exception {
+                        getAdBottom();
+                    }
+                });
+    }
+
+    private void getAdBottom() {
+        /**
+         * 加载底部广告
+         */
+        InvenoAdServiceHolder.getService().requestInfoAd(READER_BOTTOM, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            AdModel adModel = new AdModel(wrapper);
+            NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(ReadActivity.this, AD_READER_BOTTOM_TYPE));
+            holder.onBindViewHolder(ReadActivity.this, wrapper.getAdValue(), 0);
+            ViewGroup view = holder.getViewGroup();
+            adBottom.removeAllViews();
+            adBottom.addView(view);
+            adBottom.setVisibility(VISIBLE);
+            return null;
+        }).onFail((integer, s) -> {
+            adBottom.setVisibility(GONE);
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
+    }
+
+    private void getChapterAd() {
+        currIndex = 0;
+        /**
+         * 加载章节广告
+         */
+        InvenoAdServiceHolder.getService().requestInfoAd(READER_BETWEEN, this).onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            AdModel adModel = new AdModel(wrapper);
+            NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(ReadActivity.this, AD_READER_BETWEEN_TYPE));
+            holder.onBindViewHolder(ReadActivity.this, wrapper.getAdValue(), 0);
+            //获取滑动页数配置
+            adIndex = wrapper.getIndex();
+            ViewGroup view = holder.getViewGroup();
+            layoutChapter.removeAllViews();
+            layoutChapter.addView(view);
+            layoutChapterAD.setBackgroundColor(ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            layoutChapterAD.setVisibility(VISIBLE);
+            return null;
+        }).onFail((integer, s) -> {
+            layoutChapterAD.setVisibility(GONE);
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        }).execute();
     }
 
     @Override
@@ -306,6 +406,20 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 () -> hideSystemBar()
         );
 
+        //继续阅读
+        btContinue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutChapterAD.setVisibility(GONE);
+            }
+        });
+        layoutChapterAD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layoutChapterAD.setVisibility(GONE);
+            }
+        });
+
         //初始化TopMenu
         initTopMenu();
 
@@ -362,10 +476,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             mTvNightMode.setText(StringUtils.getString(R.string.nb_mode_morning));
             Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_read_menu_morning);
             mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            layoutBackground.setBackgroundColor(0xFF000000);
         } else {
             mTvNightMode.setText(StringUtils.getString(R.string.nb_mode_night));
             Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_read_menu_night);
             mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            layoutBackground.setBackgroundColor(ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
         }
     }
 
@@ -407,6 +523,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
+    int lastPos = -1;
+
     @SuppressLint("WrongConstant")
     @Override
     protected void initClick() {
@@ -417,11 +535,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
                     @Override
                     public void onChapterChange(int pos) {
+                        LogUtils.H("onChapterChange = " + pos);
                         mCategoryAdapter.setChapter(pos);
+                        mSbChapterProgress.setProgress(pos);
                     }
 
                     @Override
                     public void requestChapters(List<ChapterInfo> requestChapters) {
+                        LogUtils.H("requestChapters = " + requestChapters.size());
                         mPresenter.loadChapter(mBookId, requestChapters);
                         mHandler.sendEmptyMessage(WHAT_CATEGORY);
                         //隐藏提示
@@ -430,30 +551,41 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
                     @Override
                     public void onCategoryFinish(List<ChapterInfo> chapters) {
+                        LogUtils.H("onCategoryFinish = " + chapters.size());
                         for (ChapterInfo chapter : chapters) {
                             chapter.setChapter_name(StringUtils.convertCC(chapter.getChapter_name(), mPvPage.getContext()));
                         }
                         mCategoryAdapter.refreshItems(chapters);
+                        mSbChapterProgress.setMax(Math.max(0, chapters.size()));
                     }
 
                     @Override
                     public void onPageCountChange(int count) {
-                        mSbChapterProgress.setMax(Math.max(0, count - 1));
-                        mSbChapterProgress.setProgress(0);
-                        // 如果处于错误状态，那么就冻结使用
-                        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING
-                                || mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR) {
-                            mSbChapterProgress.setEnabled(false);
-                        } else {
-                            mSbChapterProgress.setEnabled(true);
-                        }
+                        LogUtils.H("onPageCountChange = " + count);
+//                        mSbChapterProgress.setMax(Math.max(0, count - 1));
+//                        mSbChapterProgress.setProgress(0);
+//                        // 如果处于错误状态，那么就冻结使用
+//                        if (mPageLoader.getPageStatus() == PageLoader.STATUS_LOADING
+//                                || mPageLoader.getPageStatus() == PageLoader.STATUS_ERROR) {
+//                            mSbChapterProgress.setEnabled(false);
+//                        } else {
+//                            mSbChapterProgress.setEnabled(true);
+//                        }
                     }
 
                     @Override
                     public void onPageChange(int pos) {
-                        mSbChapterProgress.post(
-                                () -> mSbChapterProgress.setProgress(pos)
-                        );
+                        LogUtils.H("onPageChange = " + pos);
+                        if (pos == lastPos + 1) {
+                            currIndex++;
+                        }
+                        lastPos = pos;
+                        if (currIndex == adIndex) {
+                            getChapterAd();
+                        }
+//                        mSbChapterProgress.post(
+//                                () -> mSbChapterProgress.setProgress(pos)
+//                        );
                     }
                 }
         );
@@ -466,6 +598,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                             //显示标题
                             mTvPageTip.setText((progress + 1) + "/" + (mSbChapterProgress.getMax() + 1));
                             mTvPageTip.setVisibility(VISIBLE);
+                            mToolbar.setTitle(mCategoryAdapter.getItem(progress + 1).getChapter_name());
                         }
                     }
 
@@ -477,8 +610,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         //进行切换
                         int pagePos = mSbChapterProgress.getProgress();
-                        if (pagePos != mPageLoader.getPagePos()) {
-                            mPageLoader.skipToPage(pagePos);
+                        if (pagePos != mPageLoader.getChapterPos()) {
+                            mPageLoader.skipToChapter(pagePos);
                         }
                         //隐藏提示
                         mTvPageTip.setVisibility(GONE);
@@ -853,6 +986,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
+        //结束底部广告
+        if (adBottomDisposable != null && !adBottomDisposable.isDisposed()) {
+            adBottomDisposable.dispose();
+        }
     }
 
     @Override
@@ -901,7 +1038,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private void postReadTime() {
         long now = System.currentTimeMillis();
         if (now - lastTouch < 60000) {
-            DDManager.getInstance().postReadTime()
+            DDManager.getInstance().postReadTime(mBookId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
                     .subscribe(new Consumer<BaseRequest>() {

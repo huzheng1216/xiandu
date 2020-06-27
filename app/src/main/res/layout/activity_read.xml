@@ -9,17 +9,61 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/layout_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/theme_leather_bg">
+
+        <FrameLayout
+            android:id="@+id/ad_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="76dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"></FrameLayout>
 
         <!--阅读页面-->
         <com.inveno.xiandu.view.read.page.PageView
             android:id="@+id/read_pv_page"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_above="@id/ad_bottom"
             android:clickable="true"
             tools:visibility="gone" />
+
+        <!-- 章节广告 -->
+        <RelativeLayout
+            android:id="@+id/ad_chapter_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <FrameLayout
+                android:id="@+id/layout_ad_chapter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:paddingHorizontal="20dp"></FrameLayout>
+
+            <Button
+                android:id="@+id/bt_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/layout_ad_chapter"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/ad_reader_between_btn_background"
+                android:text="继续阅读" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="30dp"
+                android:text="该广告创造的收入为您支付了小说的版权费用"
+                android:textColor="#999999"
+                android:textSize="16dp"></TextView>
+        </RelativeLayout>
 
         <!--切换页面提示-->
         <TextView
@@ -31,10 +75,10 @@
             android:layout_marginBottom="10dp"
             android:background="#191919"
             android:gravity="center"
-            android:paddingBottom="8dp"
             android:paddingLeft="12dp"
-            android:paddingRight="12dp"
             android:paddingTop="8dp"
+            android:paddingRight="12dp"
+            android:paddingBottom="8dp"
             android:text="1/12"
             android:textColor="@color/white"
             android:visibility="gone" />
@@ -73,7 +117,7 @@
                         style="@style/NB.Theme.TextAppearance.Read.TopMenu"
                         android:layout_toLeftOf="@id/read_tv_brief"
                         android:text="@string/nb.read.community"
-                        android:visibility="gone"/>
+                        android:visibility="gone" />
                 </RelativeLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -131,8 +175,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="72dp"
                 android:orientation="horizontal"
-                android:paddingBottom="12dp"
-                android:paddingTop="12dp">
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
 
                 <TextView
                     android:id="@+id/read_tv_category"
@@ -169,14 +213,14 @@
         android:background="@mipmap/theme_leather_bg"
         android:clickable="true"
         android:orientation="vertical"
-        android:paddingBottom="@dimen/nb.padding.large"
-        android:paddingTop="@dimen/nb.padding.large">
+        android:paddingTop="@dimen/nb.padding.large"
+        android:paddingBottom="@dimen/nb.padding.large">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginBottom="8dp"
             android:text="目录"
             android:textColor="@color/nb.text.default"
             android:textSize="20sp" />
@@ -190,7 +234,7 @@
                 android:id="@+id/read_iv_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical" />
         </RelativeLayout>
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>
