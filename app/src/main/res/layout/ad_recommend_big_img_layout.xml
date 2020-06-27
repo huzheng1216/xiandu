@@ -1,42 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ad_l_text_r_img_rl_id"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/ad_l_text_r_img_rl_id"
     android:paddingLeft="20dp"
+    android:paddingTop="12dp"
     android:paddingRight="20dp"
-    android:paddingBottom="12dp"
-    android:paddingTop="12dp">
+    android:paddingBottom="12dp">
 
     <TextView
         android:id="@+id/ad_l_text_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#ff333333"
-        android:textSize="16sp"
+        android:gravity="center_vertical"
         android:maxLines="2"
-        android:gravity="center_vertical"/>
+        android:textColor="#ff333333"
+        android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/ad_r_img_id"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ad_l_img_cardview"
+        style="@style/adCardView"
         android:layout_width="match_parent"
         android:layout_height="181dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="8dp"
-        android:scaleType="centerCrop"
-        android:layout_below="@+id/ad_l_text_id"/>
+        android:layout_below="@+id/ad_l_text_id"
+        android:layout_marginTop="8dp">
+
+        <ImageView
+            android:id="@+id/ad_r_img_id"
+            android:layout_width="match_parent"
+            android:layout_height="181dp"
+            android:scaleType="centerCrop" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/ad_r_tag_id"
         android:layout_width="27dp"
         android:layout_height="15dp"
+        android:layout_below="@+id/ad_l_text_id"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="174dp"
+        android:background="@drawable/ad_tag_background"
+        android:gravity="center"
         android:text="@string/ad_tag_string"
         android:textColor="#ffffffff"
-        android:textSize="10sp"
-        android:layout_alignParentRight="true"
-        android:gravity="center"
-        android:layout_below="@+id/ad_l_text_id"
-        android:layout_marginTop="174dp"
-        android:background="@drawable/ad_tag_background"/>
+        android:textSize="10sp" />
 
 </RelativeLayout>
