@@ -13,6 +13,8 @@ public class AdViewType {
     public static final int AD_BOOK_DETAIL_TYPE = 109;
     public static final int AD_BOOK_DETAIL_POP_TYPE = 110;
     public static final int AD_READ_FOOT_TRACE_TYPE = 111;
+    public static final int AD_READER_BOTTOM_TYPE = 112;
+    public static final int AD_READER_BETWEEN_TYPE = 113;
 
 
 }

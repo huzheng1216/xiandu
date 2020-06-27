@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="76dp"
     android:id="@+id/ad_bg_r_text_l_img_rl_id"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
-    android:paddingBottom="15dp">
+    android:paddingBottom="8dp">
 
     <ImageView
         android:id="@+id/ad_l_img_id"
-        android:layout_width="104dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="15dp"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:scaleType="centerCrop"/>
 
     <TextView
@@ -20,11 +20,10 @@
         android:layout_height="44dp"
         android:textColor="#ff333333"
         android:textSize="16sp"
-        android:gravity="center_vertical"
         android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         android:layout_toEndOf="@+id/ad_l_img_id"
-        android:layout_marginLeft="8dp"
-        android:layout_alignParentRight="true"/>
+        android:layout_marginLeft="12dp"/>
 
     <TextView
         android:id="@+id/ad_l_tag_id"

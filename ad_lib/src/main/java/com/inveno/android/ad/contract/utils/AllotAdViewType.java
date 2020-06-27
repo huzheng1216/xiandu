@@ -55,8 +55,8 @@ public class AllotAdViewType {
         switch (scenario) {
             case ScenarioManifest.READER_BOTTOM:
                 // 阅读器底部广告
+                return AD_READER_BOTTOM_TYPE;
 
-                break;
             case ScenarioManifest.EDITOR_RECOMMEND:
                 // 小编推荐模块广告
                 return desplayType == 1 ? AD_EDITOR_RECOMMEND_TYPE_1 : AD_EDITOR_RECOMMEND_TYPE_2;
@@ -75,7 +75,7 @@ public class AllotAdViewType {
 
             case ScenarioManifest.READER_BETWEEN:
                 // 阅读器间隔广告
-                break;
+                return AD_READER_BETWEEN_TYPE;
 
             case ScenarioManifest.BOOK_DETAIL:
                 // 书籍详情页广告
