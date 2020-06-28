@@ -149,6 +149,38 @@ public class StoreItemFragment extends BaseFragment {
                             }).execute();
                 }
             }
+
+            @Override
+            public void onChangeClick() {
+                APIContext.getBookCityAPi().getBookCityTop(channel, getContext())
+                        .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
+                            @Override
+                            public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
+                                for (int i = 0; i < mDataBeans.size(); i++) {
+                                    if (mDataBeans.get(i) instanceof RecommendName) {
+                                        RecommendName recommendName = (RecommendName) mDataBeans.get(i);
+                                        if (recommendName.getRecommendName().equals("人气精选")) {
+                                            if (i > 0) {
+                                                mDataBeans.subList(0, i).clear();
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+                                baseDataBeans.addAll(mDataBeans);
+                                mDataBeans = baseDataBeans;
+                                bookCityAdapter.setDataList(mDataBeans);
+                                return null;
+                            }
+                        })
+                        .onFail(new Function2<Integer, String, Unit>() {
+                            @Override
+                            public Unit invoke(Integer integer, String s) {
+                                Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
+                                return null;
+                            }
+                        }).execute();
+            }
         });
         store_refresh_layout = view.findViewById(R.id.store_refresh_layout);
         store_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -171,7 +203,7 @@ public class StoreItemFragment extends BaseFragment {
                         mMoreData[0] = new ArrayList<>(bookShelfList.getNovel_list());
                         if (flag[0] == true) {
                             int adIndex = adModel.getWrapper().getIndex();
-                            if (mMoreData[0].size() >=  adIndex) {
+                            if (mMoreData[0].size() >= adIndex) {
                                 mMoreData[0].add(adIndex, adModel);
                             }
                             mDataBeans.addAll(mMoreData[0]);
@@ -189,7 +221,7 @@ public class StoreItemFragment extends BaseFragment {
                 InvenoAdServiceHolder.getService().requestInfoAd(GUESS_YOU_LIKE, getContext()).onSuccess(wrapper -> {
                     Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                     adModel.setWrapper(wrapper);
-                    if (mMoreData[0]!=null && mMoreData[0].size() >= wrapper.getIndex()) {
+                    if (mMoreData[0] != null && mMoreData[0].size() >= wrapper.getIndex()) {
                         mMoreData[0].add(wrapper.getIndex(), adModel);
                         mDataBeans.addAll(mMoreData[0]);
                         bookCityAdapter.setDataList(mDataBeans);
@@ -250,32 +282,6 @@ public class StoreItemFragment extends BaseFragment {
         }
     }
 
-    private StatefulCallBack<BookShelfList> getRecommendData(int channel_id, int type, int num, boolean isTop) {
-        return APIContext.getBookCityAPi().getRecommend(channel_id, type, num);
-    }
-
-    private void getEditorRecommendData() {
-        APIContext.getBookCityAPi().getEditorRecommend()
-                .onSuccess(new Function1<EditorRecommendList, Unit>() {
-                    @Override
-                    public Unit invoke(EditorRecommendList editorRecommendList) {
-                        RecommendName recommendName = new RecommendName();
-                        recommendName.setRecommendName(topTitle);
-                        recommendName.setType(RecyclerBaseAdapter.CENTER_TITLE);
-                        mTopDataBeans.clear();
-                        mTopDataBeans.add(recommendName);
-                        mTopDataBeans.addAll(editorRecommendList.getNovel_list());
-                        return null;
-                    }
-                })
-                .onFail(new Function2<Integer, String, Unit>() {
-                    @Override
-                    public Unit invoke(Integer integer, String s) {
-                        return null;
-                    }
-                }).execute();
-    }
-
     private void getData() {
         APIContext.getBookCityAPi().getBookCity(channel, getContext())
                 .onSuccess(new Function1<ArrayList<BaseDataBean>, Unit>() {
@@ -283,7 +289,11 @@ public class StoreItemFragment extends BaseFragment {
                     public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
                         store_refresh_layout.setRefreshing(false);
                         mDataBeans = baseDataBeans;
-                        bookCityAdapter.setDataList(mDataBeans);
+                        if (mDataBeans.size() > 0) {
+                            bookCityAdapter.setDataList(mDataBeans);
+                        } else {
+                            Toaster.showToastCenter(getContext(), "获取数据失败");
+                        }
                         return null;
                     }
                 })

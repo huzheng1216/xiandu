@@ -184,7 +184,7 @@ public class MineFragment extends BaseFragment {
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
-                user_name.setText("点我登陆");
+                user_name.setText("点我登录");
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
                 ServiceContext.bacicParamService().refreshBaseParam();
             }

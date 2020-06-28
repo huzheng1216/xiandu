@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 请求登陆的配置
+ * 请求登录的配置
  * Created by zheng.hu on 2016/11/7.
  */
 public class LandingCodeBody extends BaseBody {

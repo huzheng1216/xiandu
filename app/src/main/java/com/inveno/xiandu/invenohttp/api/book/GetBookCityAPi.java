@@ -284,10 +284,8 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
                 } else {
                     topRequest.execute();
                 }
-                bottomRequest.execute();
                 //请求广告
                 topAdRequest.execute();
-                bottomAdRequest.execute();
             }
         };
         if (channel == 0) {
@@ -304,19 +302,18 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
                     topDataBeans.addAll(editorRecommendList.getNovel_list());
 
                     addAd(topDataBeans, bottomDataBeans, adModelTop, adModelBottom);
+                    mDataBeans.addAll(topDataBeans);
 
-                    if (!bottomDataBeans.isEmpty()) {
-                        mDataBeans.addAll(topDataBeans);
-                        mDataBeans.addAll(bottomDataBeans);
-
-                        uiCallback.invokeSuccess(mDataBeans);
-                    }
+                    bottomRequest.execute();
+                    bottomAdRequest.execute();
                     return null;
                 }
             }).onFail(new Function2<Integer, String, Unit>() {
                 @Override
                 public Unit invoke(Integer integer, String s) {
-                    uiCallback.invokeFail(integer, s);
+                    bottomRequest.execute();
+                    bottomAdRequest.execute();
+//                    uiCallback.invokeFail(integer, s);
                     return null;
                 }
             });
@@ -330,20 +327,17 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
                     bottomDataBeans.add(recommendName);
                     bottomDataBeans.addAll(bookShelfList.getNovel_list());
-                    if (!topDataBeans.isEmpty()) {
 
-                        addAd(topDataBeans, bottomDataBeans, adModelTop, adModelBottom);
+                    addAd(topDataBeans, bottomDataBeans, adModelTop, adModelBottom);
 
-                        mDataBeans.addAll(topDataBeans);
-                        mDataBeans.addAll(bottomDataBeans);
-                        uiCallback.invokeSuccess(mDataBeans);
-                    }
+                    mDataBeans.addAll(bottomDataBeans);
+                    uiCallback.invokeSuccess(mDataBeans);
                     return null;
                 }
             }).onFail(new Function2<Integer, String, Unit>() {
                 @Override
                 public Unit invoke(Integer integer, String s) {
-                    uiCallback.invokeFail(integer, s);
+                    uiCallback.invokeSuccess(mDataBeans);
                     return null;
                 }
             });
@@ -369,17 +363,16 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
 
                     addAd(topDataBeans, bottomDataBeans, adModelTop, adModelBottom);
 
-                    if (!bottomDataBeans.isEmpty()) {
-                        mDataBeans.addAll(topDataBeans);
-                        mDataBeans.addAll(bottomDataBeans);
-                        uiCallback.invokeSuccess(mDataBeans);
-                    }
+                    mDataBeans.addAll(topDataBeans);
+                    bottomRequest.execute();
+                    bottomAdRequest.execute();
                     return null;
                 }
             }).onFail(new Function2<Integer, String, Unit>() {
                 @Override
                 public Unit invoke(Integer integer, String s) {
-                    uiCallback.invokeFail(integer, s);
+                    bottomRequest.execute();
+                    bottomAdRequest.execute();
                     return null;
                 }
             });
@@ -391,20 +384,17 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
                     recommendName.setType(RecyclerBaseAdapter.CENTER_TITLE);
                     bottomDataBeans.add(recommendName);
                     bottomDataBeans.addAll(bookShelfList.getNovel_list());
-                    if (!topDataBeans.isEmpty()) {
 
-                        addAd(topDataBeans, bottomDataBeans, adModelTop, adModelBottom);
+                    addAd(topDataBeans, bottomDataBeans, adModelTop, adModelBottom);
 
-                        mDataBeans.addAll(topDataBeans);
-                        mDataBeans.addAll(bottomDataBeans);
-                        uiCallback.invokeSuccess(mDataBeans);
-                    }
+                    mDataBeans.addAll(bottomDataBeans);
+                    uiCallback.invokeSuccess(mDataBeans);
                     return null;
                 }
             }).onFail(new Function2<Integer, String, Unit>() {
                 @Override
                 public Unit invoke(Integer integer, String s) {
-                    uiCallback.invokeFail(integer, s);
+                    uiCallback.invokeSuccess(mDataBeans);
                     return null;
                 }
             });
@@ -413,9 +403,9 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         topAdRequest.onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModelTop.setWrapper(wrapper);
-            int adIndex = wrapper.getIndex()+1;
+            int adIndex = wrapper.getIndex() + 1;
             if (mDataBeans.size() >= adIndex && topDataBeans.size() >= adIndex) {
-                topDataBeans.add(adIndex , adModelTop);
+                topDataBeans.add(adIndex, adModelTop);
                 mDataBeans.add(adIndex, adModelTop);
                 uiCallback.invokeSuccess(mDataBeans);
             }
@@ -428,7 +418,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         bottomAdRequest.onSuccess(wrapper -> {
             Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModelBottom.setWrapper(wrapper);
-            int adIndex = wrapper.getIndex()+1;
+            int adIndex = wrapper.getIndex() + 1;
             if (mDataBeans.size() >= adIndex && bottomDataBeans.size() >= adIndex) {
                 mDataBeans.add(wrapper.getIndex() + topDataBeans.size() + 1, adModelBottom);
                 uiCallback.invokeSuccess(mDataBeans);
@@ -442,13 +432,112 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         return uiCallback;
     }
 
-    private void addAd(ArrayList<BaseDataBean> topDataBeans, ArrayList<BaseDataBean> bottomDataBeans, AdModel adModelTop, AdModel adModelBottom) {
-        if (adModelTop.getWrapper() != null && topDataBeans.size() >= adModelTop.getWrapper().getIndex()+1) {
-            topDataBeans.add(adModelTop.getWrapper().getIndex()+1, adModelTop);
+    /**
+     * 推荐接口异步请求同步返回
+     *
+     * @param channel 请求页
+     * @return
+     */
+    public BaseStatefulCallBack<ArrayList<BaseDataBean>> getBookCityTop(int channel, Context context) {
+
+        ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
+        ArrayList<BaseDataBean> topDataBeans = new ArrayList<>();
+
+        StatefulCallBack<EditorRecommendList> editorRequest = getEditorRecommend();
+        StatefulCallBack<BookShelfList> topRequest;
+        StatefulCallBack<IndexedAdValueWrapper> topAdRequest;
+        final AdModel adModelTop = new AdModel();
+        if (channel == 1) {
+            //男频
+            //请求男生热文
+            topRequest = getRecommend(1, 1, 4);
+
+            topAdRequest = InvenoAdServiceHolder.getService().requestInfoAd(BOY_GIRL_BOTTOM, context);
+        } else if (channel == 2) {
+            //女频
+            //请求女生热文
+            topRequest = getRecommend(2, 2, 4);
+
+            topAdRequest = InvenoAdServiceHolder.getService().requestInfoAd(BOY_GIRL_BOTTOM, context);
+        } else {
+            //出版畅销
+            topRequest = getRecommend(3, 6, 4);
+
+            topAdRequest = InvenoAdServiceHolder.getService().requestInfoAd(BOY_GIRL_BOTTOM, context);
         }
 
-        if (adModelBottom.getWrapper() != null && bottomDataBeans.size() >= adModelBottom.getWrapper().getIndex() + 1) {
-            bottomDataBeans.add(adModelBottom.getWrapper().getIndex()+1, adModelBottom);
+        BaseStatefulCallBack<ArrayList<BaseDataBean>> uiCallback = new BaseStatefulCallBack<ArrayList<BaseDataBean>>() {
+            @Override
+            public void execute() {
+                if (channel == 0) {
+                    editorRequest.execute();
+                } else {
+                    topRequest.execute();
+                }
+                //请求广告
+                topAdRequest.execute();
+            }
+        };
+
+        topRequest.onSuccess(new Function1<BookShelfList, Unit>() {
+            @Override
+            public Unit invoke(BookShelfList bookShelfList) {
+                RecommendName recommendName = new RecommendName();
+                if (channel == 1) {
+                    recommendName.setRecommendName("男生热文");
+                    recommendName.setType(RecyclerBaseAdapter.CENTER_TITLE);
+                } else if (channel == 2) {
+                    recommendName.setRecommendName("女生热文");
+                    recommendName.setType(RecyclerBaseAdapter.CENTER_TITLE);
+
+                } else if (channel == 3) {
+                    recommendName.setRecommendName("精选畅销");
+                    recommendName.setType(RecyclerBaseAdapter.CENTER_TITLE);
+                }
+                topDataBeans.add(recommendName);
+                topDataBeans.addAll(bookShelfList.getNovel_list());
+
+                addAd(topDataBeans, null, adModelTop, null);
+
+                mDataBeans.addAll(topDataBeans);
+//                uiCallback.invokeSuccess(mDataBeans);
+                return null;
+            }
+        }).onFail(new Function2<Integer, String, Unit>() {
+            @Override
+            public Unit invoke(Integer integer, String s) {
+                uiCallback.invokeFail(integer, s);
+                return null;
+            }
+        });
+
+        topAdRequest.onSuccess(wrapper -> {
+            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+            adModelTop.setWrapper(wrapper);
+            int adIndex = wrapper.getIndex() + 1;
+            if (mDataBeans.size() >= adIndex && topDataBeans.size() >= adIndex) {
+                topDataBeans.add(adIndex, adModelTop);
+                mDataBeans.add(adIndex, adModelTop);
+                uiCallback.invokeSuccess(mDataBeans);
+            }
+            return null;
+        }).onFail((integer, s) -> {
+            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+            return null;
+        });
+
+        return uiCallback;
+    }
+
+    private void addAd(ArrayList<BaseDataBean> topDataBeans, ArrayList<BaseDataBean> bottomDataBeans, AdModel adModelTop, AdModel adModelBottom) {
+        if (adModelTop.getWrapper() != null && topDataBeans.size() >= adModelTop.getWrapper().getIndex() + 1) {
+            topDataBeans.add(adModelTop.getWrapper().getIndex() + 1, adModelTop);
+        }
+
+        if (bottomDataBeans != null) {
+            if (adModelBottom.getWrapper() != null && bottomDataBeans.size() >= adModelBottom.getWrapper().getIndex() + 1) {
+                bottomDataBeans.add(adModelBottom.getWrapper().getIndex() + 1, adModelBottom);
+            }
         }
     }
 

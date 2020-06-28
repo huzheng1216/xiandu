@@ -8,47 +8,49 @@
 
     <include layout="@layout/base_tittle_bar" />
 
+
     <Space
         android:layout_width="match_parent"
-        android:layout_height="90dp"/>
+        android:layout_height="90dp" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_radio_background"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"
+        android:background="@drawable/edit_radio_background"
         android:orientation="horizontal">
-
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="@color/black"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
-            android:text="+86" />
+            android:text="+86"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <View
             android:layout_width="1dp"
             android:layout_height="10dp"
-            android:background="#999999"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:background="#999999" />
+
         <EditText
             android:id="@+id/login_phone_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
-            android:ems="10"
-            android:textColor="@color/black"
-            android:hint="@string/login_please_input_phone_num"
-            android:textSize="16sp"
             android:background="@null"
-            android:inputType="phone" />
+            android:ems="10"
+            android:hint="@string/login_please_input_phone_num"
+            android:inputType="phone"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
     </LinearLayout>
 
     <TextView
@@ -57,23 +59,48 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="5dp"
-        android:textSize="12sp"
+        android:text="@string/login_phone_prompt"
         android:textColor="#aaaaaa"
-        android:text="@string/login_phone_prompt" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/login_get_code"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         android:layout_marginTop="30dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/button_radio_background_disclick"
-        android:gravity="center"
         android:enabled="false"
+        android:gravity="center"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
+        android:text="@string/login_get_code"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        android:text="@string/login_get_code"/>
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginStart="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/agree_cb"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:checked="true" />
+
+        <TextView
+            android:id="@+id/agree_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我已阅读并同意《用户协议》及《隐私政策》"
+            android:textColor="@color/gray_9"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
 </LinearLayout>

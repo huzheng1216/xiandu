@@ -3,7 +3,6 @@ package com.inveno.xiandu.view.detail;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
@@ -28,7 +26,6 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
-import com.google.android.material.appbar.AppBarLayout;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
@@ -43,7 +40,6 @@ import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
-import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
@@ -51,9 +47,7 @@ import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RelevantBookAdapter;
-import com.inveno.xiandu.view.main.my.UserinfoActivity;
 import com.inveno.xiandu.view.read.CategoryAdapter;
-import com.inveno.xiandu.view.search.SerchActivityMain;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -521,8 +515,8 @@ public class BookDetailActivity extends BaseActivity {
 //            book_detail_coll.setText("加入书架");
         } else {
             SQL.getInstance().addBookbrack(bookbrack);
-            Toaster.showToastCenter(this, "已保存");
-            book_detail_coll.setText("已加入");
+            Toaster.showToastCenter(this, "成功加入书架");
+            book_detail_coll.setText("已在书架");
         }
     }
 

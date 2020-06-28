@@ -28,12 +28,14 @@ import kotlin.jvm.functions.Function2;
 public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnClickListener {
 
     public static String LOGIN_PHONE_NUM = "login_phone_num";
+    public static String LOGIN_TIME = "login_time";
     private TextView vali_time;
     private TextView vali_login;
     private TextView vali_phone_num;
     private EditText vali_code_input_editview;
     private CountDownTimerUtils countDownTimerUtils;
     private String loginPhoneNum;
+    private int time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,13 +57,15 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
         vali_phone_num = findViewById(R.id.vali_phone_num);
 
         loginPhoneNum = getIntent().getStringExtra(LOGIN_PHONE_NUM);
+        time = getIntent().getIntExtra(LOGIN_TIME, 60);
+
         vali_phone_num.setText(String.format(getResources().getString(R.string.login_send_vali_cade_phone_num), loginPhoneNum));
 
         vali_time.setOnClickListener(this);
         vali_login.setOnClickListener(this);
 
         editListener();
-        countDownTimerUtils = new CountDownTimerUtils(this, vali_time, 60 * 1000, 1000);
+        countDownTimerUtils = new CountDownTimerUtils(this, vali_time, time * 1000, 1000);
         countDownTimerUtils.start();
     }
 
@@ -122,6 +126,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                         }
                     })
                     .execute();
+            time = 60;
             countDownTimerUtils.start();
 
         } else if (id == R.id.vali_login) {
@@ -131,7 +136,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                     .onSuccess(new Function1<UserInfo, Unit>() {
                         @Override
                         public Unit invoke(UserInfo userInfos) {
-                            Toaster.showToast(ValiCodeActivity.this, getResources().getString(R.string.login_success));
+                            Toaster.showToastShort(ValiCodeActivity.this, getResources().getString(R.string.login_success));
                             setResult(LoginOtherPhoneActivity.LOGIN_VALI_CODE_REBACK);
                             finish();
                             return null;

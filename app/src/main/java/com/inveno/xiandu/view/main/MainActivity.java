@@ -1,10 +1,7 @@
 package com.inveno.xiandu.view.main;
 
-import android.app.ActivityOptions;
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
@@ -21,13 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -39,7 +33,6 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
-import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
@@ -49,8 +42,6 @@ import com.inveno.xiandu.view.main.my.MineFragment;
 import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.main.store.StoreFragment;
 import com.inveno.xiandu.view.main.welfare.WelfareFragment;
-import com.inveno.xiandu.view.search.SerchActivityMain;
-import com.inveno.xiandu.view.splash.SplashActivity;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -210,6 +201,9 @@ public class MainActivity extends BaseActivity {
         content.setText(getClickableSpan());
         //设置该句使文本的超连接起作用
         content.setMovementMethod(LinkMovementMethod.getInstance());
+        // 去掉点击后文字的背景色
+        content.setHighlightColor(Color.parseColor("#00000000"));
+
         View btn_sure = v.findViewById(R.id.bt_splash_agreement_ok);
         View btn_cancel = v.findViewById(R.id.bt_splash_agreement_cancel);
         //builer.setView(v);//这里如果使用builer.setView(v)，自定义布局只会覆盖title和button之间的那部分
@@ -327,7 +321,8 @@ public class MainActivity extends BaseActivity {
             firstTime = System.currentTimeMillis();
         } else {
             finish();// 销毁当前activity
-            System.exit(0);// 完全退出应用
+            // TODO: 2020/6/28 暂时去除
+//            System.exit(0);// 完全退出应用
         }
     }
 

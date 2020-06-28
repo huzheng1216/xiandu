@@ -133,7 +133,7 @@ public class SettingActivity extends TitleBarBaseActivity {
         if (areNotificationEnable) {
             //跳转到通知开关页面
             IosTypeDialog.Builder builder = new IosTypeDialog.Builder(this);
-            builder.setContext("请在系统设置-通知中心 里关闭通知开关");
+            builder.setContext("请在系统设置-通知中心里关闭通知开关");
             builder.setTitle("提示");
             builder.setRightButton("知道了", new IosTypeDialog.OnClickListener() {
                 @Override

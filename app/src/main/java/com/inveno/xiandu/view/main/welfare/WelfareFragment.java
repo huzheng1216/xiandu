@@ -96,7 +96,7 @@ public class WelfareFragment extends BaseFragment {
         if (ServiceContext.userService().isLogin()) {
             get_coin();
         }else{
-            welfare_coin_today.setText(String.format("已领取：%s", "--"));
+            welfare_coin_today.setText(String.format("%s", "--"));
         }
         get_mission();
     }
@@ -119,7 +119,7 @@ public class WelfareFragment extends BaseFragment {
                     @Override
                     public Unit invoke(UserCoinOut userCoin) {
                         mUserCoin = userCoin.getCoin();
-                        welfare_coin_today.setText(String.format("已领取：%s", mUserCoin.getCurrent_coin()));
+                        welfare_coin_today.setText(String.format("%s", mUserCoin.getCurrent_coin()));
                         return null;
                     }
                 })

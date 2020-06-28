@@ -124,6 +124,13 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             }
         } else if (holder instanceof BookCityAdapter.CenterTItleViewHolder) {
             ((CenterTItleViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
+            ((CenterTItleViewHolder) holder).book_city_change.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mListener.onChangeClick();
+                }
+            });
+
         } else if (holder instanceof BookCityAdapter.BigImageViewHolder) {
             ((BigImageViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
             int finalDataPosition = dataPosition;
@@ -174,13 +181,30 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     @Override
     public int getItemCount() {
-        return super.getItemCount();
+        if (mDataList.size() == 0) {
+            return 1;
+        }
+        if (getHeaderView() != null && getFooterView() != null) {
+            return mDataList.size() + 2;
+        } else if (getHeaderView() != null || getFooterView() != null) {
+            return mDataList.size() + 1;
+        } else {
+            return mDataList.size();
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
         if (mDataList.size() == 0) {
-            return EMPTY_ITEM_TYPE;
+            if (getHeaderView() != null) {
+                if (position == 0) {
+                    return HEADER_ITEM_TYPE;
+                }
+                return EMPTY_ITEM_TYPE;
+            } else {
+                return EMPTY_ITEM_TYPE;
+            }
+
         } else {
             if (getHeaderView() == null && getFooterView() == null) {
                 return mDataList.get(position).getType();
@@ -291,16 +315,24 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     public static class CenterTItleViewHolder extends BaseHolder<BaseDataBean> {
 
         TextView recommend_text;
+        TextView book_city_change;
 
         public CenterTItleViewHolder(@NonNull View itemView) {
             super(itemView);
             recommend_text = itemView.findViewById(R.id.recommend_text);
+            book_city_change = itemView.findViewById(R.id.book_city_change);
         }
 
         @Override
         public void setData(Context context, BaseDataBean object) {
             if (object instanceof RecommendName) {
                 recommend_text.setText(((RecommendName) object).getRecommendName());
+                RecommendName recommendName = (RecommendName) object;
+                if (recommendName.getRecommendName().equals("男生热文") ||recommendName.getRecommendName().equals("女生热文")) {
+                    book_city_change.setVisibility(View.VISIBLE);
+                } else {
+                    book_city_change.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -466,5 +498,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     public interface OnItemClickListener {
         void onItemClick(BaseDataBean baseDataBean);
+
+        void onChangeClick();
     }
 }

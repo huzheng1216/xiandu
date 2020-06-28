@@ -45,6 +45,7 @@ public class MyCoinActivity extends BaseActivity {
     private TextView coin_today;
     private TextView coin_sum_get;
     private TextView coin_exchange_rate;
+    private TextView no_coin_detail;
     private CoinDetailAdapter coinDetailAdapter;
     private ArrayList<BaseDataBean> coinDetailDatas = new ArrayList<>();
 
@@ -70,6 +71,7 @@ public class MyCoinActivity extends BaseActivity {
         coin_today = findViewById(R.id.coin_today);
         coin_sum_get = findViewById(R.id.coin_sum_get);
         coin_exchange_rate = findViewById(R.id.coin_exchange_rate);
+        no_coin_detail = findViewById(R.id.no_coin_detail);
 
         RecyclerView coin_detail_recycleview = findViewById(R.id.coin_detail_recycleview);
         coinDetailAdapter = new CoinDetailAdapter(this, this, coinDetailDatas);
@@ -126,12 +128,18 @@ public class MyCoinActivity extends BaseActivity {
 
                         coinDetailDatas.addAll(coinDetail.getCoin_detail());
                         coinDetailAdapter.setData(coinDetailDatas);
+                        if (coinDetailDatas.size() > 0) {
+                            no_coin_detail.setVisibility(View.GONE);
+                        } else {
+                            no_coin_detail.setVisibility(View.VISIBLE);
+                        }
                         return null;
                     }
                 })
                 .onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
+                        no_coin_detail.setVisibility(View.VISIBLE);
                         return null;
                     }
                 }).execute();

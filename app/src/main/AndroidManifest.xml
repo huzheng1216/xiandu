@@ -34,6 +34,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.user.login.LoginOtherPhoneActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.user.login.ValiCodeActivity"
@@ -61,7 +62,7 @@
             android:name=".view.splash.AgreementActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.search.SerchActivityMain"
+            android:name=".view.search.SearchActivityMain"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".view.search.SerchResultActivity"
