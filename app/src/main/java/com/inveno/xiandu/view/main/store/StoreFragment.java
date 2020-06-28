@@ -102,16 +102,7 @@ public class StoreFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        tv = (TextView) view.findViewById(R.id.fragment_test_tv);
-
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String name = bundle.get("name").toString();
-//            tv.setText(name);
-//        }
-
     }
-
 
     public class MyAdapter extends FragmentPagerAdapter {
         public MyAdapter(FragmentManager fm) {
@@ -134,7 +125,6 @@ public class StoreFragment extends BaseFragment {
             return strings[position];
         }
     }
-
 
     private void setDefaultItem(int position) {
         //我这里mViewpager是viewpager子类的实例。如果你是viewpager的实例，也可以这么干。

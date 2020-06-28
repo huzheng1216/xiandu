@@ -91,14 +91,17 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     public void deleteSelect() {
         ArrayList<Bookbrack> bookbracks = new ArrayList<>();
         for (int i = data.size() - 1; i >= 0; i--) {
+            if (data.get(i) instanceof AdBookModel) {
+                continue;
+            }
             if (data.get(i).isSelect()) {
                 Bookbrack bookbrack = data.get(i);
                 bookbracks.add(bookbrack);
                 BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
                 if (bookShelf != null) {
                     SQL.getInstance().delBookShelf(bookShelf);
+                    data.remove(bookbrack);
                 }
-                data.remove(bookbrack);
             }
         }
 
@@ -165,6 +168,11 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                     shelfAdapterListener.onFooterClick();
                 }
             });
+            if (data.size() > 0) {
+                holder.itemView.setVisibility(View.GONE);
+            } else {
+                holder.itemView.setVisibility(View.VISIBLE);
+            }
 
         } else if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;

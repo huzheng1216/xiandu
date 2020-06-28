@@ -295,8 +295,13 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
     private void initData() {
         //获取今日已读和今日金币
-        get_coin();
-        get_read_time();
+        if (ServiceContext.userService().isLogin()) {
+            get_coin();
+            get_read_time();
+        } else {
+            shelfAdapter.setCoinNum("--");
+            shelfAdapter.setHeaderTime("--");
+        }
         shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
         List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
         if (adBookModel != null) {

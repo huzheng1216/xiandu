@@ -85,8 +85,11 @@ public class MyCoinActivity extends BaseActivity {
         } else {
             if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0) {
                 getCoin();
-                getCoinDetail();
             }
+        }
+
+        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0) {
+            getCoinDetail();
         }
     }
 

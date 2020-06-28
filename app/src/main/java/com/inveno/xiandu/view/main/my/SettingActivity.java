@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
@@ -42,6 +43,8 @@ public class SettingActivity extends TitleBarBaseActivity {
 
     private IosTypeDialog iosTypeDialog;
 
+    private TextView logout;
+
     private boolean areNotificationEnable = false;
 
     @Override
@@ -68,6 +71,13 @@ public class SettingActivity extends TitleBarBaseActivity {
         mine_appversion = findViewById(R.id.mine_appversion);
 
         mine_appversion.setText(AppInfoUtils.getAppVersion(this));
+
+        logout = findViewById(R.id.logout);
+        if (!ServiceContext.userService().isLogin()) {
+            logout.setVisibility(View.GONE);
+        } else {
+            logout.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -174,9 +184,9 @@ public class SettingActivity extends TitleBarBaseActivity {
         builder.setLeftButton("退出", new IosTypeDialog.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toaster.showToastCenter(SettingActivity.this, "退出登录");
                 AppPersistRepository.get().save(LoginAPI.USER_DATA_KEY, "");
                 ServiceContext.userService().setUserInfo(null);
+
                 EventService.Companion.post(EventConstant.LOGOUT);
                 finish();
             }
