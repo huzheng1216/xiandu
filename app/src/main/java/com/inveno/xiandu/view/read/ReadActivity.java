@@ -302,7 +302,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
          * 加载底部广告
          */
         InvenoAdServiceHolder.getService().requestInfoAd(READER_BOTTOM, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             AdModel adModel = new AdModel(wrapper);
             NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(ReadActivity.this, AD_READER_BOTTOM_TYPE));
             holder.onBindViewHolder(ReadActivity.this, wrapper.getAdValue(), 0);

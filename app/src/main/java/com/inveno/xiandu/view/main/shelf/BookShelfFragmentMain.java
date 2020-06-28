@@ -419,7 +419,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
             @Override
             public Unit invoke(IndexedAdValueWrapper wrapper) {
-                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                 adBookModel = new AdBookModel(wrapper);
                 shelfAdapter.addAd(adBookModel);
                 return null;
@@ -427,7 +427,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         }).onFail(new Function2<Integer, String, Unit>() {
             @Override
             public Unit invoke(Integer integer, String s) {
-                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+//                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
                 return null;
             }
         }).execute();

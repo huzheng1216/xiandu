@@ -210,7 +210,7 @@ public class SerchActivityMain extends BaseActivity {
      */
     private void loadAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(SEARCH, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
             NormalAdViewHolder holder = ((NormalAdViewHolder)ADViewHolderFactory.create(SerchActivityMain.this, AD_SEARCH_TYPE));
             holder.onBindViewHolder(SerchActivityMain.this,adModel.getWrapper().getAdValue(),0);

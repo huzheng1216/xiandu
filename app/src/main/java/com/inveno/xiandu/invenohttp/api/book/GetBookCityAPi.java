@@ -411,7 +411,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         }
 
         topAdRequest.onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModelTop.setWrapper(wrapper);
             int adIndex = wrapper.getIndex()+1;
             if (mDataBeans.size() >= adIndex && topDataBeans.size() >= adIndex) {
@@ -426,7 +426,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         });
 
         bottomAdRequest.onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModelBottom.setWrapper(wrapper);
             int adIndex = wrapper.getIndex()+1;
             if (mDataBeans.size() >= adIndex && bottomDataBeans.size() >= adIndex) {

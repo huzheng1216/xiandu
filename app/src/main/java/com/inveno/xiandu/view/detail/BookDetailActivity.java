@@ -591,7 +591,7 @@ public class BookDetailActivity extends BaseActivity {
      */
     private void loadAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = setAdData(ad_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
             return null;
         }).onFail((integer, s) -> {
@@ -600,7 +600,7 @@ public class BookDetailActivity extends BaseActivity {
         }).execute();
 
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adBottomModel = setAdData(ad_bottom_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
             return null;
         }).onFail((integer, s) -> {
@@ -621,7 +621,7 @@ public class BookDetailActivity extends BaseActivity {
 
     private void loadPopAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             if(ad_pop_viewgroup!=null) {
                 setAdData(ad_pop_viewgroup, wrapper,AD_BOOK_DETAIL_POP_TYPE);
             }
