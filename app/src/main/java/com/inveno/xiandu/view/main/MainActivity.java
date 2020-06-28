@@ -327,7 +327,7 @@ public class MainActivity extends BaseActivity {
             firstTime = System.currentTimeMillis();
         } else {
             finish();// 销毁当前activity
-            System.exit(0);// 完全退出应用
+//            System.exit(0);// 完全退出应用
         }
     }
 

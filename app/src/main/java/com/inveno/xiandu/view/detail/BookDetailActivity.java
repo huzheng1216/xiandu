@@ -613,7 +613,7 @@ public class BookDetailActivity extends BaseActivity {
         AdModel adModel = new AdModel(wrapper);
         NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(BookDetailActivity.this, type));
         holder.onBindViewHolder(BookDetailActivity.this,wrapper.getAdValue(),0);
-        ViewGroup view = holder.getViewGroup();
+        View view = holder.getViewGroup();
         viewGroup.addView(view);
         viewGroup.setVisibility(View.VISIBLE);
         return adModel;

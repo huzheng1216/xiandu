@@ -60,6 +60,10 @@ public enum DataManager {
         dataReportBean.setSid(sid);
     }
 
+    public void setUPack(String upack){
+        dataReportBean.setUpack(upack);
+    }
+
     private static String createAdTk(String productId, String uid, long time) {
         return Hashing.md5().newHasher().putString(productId + ":" + uid + ":" + time, Charsets.UTF_8).hash().toString();
     }
@@ -123,12 +127,11 @@ public enum DataManager {
 
 
 
-    public String reportAppDuration( String upack,long stayTime, long leaveTime , Context context) {
+    public String reportAppDuration(long stayTime, long leaveTime , Context context) {
         dataReportBean.reset();
 
         setData(context);
         dataReportBean.setEvent_id(EventIdType.READ_BOOK_DURATION);
-        dataReportBean.setUpack(upack);
         dataReportBean.setStay_time(stayTime);
         dataReportBean.setLeave_time(leaveTime);
 

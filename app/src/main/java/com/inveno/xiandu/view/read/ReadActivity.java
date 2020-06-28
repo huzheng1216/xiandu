@@ -306,7 +306,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             AdModel adModel = new AdModel(wrapper);
             NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(ReadActivity.this, AD_READER_BOTTOM_TYPE));
             holder.onBindViewHolder(ReadActivity.this, wrapper.getAdValue(), 0);
-            ViewGroup view = holder.getViewGroup();
+            View view = holder.getViewGroup();
             adBottom.removeAllViews();
             adBottom.addView(view);
             adBottom.setVisibility(VISIBLE);
@@ -330,7 +330,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             holder.onBindViewHolder(ReadActivity.this, wrapper.getAdValue(), 0);
             //获取滑动页数配置
             adIndex = wrapper.getIndex();
-            ViewGroup view = holder.getViewGroup();
+            View view = holder.getViewGroup();
             layoutChapter.removeAllViews();
             layoutChapter.addView(view);
             layoutChapterAD.setBackgroundColor(ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));

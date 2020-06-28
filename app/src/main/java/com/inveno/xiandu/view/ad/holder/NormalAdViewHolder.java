@@ -97,8 +97,8 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
         return holderViewType;
     }
 
-    public ViewGroup getViewGroup(){
-        return child_rl;
+    public View getViewGroup(){
+        return itemView;
     }
 
     public TextView getTv_ad_title() {
