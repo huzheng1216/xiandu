@@ -100,4 +100,12 @@ public class NormalAdViewHolder extends RecyclerView.ViewHolder {
     public ViewGroup getViewGroup(){
         return child_rl;
     }
+
+    public TextView getTv_ad_title() {
+        return tv_ad_title;
+    }
+
+    public ImageView getIv_ad_iamge() {
+        return iv_ad_iamge;
+    }
 }

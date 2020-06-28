@@ -168,7 +168,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         } else if (holder instanceof FooterViewHolder) {
             ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
         } else if (holder instanceof NormalAdViewHolder) {
-            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), dataPosition);
+            ((NormalAdViewHolder) holder).onBindViewHolder(mContext, ((AdModel) mDataList.get(dataPosition)).getWrapper().getAdValue(), position);
         }
     }
 

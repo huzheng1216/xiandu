@@ -91,15 +91,14 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     public void deleteSelect() {
         ArrayList<Bookbrack> bookbracks = new ArrayList<>();
         for (int i = data.size() - 1; i >= 0; i--) {
-            if (data.get(i) instanceof AdBookModel) {
-                continue;
-            }
             if (data.get(i).isSelect()) {
                 Bookbrack bookbrack = data.get(i);
-                bookbracks.add(bookbrack);
-                BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
-                if (bookShelf != null) {
-                    SQL.getInstance().delBookShelf(bookShelf);
+                if (!(bookbrack instanceof AdBookModel)) {
+                    bookbracks.add(bookbrack);
+                    BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                    if (bookShelf != null) {
+                        SQL.getInstance().delBookShelf(bookShelf);
+                    }
                     data.remove(bookbrack);
                 }
             }
@@ -130,8 +129,8 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
     @Override
     public int getItemViewType(int position) {
         if (getHeaderView() == null && getFooterView() == null) {
-            if (data.size() > position - 1 && position > 0) {
-                if (data.get(position - 1) instanceof AdBookModel) {
+            if (data.size() > position) {
+                if (data.get(position) instanceof AdBookModel) {
                     return AD_BOOK_SHELF_TYPE;
                 }
             }
@@ -149,7 +148,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                 }
                 return CONTENT_ITEM_TYPE;
             } else {
-                if (data.get(position - 1) instanceof AdBookModel) {
+                if (data.get(position) instanceof AdBookModel) {
                     return AD_BOOK_SHELF_TYPE;
                 }
                 return CONTENT_ITEM_TYPE;
@@ -168,11 +167,6 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                     shelfAdapterListener.onFooterClick();
                 }
             });
-            if (data.size() > 0) {
-                holder.itemView.setVisibility(View.GONE);
-            } else {
-                holder.itemView.setVisibility(View.VISIBLE);
-            }
 
         } else if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
@@ -192,7 +186,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             if (getHeaderView() != null) {
                 realPosition = position - 1;
             }
-            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), realPosition);
+            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), position);
         } else {
 
             int realPosition = position;

@@ -28,5 +28,8 @@ public class ARouterPath {
     public static final String ACTIVITY_CLASSIFY = BASE_URL + "ClassifyActivity";
     public static final String ACTIVITY_RANKING = BASE_URL + "RankingActivity";
 
+    //ad
+    public static final String ACTIVITY_AD_BETWEENT = BASE_URL + "ADBetweenActivity";
+
     public static final String ACTIVITY_READ_GENDER = BASE_URL + "ChoiseGenderActivity";
 }

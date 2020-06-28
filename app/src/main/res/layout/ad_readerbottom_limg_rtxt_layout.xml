@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="76dp"
+    android:id="@+id/ad_bg_r_text_l_img_rl_id"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp"
+    android:paddingBottom="8dp"
+    android:background="#33F0F0F0">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/ad_l_img_cardview"
+        style="@style/adCardView"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp">
+    <ImageView
+        android:id="@+id/ad_l_img_id"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:scaleType="centerCrop"/>
+        <TextView
+            android:id="@+id/ad_l_tag_id"
+            android:layout_width="27dp"
+            android:layout_height="15dp"
+            android:text="@string/ad_tag_string"
+            android:textColor="#ffffffff"
+            android:textSize="10sp"
+            android:gravity="center"
+            android:background="@drawable/ad_tag_background"
+            android:layout_marginTop="45dp"
+            android:layout_marginStart="53dp"/>
+    </androidx.cardview.widget.CardView>
+    <TextView
+        android:id="@+id/ad_r_text_id"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:textColor="#888888"
+        android:textSize="16sp"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:layout_toEndOf="@+id/ad_l_img_cardview"
+        android:layout_marginLeft="12dp"/>
+
+
+
+</RelativeLayout>

@@ -3,6 +3,7 @@ package com.inveno.xiandu.view.main.my;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,8 +19,11 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.android.ad.bean.IndexedAdValueWrapper;
+import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.config.ARouterPath;
@@ -45,6 +49,9 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+import static com.inveno.android.ad.config.ScenarioManifest.READ_FOOT_TRACE;
+
 /**
  * @author yongji.wang
  * @date 2020/6/9 17:13
@@ -66,6 +73,8 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     private ReadFootprintAdapter readFootprintAdapter;
 
     private IosTypeDialog iosTypeDialog;
+
+    private AdBookModel adBookModel;
 
 
     @Override
@@ -208,6 +217,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
             }
         });
         getData();
+        loadAd();
     }
 
     private void getData() {
@@ -251,6 +261,13 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
             no_book_show.setVisibility(View.VISIBLE);
         } else {
             no_book_show.setVisibility(View.GONE);
+        }
+        //TODO 加广告
+        if (adBookModel != null) {
+            int index = adBookModel.getIndex();
+            if (bookbracks.size() >= index) {
+                bookbracks.add(index, adBookModel);
+            }
         }
         readFootprintAdapter.setData(bookbracks);
     }
@@ -321,5 +338,28 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 
         iosTypeDialog.show();
         setDialogWindowAttr(iosTypeDialog);
+    }
+
+    /**
+     * 加载广告
+     */
+    private void loadAd() {
+        InvenoAdServiceHolder.getService().requestInfoAd(READ_FOOT_TRACE, ReadFootprintActivity.this)
+                .onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+                    @Override
+                    public Unit invoke(IndexedAdValueWrapper wrapper) {
+                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                        adBookModel = new AdBookModel(wrapper);
+                        readFootprintAdapter.addAd(adBookModel);
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                        return null;
+                    }
+                }).execute();
     }
 }

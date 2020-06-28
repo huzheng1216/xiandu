@@ -128,8 +128,8 @@ public class DDManager {
      * 阅读心跳
      * @return
      */
-    public Observable<BaseRequest> postReadTime() {
-        return bookBiz.postReadTime();
+    public Observable<BaseRequest> postReadTime(String id) {
+        return bookBiz.postReadTime(id);
     }
 
 

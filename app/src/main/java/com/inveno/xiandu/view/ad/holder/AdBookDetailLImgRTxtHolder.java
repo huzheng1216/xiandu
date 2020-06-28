@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.inveno.xiandu.R;
 
+import static com.inveno.android.ad.config.AdViewType.AD_BOOK_DETAIL_TYPE;
 import static com.inveno.android.ad.config.AdViewType.AD_BOY_GIRL_BOTTOM_TYPE;
 
 /**
@@ -24,7 +25,7 @@ public class AdBookDetailLImgRTxtHolder extends NormalAdViewHolder {
         iv_ad_iamge = itemView.findViewById(R.id.ad_l_img_id);
 //        iv_ad_logo = itemView.findViewById(R.id.iv_ad_logo);
 //        tv_ad_desc = itemView.findViewById(R.id.tv_ad_desc);
-        holderViewType = AD_BOY_GIRL_BOTTOM_TYPE;
+        holderViewType = AD_BOOK_DETAIL_TYPE;
     }
 
     @Override

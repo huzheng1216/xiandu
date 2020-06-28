@@ -28,7 +28,7 @@ import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.inveno.android.ad.config.AdViewType.AD_BOOK_SHELF_TYPE;
+import static com.inveno.android.ad.config.AdViewType.AD_READ_FOOT_TRACE_TYPE;
 
 /**
  * Created By huzheng
@@ -91,12 +91,14 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
         for (int i = data.size() - 1; i >= 0; i--) {
             if (data.get(i).isSelect()) {
                 Bookbrack bookbrack = data.get(i);
-                bookbracks.add(bookbrack);
-                BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
-                if (bookShelf != null) {
-                    SQL.getInstance().delBookShelf(bookShelf);
+                if (!(bookbrack instanceof AdBookModel)) {
+                    bookbracks.add(bookbrack);
+                    BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                    if (bookShelf != null) {
+                        SQL.getInstance().delBookShelf(bookShelf);
+                    }
+                    data.remove(bookbrack);
                 }
-                data.remove(bookbrack);
             }
         }
 
@@ -126,9 +128,9 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
     @Override
     public int getItemViewType(int position) {
         if (getHeaderView() == null && getFooterView() == null) {
-            if (data.size() > position - 1 && position > 0) {
-                if (data.get(position - 1) instanceof AdBookModel) {
-                    return AD_BOOK_SHELF_TYPE;
+            if (data.size() > position) {
+                if (data.get(position) instanceof AdBookModel) {
+                    return AD_READ_FOOT_TRACE_TYPE;
                 }
             }
             return CONTENT_ITEM_TYPE;
@@ -141,12 +143,12 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
                     return HEADER_ITEM_TYPE;
                 }
                 if (data.get(position - 1) instanceof AdBookModel) {
-                    return AD_BOOK_SHELF_TYPE;
+                    return AD_READ_FOOT_TRACE_TYPE;
                 }
                 return CONTENT_ITEM_TYPE;
             } else {
-                if (data.get(position - 1) instanceof AdBookModel) {
-                    return AD_BOOK_SHELF_TYPE;
+                if (data.get(position) instanceof AdBookModel) {
+                    return AD_READ_FOOT_TRACE_TYPE;
                 }
                 return CONTENT_ITEM_TYPE;
             }
@@ -183,7 +185,7 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
             if (getHeaderView() != null) {
                 realPosition = position - 1;
             }
-            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), realPosition);
+            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), position);
         } else {
 
             int realPosition = position;
@@ -357,7 +359,7 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
             return new HeaderViewHolder(getHeaderView());
         } else if (viewType == FOOTER_ITEM_TYPE) {
             return new FootViewHolder(getFooterView());
-        } else if (viewType == AD_BOOK_SHELF_TYPE) {
+        } else if (viewType == AD_READ_FOOT_TRACE_TYPE) {
             return ADViewHolderFactory.create(context, viewType);
         } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_bookshelf_item, null);
