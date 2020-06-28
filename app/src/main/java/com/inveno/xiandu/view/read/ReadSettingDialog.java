@@ -92,6 +92,7 @@ public class ReadSettingDialog extends Dialog {
     private ReadSettingManager mSettingManager;
     private PageLoader mPageLoader;
     private Activity mActivity;
+    private OnSettingListener onSettingListener;
 
     private PageMode mPageMode;
     private ComposeMode mComposeMode;
@@ -103,6 +104,9 @@ public class ReadSettingDialog extends Dialog {
     private boolean isBrightnessAuto;
     private boolean isTextDefault;
 
+    public void setOnSettingListener(OnSettingListener onSettingListener) {
+        this.onSettingListener = onSettingListener;
+    }
 
     public ReadSettingDialog(@NonNull Activity activity, PageLoader mPageLoader) {
         super(activity, R.style.ReadSettingDialog);
@@ -365,7 +369,12 @@ public class ReadSettingDialog extends Dialog {
 
         //背景的点击事件
         mPageStyleAdapter.setOnItemClickListener(
-                (view, pos) -> mPageLoader.setPageStyle(PageStyle.values()[pos])
+                (view, pos) -> {
+                    mPageLoader.setPageStyle(PageStyle.values()[pos]);
+                    if (onSettingListener != null) {
+                        onSettingListener.onPageStyleChange(PageStyle.values()[pos]);
+                    }
+                }
         );
 
         //更多设置
@@ -384,5 +393,9 @@ public class ReadSettingDialog extends Dialog {
             return false;
         }
         return mCbBrightnessAuto.isChecked();
+    }
+
+    public interface OnSettingListener{
+        void onPageStyleChange(PageStyle value);
     }
 }
