@@ -98,7 +98,7 @@ public class DonewsAdApiImpl implements IAdApi {
             @Override
             public void Success(List<DoNewsAdNativeData> list) {//请求信息流广告成功
                 try {
-                    Log.i("requestInfoAd","Success list"+list);
+//                    Log.i("requestInfoAd","Success list"+list);
                     if (list.size() > 0) {
 //                        List<Object> callBackList = new ArrayList<>();
 //                        callBackList.addAll(list);
@@ -177,7 +177,7 @@ public class DonewsAdApiImpl implements IAdApi {
         doNewsAdNative.onCreateAdSplash(splashAdParam.getActivity(), doNewsAD, new DoNewsAdNative.SplashListener() {
             @Override
             public void onNoAD(String s) {
-                Log.i("splashad","onNoAD "+s);
+//                Log.i("splashad","onNoAD "+s);
                 splashAdParam.getSplashAdListener().onNoAD(s);
             }
 
@@ -204,7 +204,7 @@ public class DonewsAdApiImpl implements IAdApi {
             @Override
             public void extendExtra(String s) {
                 splashAdParam.getSplashAdListener().extendExtra(s);
-                Log.i("splashad","extendExtra "+s);
+//                Log.i("splashad","extendExtra "+s);
             }
         });
     }

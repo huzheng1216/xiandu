@@ -117,4 +117,5 @@ dependencies {
     implementation project(path: ':basics_modules:appcompat')
     implementation project (":ad_lib")
     implementation project(path: ':free_time_read_lib_modules:book-service')
+    implementation project (":datareport")
 }

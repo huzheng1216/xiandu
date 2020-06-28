@@ -348,7 +348,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                 .onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
                     @Override
                     public Unit invoke(IndexedAdValueWrapper wrapper) {
-                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                         adBookModel = new AdBookModel(wrapper);
                         readFootprintAdapter.addAd(adBookModel);
                         return null;

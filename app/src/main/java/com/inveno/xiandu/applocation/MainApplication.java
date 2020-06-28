@@ -1,12 +1,19 @@
 package com.inveno.xiandu.applocation;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.basics.service.BasicsServiceModule;
 import com.inveno.android.device.param.provider.AndroidParamProviderHolder;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.config.Keys;
@@ -18,8 +25,11 @@ import com.inveno.xiandu.utils.SPUtils;
 /**
  * Created by Administrator on 2016/9/23.
  */
-public class MainApplication extends Application {
+public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context sInstance;
+
+    private int activityCount;//activity的count数
+    public static boolean isForeground;//是否在前台
 
     @Override
     public void onCreate() {
@@ -44,6 +54,8 @@ public class MainApplication extends Application {
         //基础服务模块
         BasicsServiceModule.Companion.onApplicationCreate(this);
         InvenoServiceContext.init(this);
+
+        registerActivityLifecycleCallbacks(this);
     }
 
     public void initCrash(){
@@ -54,4 +66,59 @@ public class MainApplication extends Application {
     public static Context getContext() {
         return sInstance;
     }
+
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
+//        Log.i("ReportManager" , "===============onActivityCreated "+activity);
+    }
+
+    @Override
+    public void onActivityStarted(@NonNull Activity activity) {
+        ReportManager.INSTANCE.appStart();
+        activityCount++;
+//        Log.i("ReportManager" , "===============onActivityStarted "+activity);
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+//        Log.i("ReportManager" , "===============onActivityResumed "+activity);
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+//        Log.i("ReportManager" , "===============onActivityPaused "+activity);
+    }
+
+    @Override
+    public void onActivityStopped(@NonNull Activity activity) {
+        activityCount--;
+        isForeground();
+//        Log.i("ReportManager" , "===============onActivityStopped "+activity);
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
+//        Log.i("ReportManager" , "===============onActivitySaveInstanceState "+activity);
+    }
+
+    @Override
+    public void onActivityDestroyed(@NonNull Activity activity) {
+//        Log.i("ReportManager" , "===============onActivityDestroyed "+activity);
+    }
+
+
+
+    /**
+     * 判断是否在前台
+     */
+    private void isForeground() {
+        if (activityCount>0) {
+            isForeground = true;
+        }else {
+            isForeground=false;
+            ReportManager.INSTANCE.appEnd(this);
+        }
+//        Log.e("ReportManager",+activityCount+"-------isForeground="+isForeground);
+    }
+
 }

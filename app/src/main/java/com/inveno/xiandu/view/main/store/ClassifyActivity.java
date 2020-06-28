@@ -136,7 +136,7 @@ public class ClassifyActivity extends BaseActivity {
      */
     private void loadAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(CATEGORY, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
             for (int i = 0; i < fragments.size(); i++) {
                 ClassifyItemFragment classifyItemFragment = (ClassifyItemFragment) fragments.get(i);

@@ -14,6 +14,7 @@
         android:layout_height="match_parent"
         android:background="@mipmap/theme_leather_bg">
 
+        <!-- 底部广告 -->
         <FrameLayout
             android:id="@+id/ad_bottom"
             android:layout_width="match_parent"

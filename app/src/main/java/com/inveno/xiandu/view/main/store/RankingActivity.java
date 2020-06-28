@@ -268,7 +268,7 @@ public class RankingActivity extends TitleBarBaseActivity {
      */
     private void loadAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
             rightDataAdapter.addAd(adModel);
             return null;
