@@ -36,6 +36,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.google.android.material.appbar.AppBarLayout;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
@@ -267,6 +268,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mBookId = bookShelf.getContent_id() + "";
         startBottomAd();
         startChapterAD();
+        report();
     }
 
     /**
@@ -1060,6 +1062,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (subscribe.isDisposed()) {
             startPostRead();
         }
+    }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(10,"",this);
     }
 
 }

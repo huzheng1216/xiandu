@@ -2,6 +2,7 @@ package com.inveno.datareport.manager;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -58,15 +59,15 @@ public enum DataManager {
         drBaseBean.setPid(pid);
     }
 
-    public void setSid(String sid){
+    public void setSid(String sid) {
         drBaseBean.setSid(sid);
     }
 
-    public void setUPack(String upack){
+    public void setUPack(String upack) {
         drBaseBean.setUpack(upack);
     }
 
-    public void setReferrer(String referrer){
+    public void setReferrer(String referrer) {
         drBaseBean.setReferrer(referrer);
     }
 
@@ -77,50 +78,55 @@ public enum DataManager {
     public String reportPageImp(int pageId, String upack, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
-        setData(context,dataReportBean);
+        setData(context, dataReportBean);
         dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
         dataReportBean.setPage_id(pageId);
 
-        dataReportBean.setUpack(upack);
+        Log.i("ReportManager"," upack" + upack + "  "+TextUtils.isEmpty(upack));
+        if (!TextUtils.isEmpty(upack)) {
+            dataReportBean.setUpack(upack);
+        }
 
-        return toJsonString(drBaseBean , dataReportBean);
+        return toJsonString(drBaseBean, dataReportBean);
     }
 
 
-    public String reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, Context context) {
+    public String reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
-        setData(context,dataReportBean);
-        dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
-        dataReportBean.setPage_id(pageId);
-        dataReportBean.setUpack(upack);
-        dataReportBean.setCpack(cpack);
-        dataReportBean.setType(type);
-        dataReportBean.setServer_time(serverTime);
-
-        return toJsonString(drBaseBean , dataReportBean);
-    }
-
-
-    public String reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, Context context) {
-        DataReportBean dataReportBean = new DataReportBean();
-
-        setData(context,dataReportBean);
+        setData(context, dataReportBean);
         dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
         dataReportBean.setPage_id(pageId);
         dataReportBean.setUpack(upack);
         dataReportBean.setCpack(cpack);
         dataReportBean.setType(type);
         dataReportBean.setServer_time(serverTime);
+        dataReportBean.setContent_id(contentId);
 
-        return toJsonString(drBaseBean , dataReportBean);
+        return toJsonString(drBaseBean, dataReportBean);
     }
 
 
-    public String reportReadBookDuration(int pageId, String upack, String cpack, int type, long serverTime, long stayTime, Context context) {
+    public String reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
-        setData(context,dataReportBean);
+        setData(context, dataReportBean);
+        dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
+        dataReportBean.setPage_id(pageId);
+        dataReportBean.setUpack(upack);
+        dataReportBean.setCpack(cpack);
+        dataReportBean.setType(type);
+        dataReportBean.setServer_time(serverTime);
+        dataReportBean.setContent_id(contentId);
+
+        return toJsonString(drBaseBean, dataReportBean);
+    }
+
+
+    public String reportReadBookDuration(int pageId, String upack, String cpack, int type, long serverTime, long stayTime, long contentId, long eventTime, Context context) {
+        DataReportBean dataReportBean = new DataReportBean();
+
+        setData(context, dataReportBean);
         dataReportBean.setEvent_id(EventIdType.READ_BOOK_DURATION);
         dataReportBean.setPage_id(pageId);
         dataReportBean.setUpack(upack);
@@ -128,25 +134,26 @@ public enum DataManager {
         dataReportBean.setType(type);
         dataReportBean.setServer_time(serverTime);
         dataReportBean.setStay_time(stayTime);
+        dataReportBean.setContent_id(contentId);
+        dataReportBean.setEvent_time(eventTime);
 
-        return toJsonString(drBaseBean , dataReportBean);
+        return toJsonString(drBaseBean, dataReportBean);
     }
 
 
-
-    public String reportAppDuration(long stayTime, long leaveTime , Context context) {
+    public String reportAppDuration(long stayTime, long leaveTime, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
-        setData(context,dataReportBean);
+        setData(context, dataReportBean);
         dataReportBean.setEvent_id(EventIdType.READ_BOOK_DURATION);
         dataReportBean.setStay_time(stayTime);
         dataReportBean.setLeave_time(leaveTime);
 
-        return toJsonString(drBaseBean , dataReportBean);
+        return toJsonString(drBaseBean, dataReportBean);
     }
 
 
-    private void setData(Context context , DataReportBean dataReportBean) {
+    private void setData(Context context, DataReportBean dataReportBean) {
         long now = System.currentTimeMillis();
         dataReportBean.setReport_time(now);
         dataReportBean.setEvent_time(now);
@@ -154,10 +161,11 @@ public enum DataManager {
         dataReportBean.setIp(NetWorkUtil.getIpAddress(context));
     }
 
-    private String toJsonString(DrBaseBean drBaseBean , DataReportBean dataReportBean){
+    private String toJsonString(DrBaseBean drBaseBean, DataReportBean dataReportBean) {
         JSONObject jsonObject = (JSONObject) JSON.toJSON(drBaseBean);
         JSONObject jsonObject2 = (JSONObject) JSON.toJSON(dataReportBean);
         jsonObject.putAll(jsonObject2);
         return jsonObject.toJSONString();
     }
+
 }

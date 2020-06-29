@@ -22,6 +22,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
@@ -229,6 +230,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     @Override
     protected void onVisible(Boolean firstVisble) {
         LogUtils.H("书架可见：" + firstVisble);
+        ReportManager.INSTANCE.reportPageImp(1,"",getContext());
         initData();
         if (firstVisble) {
             //从网络加载书籍
