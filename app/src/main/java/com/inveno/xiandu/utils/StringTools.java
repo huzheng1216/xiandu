@@ -62,7 +62,8 @@ public class StringTools {
      * @return
      */
     public static boolean isPhone(String str) throws PatternSyntaxException {
-        return isChinaPhoneLegal(str) || isHKPhoneLegal(str);
+        return isChinaPhoneLegal(str);
+//        return isChinaPhoneLegal(str) || isHKPhoneLegal(str);
     }
 
     /**
