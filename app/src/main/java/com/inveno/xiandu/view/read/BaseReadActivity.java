@@ -17,7 +17,9 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by PC on 2016/9/8.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
 public abstract class BaseReadActivity extends AppCompatActivity {
     private static final int INVALID_VAL = -1;

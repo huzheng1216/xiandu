@@ -125,4 +125,18 @@ public class BookBiz extends BaseBiz {
         param.put("pid", ServiceContext.userService().getUserPid());
         return mMRRequestService.postReadTime(param);
     }
+
+    public Observable<BaseRequest> postReadProgress(String content_id, String chapter_id, int words_num) {
+        LinkedHashMap<String,Object> param = new LinkedHashMap<>();
+        UidParamsUtil.fillUidParams(param);
+        String uid = InvenoServiceContext.uid().getUid();
+        if(!TextUtils.isEmpty(uid)){
+            param.put("uid", uid);
+        }
+        param.put("content_id", content_id);
+        param.put("chapter_id", chapter_id);
+        param.put("words_num", words_num);
+        param.put("pid", ServiceContext.userService().getUserPid());
+        return mMRRequestService.postReadTime(param);
+    }
 }

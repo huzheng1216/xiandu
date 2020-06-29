@@ -10,11 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by newbiechen on 17-5-20.
- * 处理书籍的工具类，配合PageFactory使用
- * 已弃用，
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
-
 public class BookManager {
     private static final String TAG = "BookManager";
     private String chapterName;

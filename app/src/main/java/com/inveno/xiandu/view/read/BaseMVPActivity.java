@@ -1,7 +1,7 @@
 package com.inveno.xiandu.view.read;
 
 /**
- * Created by newbiechen on 17-4-25.
+ * Created by zheng.hu on 17-4-25.
  */
 
 public abstract class BaseMVPActivity<T extends BaseContract.BasePresenter> extends BaseReadActivity{

@@ -28,6 +28,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookChapter;
@@ -268,6 +269,7 @@ public class BookDetailActivity extends BaseActivity {
         initDirectoryPopwindow();
 
         loadAd();
+        report();
     }
 
     private boolean isTextView(TextView textView) {
@@ -415,7 +417,7 @@ public class BookDetailActivity extends BaseActivity {
 
     //获取第一章内容
     private void getFirstCapter() {
-        DDManager.getInstance().getChapterInfo(book.getContent_id() + "", book.getBookChapters().get(0).getChapter_id())
+        DDManager.getInstance().getChapterInfo(book.getContent_id() + "", book.getBookChapters().get(0).getChapter_id()+"")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BaseRequest<ChapterInfo>>() {
@@ -628,6 +630,10 @@ public class BookDetailActivity extends BaseActivity {
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         }).execute();
+    }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(11,"",this);
     }
 
 }

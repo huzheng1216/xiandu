@@ -18,6 +18,7 @@ import com.inveno.android.basics.service.callback.StatefulCallBack;
 import com.alibaba.fastjson.JSON;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdModel;
@@ -82,6 +83,8 @@ public class StoreItemFragment extends BaseFragment {
 
     private StatefulCallBack<BookShelfList> topRequest;
     private StatefulCallBack<BookShelfList> bottomRequest;
+
+    private boolean isVisible;
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -252,6 +255,8 @@ public class StoreItemFragment extends BaseFragment {
         //第一次加载数据
         Log.i("wyjjjjjjj", "页面: " + channel);
         Log.i("wyjjjjjjj", "是否第一次: " + firstVisble);
+        isVisible = true;
+        report();
         if (firstVisble) {
 //            initData();
             getData();
@@ -313,5 +318,27 @@ public class StoreItemFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+    }
+
+    @Override
+    protected void onInVisible() {
+        super.onInVisible();
+        isVisible = false;
+    }
+
+    private void report(){
+        int pageId = 2;
+        if (channel==1){
+            pageId = 3;
+        }else if (channel==2){
+            pageId = 4;
+        }
+        ReportManager.INSTANCE.reportPageImp(pageId,"",getContext());
+    }
+
+    public void checkAndReport(){
+        if (isVisible){
+            report();
+        }
     }
 }

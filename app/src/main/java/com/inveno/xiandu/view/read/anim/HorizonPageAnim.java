@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewConfiguration;
 
 /**
- * Created by newbiechen on 17-7-24.
- * 横向动画的模板
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des 横向动画的模板
  */
-
 public abstract class HorizonPageAnim extends PageAnimation{
     private static final String TAG = "HorizonPageAnim";
 

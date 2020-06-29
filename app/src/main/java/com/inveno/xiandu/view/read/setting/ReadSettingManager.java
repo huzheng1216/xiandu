@@ -6,10 +6,10 @@ import com.inveno.xiandu.view.read.page.PageMode;
 import com.inveno.xiandu.view.read.page.PageStyle;
 
 /**
- * Created by newbiechen on 17-5-17.
- * 阅读器的配置管理
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des 阅读器的配置管理
  */
-
 public class ReadSettingManager {
     /*************实在想不出什么好记的命名方式。。******************/
     public static final int READ_BG_DEFAULT = 0;

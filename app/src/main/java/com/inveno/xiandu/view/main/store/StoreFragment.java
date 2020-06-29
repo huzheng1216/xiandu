@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +90,8 @@ public class StoreFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         super.onVisible(firstVisble);
+        Log.i("ReportManager","onVisible");
+        report();
         if (firstVisble) {
             int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
             setDefaultItem(gender);
@@ -136,5 +139,11 @@ public class StoreFragment extends BaseFragment {
         myAdapter.notifyDataSetChanged();
 
         viewPager.setCurrentItem(position);
+    }
+
+    private void report(){
+        for (int i = 0; i < fragments.size(); i++) {
+            ((StoreItemFragment)fragments.get(i)).checkAndReport();
+        }
     }
 }

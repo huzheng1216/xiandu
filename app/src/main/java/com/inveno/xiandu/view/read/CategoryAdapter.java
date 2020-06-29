@@ -9,7 +9,7 @@ import com.inveno.xiandu.view.read.adapter.EasyAdapter;
 import com.inveno.xiandu.view.read.adapter.IViewHolder;
 
 /**
- * Created by newbiechen on 17-6-5.
+ * Created by zheng.hu on 17-6-5.
  */
 
 public class CategoryAdapter extends EasyAdapter<ChapterInfo> {

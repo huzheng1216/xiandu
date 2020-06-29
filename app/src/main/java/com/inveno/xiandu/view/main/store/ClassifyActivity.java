@@ -17,6 +17,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.config.ARouterPath;
@@ -96,6 +97,7 @@ public class ClassifyActivity extends BaseActivity {
         myTabLayout.setupWithViewPager(viewPager);
 
         loadAd();
+        report();
 
         int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
         setDefaultItem(1);
@@ -173,4 +175,9 @@ public class ClassifyActivity extends BaseActivity {
     public interface OnBackPressedClickListener {
         void onBackPressed();
     }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(6,"",this);
+    }
+
 }

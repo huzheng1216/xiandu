@@ -18,10 +18,10 @@ import java.util.Date;
 import static com.inveno.xiandu.view.read.setting.ReadSettingManager.SHARED_READ_CONVERT_TYPE;
 
 /**
- * Created by newbiechen on 17-4-22.
- * 对文字操作的工具类
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des 对文字操作的工具类
  */
-
 public class StringUtils {
     private static final String TAG = "StringUtils";
     private static final int HOUR_OF_DAY = 24;

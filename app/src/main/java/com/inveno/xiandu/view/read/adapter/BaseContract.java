@@ -1,7 +1,7 @@
 package com.inveno.xiandu.view.read.adapter;
 
 /**
- * Created by newbiechen on 17-4-26.
+ * Created by zheng.hu on 17-4-26.
  */
 
 public interface BaseContract {

@@ -4,9 +4,10 @@ import java.io.Closeable;
 import java.io.IOException;
 
 /**
- * Created by newbiechen on 17-5-11.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
-
 public class IOUtils {
 
     public static void close(Closeable closeable){

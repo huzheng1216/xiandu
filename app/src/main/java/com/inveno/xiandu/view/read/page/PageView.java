@@ -19,9 +19,9 @@ import com.inveno.xiandu.view.read.anim.SimulationPageAnim;
 import com.inveno.xiandu.view.read.anim.SlidePageAnim;
 
 /**
- * Created by Administrator on 2016/8/29 0029.
- * 原作者的GitHub Project Path:(https://github.com/PeachBlossom/treader)
- * 绘制页面显示内容的类
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des 绘制页面显示内容的类
  */
 public class PageView extends View {
 

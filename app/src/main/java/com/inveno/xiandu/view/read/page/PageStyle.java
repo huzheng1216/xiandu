@@ -4,10 +4,10 @@ import androidx.annotation.ColorRes;
 import com.inveno.xiandu.R;
 
 /**
- * Created by newbiechen on 2018/2/5.
- * 作用：页面的展示风格。
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des 页面的展示风格。
  */
-
 public enum PageStyle {
     BG_0(R.color.nb_read_font_1, R.color.nb_read_bg_1),
     BG_1(R.color.nb_read_font_2, R.color.nb_read_bg_2),

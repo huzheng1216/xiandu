@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdModel;
@@ -141,6 +142,7 @@ public class RankingActivity extends TitleBarBaseActivity {
         });
         getRankingMenu();
         loadAd();
+        report();
     }
 
     @Override
@@ -285,6 +287,10 @@ public class RankingActivity extends TitleBarBaseActivity {
                 mData.add(index,adModel);
             }
         }
+    }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(5,"",this);
     }
 
 }

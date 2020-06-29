@@ -16,7 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * Author： liyi
+ * Author： zheng.hu
  * Date：    2017/2/16.
  */
 //SwipeItemLayout1与SwipeItemLayout2供参考，SwipeItemLayout为正式版本

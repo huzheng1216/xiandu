@@ -12,7 +12,7 @@ import com.inveno.xiandu.view.read.page.PageStyle;
 
 
 /**
- * Created by newbiechen on 17-5-19.
+ * Created by zheng.hu on 17-5-19.
  */
 
 public class PageStyleAdapter extends BaseListAdapter<Drawable> {

@@ -15,9 +15,10 @@ import android.os.Build;
 import android.view.View;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
-
 public class SimulationPageAnim extends HorizonPageAnim {
     private static final String TAG = "SimulationPageAnim";
 

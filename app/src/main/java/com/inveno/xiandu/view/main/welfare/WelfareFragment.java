@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.MissionData;
 import com.inveno.xiandu.bean.coin.MissionDataList;
@@ -102,6 +103,7 @@ public class WelfareFragment extends BaseFragment {
             welfare_coin_today.setText(String.format("%s", "--"));
         }
         get_mission();
+        report();
     }
 
     @OnClick(R.id.welfare_my_coin)
@@ -161,6 +163,10 @@ public class WelfareFragment extends BaseFragment {
                         return null;
                     }
                 }).execute();
+    }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(7,"",getContext());
     }
 
 }

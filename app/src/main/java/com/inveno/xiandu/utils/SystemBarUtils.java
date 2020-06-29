@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created by zheng.hu on 17-5-16.
  * 基于 Android 4.4
  *
  * 主要参数说明:

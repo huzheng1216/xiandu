@@ -22,6 +22,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
@@ -47,7 +48,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+import static com.inveno.android.ad.config.ScenarioManifest.BOOK_SHELF;
 
 /**
  * Created By huzheng
@@ -229,6 +230,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     @Override
     protected void onVisible(Boolean firstVisble) {
         LogUtils.H("书架可见：" + firstVisble);
+        ReportManager.INSTANCE.reportPageImp(1,"",getContext());
         initData();
         if (firstVisble) {
             //从网络加载书籍
@@ -274,7 +276,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             shelfAdapter.setCoinNum("--");
             shelfAdapter.setHeaderTime("--");
         }
-        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
+//        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
         List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
         if (adBookModel != null) {
             int index = adBookModel.getIndex();
@@ -393,7 +395,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
      * 加载广告
      */
     private void loadAd() {
-        InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_SHELF, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
             @Override
             public Unit invoke(IndexedAdValueWrapper wrapper) {
 //                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
