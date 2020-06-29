@@ -30,7 +30,7 @@ dependencies {
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     //多牛聚合广告
-    api(name: 'donewsSDK4.93', ext: 'aar')
+    api(name: 'donewsSDK4.94', ext: 'aar')
     //广点通
     implementation(name: 'GDTSDK.unionNormal.4.176.1046', ext: 'aar')
     //穿山甲
