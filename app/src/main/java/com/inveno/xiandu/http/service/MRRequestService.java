@@ -47,4 +47,7 @@ public interface MRRequestService {
 
     @POST("behavior/heat_beat/report")
     Observable<BaseRequest> postReadTime(@Body Map<String, Object> map);
+
+    @POST("behavior/add_read_progress")
+    Observable<BaseRequest> postReadProgress(@Body Map<String, Object> map);
 }

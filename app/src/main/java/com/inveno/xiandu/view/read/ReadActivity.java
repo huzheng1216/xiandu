@@ -64,6 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Flowable;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
@@ -79,7 +80,7 @@ import static com.inveno.android.ad.config.ScenarioManifest.READER_BOTTOM;
 /**
  * Created By huzheng
  * Date 2020/5/13
- * Des
+ * Des 阅读界面
  */
 @Route(path = ARouterPath.ACTIVITY_CONTENT_MAIN)
 public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
@@ -952,9 +953,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onPause() {
         super.onPause();
         mWakeLock.release();
-        if (isCollected) {
+//        if (isCollected) {
             mPageLoader.saveRecord();
-        }
+//        }
     }
 
     @Override
@@ -986,6 +987,15 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (adBottomDisposable != null && !adBottomDisposable.isDisposed()) {
             adBottomDisposable.dispose();
         }
+        //上报阅读进度
+//        DDManager.getInstance().postReadProgress(bookShelf.getContent_id(), bookShelf.get)
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Consumer<BaseRequest>() {
+//                    @Override
+//                    public void accept(BaseRequest baseRequest) throws Exception {
+//
+//                    }
+//                });
     }
 
     @Override

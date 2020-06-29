@@ -92,6 +92,7 @@ public class DDManager {
 
     /**
      * 获取频道数据
+     *
      * @param channel_id
      * @param num
      * @param type
@@ -104,6 +105,7 @@ public class DDManager {
 
     /**
      * 获取章节列表
+     *
      * @param content_id
      * @param page_num
      * @return
@@ -115,6 +117,7 @@ public class DDManager {
 
     /**
      * 获取章节信息
+     *
      * @param content_id
      * @param chapter_id
      * @return
@@ -126,10 +129,21 @@ public class DDManager {
 
     /**
      * 阅读心跳
+     *
      * @return
      */
     public Observable<BaseRequest> postReadTime(String id) {
         return bookBiz.postReadTime(id);
+    }
+
+
+    /**
+     * 上报阅读进度
+     *
+     * @return
+     */
+    public Observable<BaseRequest> postReadProgress(String content_id, String chapter_id, int words_num) {
+        return bookBiz.postReadProgress(content_id, chapter_id, words_num);
     }
 
 

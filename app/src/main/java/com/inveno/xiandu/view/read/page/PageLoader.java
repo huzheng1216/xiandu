@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ChapterInfo;
+import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.view.read.setting.IOUtils;
 import com.inveno.xiandu.view.read.setting.ReadSettingManager;
 import com.inveno.xiandu.view.read.setting.RxUtils;
@@ -616,10 +617,17 @@ public abstract class PageLoader {
      */
     public void saveRecord() {
 
-//        if (mChapterList.isEmpty()) {
-//            return;
-//        }
-//
+        if (mChapterList.isEmpty()) {
+            return;
+        }
+        int words = 0;
+        for (int i = 0; i <= mCurPage.position; i++) {
+            TxtPage txtPage = mCurPageList.get(i);
+            for (String c : txtPage.lines) {
+                words += c.trim().length();
+            }
+        }
+        LogUtils.H(mCollBook.getContent_id() + "---" + mCurChapterPos + "---" + mCurPage.position);
 //        mBookRecord.setBookId(mCollBook.getContent_id() + "");
 //        mBookRecord.setChapter(mCurChapterPos);
 //
@@ -628,8 +636,8 @@ public abstract class PageLoader {
 //        } else {
 //            mBookRecord.setPagePos(0);
 //        }
-
-        //存储到数据库
+//
+//        //存储到数据库
 //        BookRepository.getInstance()
 //                .saveBookRecord(mBookRecord);
     }
