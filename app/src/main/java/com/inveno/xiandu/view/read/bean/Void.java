@@ -1,8 +1,9 @@
 package com.inveno.xiandu.view.read.bean;
 
 /**
- * Created by newbiechen on 17-5-27.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
-
 public final class Void {
 }

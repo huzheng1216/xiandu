@@ -7,7 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.View;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * Created by zheng.hu on 17-7-24.
  */
 
 public class CoverPageAnim extends HorizonPageAnim {

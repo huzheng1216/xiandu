@@ -12,9 +12,10 @@ import com.inveno.xiandu.applocation.MainApplication;
 import java.lang.reflect.Method;
 
 /**
- * Created by newbiechen on 17-5-1.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
-
 public class ScreenUtils {
 
     public static int dpToPx(int dp){

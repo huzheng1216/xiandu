@@ -79,7 +79,7 @@ import static com.inveno.android.ad.config.ScenarioManifest.READER_BETWEEN;
 import static com.inveno.android.ad.config.ScenarioManifest.READER_BOTTOM;
 
 /**
- * Created by newbiechen on
+ * Created by zheng.hu on
  */
 @Route(path = ARouterPath.ACTIVITY_AD_BETWEENT)
 public class ADBetweenActivity extends BaseActivity {

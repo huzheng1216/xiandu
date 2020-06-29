@@ -1,7 +1,7 @@
 package com.inveno.xiandu.utils;
 
 /**
- * Created by newbiechen on 2018/1/1.
+ * Created by zheng.hu on 2018/1/1.
  */
 
 import java.security.MessageDigest;

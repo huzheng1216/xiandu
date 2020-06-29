@@ -6,7 +6,7 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created by zheng.hu on 17-5-16.
  */
 
 public class CategoryHolder extends ViewHolderImpl<ChapterInfo> {

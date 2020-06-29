@@ -28,7 +28,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created by zheng.hu on 17-5-16.
  */
 
 public class ReadPresenter extends RxPresenter<ReadContract.View>

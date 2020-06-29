@@ -4,9 +4,10 @@ import android.graphics.Canvas;
 import android.view.View;
 
 /**
- * Created by newbiechen on 17-7-24.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
-
 public class NonePageAnim extends HorizonPageAnim{
 
     public NonePageAnim(int w, int h, View view, OnPageChangeListener listener) {

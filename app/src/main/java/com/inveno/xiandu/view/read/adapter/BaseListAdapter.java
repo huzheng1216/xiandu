@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by newbiechen on 17-3-21.
+ * Created by zheng.hu on 17-3-21.
  */
 
 public abstract class BaseListAdapter<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder>{

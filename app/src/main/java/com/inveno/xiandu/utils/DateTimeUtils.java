@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
- * @author Clown
+ * @author zheng.hu
  * @ClassName: DateTimeUtils
  * @Description: 时间日期工具类
  * @date 2015年8月10日 上午9:58:53

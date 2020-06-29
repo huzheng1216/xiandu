@@ -151,6 +151,7 @@ import static androidx.viewpager2.widget.ViewPager2.SCROLL_STATE_SETTLING;
  * @attr ref android.support.design.R.styleable#TabLayout_tabTextAppearance
  *
  * 修改自api27-Tablayout源码，可以设置指示器宽高，动画
+ * CreatBy huzheng
  */
 @ViewPager.DecorView
 public class MyTabLayout extends HorizontalScrollView {

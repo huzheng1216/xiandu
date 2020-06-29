@@ -84,7 +84,9 @@ import static com.inveno.android.ad.config.ScenarioManifest.READER_BOTTOM;
 import static com.inveno.android.ad.config.ScenarioManifest.SEARCH;
 
 /**
- * Created by newbiechen on 17-5-16.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  */
 @Route(path = ARouterPath.ACTIVITY_CONTENT_MAIN)
 public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>

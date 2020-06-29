@@ -28,11 +28,12 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
 
 /**
- * Created by newbiechen on 17-7-1.
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des
  * 问题:
  * 1. 异常处理没有做好
  */
-
 public class LocalPageLoader extends PageLoader {
     private static final String TAG = "LocalPageLoader";
     //默认从文件中获取数据的长度

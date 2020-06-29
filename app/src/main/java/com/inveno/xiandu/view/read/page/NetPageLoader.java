@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by newbiechen on 17-5-29.
- * 网络页面加载器
+ * Created By huzheng
+ * Date 2020/5/13
+ * Des 网络页面加载器
  */
-
 public class NetPageLoader extends PageLoader {
     private static final String TAG = "PageFactory";
 
