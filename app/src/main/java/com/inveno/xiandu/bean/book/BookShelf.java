@@ -65,6 +65,7 @@ public class BookShelf extends BaseDataBean {
     public BookShelf() {
     }
 
+
     @Generated(hash = 1267319505)
     public BookShelf(Long content_id, String poster, String book_name,
             String author, float score, int popularity, int book_status,
@@ -85,6 +86,7 @@ public class BookShelf extends BaseDataBean {
         this.chapter_id = chapter_id;
         this.time = time;
     }
+
 
     public Long getContent_id() {
         return this.content_id;
@@ -213,11 +215,14 @@ public class BookShelf extends BaseDataBean {
         this.chapter_name = chapter_name;
     }
 
+
     public int getChapter_id() {
         return this.chapter_id;
     }
 
+
     public void setChapter_id(int chapter_id) {
         this.chapter_id = chapter_id;
     }
+
 }

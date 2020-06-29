@@ -22,6 +22,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
@@ -218,6 +219,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
         });
         getData();
         loadAd();
+        report();
     }
 
     private void getData() {
@@ -361,5 +363,9 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                         return null;
                     }
                 }).execute();
+    }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(9,"",this);
     }
 }

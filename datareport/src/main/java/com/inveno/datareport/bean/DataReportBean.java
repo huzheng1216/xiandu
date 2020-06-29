@@ -14,6 +14,7 @@ public class DataReportBean {
     public Long report_time;
     public String tk;
     public String ip;
+    public long content_id;
 
     public int getEvent_id() {
         return event_id;
@@ -111,6 +112,14 @@ public class DataReportBean {
         this.ip = ip;
     }
 
+    public long getContent_id() {
+        return content_id;
+    }
+
+    public void setContent_id(long content_id) {
+        this.content_id = content_id;
+    }
+
     //    public void reset(){
 //        event_id = 0;
 //        page_id = 0;
@@ -140,6 +149,7 @@ public class DataReportBean {
                 ", report_time=" + report_time +
                 ", tk='" + tk + '\'' +
                 ", ip='" + ip + '\'' +
+                ", content_id='" + content_id + '\'' +
                 '}';
     }
 }

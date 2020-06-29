@@ -74,7 +74,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
         for (ChapterInfo chapterInfo : bookChapters) {
             if (!TextUtils.isEmpty(chapterInfo.getContent()))
                 continue;
-            list.add(DDManager.getInstance().getChapterInfo(bookId, chapterInfo.getChapter_id()));
+            list.add(DDManager.getInstance().getChapterInfo(bookId, chapterInfo.getChapter_id()+""));
         }
         LogUtils.H("hahahahah");
         Observable.concat(list)
@@ -89,7 +89,7 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                     @Override
                     public void onNext(BaseRequest<ChapterInfo> chapterInfoBaseRequest) {
                         ChapterInfo data = chapterInfoBaseRequest.getData();
-                        saveChapterInfo(bookId, data.getChapter_id(), data.getContent());
+                        saveChapterInfo(bookId, data.getChapter_id()+"", data.getContent());
                         mView.finishChapter();
                     }
 

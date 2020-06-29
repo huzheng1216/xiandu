@@ -20,7 +20,7 @@ public class ChapterInfo {
     private Long content_id;
 
     @Id
-    private String chapter_id;
+    private int chapter_id;
 
     private String book_name;
 
@@ -37,8 +37,12 @@ public class ChapterInfo {
     @Transient
     private String content;
 
-    @Generated(hash = 1921544683)
-    public ChapterInfo(Long content_id, String chapter_id, String book_name,
+    @Generated(hash = 1687309083)
+    public ChapterInfo() {
+    }
+
+    @Generated(hash = 1264658668)
+    public ChapterInfo(Long content_id, int chapter_id, String book_name,
             String chapter_name, int chapter_index, long word_count) {
         this.content_id = content_id;
         this.chapter_id = chapter_id;
@@ -46,10 +50,6 @@ public class ChapterInfo {
         this.chapter_name = chapter_name;
         this.chapter_index = chapter_index;
         this.word_count = word_count;
-    }
-
-    @Generated(hash = 1687309083)
-    public ChapterInfo() {
     }
 
     public String getBook_name() {
@@ -92,19 +92,19 @@ public class ChapterInfo {
         this.chapter_index = chapter_index;
     }
 
-    public String getChapter_id() {
-        return chapter_id;
-    }
-
-    public void setChapter_id(String chapter_id) {
-        this.chapter_id = chapter_id;
-    }
-
     public Long getContent_id() {
         return this.content_id;
     }
 
     public void setContent_id(Long content_id) {
         this.content_id = content_id;
+    }
+
+    public int getChapter_id() {
+        return this.chapter_id;
+    }
+
+    public void setChapter_id(int chapter_id) {
+        this.chapter_id = chapter_id;
     }
 }

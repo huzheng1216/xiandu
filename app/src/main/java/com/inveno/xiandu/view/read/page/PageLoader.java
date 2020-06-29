@@ -15,6 +15,9 @@ import androidx.core.content.ContextCompat;
 
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ChapterInfo;
+import com.inveno.xiandu.db.SQL;
+import com.inveno.xiandu.http.DDManager;
+import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.view.read.setting.IOUtils;
 import com.inveno.xiandu.view.read.setting.ReadSettingManager;
@@ -28,11 +31,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created By huzheng
@@ -620,26 +627,46 @@ public abstract class PageLoader {
         if (mChapterList.isEmpty()) {
             return;
         }
-        int words = 0;
-        for (int i = 0; i <= mCurPage.position; i++) {
-            TxtPage txtPage = mCurPageList.get(i);
-            for (String c : txtPage.lines) {
-                words += c.trim().length();
-            }
-        }
         LogUtils.H(mCollBook.getContent_id() + "---" + mCurChapterPos + "---" + mCurPage.position);
-//        mBookRecord.setBookId(mCollBook.getContent_id() + "");
-//        mBookRecord.setChapter(mCurChapterPos);
-//
-//        if (mCurPage != null) {
-//            mBookRecord.setPagePos(mCurPage.position);
-//        } else {
-//            mBookRecord.setPagePos(0);
-//        }
+        mCollBook.setChapter_id(mCurPage.id);
+
+        int words = 0;
+        if (mCurPage != null) {
+            for (int i = 0; i <= mCurPage.position; i++) {
+                TxtPage txtPage = mCurPageList.get(i);
+                for (String c : txtPage.lines) {
+                    words += c.trim().length();
+                }
+            }
+            mCollBook.setWords_num(words);
+        } else {
+            mCollBook.setWords_num(words);
+        }
 //
 //        //存储到数据库
-//        BookRepository.getInstance()
-//                .saveBookRecord(mBookRecord);
+//        SQL.getInstance().insertOrReplace();
+        //上报阅读进度
+        DDManager.getInstance().postReadProgress(mCollBook.getContent_id()+"", mCollBook.getChapter_id()+"", mCollBook.getWords_num())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<BaseRequest>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                    }
+
+                    @Override
+                    public void onNext(BaseRequest baseRequest) {
+                        LogUtils.H("");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.H("");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
     }
 
     /**
@@ -1347,6 +1374,7 @@ public abstract class PageLoader {
                         TxtPage page = new TxtPage();
                         page.position = pages.size();
                         page.title = StringUtils.convertCC(chapter.getChapter_name(), mContext);
+                        page.id = chapter.getChapter_id();
                         page.lines = new ArrayList<>(lines);
                         page.titleLines = titleLinesCount;
                         pages.add(page);
@@ -1400,6 +1428,7 @@ public abstract class PageLoader {
                 TxtPage page = new TxtPage();
                 page.position = pages.size();
                 page.title = StringUtils.convertCC(chapter.getChapter_name(), mContext);
+                page.id = chapter.getChapter_id();
                 page.lines = new ArrayList<>(lines);
                 page.titleLines = titleLinesCount;
                 pages.add(page);

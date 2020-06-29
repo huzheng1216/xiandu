@@ -69,7 +69,7 @@ public class NetPageLoader extends PageLoader {
 
     @Override
     protected boolean hasChapterData(ChapterInfo chapter) {
-        return BookManager.isChapterCached(mCollBook.getContent_id() + "", chapter.getChapter_id());
+        return BookManager.isChapterCached(mCollBook.getContent_id() + "", chapter.getChapter_id()+"");
     }
 
     // 装载上一章节的内容

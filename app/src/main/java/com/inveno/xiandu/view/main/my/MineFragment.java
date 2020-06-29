@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.basics.service.event.EventCanceler;
 import com.inveno.android.basics.service.event.EventListener;
 import com.inveno.android.basics.service.event.EventService;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.bean.coin.UserCoinOut;
@@ -202,6 +203,7 @@ public class MineFragment extends BaseFragment {
 
     @Override
     protected void onVisible(Boolean firstVisble) {
+        report();
         if (firstVisble) {
             UserInfo userInfo = ServiceContext.userService().getUserInfo();
             if (userInfo != null) {
@@ -280,5 +282,9 @@ public class MineFragment extends BaseFragment {
                 mainActivity.setCheckViewPager(1);
             }
         }
+    }
+
+    private void report(){
+        ReportManager.INSTANCE.reportPageImp(8,"",getContext());
     }
 }
