@@ -1,6 +1,7 @@
 package com.inveno.xiandu.view.splash;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ViewGroup;
@@ -94,23 +95,40 @@ public class SplashActivity extends BaseActivity implements AppInitListener {
 
 
     private void checkAndInit() {
-        if (initViewProxy.isNeedToCheckPermission()) {
-            AppPermissionUtil.checkPermission(SplashActivity.this, new Runnable() {
-                @Override
-                public void run() {
-                    onAppPermissionGet();
-                }
-            }, true);
+//        if (initViewProxy.isNeedToCheckPermission()) {
+        AppPermissionUtil.checkPermission(SplashActivity.this, new Runnable() {
+            @Override
+            public void run() {
+                onAppPermissionGet();
+            }
+        }, true);
 
-        } else {
-            initViewProxy.init();
-        }
+//        } else {
+//            initViewProxy.init();
+//        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         AppPermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        initViewProxy.init();
+    }
+
+    /**
+     * 检测是否说有的权限都已经授权
+     *
+     * @param grantResults
+     * @return
+     * @since 2.5.0
+     */
+    private boolean verifyPermissions(int[] grantResults) {
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void onAppPermissionGet() {

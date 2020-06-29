@@ -87,17 +87,19 @@ public class UidParamsUtil {
         IProductService iProductService = InvenoServiceContext.product();
         IAndroidParamProvider androidParamProvider = AndroidParamProviderHolder.get();
 
+        String request_time = String.valueOf(System.currentTimeMillis());
+
         paramMap.put("product_id", iProductService.getProductId());
         if (!TextUtils.isEmpty(InvenoServiceContext.uid().getUid()))
             paramMap.put("uid", InvenoServiceContext.uid().getUid());
-        paramMap.put("request_time", String.valueOf(System.currentTimeMillis()));
+        paramMap.put("request_time", request_time);
         paramMap.put("app_ver", AppInfoHolder.Companion.getAppInfo().getVersionName());
         paramMap.put("api_ver", "1.0");
         paramMap.put("network", androidParamProvider.device().getNetwork());
         paramMap.put("platform", "android");
         paramMap.put("brand", androidParamProvider.device().getBrand());
         paramMap.put("model", androidParamProvider.device().getModel());
-        paramMap.put("tk", iProductService.createTkWithoutData(String.valueOf(System.currentTimeMillis())));
+        paramMap.put("tk", iProductService.createTkWithoutData(request_time));
 
         paramMap.put("osv", androidParamProvider.os().getOsVersion());
         paramMap.put("imei", androidParamProvider.device().getImei());

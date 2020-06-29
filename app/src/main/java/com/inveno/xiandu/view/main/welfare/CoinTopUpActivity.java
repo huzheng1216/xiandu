@@ -15,6 +15,7 @@ import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
+import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 
@@ -196,7 +197,15 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     }
 
     public void exchange(View view) {
-        Toaster.showToastCenter(this, "金币余额不足");
+        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPhone_num() != null) {
+            if (StringTools.isPhone(ServiceContext.userService().getUserInfo().getPhone_num())){
+                Toaster.showToastCenter(this, "金币余额不足");
+            }else{
+                Toaster.showToastCenter(this, "请输入正确电话号码");
+            }
+        } else {
+            Toaster.showToastCenter(this, "请输入电话号码");
+        }
     }
 
     public void coinRecord(View view) {

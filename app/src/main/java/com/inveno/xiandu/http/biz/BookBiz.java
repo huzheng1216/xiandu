@@ -97,6 +97,7 @@ public class BookBiz extends BaseBiz {
         param.put("pid", ServiceContext.userService().getUserPid());
         param.put("content_id", content_id);
         param.put("page_num", page_num + "");
+
         return mMRRequestService.getChapterList(param);
     }
 

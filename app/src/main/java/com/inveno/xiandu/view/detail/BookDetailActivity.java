@@ -403,10 +403,12 @@ public class BookDetailActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.i("wyjjjjj", "onError: "+ e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
+                        Log.i("wyjjjjj", "onComplete: ");
                     }
                 });
     }

@@ -192,7 +192,7 @@ public class StoreItemFragment extends BaseFragment {
         recyclerView.addOnScrollListener(new MRecycleScrollListener() {
             @Override
             public void onLoadMore() {
-
+                bookCityAdapter.setFooterText("正在努力加载...");
                 final List<BaseDataBean>[] mMoreData = new List[1];
                 final boolean[] flag = new boolean[1];
                 AdModel adModel = new AdModel();
@@ -201,6 +201,9 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(BookShelfList bookShelfList) {
                         mMoreData[0] = new ArrayList<>(bookShelfList.getNovel_list());
+                        if (mMoreData[0].size()<0){
+                            bookCityAdapter.setFooterText("没有更多数据");
+                        }
                         if (flag[0] == true) {
                             int adIndex = adModel.getWrapper().getIndex();
                             if (mMoreData[0].size() >= adIndex) {
@@ -214,6 +217,7 @@ public class StoreItemFragment extends BaseFragment {
                 }).onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
+                        bookCityAdapter.setFooterText("没有更多数据");
                         Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
                         return null;
                     }
@@ -252,7 +256,6 @@ public class StoreItemFragment extends BaseFragment {
 //            initData();
             getData();
             initLoadData();
-
         }
     }
 
@@ -290,9 +293,13 @@ public class StoreItemFragment extends BaseFragment {
                         store_refresh_layout.setRefreshing(false);
                         mDataBeans = baseDataBeans;
                         if (mDataBeans.size() > 0) {
+                            if (mDataBeans.size()<10){
+                                bookCityAdapter.setFooterText("没有更多数据");
+                            }
                             bookCityAdapter.setDataList(mDataBeans);
                         } else {
                             Toaster.showToastCenter(getContext(), "获取数据失败");
+                            bookCityAdapter.setFooterText("没有更多数据");
                         }
                         return null;
                     }
@@ -301,6 +308,7 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(Integer integer, String s) {
                         store_refresh_layout.setRefreshing(false);
+                        bookCityAdapter.setFooterText("没有更多数据");
                         Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
                         return null;
                     }
