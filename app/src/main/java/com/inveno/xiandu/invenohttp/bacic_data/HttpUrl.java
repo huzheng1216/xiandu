@@ -44,7 +44,6 @@ public class HttpUrl {
 
     public static String SEARCH_BOOK = "/search/novel"; //搜索
 
-
     public static String getHttpUri(String url) {
         return HOST_URI + url;
     }

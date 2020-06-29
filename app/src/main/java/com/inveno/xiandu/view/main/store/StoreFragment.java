@@ -8,15 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.inveno.xiandu.R;
@@ -24,11 +21,9 @@ import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.SPUtils;
-import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
-import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
-import com.inveno.xiandu.view.search.SerchActivityMain;
+import com.inveno.xiandu.view.search.SearchActivityMain;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -36,7 +31,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created By huzheng
@@ -53,7 +47,7 @@ public class StoreFragment extends BaseFragment {
     ViewPager viewPager;
 
     private List<Fragment> fragments = new ArrayList<>();
-    private String[] strings = new String[]{"推荐", "男频", "女频", "出版"};
+    private String[] strings = new String[]{"推荐", "男频", "女频"};
     MyAdapter myAdapter;
 
     public static StoreFragment newInstance(String name) {
@@ -83,7 +77,7 @@ public class StoreFragment extends BaseFragment {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SerchActivityMain.class);
+                Intent intent = new Intent(getActivity(), SearchActivityMain.class);
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), search, "photo").toBundle();
                 startActivity(intent, bundle);
             }
@@ -95,23 +89,16 @@ public class StoreFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         super.onVisible(firstVisble);
-        int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
-        setDefaultItem(gender);
+        if (firstVisble) {
+            int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
+            setDefaultItem(gender);
+        }
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        tv = (TextView) view.findViewById(R.id.fragment_test_tv);
-
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String name = bundle.get("name").toString();
-//            tv.setText(name);
-//        }
-
     }
-
 
     public class MyAdapter extends FragmentPagerAdapter {
         public MyAdapter(FragmentManager fm) {
@@ -134,7 +121,6 @@ public class StoreFragment extends BaseFragment {
             return strings[position];
         }
     }
-
 
     private void setDefaultItem(int position) {
         //我这里mViewpager是viewpager子类的实例。如果你是viewpager的实例，也可以这么干。

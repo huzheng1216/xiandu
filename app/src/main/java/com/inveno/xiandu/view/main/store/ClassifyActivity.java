@@ -7,14 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -22,19 +20,21 @@ import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.config.ARouterPath;
+import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
+import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
-import com.inveno.xiandu.view.search.SerchActivityMain;
+import com.inveno.xiandu.view.search.SearchActivityMain;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 
 import static com.inveno.android.ad.config.ScenarioManifest.CATEGORY;
-import static com.inveno.android.ad.config.ScenarioManifest.GUESS_YOU_LIKE;
 
 /**
  * @author yongji.wang
@@ -78,7 +78,7 @@ public class ClassifyActivity extends BaseActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ClassifyActivity.this, SerchActivityMain.class);
+                Intent intent = new Intent(ClassifyActivity.this, SearchActivityMain.class);
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ClassifyActivity.this, classify_search_img, "photo").toBundle();
                 startActivity(intent, bundle);
             }
@@ -96,6 +96,9 @@ public class ClassifyActivity extends BaseActivity {
         myTabLayout.setupWithViewPager(viewPager);
 
         loadAd();
+
+        int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
+        setDefaultItem(1);
     }
 
     public void click_back(View view) {
@@ -133,7 +136,7 @@ public class ClassifyActivity extends BaseActivity {
      */
     private void loadAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(CATEGORY, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
             for (int i = 0; i < fragments.size(); i++) {
                 ClassifyItemFragment classifyItemFragment = (ClassifyItemFragment) fragments.get(i);
@@ -152,6 +155,20 @@ public class ClassifyActivity extends BaseActivity {
 //            backPressedClickListener.onBackPressed();
 //        }
 //    }
+
+    private void setDefaultItem(int position) {
+        //我这里mViewpager是viewpager子类的实例。如果你是viewpager的实例，也可以这么干。
+        try {
+            Class c = Class.forName("android.support.v4.view.ViewPager");
+            Field field = c.getDeclaredField("mCurItem");
+            field.setAccessible(true);
+            field.setInt(viewPager, position);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        viewPager.setCurrentItem(position);
+    }
 
     public interface OnBackPressedClickListener {
         void onBackPressed();

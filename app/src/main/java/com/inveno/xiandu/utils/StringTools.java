@@ -22,7 +22,7 @@ public class StringTools {
      * 判断字符是否有内容 为空则返回true
      **/
     public static boolean isEmpty(String src) {
-        if (TextUtils.isEmpty(src)){
+        if (TextUtils.isEmpty(src)) {
             return true;
         }
         return false;
@@ -38,12 +38,12 @@ public class StringTools {
 
     /**
      * 把String 是否为数字
-     *
+     * <p>
      * 2009-8-20
      *
-     * @yaoyuan
      * @param val
      * @return
+     * @yaoyuan
      */
     public static boolean isNumber(String val) {
         try {
@@ -80,9 +80,7 @@ public class StringTools {
         // ^ 匹配输入字符串开始的位置
         // \d 匹配一个或多个数字，其中 \ 要转义，所以是 \\d
         // $ 匹配输入字符串结尾的位置
-        String regExp = "^((13[0-9])|(14[5,7,9])|(15[0-3,5-9])|(166)|(17[3,5,6,7,8])" +
-                "|(18[0-9])|(19[8,9]))\\d{8}$";
-        Pattern p = Pattern.compile(regExp);
+        Pattern p = Pattern.compile("^1(3([1-35-9]\\d|4[1-8])|4[14-9]\\d|5([0-25689]\\d|7[1-79])|66\\d|7[2-35-8]\\d|8[2-9]\\d|9[89]\\d)\\d{7}$");
         Matcher m = p.matcher(str);
         return m.matches();
     }
@@ -117,6 +115,7 @@ public class StringTools {
     /**
      * 关键字高亮显示(包含特殊字符)
      * start与end参数默认情况下传0，当需要高亮的关键字前后有符号时（比如[高亮]），start与end参数可传1。
+     *
      * @param context 上下文
      * @param text    需要显示的文字
      * @param target  需要高亮的关键字

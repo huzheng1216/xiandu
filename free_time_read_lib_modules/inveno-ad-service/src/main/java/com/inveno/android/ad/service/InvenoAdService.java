@@ -64,7 +64,7 @@ public class InvenoAdService {
             Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);
             if (rule_list != null) {
                 Rule rule = rule_list.getRule().get(0).get(0);
-                Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
+//                Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
 
 //                zheShiGeKeng(scenario, rule);
                 InfoAdParam infoAdParam = InfoAdParam.InfoAdParamBuilder.newBuilder()
@@ -102,7 +102,7 @@ public class InvenoAdService {
         List<StatefulCallBack<IndexedAdValueWrapper>> resultList = new ArrayList<>();
         try {
             Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);
-            Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
+//            Log.i("requestInfoAd", "rule" + JSON.toJSONString(rule_list));
             if (rule_list != null) {
                 List<Rule> rules = rule_list.getRule().get(0);
                 for (int i = 0; i < rules.size(); i++) {

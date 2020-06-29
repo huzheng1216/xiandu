@@ -30,7 +30,7 @@ import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.view.adapter.RankingLeftMenuAdapter;
 import com.inveno.xiandu.view.adapter.RightDataAdapter;
-import com.inveno.xiandu.view.search.SerchActivityMain;
+import com.inveno.xiandu.view.search.SearchActivityMain;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +40,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-import static com.inveno.android.ad.config.ScenarioManifest.CATEGORY;
 import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
 
 /**
@@ -152,7 +151,7 @@ public class RankingActivity extends TitleBarBaseActivity {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RankingActivity.this, SerchActivityMain.class);
+                Intent intent = new Intent(RankingActivity.this, SearchActivityMain.class);
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(RankingActivity.this, imageView, "photo").toBundle();
                 startActivity(intent, bundle);
             }
@@ -269,7 +268,7 @@ public class RankingActivity extends TitleBarBaseActivity {
      */
     private void loadAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
             rightDataAdapter.addAd(adModel);
             return null;

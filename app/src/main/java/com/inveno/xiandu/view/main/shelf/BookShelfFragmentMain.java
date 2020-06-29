@@ -2,7 +2,6 @@ package com.inveno.xiandu.view.main.shelf;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Display;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,68 +13,41 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager.widget.ViewPager;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
-import com.inveno.android.basics.service.app.info.AppInfo;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
-import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.coin.ReadTime;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.bean.coin.UserCoinOut;
-import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.config.ARouterPath;
-import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.db.SQL;
-import com.inveno.xiandu.http.DDManager;
-import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
-import com.inveno.xiandu.invenohttp.service.UserService;
-import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
-import com.inveno.xiandu.utils.SPUtils;
-import com.inveno.xiandu.utils.Toaster;
-import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.BaseFragment;
-import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
-import com.inveno.xiandu.view.components.PopupWindowShelfItem;
-import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.custom.SwipeItemLayout;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
 import com.inveno.xiandu.view.main.MainActivity;
-import com.inveno.xiandu.view.search.SerchActivityMain;
-
-import org.greenrobot.greendao.annotation.Id;
 
 import java.util.List;
 
-import butterknife.OnClick;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+import static com.inveno.android.ad.config.ScenarioManifest.BOOK_SHELF;
 
 /**
  * Created By huzheng
@@ -295,9 +267,14 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
     private void initData() {
         //获取今日已读和今日金币
-        get_coin();
-        get_read_time();
-        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
+        if (ServiceContext.userService().isLogin()) {
+            get_coin();
+            get_read_time();
+        } else {
+            shelfAdapter.setCoinNum("--");
+            shelfAdapter.setHeaderTime("--");
+        }
+//        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
         List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
         if (adBookModel != null) {
             int index = adBookModel.getIndex();
@@ -416,10 +393,10 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
      * 加载广告
      */
     private void loadAd() {
-        InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_SHELF, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
             @Override
             public Unit invoke(IndexedAdValueWrapper wrapper) {
-                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                 adBookModel = new AdBookModel(wrapper);
                 shelfAdapter.addAd(adBookModel);
                 return null;
@@ -427,7 +404,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         }).onFail(new Function2<Integer, String, Unit>() {
             @Override
             public Unit invoke(Integer integer, String s) {
-                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+//                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
                 return null;
             }
         }).execute();

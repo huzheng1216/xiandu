@@ -36,11 +36,11 @@ public class BacicParamService extends BaseSingleInstanceService {
     private void putParams() {
         IProductService iProductService = InvenoServiceContext.product();
         baseParam.put("product_id", iProductService.getProductId());
-        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0)
-            baseParam.put("pid", ServiceContext.userService().getUserInfo().getPid());
-        else{
-            baseParam.put("pid", 0);
-        }
+//        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPid() > 0)
+//            baseParam.put("pid", ServiceContext.userService().getUserInfo().getPid());
+//        else {
+//            baseParam.put("pid", 0);
+//        }
         if (!TextUtils.isEmpty(InvenoServiceContext.uid().getUid()))
             baseParam.put("uid", InvenoServiceContext.uid().getUid());
         baseParam.put("request_time", String.valueOf(System.currentTimeMillis()));
@@ -53,12 +53,26 @@ public class BacicParamService extends BaseSingleInstanceService {
         baseParam.put("tk", iProductService.createTkWithoutData(String.valueOf(System.currentTimeMillis())));
     }
 
-    //更新公共参数
-    public void refreshBaseParam(){
-        putParams();
+    private void refreshPid() {
+        baseParam.remove("pid");
+        if (ServiceContext.userService().getUserPid() > 0)
+            baseParam.put("pid", ServiceContext.userService().getUserPid());
+        else {
+            baseParam.put("pid", 0);
+        }
+    }
+
+    //更新Pid
+    public void refreshBaseParam() {
+        refreshPid();
     }
 
     public LinkedHashMap<String, Object> getBaseParam() {
+        if (ServiceContext.userService().getUserPid() > 0)
+            baseParam.put("pid", ServiceContext.userService().getUserPid());
+        else {
+            baseParam.put("pid", 0);
+        }
         return baseParam;
     }
 }

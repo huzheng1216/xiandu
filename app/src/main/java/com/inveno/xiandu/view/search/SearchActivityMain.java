@@ -7,8 +7,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
@@ -28,7 +26,6 @@ import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.SPUtils;
-import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
@@ -43,7 +40,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.inveno.android.ad.config.AdViewType.AD_SEARCH_TYPE;
-import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
 import static com.inveno.android.ad.config.ScenarioManifest.SEARCH;
 
 /**
@@ -52,7 +48,7 @@ import static com.inveno.android.ad.config.ScenarioManifest.SEARCH;
  * Des 搜索
  */
 @Route(path = ARouterPath.ACTIVITY_SEARCH)
-public class SerchActivityMain extends BaseActivity {
+public class SearchActivityMain extends BaseActivity {
 
     private HistoryAdapter historyAdapter;
     private ArrayList<String> history;
@@ -82,8 +78,8 @@ public class SerchActivityMain extends BaseActivity {
         ButterKnife.bind(this);
         setStatusBar(R.color.white, true);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 4);  // 垂直排列
-        historyRecyclerView.addItemDecoration(new GridSpacingItemDecoration(4, getResources().getDimensionPixelSize(R.dimen.adapter_search_history), true));
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);  // 垂直排列
+        historyRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, getResources().getDimensionPixelSize(R.dimen.adapter_search_history), true));
         historyRecyclerView.setLayoutManager(layoutManager);
         editText.setOnDelayerTextChange(new DelayerEditText.OnDelayerTextChange() {
             @Override
@@ -103,7 +99,7 @@ public class SerchActivityMain extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //删除搜索历史二次确认弹窗
-                IosTypeDialog.Builder builder = new IosTypeDialog.Builder(SerchActivityMain.this);
+                IosTypeDialog.Builder builder = new IosTypeDialog.Builder(SearchActivityMain.this);
                 builder.setContext("确定要删除搜索历史吗？");
                 builder.setTitle("提示");
                 builder.setLeftButton("确定", new IosTypeDialog.OnClickListener() {
@@ -134,13 +130,13 @@ public class SerchActivityMain extends BaseActivity {
         ClickUtil.bindSingleClick(back, 500, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityCompat.finishAfterTransition(SerchActivityMain.this);
+                ActivityCompat.finishAfterTransition(SearchActivityMain.this);
             }
         });
         ClickUtil.bindSingleClick(bt_search_main_cancel, 500, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityCompat.finishAfterTransition(SerchActivityMain.this);
+                ActivityCompat.finishAfterTransition(SearchActivityMain.this);
             }
         });
         //本地历史
@@ -202,7 +198,7 @@ public class SerchActivityMain extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ActivityCompat.finishAfterTransition(SerchActivityMain.this);
+        ActivityCompat.finishAfterTransition(SearchActivityMain.this);
     }
 
     /**
@@ -210,11 +206,11 @@ public class SerchActivityMain extends BaseActivity {
      */
     private void loadAd(){
         InvenoAdServiceHolder.getService().requestInfoAd(SEARCH, this).onSuccess(wrapper -> {
-            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+//            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
-            NormalAdViewHolder holder = ((NormalAdViewHolder)ADViewHolderFactory.create(SerchActivityMain.this, AD_SEARCH_TYPE));
-            holder.onBindViewHolder(SerchActivityMain.this,adModel.getWrapper().getAdValue(),0);
-            ViewGroup view = holder.getViewGroup();
+            NormalAdViewHolder holder = ((NormalAdViewHolder)ADViewHolderFactory.create(SearchActivityMain.this, AD_SEARCH_TYPE));
+            holder.onBindViewHolder(SearchActivityMain.this,adModel.getWrapper().getAdValue(),0);
+            View view = holder.getViewGroup();
             search_ad_ll.addView(view);
             search_ad_ll.setVisibility(View.VISIBLE);
             return null;

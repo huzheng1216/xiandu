@@ -14,13 +14,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
+import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
@@ -168,6 +171,20 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                 }
             });
 
+            if (data.size() > 1) {
+                holder.itemView.setVisibility(View.GONE);
+            } else {
+                if (data.size() == 1) {
+                    if (data.get(0) instanceof AdBookModel) {
+                        holder.itemView.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.itemView.setVisibility(View.GONE);
+                    }
+                } else {
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
+            }
+
         } else if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder headerViewHolder = (HeaderViewHolder) holder;
             if (TextUtils.isEmpty(headerTime)) {
@@ -181,6 +198,22 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             } else {
                 headerViewHolder.bookrack_coin_num.setText(headerCoin);
             }
+            headerViewHolder.bookrack_read_time.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!ServiceContext.userService().isLogin()) {
+                        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+                    }
+                }
+            });
+            headerViewHolder.bookrack_coin_num.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!ServiceContext.userService().isLogin()) {
+                        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+                    }
+                }
+            });
         } else if (holder instanceof NormalAdViewHolder) {
             int realPosition = position;
             if (getHeaderView() != null) {

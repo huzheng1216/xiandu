@@ -72,6 +72,7 @@
             android:hint="输入书名或作者"
             android:imeOptions="actionSearch"
             android:inputType="text"
+            android:maxLength="18"
             android:paddingStart="5dp"
             android:singleLine="true"
             android:textColorHint="#884577FF"
@@ -82,11 +83,11 @@
         android:id="@+id/search_ad_ll"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="@+id/main_search_layout"
-        app:layout_constraintTop_toBottomOf="@+id/main_search_layout"
         android:layout_marginTop="7.33dp"
-        android:visibility="gone"/>
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/main_search_layout"
+        app:layout_constraintTop_toBottomOf="@+id/main_search_layout" />
 
     <TextView
         android:id="@+id/textView2"
@@ -107,7 +108,7 @@
         android:layout_marginTop="16dp"
         android:src="@drawable/ic_delete_bt_64dp"
         app:layout_constraintEnd_toEndOf="@+id/main_search_layout"
-        app:layout_constraintTop_toBottomOf="@+id/search_ad_ll"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_ad_ll" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleview_search_main_history"
@@ -119,6 +120,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
