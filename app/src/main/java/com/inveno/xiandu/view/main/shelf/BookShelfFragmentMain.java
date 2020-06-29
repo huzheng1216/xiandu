@@ -47,7 +47,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
+import static com.inveno.android.ad.config.ScenarioManifest.BOOK_SHELF;
 
 /**
  * Created By huzheng
@@ -274,7 +274,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             shelfAdapter.setCoinNum("--");
             shelfAdapter.setHeaderTime("--");
         }
-        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
+//        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
         List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
         if (adBookModel != null) {
             int index = adBookModel.getIndex();
@@ -393,7 +393,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
      * 加载广告
      */
     private void loadAd() {
-        InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+        InvenoAdServiceHolder.getService().requestInfoAd(BOOK_SHELF, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
             @Override
             public Unit invoke(IndexedAdValueWrapper wrapper) {
 //                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());

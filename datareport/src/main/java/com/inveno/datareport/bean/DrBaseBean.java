@@ -10,11 +10,10 @@ public class DrBaseBean {
     String pid;
     String app_ver;
     String api_ver;
-    Long report_time;
+
     String network;
+
     String upack;
-    String tk;
-    String ip;
     String location;
     String imei;
     String aid;
@@ -22,7 +21,7 @@ public class DrBaseBean {
     String model;
     String osv;
     String platform = "android";
-    String language ;
+    String language;
     String mcc;
     String mnc;
     String referrer;
@@ -69,13 +68,6 @@ public class DrBaseBean {
         this.api_ver = api_ver;
     }
 
-    public Long getReport_time() {
-        return report_time;
-    }
-
-    public void setReport_time(Long report_time) {
-        this.report_time = report_time;
-    }
 
     public String getNetwork() {
         return network;
@@ -85,29 +77,6 @@ public class DrBaseBean {
         this.network = network;
     }
 
-    public String getUpack() {
-        return upack;
-    }
-
-    public void setUpack(String upack) {
-        this.upack = upack;
-    }
-
-    public String getTk() {
-        return tk;
-    }
-
-    public void setTk(String tk) {
-        this.tk = tk;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
 
     public String getLocation() {
         return location;
@@ -203,5 +172,13 @@ public class DrBaseBean {
 
     public void setSid(String sid) {
         this.sid = sid;
+    }
+
+    public String getUpack() {
+        return upack;
+    }
+
+    public void setUpack(String upack) {
+        this.upack = upack;
     }
 }
