@@ -23,7 +23,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true">
         <!--直客配置-->
         <provider
             android:name="com.donews.zkad.ad.ZkFileProvider"
