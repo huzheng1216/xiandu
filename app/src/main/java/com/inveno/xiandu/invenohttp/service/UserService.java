@@ -38,7 +38,7 @@ public class UserService extends BaseSingleInstanceService {
     }
 
     public boolean isLogin(){
-        return getUserPid() != 0;
+        return getUserPid() > 0;
     }
 
     public void setUserInfo(UserInfo userInfo) {

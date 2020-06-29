@@ -58,7 +58,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     @Override
     public String getCenterText() {
-        return "我要提现";
+        return "话费充值";
     }
 
     @Override

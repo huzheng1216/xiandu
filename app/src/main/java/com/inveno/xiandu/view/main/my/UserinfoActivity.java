@@ -54,7 +54,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
     private ImageView mine_user_pic;
     private TextView mine_user_name;
     private TextView mine_user_gender;
-    private TextView mine_user_code;
+//    private TextView mine_user_code;
 
     private IosTypeDialog iosTypeDialog;
     private PopupWindow popupWindow;
@@ -83,7 +83,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
         mine_user_pic = findViewById(R.id.mine_user_pic);
         mine_user_name = findViewById(R.id.mine_user_name);
         mine_user_gender = findViewById(R.id.mine_user_gender);
-        mine_user_code = findViewById(R.id.mine_user_code);
+//        mine_user_code = findViewById(R.id.mine_user_code);
 
         userInfo = ServiceContext.userService().getUserInfo();
 
@@ -106,7 +106,7 @@ public class UserinfoActivity extends TitleBarBaseActivity {
             } else {
                 mine_user_gender.setText("未知");
             }
-            mine_user_code.setText(String.valueOf(userInfo.getPid()));
+//            mine_user_code.setText(String.valueOf(userInfo.getPid()));
 
             showPopwindow();
         }

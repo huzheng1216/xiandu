@@ -21,11 +21,13 @@ import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
+import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.main.MainActivity;
 
@@ -73,15 +75,15 @@ public class MineFragment extends BaseFragment {
     }
 
     @OnClick(R.id.mine_my_coin_line)
-    void my_coin(){
-        if (!ServiceContext.userService().isLogin()){
+    void my_coin() {
+        if (!ServiceContext.userService().isLogin()) {
             ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
         }
     }
 
     @OnClick(R.id.mine_today_coin_line)
-    void today_coin(){
-        if (!ServiceContext.userService().isLogin()){
+    void today_coin() {
+        if (!ServiceContext.userService().isLogin()) {
             ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
         }
     }
@@ -177,15 +179,14 @@ public class MineFragment extends BaseFragment {
                 } else {
                     user_name.setText(userInfo.getUser_name());
                 }
-                user_name.setClickable(false);
-                user_name.setEnabled(false);
             }
         });
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
-                user_name.setText("点我登陆");
+                user_name.setText("点我登录");
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
+                ServiceContext.bacicParamService().refreshBaseParam();
             }
         });
         int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
@@ -239,7 +240,12 @@ public class MineFragment extends BaseFragment {
                 }).execute();
             }
         }
-        get_coin();
+        if (ServiceContext.userService().isLogin()) {
+            get_coin();
+        }else{
+            mine_my_coin.setText("--");
+            mine_today_coin.setText("--");
+        }
     }
 
     private void setHeaderImage(int defaul) {

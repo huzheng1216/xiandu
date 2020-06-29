@@ -236,6 +236,15 @@
                 android:textSize="18sp" />
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/no_coin_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="暂无金币明细"
+            android:textSize="14sp"
+            android:textColor="@color/gray_6"
+            android:gravity="center_horizontal"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/coin_detail_recycleview"
             android:layout_width="match_parent"

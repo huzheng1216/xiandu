@@ -45,7 +45,7 @@ public class AppPersistRepository extends BaseSingleInstanceService {
         ThreadUtil.execOnIo(new Runnable() {
             @Override
             public void run() {
-                sharedPreferences.edit().putString(key, value).commit();
+                sharedPreferences.edit().putString(key, value).apply();
             }
         });
     }
@@ -59,7 +59,7 @@ public class AppPersistRepository extends BaseSingleInstanceService {
         ThreadUtil.execOnIo(new Runnable() {
             @Override
             public void run() {
-                ensure(name).edit().putString(key, value).commit();
+                ensure(name).edit().putString(key, value).apply();
             }
         });
     }
