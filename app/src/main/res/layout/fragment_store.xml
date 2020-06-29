@@ -27,6 +27,7 @@
             app:tabIndicatorFullWidth="false"
             app:tabMaxWidth="0dp"
             app:tabMode="scrollable"
+            android:layout_marginBottom="5dp"
             app:tabRippleColor="@color/transparent"
             app:tabSelectedTextColor="@color/base_color"
             app:tabTextColor="@color/gray_3" />

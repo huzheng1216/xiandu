@@ -60,6 +60,9 @@ public class WelfareFragment extends BaseFragment {
     @BindView(R.id.welfare_coin_scroll)
     ScrollView welfare_coin_scroll;
 
+    @BindView(R.id.no_mission_detail)
+    TextView no_mission_detail;
+
     private MissionAdapter missionAdapter;
     private List<MissionData> missionDataList = new ArrayList<>();
     private UserCoin mUserCoin;
@@ -95,7 +98,7 @@ public class WelfareFragment extends BaseFragment {
         //第一次加载，获取金币
         if (ServiceContext.userService().isLogin()) {
             get_coin();
-        }else{
+        } else {
             welfare_coin_today.setText(String.format("%s", "--"));
         }
         get_mission();
@@ -137,14 +140,24 @@ public class WelfareFragment extends BaseFragment {
                 .onSuccess(new Function1<MissionDataList, Unit>() {
                     @Override
                     public Unit invoke(MissionDataList missionDataList) {
-                        missionAdapter.setsData(missionDataList.getMission_list());
+                        if (missionDataList != null && missionDataList.getMission_list().size() > 0) {
+                            missionAdapter.setsData(missionDataList.getMission_list());
+                            no_mission_detail.setVisibility(View.GONE);
+                        } else {
+                            no_mission_detail.setVisibility(View.VISIBLE);
+                        }
                         return null;
                     }
                 })
                 .onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
-                        Toaster.showToastShort(getContext(), "获取任务失败:" + s);
+                        if (s.equals("404")) {
+                            Toaster.showToastShort(getContext(), "获取任务失败:请求的数据不存在");
+                        } else {
+                            Toaster.showToastShort(getContext(), "获取任务失败:" + s);
+                        }
+                        no_mission_detail.setVisibility(View.VISIBLE);
                         return null;
                     }
                 }).execute();

@@ -167,7 +167,7 @@ public class BookDetailActivity extends BaseActivity {
 
     private void initData() {
         book = GsonUtil.gsonToObject(json, BookShelf.class);
-        if (book == null){
+        if (book == null) {
             showErrorPopwindow(NO_BOOK_ERROR, new OnClickListener() {
                 @Override
                 public void onBackClick() {
@@ -214,7 +214,7 @@ public class BookDetailActivity extends BaseActivity {
             wordsCountStr = String.format(bookType + "-%s字", book.getWord_count());
         } else if (book.getWord_count() >= 1000 && book.getWord_count() < 10000) {
             wordsCountStr = String.format(bookType + "-%s千字", book.getWord_count() / 1000);
-        } else{
+        } else {
             wordsCountStr = String.format(bookType + "-%s万字", book.getWord_count() / 10000);
         }
         book_detail_type.setText(wordsCountStr);
@@ -343,9 +343,9 @@ public class BookDetailActivity extends BaseActivity {
         pop_directory_capter_order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isReverse){
+                if (isReverse) {
                     pop_directory_capter_order.setText("倒序");
-                }else{
+                } else {
                     pop_directory_capter_order.setText("正序");
                 }
                 isReverse = !isReverse;
@@ -459,14 +459,16 @@ public class BookDetailActivity extends BaseActivity {
     }
 
     private void refreshCapter() {
-        //刷新目录数据
-        if (book.getBookChapters().size() > 0) {
-            getFirstCapter();
-        } else {
-            Toaster.showToastShort(this, "目录准备中，请稍等");
-            first_capter_title.setVisibility(View.GONE);
-            first_capter_msg.setVisibility(View.GONE);
-            open_first_more.setVisibility(View.GONE);
+        if (book != null && book.getBookChapters() != null) {
+            //刷新目录数据
+            if (book.getBookChapters().size() > 0) {
+                getFirstCapter();
+            } else {
+                Toaster.showToastShort(this, "目录准备中，请稍等");
+                first_capter_title.setVisibility(View.GONE);
+                first_capter_msg.setVisibility(View.GONE);
+                open_first_more.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -549,7 +551,7 @@ public class BookDetailActivity extends BaseActivity {
     //打开目录
     @OnClick(R.id.book_capter)
     void open_book_capter() {
-        if (book.getBookChapters().size() > 0) {
+        if (book.getBookChapters() != null && book.getBookChapters().size() > 0) {
             openPopWindow();
         } else {
             Toaster.showToastShort(this, "目录准备中，请稍等");
@@ -583,10 +585,10 @@ public class BookDetailActivity extends BaseActivity {
     /**
      * 加载广告
      */
-    private void loadAd(){
+    private void loadAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
 //            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            adModel = setAdData(ad_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
+            adModel = setAdData(ad_viewgroup, wrapper, AD_BOOK_DETAIL_TYPE);
             return null;
         }).onFail((integer, s) -> {
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
@@ -595,7 +597,7 @@ public class BookDetailActivity extends BaseActivity {
 
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
 //            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            adBottomModel = setAdData(ad_bottom_viewgroup , wrapper,AD_BOOK_DETAIL_TYPE);
+            adBottomModel = setAdData(ad_bottom_viewgroup, wrapper, AD_BOOK_DETAIL_TYPE);
             return null;
         }).onFail((integer, s) -> {
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
@@ -603,21 +605,21 @@ public class BookDetailActivity extends BaseActivity {
         }).execute();
     }
 
-    private AdModel setAdData(ViewGroup viewGroup , IndexedAdValueWrapper wrapper , int type){
+    private AdModel setAdData(ViewGroup viewGroup, IndexedAdValueWrapper wrapper, int type) {
         AdModel adModel = new AdModel(wrapper);
         NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(BookDetailActivity.this, type));
-        holder.onBindViewHolder(BookDetailActivity.this,wrapper.getAdValue(),0);
+        holder.onBindViewHolder(BookDetailActivity.this, wrapper.getAdValue(), 0);
         View view = holder.getViewGroup();
         viewGroup.addView(view);
         viewGroup.setVisibility(View.VISIBLE);
         return adModel;
     }
 
-    private void loadPopAd(){
+    private void loadPopAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_DETAIL, this).onSuccess(wrapper -> {
 //            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-            if(ad_pop_viewgroup!=null) {
-                setAdData(ad_pop_viewgroup, wrapper,AD_BOOK_DETAIL_POP_TYPE);
+            if (ad_pop_viewgroup != null) {
+                setAdData(ad_pop_viewgroup, wrapper, AD_BOOK_DETAIL_POP_TYPE);
             }
             return null;
         }).onFail((integer, s) -> {

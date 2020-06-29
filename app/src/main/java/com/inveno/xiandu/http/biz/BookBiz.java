@@ -40,7 +40,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest<ResponseShelf>> getBookShelf() {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
@@ -51,7 +51,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest<List<BookShelf>>> addBookShelf(long content_id, int status) {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
@@ -63,7 +63,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest<List<BookShelf>>> updateBookShelf(long content_id, int status) {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
@@ -75,7 +75,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest<ResponseChannel>> getRecommendList(int channel_id, int num, int type) {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
@@ -89,7 +89,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest<BookChapter>> getChapterList(String content_id, int page_num) {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
@@ -102,7 +102,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest<ChapterInfo>> getChapterInfo(String content_id, String chapter_id) {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);
@@ -115,7 +115,7 @@ public class BookBiz extends BaseBiz {
 
     public Observable<BaseRequest> postReadTime(String id) {
         LinkedHashMap<String,Object> param = new LinkedHashMap<>();
-        UidParamsUtil.fillUidParams(param);
+        UidParamsUtil.fillParams(param);
         String uid = InvenoServiceContext.uid().getUid();
         if(!TextUtils.isEmpty(uid)){
             param.put("uid", uid);

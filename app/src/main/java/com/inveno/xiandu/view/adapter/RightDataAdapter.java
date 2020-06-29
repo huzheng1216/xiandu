@@ -284,14 +284,16 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
     }
 
     public void addAd(AdModel adModel) {
-        int index = adModel.getWrapper().getIndex();
-        if (mDataList != null && mDataList.size() >= index) {
-            mDataList.add(index, adModel);
-        } else if (mDataList == null && index == 0) {
-            mDataList = new ArrayList<>();
-            mDataList.add(adModel);
+        if (adModel != null) {
+            int index = adModel.getWrapper().getIndex();
+            if (mDataList != null && mDataList.size() >= index) {
+                mDataList.add(index, adModel);
+            } else if (mDataList == null && index == 0) {
+                mDataList = new ArrayList<>();
+                mDataList.add(adModel);
+            }
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {

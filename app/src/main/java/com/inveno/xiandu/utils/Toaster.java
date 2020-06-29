@@ -55,4 +55,54 @@ public class Toaster {
         toastCenter.setText(str);
         toastCenter.show();
     }
+
+    public static void showNetWorkErrorCenterShort(Context context, int error_code, String msg) {
+        if (error_code == 503) {
+            showToastCenterShort(context, "服务发生错误");
+        } else if (error_code == 403) {
+            showToastCenterShort(context, "无访问权限");
+
+        } else if (error_code == 404) {
+            showToastCenterShort(context, "请求数据不存在");
+
+        } else if (error_code == 1001) {
+            showToastCenterShort(context, "内容包含敏感信息");
+
+        } else if (error_code == 1002) {
+            showToastCenterShort(context, "服务器繁忙");
+
+        } else if (error_code == 1003) {
+            showToastCenterShort(context, "内容已下线或当前无法访问");
+
+        } else if (error_code == 1004) {
+            showToastCenterShort(context, "服务发生错误");
+        } else {
+            showToastCenterShort(context, msg);
+        }
+    }
+
+    public static void showNetWorkErrorShort(Context context, int error_code, String msg) {
+        if (error_code == 503) {
+            showToastShort(context, "服务发生错误");
+        } else if (error_code == 403) {
+            showToastShort(context, "无访问权限");
+
+        } else if (error_code == 404) {
+            showToastShort(context, "请求数据不存在");
+
+        } else if (error_code == 1001) {
+            showToastShort(context, "内容包含敏感信息");
+
+        } else if (error_code == 1002) {
+            showToastShort(context, "服务器繁忙");
+
+        } else if (error_code == 1003) {
+            showToastShort(context, "内容已下线或当前无法访问");
+
+        } else if (error_code == 1004) {
+            showToastShort(context, "服务发生错误");
+        } else {
+            showToastShort(context, msg);
+        }
+    }
 }

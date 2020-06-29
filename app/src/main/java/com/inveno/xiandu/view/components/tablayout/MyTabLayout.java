@@ -1433,6 +1433,11 @@ public class MyTabLayout extends HorizontalScrollView {
             return setText(mParent.getResources().getText(resId));
         }
 
+        public Tab setTextSize(float textSize){
+
+            return this;
+        }
+
         /**
          * Select this tab. Only valid if the tab has been added to the action bar.
          */
@@ -1653,7 +1658,7 @@ public class MyTabLayout extends HorizontalScrollView {
                     }
 
                     if (updateTextView) {
-                        mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
+//                        mTextView.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
                         mTextView.setMaxLines(maxLines);
                         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                     }
@@ -2297,11 +2302,13 @@ public class MyTabLayout extends HorizontalScrollView {
         @Override
         public void onTabSelected(Tab tab) {
             mViewPager.setCurrentItem(tab.getPosition());
+            tab.mView.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         }
 
         @Override
         public void onTabUnselected(Tab tab) {
             // No-op
+            tab.mView.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         }
 
         @Override
