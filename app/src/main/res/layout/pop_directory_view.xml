@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="350dp"
-    android:background="@drawable/pop_top_radius"
     android:layout_gravity="bottom"
+    android:background="@drawable/pop_top_radius"
     android:orientation="vertical">
 
     <TextView
@@ -61,13 +61,14 @@
         android:id="@+id/ad_pop_viewgroup"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginBottom="12dp"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_marginBottom="12dp"/>
+        android:visibility="gone" />
 
     <ListView
         android:id="@+id/pop_directory_category_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:divider="@null"
+        android:scrollbars="none" />
 </LinearLayout>

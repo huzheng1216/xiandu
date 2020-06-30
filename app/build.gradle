@@ -1,7 +1,18 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
+
+
+String apkFile
+
+def buildTime() {
+    def df = new SimpleDateFormat("yyyyMMdd'-'HHmm")
+    df.setTimeZone(TimeZone.getDefault())
+    return df.format(new Date())
+}
 
 android {
     signingConfigs {
@@ -10,12 +21,16 @@ android {
             storePassword '123456'
             keyAlias = 'xiandu'
             keyPassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
         debug {
             storeFile file('..\\keystore\\inveno_keys.jks')
             storePassword '123456'
             keyAlias = 'xiandu'
             keyPassword '123456'
+            v1SigningEnabled true
+            v2SigningEnabled true
         }
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -24,11 +39,15 @@ android {
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
+        flavorDimensions "com.inveno.xiandu"
+
         applicationId "com.inveno.xiandu"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10004
-        versionName "1.0.4"
+
+        versionCode VERSION_CODE as int
+        versionName VERSION_NAME
+
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
@@ -41,8 +60,15 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -52,8 +78,40 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
 
+    android.applicationVariants.all { variant ->
+//        if (variant.name.contains("release")) {
+//            def cmd ="python ScanProguard.py 1"
+//            Process p = cmd.execute()
+//            def result =  p.text
+//            if (result.contains("Errors")) {
+//                throw new RuntimeException("下列实体被混淆了：\n" + result)
+//            }
+//        }
+        if (variant.buildType.debuggable) {
+//            variant.outputs.each { output ->
+//                def outputFile = output.outputFile
+//                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+//                    def fileName = "apk/" + applicationId + "-V" + versionName + "-" + versionCode + "-" + variant.name + "-" + buildTime() + ".apk"
+//                   output.outputFile = new File(outputFile.parent, fileName)
+//                }
+//            }
+        } else {
+            variant.outputs.all { output ->
+                def outputFile = output.outputFile
+                if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    def time = buildTime()
+                    def fileName = defaultConfig.versionName + "/" + variant.name + "-V" + defaultConfig.versionName + "-" + time + ".apk"
+                    outputFileName = fileName
+                    variant.getPackageApplication().outputDirectory = new File("../../output")
+//                    output.outputFile = new File("../../../output", fileName)
+                    apkFile = "../../output/" + defaultConfig.versionName + "/" + "APKNAMERelease" + "-V" + defaultConfig.versionName + "-" + time + ".apk"
+                }
+
+            }
+        }
+    }
+}
 
 greendao {
     schemaVersion 1

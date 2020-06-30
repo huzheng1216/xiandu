@@ -21,7 +21,6 @@
             android:text="基本信息"
             android:textColor="@color/gray_3"
             android:textSize="14sp"
-            android:layout_toEndOf="@+id/image2"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"/>
 
@@ -55,7 +54,6 @@
             android:text="推送通知"
             android:textColor="@color/gray_3"
             android:textSize="14sp"
-            android:layout_toEndOf="@+id/image2"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"/>
 
@@ -94,7 +92,6 @@
             android:text="当前版本"
             android:textColor="@color/gray_3"
             android:textSize="14sp"
-            android:layout_toEndOf="@+id/image2"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"/>
 

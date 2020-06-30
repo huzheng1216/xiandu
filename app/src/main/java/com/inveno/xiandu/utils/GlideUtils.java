@@ -41,7 +41,7 @@ public class GlideUtils {
     public static void LoadImage(Context mContext, String path,
                                  ImageView imageview) {
         Glide.with(mContext).load(path)
-                .centerCrop()
+//                .centerCrop()
                 .placeholder(R.drawable.background_bookshelf_adapter_foot)
 //                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))

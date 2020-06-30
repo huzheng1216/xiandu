@@ -58,8 +58,8 @@
         android:layout_gravity="center"
         android:visibility="gone"
         app:SpinKit_Color="@color/base_color"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerView_layout"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView_layout"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/headerBar_search_result" />
 
@@ -70,7 +70,7 @@
         android:src="@mipmap/ic_no_data"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView_layout"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

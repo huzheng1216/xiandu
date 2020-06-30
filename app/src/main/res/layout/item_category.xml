@@ -14,10 +14,10 @@
 		android:padding="15dp"
 		android:text="1.第一章 八十大寿"
 		android:textSize="16sp" />
-	
-	
-	<View
-		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:background="#888" />
+<!--	-->
+<!--	-->
+<!--	<View-->
+<!--		android:layout_width="match_parent"-->
+<!--		android:layout_height="1dp"-->
+<!--		android:background="#888" />-->
 </LinearLayout>

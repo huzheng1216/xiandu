@@ -405,7 +405,7 @@ public class BookDetailActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("wyjjjjj", "onError: "+ e.getMessage());
+                        Log.i("wyjjjjj", "onError: " + e.getMessage());
                     }
 
                     @Override
@@ -417,7 +417,7 @@ public class BookDetailActivity extends BaseActivity {
 
     //获取第一章内容
     private void getFirstCapter() {
-        DDManager.getInstance().getChapterInfo(book.getContent_id() + "", book.getBookChapters().get(0).getChapter_id()+"")
+        DDManager.getInstance().getChapterInfo(book.getContent_id() + "", book.getBookChapters().get(0).getChapter_id() + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BaseRequest<ChapterInfo>>() {
@@ -503,23 +503,11 @@ public class BookDetailActivity extends BaseActivity {
     //收藏
     @OnClick(R.id.book_detail_coll)
     void coll() {
-        if (SQL.getInstance().hasBookShelf(book)) {
-//            SQL.getInstance().delBookShelf(book);
-//            Toaster.showToastCenter(this, "已移除");
-//            collBt.setText("保存书架");
-        } else {
+        if (!SQL.getInstance().hasBookShelf(book)) {
             SQL.getInstance().addBookShelf(book);
-//            Toaster.showToastCenter(this, "已保存");
-//            collBt.setText("已保存");
         }
 
-        if (SQL.getInstance().hasBookbrack(bookbrack)) {
-//            bookbracks.clear();
-//            bookbracks.add(bookbrack);
-//            SQL.getInstance().delBookbrack(bookbracks);
-//            Toaster.showToastCenter(this, "已移除");
-//            book_detail_coll.setText("加入书架");
-        } else {
+        if (!SQL.getInstance().hasBookbrack(bookbrack)) {
             SQL.getInstance().addBookbrack(bookbrack);
             Toaster.showToastCenter(this, "成功加入书架");
             book_detail_coll.setText("已在书架");
@@ -632,8 +620,8 @@ public class BookDetailActivity extends BaseActivity {
         }).execute();
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(11,"",this);
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(11, "", this);
     }
 
 }

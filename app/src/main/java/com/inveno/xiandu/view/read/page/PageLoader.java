@@ -1453,7 +1453,11 @@ public abstract class PageLoader {
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(pos);
         }
-        return mCurPageList.get(pos);
+        if (mCurPageList.size() < pos){
+            return mCurPageList.get(mCurPageList.size()-1);
+        }else{
+            return mCurPageList.get(pos);
+        }
     }
 
     /**
