@@ -46,4 +46,4 @@ public static ** valueOf(java.lang.String);
 -keep class com.bun.miitmdid.core.** {*;}
 
 #数据上报不混淆
--keep class com.inveno.datareport.** {*;}
+-keep class com.inveno.datareport.bean.** {*;}
