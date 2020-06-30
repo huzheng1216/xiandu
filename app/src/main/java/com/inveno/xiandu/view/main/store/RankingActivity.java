@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,7 +65,7 @@ public class RankingActivity extends TitleBarBaseActivity {
     private int channel_id = 1;
     private boolean isBookEnd = false;
     private HashMap<String, List<RankingData>> mRankingDatas = new HashMap<>();
-
+    private RecyclerView ranking_data_recycle;
     /**
      * 这个页面只有一个广告
      */
@@ -95,7 +96,7 @@ public class RankingActivity extends TitleBarBaseActivity {
         ranking_man_bt = findViewById(R.id.ranking_man_bt);
         ranking_woman_bt = findViewById(R.id.ranking_woman_bt);
 
-        RecyclerView ranking_data_recycle = findViewById(R.id.ranking_data_recycle);
+        ranking_data_recycle = findViewById(R.id.ranking_data_recycle);
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(this);
         ranking_data_recycle.setLayoutManager(dataLayoutManager);
         rightDataAdapter = new RightDataAdapter(this, this, rankingBooks);
@@ -113,6 +114,7 @@ public class RankingActivity extends TitleBarBaseActivity {
                                     ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                                             .withString("json", GsonUtil.objectToJson(bookShelf))
                                             .navigation();
+                                    clickReport(bookShelf.getContent_id());
                                     return null;
                                 }
                             })
@@ -124,6 +126,13 @@ public class RankingActivity extends TitleBarBaseActivity {
                                 }
                             }).execute();
                 }
+            }
+        });
+        //TODO 这里可能内存泄漏
+        ranking_data_recycle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                impReport();
             }
         });
 
@@ -292,6 +301,45 @@ public class RankingActivity extends TitleBarBaseActivity {
 
     private void report(){
         ReportManager.INSTANCE.reportPageImp(5,"",this, ServiceContext.userService().getUserPid());
+    }
+
+    private void clickReport(long contentId) {
+        ReportManager.INSTANCE.reportBookClick(6, "", "", 10,
+                0, contentId, RankingActivity.this, ServiceContext.userService().getUserPid());
+    }
+
+    private void impReport(int first, int last) {
+        List<BaseDataBean> mBookselfs = new ArrayList<>(rightDataAdapter.getmDataList());
+        int size = mBookselfs.size();
+        int newLast = last;
+        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:"+newLast);
+        //TODO
+        if (size>0 && first<=0 && newLast<=0){
+            first = 0;
+            newLast = Math.min(7,size-1);
+        }
+        Log.i("ReportManager", "2    size:" + size + " first:" + first + "  newLast:" + newLast);
+        if (first >= 0 && newLast >= 0 && size > newLast) {
+            for (int i = first; i <= newLast; i++) {
+
+                BaseDataBean baseDataBean = mBookselfs.get(i);
+                if (baseDataBean instanceof RankingData) {
+                    RankingData rankingData = (RankingData) baseDataBean;
+                    Log.i("ReportManager", "name:" + rankingData.getBook_name());
+                    long contentId = rankingData.getContent_id();
+                    ReportManager.INSTANCE.reportBookImp(6, "", "", 10,
+                            0, contentId, RankingActivity.this, ServiceContext.userService().getUserPid());
+                }
+
+            }
+        }
+    }
+
+    private void impReport() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) ranking_data_recycle.getLayoutManager();
+        if (layoutManager != null) {
+            impReport(layoutManager.findFirstCompletelyVisibleItemPosition(), layoutManager.findLastVisibleItemPosition());
+        }
     }
 
 }

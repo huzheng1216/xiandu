@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -18,12 +19,14 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdModel;
@@ -32,11 +35,13 @@ import com.inveno.xiandu.bean.book.ClassifyData;
 import com.inveno.xiandu.bean.book.ClassifyMenu;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.adapter.LeftMenuAdapter;
 import com.inveno.xiandu.view.adapter.RightDataAdapter;
 import com.inveno.xiandu.view.custom.MRecycleScrollListener;
+import com.inveno.xiandu.view.detail.BookDetailActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,6 +70,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
     private TextView screen_load;
     private TextView screen_over;
     private TextView screen_cancel;
+    private RecyclerView ranking_data_recycle;
 
     //    private TextView no_book_show;
     private RightDataAdapter rightDataAdapter;
@@ -121,7 +127,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         book_screen.setOnClickListener(this);
 //        no_book_show = view.findViewById(R.id.no_book_show);
         book_sum.setText("共计0本");
-        RecyclerView ranking_data_recycle = view.findViewById(R.id.ranking_data_recycle);
+        ranking_data_recycle = view.findViewById(R.id.ranking_data_recycle);
         RecyclerView ranking_menu_recycle = view.findViewById(R.id.ranking_menu_recycle);
 
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(getActivity());
@@ -129,6 +135,15 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         rightDataAdapter = new RightDataAdapter(getActivity(), getActivity(), mBookselfs);
         rightDataAdapter.setFooterView(getViewHolderView(getContext(), R.layout.item_right_load_more));
         ranking_data_recycle.setAdapter(rightDataAdapter);
+        ranking_data_recycle.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    impReport();
+                }
+            }
+        });
         rightDataAdapter.setOnitemClickListener(new RightDataAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseDataBean baseDataBean) {
@@ -137,7 +152,15 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                             .withString("json", GsonUtil.objectToJson(bookShelf))
                             .navigation();
+                    clickReport(bookShelf.getContent_id());
                 }
+            }
+        });
+        //TODO 这里可能内存泄漏
+        ranking_data_recycle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                impReport();
             }
         });
 
@@ -168,6 +191,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                 mClassifyDatas.remove(mMenus.get(knowClassifyPosition).getCategory_id() + "-" + book_status);
                 //刷新请求新数据
                 getClassifyData(1);
+
             }
         });
         //上拉加载
@@ -224,6 +248,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
             //缓存没数据，需要去请求
             getClassifyData(1);
         }
+
     }
 
     private View getViewHolderView(Context context, int p) {
@@ -502,6 +527,44 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
             if (getActivity() != null) {
                 getActivity().finish();
             }
+        }
+    }
+
+    private void clickReport(long contentId) {
+        ReportManager.INSTANCE.reportBookClick(6, "", "", 10,
+                0, contentId, getContext(), ServiceContext.userService().getUserPid());
+    }
+
+    private void impReport(int first, int last) {
+        List<BaseDataBean> mBookselfs = new ArrayList<>(rightDataAdapter.getmDataList());
+        int size = mBookselfs.size();
+        int newLast = last - 1;
+        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast);
+//        if (size > 0 && first <= 0 && newLast <= 0) {
+//            first = 0;
+//            newLast = Math.min(7, size - 1);
+//        }
+        Log.i("ReportManager", "2    size:" + size + " first:" + first + "  newLast:" + newLast);
+        if (first >= 0 && newLast >= 0 && size > newLast) {
+            for (int i = first; i <= newLast; i++) {
+
+                BaseDataBean baseDataBean = mBookselfs.get(i);
+                if (baseDataBean instanceof BookShelf) {
+                    BookShelf bookShelf = (BookShelf) baseDataBean;
+                    Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+                    long contentId = bookShelf.getContent_id();
+                    ReportManager.INSTANCE.reportBookImp(6, "", "", 10,
+                            0, contentId, getContext(), ServiceContext.userService().getUserPid());
+                }
+
+            }
+        }
+    }
+
+    private void impReport() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) ranking_data_recycle.getLayoutManager();
+        if (layoutManager != null) {
+            impReport(layoutManager.findFirstCompletelyVisibleItemPosition(), layoutManager.findLastVisibleItemPosition());
         }
     }
 }

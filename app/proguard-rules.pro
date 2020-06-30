@@ -44,3 +44,6 @@ public static ** valueOf(java.lang.String);
 -keep class com.donews.** {*;}
 #OAID 唯一标识 如果没有使用是不用配置下面的选项
 -keep class com.bun.miitmdid.core.** {*;}
+
+#数据上报不混淆
+-keep class com.inveno.datareport.** {*;}

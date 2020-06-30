@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,12 +31,14 @@ import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookChapter;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.BookShelfList;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
+import com.inveno.xiandu.bean.book.EditorRecommend;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
@@ -264,6 +267,16 @@ public class BookDetailActivity extends BaseActivity {
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                         .withString("json", GsonUtil.objectToJson(bookShelfs.get(position)))
                         .navigation();
+                clickReport(bookShelfs.get(position).getContent_id());
+            }
+        });
+        book_detail_bottom_recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    impReport();
+                }
             }
         });
         getRelevantBook();
@@ -406,7 +419,7 @@ public class BookDetailActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("wyjjjjj", "onError: "+ e.getMessage());
+                        Log.i("wyjjjjj", "onError: " + e.getMessage());
                     }
 
                     @Override
@@ -418,7 +431,7 @@ public class BookDetailActivity extends BaseActivity {
 
     //获取第一章内容
     private void getFirstCapter() {
-        DDManager.getInstance().getChapterInfo(book.getContent_id() + "", book.getBookChapters().get(0).getChapter_id()+"")
+        DDManager.getInstance().getChapterInfo(book.getContent_id() + "", book.getBookChapters().get(0).getChapter_id() + "")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<BaseRequest<ChapterInfo>>() {
@@ -484,6 +497,7 @@ public class BookDetailActivity extends BaseActivity {
                     public Unit invoke(BookShelfList bookShelfList) {
                         bookShelfs = bookShelfList.getNovel_list();
                         relevantBookAdapter.setsData(bookShelfs);
+                        impReport();
                         return null;
                     }
                 })
@@ -633,8 +647,35 @@ public class BookDetailActivity extends BaseActivity {
         }).execute();
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(11,"",this, ServiceContext.userService().getUserPid());
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(11, "", this, ServiceContext.userService().getUserPid());
+    }
+
+    private void clickReport(long contentId) {
+        ReportManager.INSTANCE.reportBookClick(11, "", "", 9,
+                0, contentId, BookDetailActivity.this, ServiceContext.userService().getUserPid());
+    }
+
+    private void impReport(int first, int last) {
+        int size = bookShelfs.size();
+        if (size>0 && size > last) {
+            for (int i = first; i <= last; i++) {
+
+                BookShelf bookShelf = bookShelfs.get(i);
+                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+                long contentId = bookShelf.getContent_id();
+                ReportManager.INSTANCE.reportBookImp(11, "", "", 9,
+                        0, contentId, BookDetailActivity.this, ServiceContext.userService().getUserPid());
+
+            }
+        }
+    }
+
+    private void impReport() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) book_detail_bottom_recyclerview.getLayoutManager();
+        if (layoutManager != null) {
+            impReport(layoutManager.findFirstCompletelyVisibleItemPosition(), layoutManager.findLastCompletelyVisibleItemPosition());
+        }
     }
 
 }
