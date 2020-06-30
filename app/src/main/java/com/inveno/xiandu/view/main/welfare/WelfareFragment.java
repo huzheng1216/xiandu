@@ -166,7 +166,7 @@ public class WelfareFragment extends BaseFragment {
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(7,"",getContext());
+        ReportManager.INSTANCE.reportPageImp(7,"",getContext(), ServiceContext.userService().getUserPid());
     }
 
 }

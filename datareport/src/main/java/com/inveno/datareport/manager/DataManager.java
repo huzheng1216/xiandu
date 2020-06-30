@@ -17,6 +17,7 @@ import com.inveno.datareport.bean.DrBaseBean;
 import com.inveno.datareport.config.Config;
 import com.inveno.datareport.config.EventIdType;
 
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 import kotlin.text.Charsets;
@@ -34,12 +35,10 @@ public enum DataManager {
     private void init() {
         IAndroidParamProvider androidParamProvider = AndroidParamProviderHolder.get();
         IProductService productService = InvenoServiceContext.product();
-        String uid = InvenoServiceContext.uid().getUid();
-        if (!TextUtils.isEmpty(uid)) {
-            drBaseBean.setUid(uid);
-        }
+        initUid();
 
-        drBaseBean.setPid("0");
+
+        drBaseBean.setProduct_id(productService.getProductId());
         drBaseBean.setApp_ver(androidParamProvider.app().getVersionName());
         drBaseBean.setApi_ver(Config.API_VER);
         drBaseBean.setNetwork(androidParamProvider.device().getNetwork());
@@ -50,12 +49,21 @@ public enum DataManager {
         drBaseBean.setLanguage(androidParamProvider.os().getLang());
         drBaseBean.setMcc(androidParamProvider.device().getMcc());
         drBaseBean.setMnc(androidParamProvider.device().getMnc());
+        drBaseBean.setAid(androidParamProvider.device().getAid());
+        drBaseBean.setPlatform(androidParamProvider.device().getPlatform());
 
         drBaseBean.setReferrer("");
 
     }
 
-    public void initPid(String pid) {
+    private void initUid(){
+        String uid = InvenoServiceContext.uid().getUid();
+        if (!TextUtils.isEmpty(uid)) {
+            drBaseBean.setUid(uid);
+        }
+    }
+
+    public void initPid(long pid) {
         drBaseBean.setPid(pid);
     }
 
@@ -71,11 +79,11 @@ public enum DataManager {
         drBaseBean.setReferrer(referrer);
     }
 
-    private static String createAdTk(String productId, String uid, long time) {
-        return Hashing.md5().newHasher().putString(productId + ":" + uid + ":" + time, Charsets.UTF_8).hash().toString();
+    private static String createAdTk(long time) {
+        return Hashing.md5().newHasher().putString("e3dccdbeeefeb574b3ad7ae5df1a2cf34b7aeabb" + "::" + time, Charsets.UTF_8).hash().toString();
     }
 
-    public String reportPageImp(int pageId, String upack, Context context) {
+    public  LinkedHashMap<String, Object> reportPageImp(int pageId, String upack, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
@@ -87,15 +95,15 @@ public enum DataManager {
             dataReportBean.setUpack(upack);
         }
 
-        return toJsonString(drBaseBean, dataReportBean);
+        return parseToMap(drBaseBean, dataReportBean);
     }
 
 
-    public String reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
+    public  LinkedHashMap<String, Object> reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
-        dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
+        dataReportBean.setEvent_id(EventIdType.BOOK_IMP);
         dataReportBean.setPage_id(pageId);
         dataReportBean.setUpack(upack);
         dataReportBean.setCpack(cpack);
@@ -103,15 +111,15 @@ public enum DataManager {
         dataReportBean.setServer_time(serverTime);
         dataReportBean.setContent_id(contentId);
 
-        return toJsonString(drBaseBean, dataReportBean);
+        return parseToMap(drBaseBean, dataReportBean);
     }
 
 
-    public String reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
+    public  LinkedHashMap<String, Object> reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
-        dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
+        dataReportBean.setEvent_id(EventIdType.BOOK_CLICK);
         dataReportBean.setPage_id(pageId);
         dataReportBean.setUpack(upack);
         dataReportBean.setCpack(cpack);
@@ -119,11 +127,11 @@ public enum DataManager {
         dataReportBean.setServer_time(serverTime);
         dataReportBean.setContent_id(contentId);
 
-        return toJsonString(drBaseBean, dataReportBean);
+        return parseToMap(drBaseBean, dataReportBean);
     }
 
 
-    public String reportReadBookDuration(int pageId, String upack, String cpack, int type, long serverTime, long stayTime, long contentId, long eventTime, Context context) {
+    public  LinkedHashMap<String, Object> reportReadBookDuration(int pageId, String upack, String cpack, int type, long serverTime, long stayTime, long contentId, long eventTime, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
@@ -137,35 +145,40 @@ public enum DataManager {
         dataReportBean.setContent_id(contentId);
         dataReportBean.setEvent_time(eventTime);
 
-        return toJsonString(drBaseBean, dataReportBean);
+        return parseToMap(drBaseBean, dataReportBean);
     }
 
 
-    public String reportAppDuration(long stayTime, long leaveTime, Context context) {
+    public  LinkedHashMap<String, Object> reportAppDuration(long stayTime, long leaveTime, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
-        dataReportBean.setEvent_id(EventIdType.READ_BOOK_DURATION);
+        dataReportBean.setEvent_id(EventIdType.APP_DURATION);
         dataReportBean.setStay_time(stayTime);
         dataReportBean.setLeave_time(leaveTime);
 
-        return toJsonString(drBaseBean, dataReportBean);
+        return parseToMap(drBaseBean, dataReportBean);
     }
 
 
     private void setData(Context context, DataReportBean dataReportBean) {
+        initUid();
         long now = System.currentTimeMillis();
         dataReportBean.setReport_time(now);
         dataReportBean.setEvent_time(now);
-        dataReportBean.setTk(createAdTk(drBaseBean.getProduct_id(), drBaseBean.getUid(), now));
+        dataReportBean.setTk(createAdTk(now));
         dataReportBean.setIp(NetWorkUtil.getIpAddress(context));
+        dataReportBean.setRequest_time(String.valueOf(now));
     }
 
-    private String toJsonString(DrBaseBean drBaseBean, DataReportBean dataReportBean) {
+    private LinkedHashMap<String, Object> parseToMap(DrBaseBean drBaseBean, DataReportBean dataReportBean) {
         JSONObject jsonObject = (JSONObject) JSON.toJSON(drBaseBean);
         JSONObject jsonObject2 = (JSONObject) JSON.toJSON(dataReportBean);
-        jsonObject.putAll(jsonObject2);
-        return jsonObject.toJSONString();
+
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        map.putAll(jsonObject);
+        map.putAll(jsonObject2);
+        return map;
     }
 
 }

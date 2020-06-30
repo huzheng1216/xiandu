@@ -132,6 +132,11 @@ public class SerchResultActivity extends BaseActivity {
                     startBookSearch();
                 }
             }
+
+            @Override
+            public void onVisibleItem(int first, int last) {
+
+            }
         });
 
         startBookSearch();

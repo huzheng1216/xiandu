@@ -41,6 +41,7 @@ import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
@@ -633,7 +634,7 @@ public class BookDetailActivity extends BaseActivity {
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(11,"",this);
+        ReportManager.INSTANCE.reportPageImp(11,"",this, ServiceContext.userService().getUserPid());
     }
 
 }

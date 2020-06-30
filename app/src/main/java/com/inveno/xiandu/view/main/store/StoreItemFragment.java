@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,6 +35,7 @@ import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.api.book.GetBookCityAPi;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
@@ -85,6 +87,7 @@ public class StoreItemFragment extends BaseFragment {
     private StatefulCallBack<BookShelfList> bottomRequest;
 
     private boolean isVisible;
+    private int pageId = 2;
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -92,21 +95,25 @@ public class StoreItemFragment extends BaseFragment {
                 channel = 0;
                 topTitle = "小编推荐";
                 bottomTitle = "猜你喜欢";
+                pageId = 2;
                 break;
             case "男频":
                 channel = 1;
                 topTitle = "男生热文";
                 bottomTitle = "人气精选";
+                pageId = 3;
                 break;
             case "女频":
                 channel = 2;
                 topTitle = "女生热文";
                 bottomTitle = "人气精选";
+                pageId = 4;
                 break;
             case "出版":
                 channel = 3;
                 topTitle = "精选畅销";
                 bottomTitle = "人气精选";
+                pageId = 0;
                 break;
         }
     }
@@ -124,12 +131,14 @@ public class StoreItemFragment extends BaseFragment {
         recyclerView.setAdapter(bookCityAdapter);
         bookCityAdapter.setOnItemClickListener(new BookCityAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(BaseDataBean baseDataBean) {
+            public void onItemClick(BaseDataBean baseDataBean, int position) {
+
                 if (baseDataBean instanceof BookShelf) {
                     BookShelf bookShelf = (BookShelf) baseDataBean;
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                             .withString("json", GsonUtil.objectToJson(bookShelf))
                             .navigation();
+                    clickReport(bookShelf.getContent_id(), position);
                 } else if (baseDataBean instanceof EditorRecommend) {
                     //小编推荐需要去请求书本数据
                     EditorRecommend editorRecommend = (EditorRecommend) baseDataBean;
@@ -150,6 +159,8 @@ public class StoreItemFragment extends BaseFragment {
                                     return null;
                                 }
                             }).execute();
+                    clickRecommandReport(editorRecommend.getContent_id(), position);
+
                 }
             }
 
@@ -173,6 +184,7 @@ public class StoreItemFragment extends BaseFragment {
                                 baseDataBeans.addAll(mDataBeans);
                                 mDataBeans = baseDataBeans;
                                 bookCityAdapter.setDataList(mDataBeans);
+                                impReport();
                                 return null;
                             }
                         })
@@ -204,7 +216,7 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(BookShelfList bookShelfList) {
                         mMoreData[0] = new ArrayList<>(bookShelfList.getNovel_list());
-                        if (mMoreData[0].size()<0){
+                        if (mMoreData[0].size() < 0) {
                             bookCityAdapter.setFooterText("没有更多数据");
                         }
                         if (flag[0] == true) {
@@ -240,6 +252,11 @@ public class StoreItemFragment extends BaseFragment {
                     flag[0] = true;
                     return null;
                 }).execute();
+            }
+
+            @Override
+            public void onVisibleItem(int first, int last) {
+                impReport(first, last);
             }
         });
         return view;
@@ -298,10 +315,11 @@ public class StoreItemFragment extends BaseFragment {
                         store_refresh_layout.setRefreshing(false);
                         mDataBeans = baseDataBeans;
                         if (mDataBeans.size() > 0) {
-                            if (mDataBeans.size()<10){
+                            if (mDataBeans.size() < 10) {
                                 bookCityAdapter.setFooterText("没有更多数据");
                             }
                             bookCityAdapter.setDataList(mDataBeans);
+                            impReport();
                         } else {
                             Toaster.showToastCenter(getContext(), "获取数据失败");
                             bookCityAdapter.setFooterText("没有更多数据");
@@ -326,19 +344,74 @@ public class StoreItemFragment extends BaseFragment {
         isVisible = false;
     }
 
-    private void report(){
-        int pageId = 2;
-        if (channel==1){
-            pageId = 3;
-        }else if (channel==2){
-            pageId = 4;
-        }
-        ReportManager.INSTANCE.reportPageImp(pageId,"",getContext());
+
+    //**************** 上报  start ******************//
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(pageId, "", getContext(), ServiceContext.userService().getUserPid());
+        impReport();
     }
 
-    public void checkAndReport(){
-        if (isVisible){
+    public void checkAndReport() {
+        if (isVisible) {
             report();
         }
     }
+
+    private void clickRecommandReport(long contentId, int position) {
+        ReportManager.INSTANCE.reportBookClick(pageId, "", "", 8, 0,
+                contentId, getContext(), ServiceContext.userService().getUserPid());
+    }
+
+    private void clickReport(long contentId, int position) {
+        ReportManager.INSTANCE.reportBookClick(pageId, "", "", getCurrntType(position),
+                0, contentId, getContext(), ServiceContext.userService().getUserPid());
+    }
+
+    private void impReport(int first, int last) {
+        int size = mDataBeans.size();
+        if (size > last - 1) {
+            for (int i = first - 1; i <= last - 1; i++) {
+                if (i > 0) {
+                    BaseDataBean baseDataBean = mDataBeans.get(i);
+                    if (baseDataBean instanceof BookShelf) {
+                        long contentId = ((BookShelf) baseDataBean).getContent_id();
+                        ReportManager.INSTANCE.reportBookImp(pageId, "", "", getCurrntType(i),
+                                0, contentId, getContext(), ServiceContext.userService().getUserPid());
+                    } else if (baseDataBean instanceof EditorRecommend) {
+                        long contentId = ((EditorRecommend) baseDataBean).getContent_id();
+                        ReportManager.INSTANCE.reportBookImp(pageId, "", "", getCurrntType(i),
+                                0, contentId, getContext(), ServiceContext.userService().getUserPid());
+                    }
+                }
+            }
+        }
+    }
+
+    private void impReport() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        if (layoutManager != null) {
+            impReport(layoutManager.findFirstCompletelyVisibleItemPosition(), layoutManager.findLastCompletelyVisibleItemPosition());
+        }
+    }
+
+    private int getCurrntType(int position) {
+        //TODO 暂时这么写
+        int type = 8;
+        if (position < bookCityAdapter.getCenterPostion()) {
+            if (channel == 1) {
+                type = 1;
+            } else if (channel == 2) {
+                type = 2;
+            }
+        } else {
+            type = 4;
+            if (channel == 1) {
+                type = 3;
+            } else if (channel == 2) {
+                type = 5;
+            }
+        }
+        return type;
+    }
+    //**************** 上报  end ******************//
 }

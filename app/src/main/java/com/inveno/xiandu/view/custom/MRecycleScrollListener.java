@@ -34,6 +34,11 @@ public abstract class MRecycleScrollListener extends RecyclerView.OnScrollListen
                 onLoadMore();
             }
         }
+
+        if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+            assert manager != null;
+            onVisibleItem(manager.findFirstCompletelyVisibleItemPosition(), manager.findLastCompletelyVisibleItemPosition());
+        }
     }
 
     @Override
@@ -47,4 +52,6 @@ public abstract class MRecycleScrollListener extends RecyclerView.OnScrollListen
      * 加载更多回调
      */
     public abstract void onLoadMore();
+
+    public abstract void onVisibleItem(int first , int last);
 }

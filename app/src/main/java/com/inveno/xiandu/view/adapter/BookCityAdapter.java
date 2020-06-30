@@ -2,6 +2,7 @@ package com.inveno.xiandu.view.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     private int lastChoise = 0;
     private BookCityAdapter.OnItemClickListener mListener;
     private String footerStr = "正在努力加载...";
-
+    private int centerPostion = 5;
 
     public BookCityAdapter(Context context, Activity activity, ArrayList<BaseDataBean> dataList) {
         mContext = context;
@@ -118,7 +119,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onItemClick(mDataList.get(finalDataPosition));
+                        mListener.onItemClick(mDataList.get(finalDataPosition) , finalDataPosition);
                     }
                 });
             }
@@ -130,14 +131,16 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                     mListener.onChangeClick();
                 }
             });
-
+            if (position>2) {
+                centerPostion = position;
+            }
         } else if (holder instanceof BookCityAdapter.BigImageViewHolder) {
             ((BigImageViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
             int finalDataPosition = dataPosition;
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemClick(mDataList.get(finalDataPosition));
+                    mListener.onItemClick(mDataList.get(finalDataPosition), finalDataPosition);
                 }
             });
 
@@ -148,7 +151,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemClick(mDataList.get(finalDataPosition));
+                    mListener.onItemClick(mDataList.get(finalDataPosition), finalDataPosition);
                 }
             });
 
@@ -159,7 +162,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemClick(mDataList.get(finalDataPosition));
+                    mListener.onItemClick(mDataList.get(finalDataPosition), finalDataPosition);
                 }
             });
         } else if (holder instanceof BookCityAdapter.NotImageViewHolder) {
@@ -169,7 +172,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mListener.onItemClick(mDataList.get(finalDataPosition));
+                    mListener.onItemClick(mDataList.get(finalDataPosition), finalDataPosition);
                 }
             });
         } else if (holder instanceof FooterViewHolder) {
@@ -497,8 +500,12 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(BaseDataBean baseDataBean);
+        void onItemClick(BaseDataBean baseDataBean , int position);
 
         void onChangeClick();
+    }
+
+    public int getCenterPostion(){
+        return centerPostion;
     }
 }

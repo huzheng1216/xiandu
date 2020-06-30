@@ -230,7 +230,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     @Override
     protected void onVisible(Boolean firstVisble) {
         LogUtils.H("书架可见：" + firstVisble);
-        ReportManager.INSTANCE.reportPageImp(1,"",getContext());
+        ReportManager.INSTANCE.reportPageImp(1,"",getContext(), ServiceContext.userService().getUserPid());
         initData();
         if (firstVisble) {
             //从网络加载书籍
