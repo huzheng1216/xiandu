@@ -25,6 +25,7 @@ import com.inveno.xiandu.bean.book.RankingData;
 import com.inveno.xiandu.bean.book.RankingMenu;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
@@ -290,7 +291,7 @@ public class RankingActivity extends TitleBarBaseActivity {
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(5,"",this);
+        ReportManager.INSTANCE.reportPageImp(5,"",this, ServiceContext.userService().getUserPid());
     }
 
 }

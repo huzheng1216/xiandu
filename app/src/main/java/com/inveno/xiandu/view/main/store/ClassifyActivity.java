@@ -22,6 +22,7 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.SPUtils;
@@ -177,7 +178,7 @@ public class ClassifyActivity extends BaseActivity {
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(6,"",this);
+        ReportManager.INSTANCE.reportPageImp(6,"",this, ServiceContext.userService().getUserPid());
     }
 
 }

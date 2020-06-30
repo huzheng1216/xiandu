@@ -4,9 +4,11 @@ import android.content.Context;
 import android.util.Log;
 
 import com.inveno.datareport.bean.AppDurationBean;
+import com.inveno.datareport.bean.ReportCache;
 import com.inveno.datareport.bean.ReadBean;
 import com.inveno.datareport.service.ReportService;
 
+import java.util.LinkedHashMap;
 import java.util.UUID;
 
 public enum ReportManager {
@@ -17,7 +19,14 @@ public enum ReportManager {
 
     ReadBean readBean;
 
+    ReportCache reportCache;
+
+    int currentType;
+    int currentPageId;
+
+
     ReportManager() {
+        reportCache = new ReportCache();
     }
 
     public void appStart() {
@@ -28,12 +37,13 @@ public enum ReportManager {
         }
     }
 
-    public void appEnd(Context context) {
+    public void appEnd(Context context , long pid) {
         if (appDurationBean != null) {
             appDurationBean.endTime = System.currentTimeMillis();
-            String json = DataManager.INSTANCE.reportAppDuration(appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context);
-            Log.i("ReportManager", "appEnd json:" + json);
-            ReportService.INSTANCE.report(json);
+            DataManager.INSTANCE.initPid(pid);
+            LinkedHashMap<String, Object> map  = DataManager.INSTANCE.reportAppDuration(appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context);
+            Log.i("ReportManager", "appEnd json:" + map);
+            ReportService.INSTANCE.report(map);
         }
         appDurationBean = null;
     }
@@ -42,44 +52,52 @@ public enum ReportManager {
         DataManager.INSTANCE.setUPack(upack);
     }
 
-    public void reportPageImp(int pageId, String upack, Context context) {
-        String json = DataManager.INSTANCE.reportPageImp(pageId, upack, context);
-        Log.i("ReportManager", "reportPageImp json:" + json);
-        ReportService.INSTANCE.report(json);
+    public void reportPageImp(int pageId, String upack, Context context, long pid) {
+        DataManager.INSTANCE.initPid(pid);
+        LinkedHashMap<String, Object> map  = DataManager.INSTANCE.reportPageImp(pageId, upack, context);
+        Log.i("ReportManager", "reportPageImp json:" + map);
+        ReportService.INSTANCE.report(map);
     }
 
-    public void reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
-        String json = DataManager.INSTANCE.reportBookImp(pageId, upack, cpack, type, serverTime, contentId, context);
-        Log.i("ReportManager", "reportBookImp json:" + json);
-        ReportService.INSTANCE.report(json);
+    public void reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context, long pid) {
+        if (reportCache.ifCanReport(pageId,type,contentId)) {
+            DataManager.INSTANCE.initPid(pid);
+            LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookImp(pageId, upack, cpack, type, serverTime, contentId, context);
+            Log.i("ReportManager", "reportBookImp json:" + map);
+            ReportService.INSTANCE.report(map);
+        }
     }
 
-    public void reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context) {
-        String json = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
-        Log.i("ReportManager", "reportBookClick json:" + json);
-        ReportService.INSTANCE.report(json);
+    public void reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context, long pid) {
+        currentPageId = pageId;
+        currentType = type;
+        DataManager.INSTANCE.initPid(pid);
+        LinkedHashMap<String, Object> map  = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
+        Log.i("ReportManager", "reportBookClick json:" + map);
+        ReportService.INSTANCE.report(map);
     }
 
-    public void readBookStart(int pageId, String upack, String cpack, int type, long serverTime, long contentId) {
+    public void readBookStart( String upack, String cpack, long serverTime, long contentId) {
         if (readBean == null) {
             readBean = new ReadBean();
             readBean.startTime = System.currentTimeMillis();
-            readBean.pageId = pageId;
+            readBean.pageId = currentPageId;
             readBean.upack = upack;
             readBean.cpack = cpack;
-            readBean.type = type;
+            readBean.type = currentType;
             readBean.serverTime = serverTime;
             readBean.contentId = contentId;
         }
     }
 
-    public void readBookStartEnd(Context context) {
+    public void readBookStartEnd(Context context, long pid) {
         if (readBean != null) {
-            String json = DataManager.INSTANCE.reportReadBookDuration(readBean.pageId, readBean.upack, readBean.cpack,
+            DataManager.INSTANCE.initPid(pid);
+            LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportReadBookDuration(readBean.pageId, readBean.upack, readBean.cpack,
                     readBean.type, readBean.serverTime, System.currentTimeMillis() - readBean.startTime,
                     readBean.contentId, readBean.startTime, context);
-            Log.i("ReportManager", "readBookStartEnd json:" + json);
-            ReportService.INSTANCE.report(json);
+            Log.i("ReportManager", "readBookStartEnd json:" + map);
+            ReportService.INSTANCE.report(map);
         }
         readBean = null;
     }

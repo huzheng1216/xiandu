@@ -285,6 +285,6 @@ public class MineFragment extends BaseFragment {
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(8,"",getContext());
+        ReportManager.INSTANCE.reportPageImp(8,"",getContext(), ServiceContext.userService().getUserPid());
     }
 }

@@ -20,6 +20,7 @@ import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.crash.CrashHandler;
 import com.inveno.xiandu.db.DaoManager;
 import com.inveno.xiandu.http.DDManager;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.SPUtils;
 
 /**
@@ -116,7 +117,7 @@ public class MainApplication extends Application implements Application.Activity
             isForeground = true;
         }else {
             isForeground=false;
-            ReportManager.INSTANCE.appEnd(this);
+            ReportManager.INSTANCE.appEnd(this , ServiceContext.userService().getUserPid());
         }
 //        Log.e("ReportManager",+activityCount+"-------isForeground="+isForeground);
     }

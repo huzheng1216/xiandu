@@ -7,7 +7,7 @@ public class DrBaseBean {
 
     String product_id;
     String uid;
-    String pid;
+    long pid;
     String app_ver;
     String api_ver;
 
@@ -44,11 +44,11 @@ public class DrBaseBean {
         this.uid = uid;
     }
 
-    public String getPid() {
+    public long getPid() {
         return pid;
     }
 
-    public void setPid(String pid) {
+    public void setPid(long pid) {
         this.pid = pid;
     }
 

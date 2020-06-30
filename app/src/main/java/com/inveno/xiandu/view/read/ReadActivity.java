@@ -46,6 +46,7 @@ import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.utils.SystemBarUtils;
@@ -938,6 +939,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onStart() {
         super.onStart();
         registerBrightObserver();
+        ReportManager.INSTANCE.readBookStart("","",0,bookShelf.getContent_id());
     }
 
     @Override
@@ -968,6 +970,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
+        ReportManager.INSTANCE.readBookStartEnd(this, ServiceContext.userService().getUserPid());
     }
 
     @Override
@@ -1075,7 +1078,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(10,"",this);
+        ReportManager.INSTANCE.reportPageImp(10,"",this, ServiceContext.userService().getUserPid());
     }
 
 }

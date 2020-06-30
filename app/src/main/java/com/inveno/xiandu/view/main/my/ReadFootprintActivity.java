@@ -366,6 +366,6 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     }
 
     private void report(){
-        ReportManager.INSTANCE.reportPageImp(9,"",this);
+        ReportManager.INSTANCE.reportPageImp(9,"",this, ServiceContext.userService().getUserPid());
     }
 }

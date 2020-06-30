@@ -189,6 +189,11 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                     }
                 }
             }
+
+            @Override
+            public void onVisibleItem(int first, int last) {
+
+            }
         });
         initPopwindow();
 
