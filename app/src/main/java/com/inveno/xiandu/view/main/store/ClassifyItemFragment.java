@@ -539,19 +539,13 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         List<BaseDataBean> mBookselfs = new ArrayList<>(rightDataAdapter.getmDataList());
         int size = mBookselfs.size();
         int newLast = last - 1;
-        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast);
-//        if (size > 0 && first <= 0 && newLast <= 0) {
-//            first = 0;
-//            newLast = Math.min(7, size - 1);
-//        }
-        Log.i("ReportManager", "2    size:" + size + " first:" + first + "  newLast:" + newLast);
+//        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast);
         if (first >= 0 && newLast >= 0 && size > newLast) {
             for (int i = first; i <= newLast; i++) {
-
                 BaseDataBean baseDataBean = mBookselfs.get(i);
                 if (baseDataBean instanceof BookShelf) {
                     BookShelf bookShelf = (BookShelf) baseDataBean;
-                    Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+//                    Log.i("ReportManager", "name:" + bookShelf.getBook_name());
                     long contentId = bookShelf.getContent_id();
                     ReportManager.INSTANCE.reportBookImp(6, "", "", 10,
                             0, contentId, getContext(), ServiceContext.userService().getUserPid());

@@ -322,20 +322,13 @@ public class RankingActivity extends TitleBarBaseActivity {
         List<BaseDataBean> mBookselfs = new ArrayList<>(rightDataAdapter.getmDataList());
         int size = mBookselfs.size();
         int newLast = last;
-        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:"+newLast);
-        //TODO
-        if (size>0 && first<=0 && newLast<=0){
-            first = 0;
-            newLast = Math.min(7,size-1);
-        }
-        Log.i("ReportManager", "2    size:" + size + " first:" + first + "  newLast:" + newLast);
+//        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:"+newLast);
         if (first >= 0 && newLast >= 0 && size > newLast) {
             for (int i = first; i <= newLast; i++) {
-
                 BaseDataBean baseDataBean = mBookselfs.get(i);
                 if (baseDataBean instanceof RankingData) {
                     RankingData rankingData = (RankingData) baseDataBean;
-                    Log.i("ReportManager", "name:" + rankingData.getBook_name());
+//                    Log.i("ReportManager", "name:" + rankingData.getBook_name());
                     long contentId = rankingData.getContent_id();
                     ReportManager.INSTANCE.reportBookImp(6, "", "", 10,
                             0, contentId, RankingActivity.this, ServiceContext.userService().getUserPid());

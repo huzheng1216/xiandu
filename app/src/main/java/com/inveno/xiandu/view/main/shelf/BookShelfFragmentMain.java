@@ -444,18 +444,13 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         int size = mBookselfs.size();
         int newFirst = first - 1 ;
         int newLast = last - 2;
-        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast);
-//        if (size > 0 && first <= 0 && newLast <= 0) {
-//            first = 0;
-//            newLast = Math.min(7, size - 1);
-//        }
-        Log.i("ReportManager", "2    size:" + size + " newFirst:" + newFirst + "  newLast:" + newLast);
+//        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast + " newFirst:" + newFirst);
         if (newLast >= 0 && size > newLast) {
             for (int i = newFirst; i <= newLast; i++) {
                 if(i >= 0) {
                     Bookbrack bookbrack = mBookselfs.get(i);
                     if (!(bookbrack instanceof AdBookModel)) {
-                        Log.i("ReportManager", "name:" + bookbrack.getBook_name() + " i:" + i);
+//                        Log.i("ReportManager", "name:" + bookbrack.getBook_name() + " i:" + i);
                         long contentId = bookbrack.getContent_id();
                         ReportManager.INSTANCE.reportBookImp(1, "", "", 10,
                                 0, contentId, getContext(), ServiceContext.userService().getUserPid());

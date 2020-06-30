@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -277,6 +278,13 @@ public class BookDetailActivity extends BaseActivity {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     impReport();
                 }
+            }
+        });
+        //TODO 这里可能内存泄漏
+        book_detail_bottom_recyclerview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                impReport();
             }
         });
         getRelevantBook();
@@ -660,13 +668,11 @@ public class BookDetailActivity extends BaseActivity {
         int size = bookShelfs.size();
         if (size>0 && size > last) {
             for (int i = first; i <= last; i++) {
-
                 BookShelf bookShelf = bookShelfs.get(i);
-                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+//                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
                 long contentId = bookShelf.getContent_id();
                 ReportManager.INSTANCE.reportBookImp(11, "", "", 9,
                         0, contentId, BookDetailActivity.this, ServiceContext.userService().getUserPid());
-
             }
         }
     }
