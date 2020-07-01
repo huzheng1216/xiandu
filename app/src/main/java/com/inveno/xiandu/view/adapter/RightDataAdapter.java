@@ -42,6 +42,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
     private List<BaseDataBean> mDataList;
     private int lastChoise = 0;
     private OnItemClickListener mListener;
+    private OnImpReportListener onImpReportListener;
 
     private String footerStr = "正在努力加载...";
     private boolean isNotMore = false;
@@ -55,6 +56,10 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     public void setOnitemClickListener(OnItemClickListener onitemClickListener) {
         mListener = onitemClickListener;
+    }
+
+    public void setOnImpReportListener(OnImpReportListener onImpReportListener) {
+        this.onImpReportListener = onImpReportListener;
     }
 
     @Override
@@ -285,6 +290,10 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
     public void setmDataList(List<BaseDataBean> dataList) {
         mDataList = dataList;
         notifyDataSetChanged();
+
+        if (onImpReportListener!=null){
+            onImpReportListener.onImpReport();
+        }
     }
 
     public void addAd(AdModel adModel) {
@@ -302,5 +311,13 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     public interface OnItemClickListener {
         void onItemClick(BaseDataBean baseDataBean);
+    }
+
+    public interface OnImpReportListener{
+        void onImpReport();
+    }
+
+    public List<BaseDataBean> getmDataList() {
+        return mDataList;
     }
 }

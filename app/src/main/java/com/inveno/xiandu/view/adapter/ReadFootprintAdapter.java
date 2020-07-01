@@ -380,4 +380,8 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
 
         void onFooterClick();
     }
+
+    public List<Bookbrack> getData() {
+        return data;
+    }
 }

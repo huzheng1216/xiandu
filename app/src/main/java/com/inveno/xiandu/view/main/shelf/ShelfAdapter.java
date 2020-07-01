@@ -428,4 +428,8 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
 
         void onFooterClick();
     }
+
+    public List<Bookbrack> getData() {
+        return data;
+    }
 }

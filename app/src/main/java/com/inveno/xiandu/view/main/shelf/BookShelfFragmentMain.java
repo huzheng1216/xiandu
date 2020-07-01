@@ -7,12 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +26,7 @@ import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
@@ -42,6 +45,7 @@ import com.inveno.xiandu.view.custom.SwipeItemLayout;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
 import com.inveno.xiandu.view.main.MainActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kotlin.Unit;
@@ -65,6 +69,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     private TextView bookbrack_delete_all_cancel;
     private TextView bookbrack_delete_all_select_all;
     private TextView bookbrack_delete_all_delete;
+    private RecyclerView bookrack_recyclerview;
 
     private IosTypeDialog iosTypeDialog;
     private AdBookModel adBookModel;
@@ -108,7 +113,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                         }).execute();
             }
         });
-        RecyclerView bookrack_recyclerview = inflate.findViewById(R.id.bookrack_recyclerview);
+        bookrack_recyclerview = inflate.findViewById(R.id.bookrack_recyclerview);
         bookrack_recyclerview.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(getActivity()));
 
         shelfAdapter = new ShelfAdapter(getContext());
@@ -150,6 +155,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             public void onBookClick(Bookbrack bookbrack) {
                 // TODO: 2020/6/17  去数据库查书，查到了就跳转，没查到就请求后跳转
                 BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                clickReport(bookbrack.getContent_id());
                 if (bookShelf != null) {
                     //这里需要跳转到小说阅读
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
@@ -207,6 +213,22 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(getActivity());
         bookrack_recyclerview.setLayoutManager(dataLayoutManager);
+         //TODO 这里可能内存泄漏
+        bookrack_recyclerview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                impReport();
+            }
+        });
+        bookrack_recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    impReport();
+                }
+            }
+        });
         initHeaderView();
         initFooterView();
         loadAd();
@@ -410,5 +432,38 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                 return null;
             }
         }).execute();
+    }
+
+    private void clickReport(long contentId) {
+        ReportManager.INSTANCE.reportBookClick(1, "", "", 10,
+                0, contentId, getContext(), ServiceContext.userService().getUserPid());
+    }
+
+    private void impReport(int first, int last) {
+        List<Bookbrack> mBookselfs = new ArrayList<>(shelfAdapter.getData());
+        int size = mBookselfs.size();
+        int newFirst = first - 1 ;
+        int newLast = last - 2;
+//        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast + " newFirst:" + newFirst);
+        if (newLast >= 0 && size > newLast) {
+            for (int i = newFirst; i <= newLast; i++) {
+                if(i >= 0) {
+                    Bookbrack bookbrack = mBookselfs.get(i);
+                    if (!(bookbrack instanceof AdBookModel)) {
+//                        Log.i("ReportManager", "name:" + bookbrack.getBook_name() + " i:" + i);
+                        long contentId = bookbrack.getContent_id();
+                        ReportManager.INSTANCE.reportBookImp(1, "", "", 10,
+                                0, contentId, getContext(), ServiceContext.userService().getUserPid());
+                    }
+                }
+            }
+        }
+    }
+
+    private void impReport() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) bookrack_recyclerview.getLayoutManager();
+        if (layoutManager != null) {
+            impReport(layoutManager.findFirstCompletelyVisibleItemPosition(), layoutManager.findLastVisibleItemPosition());
+        }
     }
 }

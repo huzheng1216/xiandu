@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +43,7 @@ import com.inveno.xiandu.view.dialog.IosTypeDialog;
 import com.inveno.xiandu.view.main.MainActivity;
 import com.inveno.xiandu.view.main.shelf.ShelfAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -77,6 +80,8 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 
     private AdBookModel adBookModel;
 
+    private RecyclerView footprint_recycle;
+
 
     @Override
     public String getCenterText() {
@@ -98,7 +103,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        RecyclerView footprint_recycle = findViewById(R.id.footprint_recycle);
+        footprint_recycle = findViewById(R.id.footprint_recycle);
         footprint_recycle.addOnItemTouchListener(new SwipeItemLayout.OnSwipeItemTouchListener(this));
         readFootprintAdapter = new ReadFootprintAdapter(this);
 
@@ -110,6 +115,22 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(this);
         footprint_recycle.setLayoutManager(dataLayoutManager);
+        //TODO 这里可能内存泄漏
+        footprint_recycle.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                impReport();
+            }
+        });
+        footprint_recycle.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    impReport();
+                }
+            }
+        });
 
         readFootprintAdapter.setShelfAdapterListener(new ReadFootprintAdapter.ShelfAdapterListener() {
 
@@ -152,6 +173,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
             public void onBookClick(Bookbrack bookbrack) {
                 // TODO: 2020/6/17  去数据库查书，查到了就跳转，没查到就请求后跳转
                 BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                clickReport(bookbrack.getContent_id());
                 if (bookShelf != null) {
                     //这里需要跳转到小说阅读
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
@@ -367,5 +389,36 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 
     private void report(){
         ReportManager.INSTANCE.reportPageImp(9,"",this, ServiceContext.userService().getUserPid());
+    }
+
+    private void clickReport(long contentId) {
+        ReportManager.INSTANCE.reportBookClick(9, "", "", 10,
+                0, contentId, ReadFootprintActivity.this, ServiceContext.userService().getUserPid());
+    }
+
+    private void impReport(int first, int last) {
+        List<Bookbrack> mBookselfs = new ArrayList<>(readFootprintAdapter.getData());
+        int size = mBookselfs.size();
+        int newFirst = first ;
+        int newLast = last;
+//        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast+ " newFirst:" + newFirst);
+        if (newFirst >= 0 && newLast >= 0 && size > newLast) {
+            for (int i = newFirst; i <= newLast; i++) {
+                Bookbrack bookbrack = mBookselfs.get(i);
+                if (!(bookbrack instanceof AdBookModel)) {
+//                    Log.i("ReportManager", "name:" + bookbrack.getBook_name() + " i:"+i);
+                    long contentId = bookbrack.getContent_id();
+                    ReportManager.INSTANCE.reportBookImp(9, "", "", 10,
+                            0, contentId, ReadFootprintActivity.this, ServiceContext.userService().getUserPid());
+                }
+            }
+        }
+    }
+
+    private void impReport() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) footprint_recycle.getLayoutManager();
+        if (layoutManager != null) {
+            impReport(layoutManager.findFirstCompletelyVisibleItemPosition(), layoutManager.findLastVisibleItemPosition());
+        }
     }
 }

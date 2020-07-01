@@ -10,7 +10,7 @@ public class ReportCache {
         String key = ""+pageId+":"+type+":"+contentId;
         Long value = impCacheMap.get(key);
         if (value!=null){
-            if (System.currentTimeMillis() - value.longValue() >1*60*1000){
+            if ((System.currentTimeMillis() - value) >10*60*1000){
                 impCacheMap.put(key,System.currentTimeMillis());
                 return true;
             }

@@ -687,3 +687,5 @@ public static ** valueOf(java.lang.String);
 -keep public class com.inveno.xiandu.bean.*.*{ *; }
 -keep public class com.inveno.xiandu.bean.*{ *; }
 -keep public class com.inveno.xiandu.http.body.*{ *; }
+#数据上报不混淆
+-keep class com.inveno.datareport.bean.** {*;}
