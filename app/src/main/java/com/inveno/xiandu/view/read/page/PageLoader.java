@@ -14,8 +14,10 @@ import android.text.TextPaint;
 import androidx.core.content.ContextCompat;
 
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.db.SQL;
+import com.inveno.xiandu.gen.BookbrackDao;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.utils.LogUtils;
@@ -643,30 +645,41 @@ public abstract class PageLoader {
             mCollBook.setWords_num(words);
         }
 //
+//        Bookbrack bookbrack = new Bookbrack();
+//        bookbrack.setContent_id(mCollBook.getContent_id());
+//        bookbrack.setChapter_id(getChapterPos());
+//        bookbrack.setChapter_name(mCollBook.getChapter_name());
+//        bookbrack.setWords_num(mCollBook.getWords_num());
+//        bookbrack.setPoster(mCollBook.getPoster());
+//        bookbrack.setBook_name(mCollBook.getBook_name());
+//        bookbrack.setPage(mCurPage.position);
+//
+//        SQL.getInstance().addBookbrack(bookbrack);
+//
 //        //存储到数据库
 //        SQL.getInstance().insertOrReplace();
-        //上报阅读进度
-        DDManager.getInstance().postReadProgress(mCollBook.getContent_id()+"", mCollBook.getChapter_id()+"", mCollBook.getWords_num())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<BaseRequest>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(BaseRequest baseRequest) {
-                        LogUtils.H("");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtils.H("");
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
+//        //上报阅读进度
+//        DDManager.getInstance().postReadProgress(mCollBook.getContent_id()+"", mCollBook.getChapter_id()+"", mCollBook.getWords_num())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Observer<BaseRequest>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                    }
+//
+//                    @Override
+//                    public void onNext(BaseRequest baseRequest) {
+//                        LogUtils.H("");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        LogUtils.H("");
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                    }
+//                });
     }
 
     /**
@@ -844,6 +857,9 @@ public abstract class PageLoader {
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
+                        if (mCurChapterPos >= mChapterList.size()) {
+                            mCurChapterPos = mChapterList.size() - 1;
+                        }
                         canvas.drawText(mChapterList.get(mCurChapterPos).getChapter_name()
                                 , mMarginWidth, tipTop, mTipPaint);
                     }

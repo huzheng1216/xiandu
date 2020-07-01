@@ -76,6 +76,13 @@ public class SQL {
     }
 
     /**
+     * 根据id获取某本书
+     */
+    public Bookbrack getBookbrack(long content_id) {
+        return DaoManager.getInstance(context).bookbrackDao.queryBuilder().where(BookbrackDao.Properties.Content_id.eq(content_id)).unique();
+    }
+
+    /**
      * 是否包含某本书
      */
     public boolean hasBookShelf(BookShelf bookShelf) {
@@ -114,7 +121,7 @@ public class SQL {
     }
 
     /**
-     * 添加书架书籍
+     * 添加书籍阅读记录
      *
      * @param bookbrack
      * @return

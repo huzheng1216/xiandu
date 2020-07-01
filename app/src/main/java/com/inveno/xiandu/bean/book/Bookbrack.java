@@ -27,6 +27,8 @@ public class Bookbrack {
 
     private int chapter_id;//阅读到的章节id
 
+    private int page;//阅读到章节的第几页
+
     //书架创建时间
     private String time;
 
@@ -45,15 +47,17 @@ public class Bookbrack {
     public Bookbrack() {
     }
 
-    @Generated(hash = 189409290)
+    @Generated(hash = 1401419709)
     public Bookbrack(Long content_id, String book_name, String poster,
-            int words_num, String chapter_name, int chapter_id, String time) {
+            int words_num, String chapter_name, int chapter_id, int page,
+            String time) {
         this.content_id = content_id;
         this.book_name = book_name;
         this.poster = poster;
         this.words_num = words_num;
         this.chapter_name = chapter_name;
         this.chapter_id = chapter_id;
+        this.page = page;
         this.time = time;
     }
 
@@ -111,6 +115,14 @@ public class Bookbrack {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public int getPage() {
+        return this.page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
     }
 
 }
