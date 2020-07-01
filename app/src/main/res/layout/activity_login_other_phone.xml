@@ -41,15 +41,20 @@
 
         <EditText
             android:id="@+id/login_phone_edit"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_weight="1"
+            android:autofillHints=""
             android:background="@null"
             android:ems="10"
             android:hint="@string/login_please_input_phone_num"
+            android:imeOptions="normal"
             android:inputType="phone"
+            android:lines="1"
             android:textColor="@color/black"
+            android:textColorHint="#b5b5b5"
+            android:textCursorDrawable="@drawable/my_cursor"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -60,7 +65,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="5dp"
         android:text="@string/login_phone_prompt"
-        android:textColor="#aaaaaa"
+        android:textColor="#b5b5b5"
         android:textSize="12sp" />
 
     <TextView

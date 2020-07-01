@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F2F5"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <include layout="@layout/base_tittle_bar" />
@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F0F2F5"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -29,6 +29,7 @@
                 android:id="@+id/ranking_menu_recycle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:overScrollMode="never"
                 android:layout_marginTop="5dp"
                 android:scrollbars="none" />
         </RelativeLayout>
@@ -76,6 +77,7 @@
                 android:id="@+id/ranking_data_recycle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:overScrollMode="never"
                 android:layout_marginTop="12dp"/>
         </LinearLayout>
     </LinearLayout>

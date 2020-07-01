@@ -34,6 +34,8 @@ import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
@@ -68,7 +70,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
         super.initView();
         login_phone_edit = findViewById(R.id.login_phone_edit);
         login_get_code = findViewById(R.id.login_get_code);
-
+        setCursorColor(login_phone_edit);
         agree_cb = findViewById(R.id.agree_cb);
         agree_tv = findViewById(R.id.agree_tv);
         agree_tv.setText(getClickableSpan());
@@ -200,6 +202,21 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                 Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, "您需要阅读并同意《用户协议》及《隐私政策》");
             }
         }
+    }
+
+    /**
+     * 反射设置光标颜色
+     * @param mEditText
+     */
+    private void setCursorColor(EditText mEditText) {
+
+        try {
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(mEditText, R.drawable.my_cursor);
+        } catch (Exception ignored) {
+        }
+
     }
 
     @Override

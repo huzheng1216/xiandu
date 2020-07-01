@@ -32,7 +32,7 @@
     </item>
     <item>
         <shape>
-            <solid android:color="#FFFFFF" /> />
+            <solid android:color="#F6F7F9" /> />
         </shape>
     </item>
 </layer-list>

@@ -493,7 +493,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                     wordsCountStr = String.format("%s万字·" + bookStatusStr, bookShelf.getWord_count() / 10000);
                 }
                 default_image_words.setText(wordsCountStr);
-                default_image_score.setText(String.format("%s分", bookShelf.getScore()));
+                default_image_score.setText(String.format("%s", bookShelf.getScore()));
                 GlideUtils.LoadImage(context, bookShelf.getPoster(), default_image_img);
             }
         }

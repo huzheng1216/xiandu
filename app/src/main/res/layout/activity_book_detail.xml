@@ -4,11 +4,54 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/second_titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="83dp"
+        android:visibility="visible"
+        android:background="@drawable/ic_test_ad">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:background="#CCFFFFFF" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="28dp">
+
+            <ImageView
+                android:id="@+id/second_titleBar_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:onClick="back"
+                android:padding="5dp"
+                android:src="@drawable/black_back_arrow" />
+
+            <LinearLayout
+                android:id="@+id/second_titleBar_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
+                android:padding="5dp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <com.inveno.xiandu.view.custom.MScrollView
+        android:id="@+id/book_detail_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.01"
-        android:background="#F0F2F5">
+        android:background="#FFFFFF"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,34 +61,35 @@
             <include layout="@layout/book_detail_top" />
 
             <include layout="@layout/book_detail_intro_and_directory" />
-            
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="#EFEFEF"/>
-
-            <include layout="@layout/book_detail_first_chapter"/>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
-                android:background="#EFEFEF"/>
+                android:background="#EFEFEF" />
 
-            <include layout="@layout/book_detail_read_more"/>
+            <include layout="@layout/book_detail_first_chapter" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#EFEFEF" />
+
+            <include layout="@layout/book_detail_read_more" />
         </LinearLayout>
-    </ScrollView>
+    </com.inveno.xiandu.view.custom.MScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:orientation="horizontal">
 
+        <!--        android:background="@drawable/bookbrack_delete_all_bg"-->
         <TextView
             android:id="@+id/book_detail_coll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/bookbrack_delete_all_bg"
+            android:background="@color/white"
             android:gravity="center"
             android:text="加入书架"
             android:textColor="@color/base_color"

@@ -8,55 +8,68 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:paddingTop="30dp"
         android:background="@drawable/bookbrack_top_bg"
+        android:paddingTop="30dp"
         android:paddingBottom="40dp">
 
-        <TextView
-            android:id="@+id/bookrack_read_time"
+        <LinearLayout
+            android:id="@+id/bookrack_read_time_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:text="--"
-            android:textColor="#FFEE90"
-            android:textSize="35sp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/bookrack_coin_num"
+            <TextView
+                android:id="@+id/bookrack_read_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="#FFEE90"
+                android:textSize="35sp" />
+
+            <TextView
+                android:id="@+id/textView40"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="今日已读(分钟)"
+                android:textColor="#FFEE90"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/bookrack_coin_num_line"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="70dp"
-            android:text="--"
-            android:textColor="#FFEE90"
-            android:textSize="35sp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bookrack_read_time"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/bookrack_read_time_line"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView40"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="今日已读(分钟)"
-            android:textColor="#FFEE90"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/bookrack_read_time"
-            app:layout_constraintStart_toStartOf="@+id/bookrack_read_time"
-            app:layout_constraintTop_toBottomOf="@+id/bookrack_read_time" />
+            <TextView
+                android:id="@+id/bookrack_coin_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="#FFEE90"
+                android:textSize="35sp" />
 
-        <TextView
-            android:id="@+id/textView41"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="今日金币"
-            android:textColor="#FFEE90"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@+id/bookrack_coin_num"
-            app:layout_constraintStart_toStartOf="@+id/bookrack_coin_num"
-            app:layout_constraintTop_toBottomOf="@+id/bookrack_coin_num" />
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="今日金币"
+                android:textColor="#FFEE90"
+                android:textSize="14sp" />
+
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Space

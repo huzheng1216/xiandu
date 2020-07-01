@@ -209,6 +209,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         TextView ranking_book_name;
         TextView ranking_book_type;
         TextView ranking_book_ranking;
+        TextView ranking_book_text;
 
         public ContentViewHolder(View itemView) {
             super(itemView);
@@ -217,6 +218,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
             ranking_book_name = itemView.findViewById(R.id.ranking_book_name);
             ranking_book_type = itemView.findViewById(R.id.ranking_book_type);
             ranking_book_ranking = itemView.findViewById(R.id.ranking_book_ranking);
+            ranking_book_text = itemView.findViewById(R.id.ranking_book_text);
         }
 
         @Override
@@ -226,6 +228,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
                 ranking_book_name.setText(rankingData.getBook_name());
                 ranking_book_type.setText(rankingData.getCategory_name());
                 ranking_book_ranking.setText("");
+                ranking_book_text.setText("");
                 if (rankingData.getRank_sort() == 1) {
                     ranking_book_ranking.setBackground(context.getResources().getDrawable(R.drawable.ranking_one));
                 } else if (rankingData.getRank_sort() == 2) {
@@ -242,7 +245,8 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
                 ranking_book_name.setText(bookShelf.getBook_name());
                 ranking_book_type.setText(bookShelf.getAuthor());
                 ranking_book_ranking.setTextColor(Color.parseColor("#F5A623"));
-                ranking_book_ranking.setText(String.format("%s分", bookShelf.getScore()));
+                ranking_book_ranking.setText(String.format("%s", bookShelf.getScore()));
+                ranking_book_text.setText("分");
                 GlideUtils.LoadImage(context, bookShelf.getPoster(), R.drawable.background_bookshelf_adapter_foot, ranking_book_pic);
             }
         }

@@ -19,6 +19,7 @@ import com.inveno.xiandu.utils.StringTools;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 
 import kotlin.Unit;
@@ -98,6 +99,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
         coin_top_up_100 = findViewById(R.id.coin_top_up_100);
 
         coin_top_up_phone_num = findViewById(R.id.coin_top_up_phone_num);
+        setCursorColor(coin_top_up_phone_num);
 
         if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPhone_num() != null) {
             coin_top_up_phone_num.setText(ServiceContext.userService().getUserInfo().getPhone_num());
@@ -210,6 +212,22 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     public void coinRecord(View view) {
         Toaster.showToastCenter(this, "您没有充值记录");
+    }
+
+
+    /**
+     * 反射设置光标颜色
+     * @param mEditText
+     */
+    private void setCursorColor(EditText mEditText) {
+
+        try {
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(mEditText, R.drawable.my_cursor);
+        } catch (Exception ignored) {
+        }
+
     }
 
 }

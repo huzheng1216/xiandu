@@ -2,7 +2,10 @@ package com.inveno.xiandu.view.detail;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -16,8 +19,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +33,8 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
 import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.datareport.manager.ReportManager;
@@ -49,6 +58,7 @@ import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RelevantBookAdapter;
+import com.inveno.xiandu.view.custom.MScrollView;
 import com.inveno.xiandu.view.read.CategoryAdapter;
 
 import java.util.ArrayList;
@@ -141,6 +151,15 @@ public class BookDetailActivity extends BaseActivity {
     @BindView(R.id.ad_bottom_viewgroup)
     LinearLayout ad_bottom_viewgroup;
 
+    @BindView(R.id.book_detail_scrollview)
+    MScrollView book_detail_scrollview;
+
+    @BindView(R.id.book_capter)
+    RelativeLayout book_capter;
+
+    @BindView(R.id.second_titleBar)
+    RelativeLayout second_titleBar;
+
     LinearLayout ad_pop_viewgroup;
 
     private AdModel adModel;
@@ -157,6 +176,9 @@ public class BookDetailActivity extends BaseActivity {
     private CategoryAdapter mCategoryAdapter;
 
     private boolean isReverse = false;
+
+    private boolean isShowSecondGoss = false;
+    private boolean isShowSecondWhite = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,6 +288,47 @@ public class BookDetailActivity extends BaseActivity {
                         .navigation();
             }
         });
+
+        book_detail_scrollview.setScrollViewListener(new MScrollView.ScrollViewListener() {
+            @Override
+            public void onScrollChanged(MScrollView scrollView, int x, int y, int oldx, int oldy) {
+                if (overScreen(book_detail_goss_bg)) {
+                    if (overScreen(book_capter)) {
+                        Log.i("wyjjjjj", "目录不可见，");
+                        if (!isShowSecondWhite) {
+                            //改变背景
+                            second_titleBar.setBackgroundColor(Color.parseColor("#ffffff"));
+                            isShowSecondWhite = true;
+                            isShowSecondGoss = false;
+
+                        }
+                    } else {
+                        Log.i("wyjjjjj", "目录可见，");
+                        if (!isShowSecondGoss) {
+                            second_titleBar.setVisibility(View.VISIBLE);
+                            isShowSecondGoss = true;
+                            isShowSecondWhite = false;
+
+                            Glide.with(BookDetailActivity.this)
+                                    .load(book.getPoster())
+                                    .into(new SimpleTarget<Drawable>() {
+                                        @Override
+                                        public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+
+                                        }
+                                    });
+                        }
+                    }
+
+                } else {
+                    Log.i("wyjjjjj", "高斯可见，");
+                    isShowSecondGoss = false;
+                    isShowSecondWhite = false;
+                    second_titleBar.setVisibility(View.GONE);
+                }
+            }
+        });
+
         getRelevantBook();
         initDirectoryPopwindow();
 
@@ -623,6 +686,16 @@ public class BookDetailActivity extends BaseActivity {
 
     private void report() {
         ReportManager.INSTANCE.reportPageImp(11, "", this, ServiceContext.userService().getUserPid());
+    }
+
+    private boolean overScreen(View childView) {
+        Rect scrollBounds = new Rect();
+        book_detail_scrollview.getHitRect(scrollBounds);
+        if (childView.getLocalVisibleRect(scrollBounds)) {//可见
+            return false;
+        } else {//完全不可见
+            return true;
+        }
     }
 
 }

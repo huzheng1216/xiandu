@@ -60,7 +60,7 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 vholder.left_menu_name.setPadding(0, 56, 0, 56);
                 vholder.left_menu_name.setLayoutParams(layoutParams);
             } else {
-                vholder.left_menu_name.setBackgroundColor(Color.parseColor("#ffffff"));
+                vholder.left_menu_name.setBackgroundColor(Color.parseColor("#F6F7F9"));
                 vholder.left_menu_name.setTextColor(mContext.getResources().getColor(R.color.gray_3));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 50, 0);//4个参数按顺序分别是左bai上右下

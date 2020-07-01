@@ -84,6 +84,7 @@ public class MainActivity extends BaseActivity {
 //        });
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
+        bottomNavigationView.setItemIconTintList(null);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         viewPager = findViewById(R.id.viewpage_main);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

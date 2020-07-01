@@ -49,8 +49,20 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:textColor="@color/gray_9"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:text=""
+        android:layout_toLeftOf="@+id/ranking_book_text"
+        android:layout_centerVertical="true"/>
+
+    <TextView
+        android:id="@+id/ranking_book_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textColor="#F5A623"
+        android:textSize="12sp"
+        android:text="分"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"/>
 </RelativeLayout>

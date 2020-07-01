@@ -107,4 +107,7 @@
 
     <color name="delete_red">#FA5150</color>
 
+    <color name="gray_line">#E5E5E5</color>
+
+
 </resources>

@@ -16,41 +16,45 @@
 
         <TextView
             android:id="@+id/classify"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="40dp"
             android:drawableTop="@drawable/classify"
             android:drawablePadding="5dp"
             android:onClick="startClassify"
+            android:layout_weight="1"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:gravity="center"
             android:text="分类"
             android:textColor="@color/gray_6"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/rankiing"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:drawableTop="@drawable/ranking"
             android:drawablePadding="5dp"
+            android:layout_weight="1"
             android:onClick="startRanking"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:gravity="center"
             android:text="排行榜"
             android:textColor="@color/gray_6"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/the_end"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="40dp"
             android:drawableTop="@drawable/the_end"
+            android:layout_weight="1"
             android:drawablePadding="5dp"
             android:onClick="startTheEnd"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:gravity="center"
             android:text="完结"
             android:textColor="@color/gray_6"
             android:textSize="12sp" />

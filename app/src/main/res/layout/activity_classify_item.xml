@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F0F2F5"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
+                android:overScrollMode="never"
                 android:scrollbars="none" />
         </RelativeLayout>
 
@@ -94,7 +95,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/ranking_data_recycle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never" />
             </LinearLayout>
         </com.inveno.xiandu.view.custom.MSwipeRefreshLayout>
     </LinearLayout>

@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:paddingEnd="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:paddingStart="20dp"
     android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:paddingEnd="20dp"
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/default_image_img"
@@ -19,14 +18,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/background_bookshelf_adapter_foot" />
 
+    <View
+        android:layout_width="70dp"
+        android:layout_height="5dp"
+        android:background="@drawable/book_img_bottom_bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/default_image_img"/>
+
     <TextView
         android:id="@+id/default_image_book_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="书名"
         android:textColor="@color/gray_3"
         android:textSize="16sp"
-        android:layout_marginStart="10dp"
         app:layout_constraintStart_toEndOf="@+id/default_image_img"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,9 +74,20 @@
         android:id="@+id/default_image_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="9.0分"
-        android:textSize="14sp"
+        android:text="9.0"
         android:textColor="#F5A623"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/default_image_score_text"
+        app:layout_constraintBottom_toBottomOf="@+id/default_image_book_name" />
+
+    <TextView
+        android:id="@+id/default_image_score_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="分"
+        android:textColor="#F5A623"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/default_image_book_name" />
+        app:layout_constraintBottom_toBottomOf="@+id/default_image_book_name"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -223,7 +223,6 @@
             android:layout_height="50dp"
             android:layout_marginStart="5dp"
             android:background="?attr/selectableItemBackground"
-            android:onClick="mine_read"
             android:orientation="horizontal"
             tools:ignore="RtlSymmetry">
 
@@ -248,6 +247,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/coin_detail_recycleview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
     </LinearLayout>
 </LinearLayout>

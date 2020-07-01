@@ -14,6 +14,8 @@ import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 
+import java.lang.reflect.Field;
+
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
@@ -54,6 +56,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
         vali_time = findViewById(R.id.vali_time);
         vali_login = findViewById(R.id.vali_login);
         vali_code_input_editview = findViewById(R.id.vali_code_input_editview);
+        setCursorColor(vali_code_input_editview);
         vali_phone_num = findViewById(R.id.vali_phone_num);
 
         loginPhoneNum = getIntent().getStringExtra(LOGIN_PHONE_NUM);
@@ -103,6 +106,21 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
             }
         };
         vali_code_input_editview.addTextChangedListener(textWatcher);
+    }
+
+    /**
+     * 反射设置光标颜色
+     * @param mEditText
+     */
+    private void setCursorColor(EditText mEditText) {
+
+        try {
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(mEditText, R.drawable.my_cursor);
+        } catch (Exception ignored) {
+        }
+
     }
 
     @Override
