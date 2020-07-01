@@ -103,6 +103,7 @@ public class SerchResultActivity extends BaseActivity {
             @Override
             public void onItemClick(BaseDataBean baseDataBean) {
                 if (baseDataBean instanceof BookShelf) {
+                    Toaster.showToastCenterShort(SerchResultActivity.this, "正在准备书籍，请稍后");
                     //请求完整图书数据后跳转
                     APIContext.getBookCityAPi().getBook(((BookShelf) baseDataBean).getContent_id())
                             .onSuccess(new Function1<BookShelf, Unit>() {

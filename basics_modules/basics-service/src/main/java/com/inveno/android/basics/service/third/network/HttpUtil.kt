@@ -234,7 +234,7 @@ object HttpUtil {
                             "postJson exception url: " + url + " type:" + e.message,
                             e
                         )
-                        invokeFail(900, e.message!!)
+                        invokeFail(900, e.message?:"")
                     }
                 }
             }

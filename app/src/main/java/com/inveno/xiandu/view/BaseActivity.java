@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.ColorUtils;
 
@@ -93,20 +94,19 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected void setStatusBar(int color, boolean isResource) {
         int mColor = isResource ? getResources().getColor(color) : color;
+        //透明式状态栏
         //5.0及以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            View decorView = getWindow().getDecorView();
-//            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            //根据上面设置是否对状态栏单独设置颜色
-//            getWindow().setStatusBarColor(color);
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //4.4到5.0
             WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
 //            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
         }
-
         //android6.0以后可以对状态栏文字颜色和图标进行修改
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //判断颜色是否为：亮色
@@ -156,7 +156,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        errorPopup.showAtLocation(view, Gravity.BOTTOM, 0, 0);
     }
 
-    private void getNetWork(){
+    private void getNetWork() {
 
     }
 

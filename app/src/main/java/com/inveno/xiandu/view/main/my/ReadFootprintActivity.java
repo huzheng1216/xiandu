@@ -27,8 +27,9 @@ import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
+import com.inveno.xiandu.bean.ad.AdReadTrackModel;
 import com.inveno.xiandu.bean.book.BookShelf;
-import com.inveno.xiandu.bean.book.Bookbrack;
+import com.inveno.xiandu.bean.book.ReadTrack;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
@@ -78,7 +79,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 
     private IosTypeDialog iosTypeDialog;
 
-    private AdBookModel adBookModel;
+    private AdReadTrackModel adBookModel;
 
     private RecyclerView footprint_recycle;
 
@@ -135,11 +136,11 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
         readFootprintAdapter.setShelfAdapterListener(new ReadFootprintAdapter.ShelfAdapterListener() {
 
             @Override
-            public void onBookReadContinue(Bookbrack Bookbrack) {
+            public void onBookReadContinue(ReadTrack readTrack) {
             }
 
             @Override
-            public void onBookDelete(Bookbrack Bookbrack) {
+            public void onBookDelete(ReadTrack readTrack) {
                 IosTypeDialog.Builder builder = new IosTypeDialog.Builder(ReadFootprintActivity.this);
                 builder.setContext("确定要删除这本书？");
                 builder.setTitle("提示");
@@ -149,8 +150,8 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                         iosTypeDialog.dismiss();
                         iosTypeDialog = null;
 
-                        List<Bookbrack> bookbracks = readFootprintAdapter.deleteSelect();
-                        if (bookbracks.size() < 1) {
+                        List<ReadTrack> readTracks = readFootprintAdapter.deleteSelect();
+                        if (readTracks.size() < 1) {
                             no_book_show.setVisibility(View.VISIBLE);
                         }
                     }
@@ -170,39 +171,31 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
             }
 
             @Override
-            public void onBookClick(Bookbrack bookbrack) {
+            public void onBookClick(ReadTrack readTrack) {
                 // TODO: 2020/6/17  去数据库查书，查到了就跳转，没查到就请求后跳转
-                BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
-                clickReport(bookbrack.getContent_id());
-                if (bookShelf != null) {
-                    //这里需要跳转到小说阅读
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
-                            .withString("json", GsonUtil.objectToJson(bookShelf))
-                            .withInt("capter", bookbrack.getChapter_id())
-                            .navigation();
-                } else {
-                    APIContext.getBookCityAPi().getBook(bookbrack.getContent_id())
-                            .onSuccess(new Function1<BookShelf, Unit>() {
-                                @Override
-                                public Unit invoke(BookShelf bookShelf) {
-                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
-                                            .withString("json", GsonUtil.objectToJson(bookShelf))
-                                            .withInt("capter", bookbrack.getChapter_id())
-                                            .navigation();
-                                    return null;
-                                }
-                            })
-                            .onFail(new Function2<Integer, String, Unit>() {
-                                @Override
-                                public Unit invoke(Integer integer, String s) {
-                                    return null;
-                                }
-                            }).execute();
-                }
+                clickReport(readTrack.getContent_id());
+                APIContext.getBookCityAPi().getBook(readTrack.getContent_id())
+                        .onSuccess(new Function1<BookShelf, Unit>() {
+                            @Override
+                            public Unit invoke(BookShelf bookShelf) {
+                                ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
+                                        .withString("json", GsonUtil.objectToJson(bookShelf))
+                                        .withInt("capter", readTrack.getChapter_id())
+                                        .navigation();
+                                return null;
+                            }
+                        })
+                        .onFail(new Function2<Integer, String, Unit>() {
+                            @Override
+                            public Unit invoke(Integer integer, String s) {
+                                Toaster.showToastCenterShort(ReadFootprintActivity.this, "获取小说失败：" + s);
+                                return null;
+                            }
+                        }).execute();
             }
 
             @Override
-            public void onBookLongClick(Bookbrack bookbrack, View parent) {
+            public void onBookLongClick(ReadTrack bookbrack, View parent) {
                 Animation animBottomIn = AnimationUtils.loadAnimation(ReadFootprintActivity.this, R.anim.bottom_in);
                 animBottomIn.setDuration(500);
                 bookbrack_delete_all_line.setVisibility(View.VISIBLE);
@@ -220,13 +213,13 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
             @Override
             public void onRefresh() {
                 //从网络加载书籍
-                APIContext.bookbrackApi().getBookbrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
-                        .onSuccess(new Function1<List<Bookbrack>, Unit>() {
+                APIContext.readTrackApi().getReadTrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
+                        .onSuccess(new Function1<List<ReadTrack>, Unit>() {
                             @Override
-                            public Unit invoke(List<Bookbrack> bookbracks) {
+                            public Unit invoke(List<ReadTrack> readTracks) {
                                 swipeRefreshLayout.setRefreshing(false);
 //                            //同步数据
-                                syncData(bookbracks);
+                                syncData(readTracks);
                                 return null;
                             }
                         })
@@ -247,12 +240,12 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     private void getData() {
         initData();
         //从网络加载书籍
-        APIContext.bookbrackApi().getBookbrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
-                .onSuccess(new Function1<List<Bookbrack>, Unit>() {
+        APIContext.readTrackApi().getReadTrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
+                .onSuccess(new Function1<List<ReadTrack>, Unit>() {
                     @Override
-                    public Unit invoke(List<Bookbrack> bookbracks) {
+                    public Unit invoke(List<ReadTrack> readTracks) {
 //                            //同步数据
-                        syncData(bookbracks);
+                        syncData(readTracks);
                         return null;
                     }
                 })
@@ -269,19 +262,19 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
      *
      * @param data
      */
-    private void syncData(List<Bookbrack> data) {
+    private void syncData(List<ReadTrack> data) {
 //        SQL.getInstance().insertOrReplaceBookbrack(data);
         initData();
 //        //简单判断一下
-        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
-            SQL.getInstance().insertOrReplaceBookbrack(data);
+        if (SQL.getInstance().getAllReadTrack().size() != data.size()) {
+            SQL.getInstance().insertOrReplaceReadTrack(data);
             initData();
         }
     }
 
     private void initData() {
-        List<Bookbrack> bookbracks = SQL.getInstance().getAllBookbrack();
-        if (bookbracks.size() < 1) {
+        List<ReadTrack> readTracks = SQL.getInstance().getAllReadTrack();
+        if (readTracks.size() < 1) {
             no_book_show.setVisibility(View.VISIBLE);
         } else {
             no_book_show.setVisibility(View.GONE);
@@ -289,11 +282,11 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
         //TODO 加广告
         if (adBookModel != null) {
             int index = adBookModel.getIndex();
-            if (bookbracks.size() >= index) {
-                bookbracks.add(index, adBookModel);
+            if (readTracks.size() >= index) {
+                readTracks.add(index, adBookModel);
             }
         }
-        readFootprintAdapter.setData(bookbracks);
+        readFootprintAdapter.setData(readTracks);
     }
 
     //在dialog.show()之后调用
@@ -339,7 +332,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                 iosTypeDialog.dismiss();
                 iosTypeDialog = null;
 
-                List<Bookbrack> bookbracks = readFootprintAdapter.deleteSelect();
+                List<ReadTrack> bookbracks = readFootprintAdapter.deleteSelect();
                 if (bookbracks.size() < 1) {
                     no_book_show.setVisibility(View.VISIBLE);
                 }
@@ -373,7 +366,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                     @Override
                     public Unit invoke(IndexedAdValueWrapper wrapper) {
 //                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-                        adBookModel = new AdBookModel(wrapper);
+                        adBookModel = new AdReadTrackModel(wrapper);
                         readFootprintAdapter.addAd(adBookModel);
                         return null;
                     }
@@ -387,8 +380,8 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                 }).execute();
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(9,"",this, ServiceContext.userService().getUserPid());
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(9, "", this, ServiceContext.userService().getUserPid());
     }
 
     private void clickReport(long contentId) {
@@ -397,17 +390,17 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     }
 
     private void impReport(int first, int last) {
-        List<Bookbrack> mBookselfs = new ArrayList<>(readFootprintAdapter.getData());
+        List<ReadTrack> mBookselfs = new ArrayList<>(readFootprintAdapter.getData());
         int size = mBookselfs.size();
-        int newFirst = first ;
+        int newFirst = first;
         int newLast = last;
 //        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast+ " newFirst:" + newFirst);
         if (newFirst >= 0 && newLast >= 0 && size > newLast) {
             for (int i = newFirst; i <= newLast; i++) {
-                Bookbrack bookbrack = mBookselfs.get(i);
-                if (!(bookbrack instanceof AdBookModel)) {
+                ReadTrack readTrack = mBookselfs.get(i);
+                if (!(readTrack instanceof AdReadTrackModel)) {
 //                    Log.i("ReportManager", "name:" + bookbrack.getBook_name() + " i:"+i);
-                    long contentId = bookbrack.getContent_id();
+                    long contentId = readTrack.getContent_id();
                     ReportManager.INSTANCE.reportBookImp(9, "", "", 10,
                             0, contentId, ReadFootprintActivity.this, ServiceContext.userService().getUserPid());
                 }

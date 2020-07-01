@@ -7,9 +7,11 @@ import com.inveno.xiandu.applocation.MainApplication;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
+import com.inveno.xiandu.bean.book.ReadTrack;
 import com.inveno.xiandu.gen.BookShelfDao;
 import com.inveno.xiandu.gen.BookbrackDao;
 import com.inveno.xiandu.gen.ChapterInfoDao;
+import com.inveno.xiandu.gen.ReadTrackDao;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
@@ -92,6 +94,14 @@ public class SQL {
     }
 
     /**
+     * 是否包含某本书
+     */
+    public boolean hasBookbrack(Long contentId) {
+        Bookbrack bookShelf1 = DaoManager.getInstance(context).bookbrackDao.loadByRowId(contentId);
+        return bookShelf1 != null;
+    }
+
+    /**
      * 添加书架书籍
      *
      * @param bookShelf
@@ -100,8 +110,8 @@ public class SQL {
     public void addBookShelf(BookShelf bookShelf) {
         bookShelf.setTime(System.currentTimeMillis() + "");
         DaoManager.getInstance(context).bookShelfDao.insertOrReplace(bookShelf);
-        if (bookShelf.getBookChapters() != null)
-            DaoManager.getInstance(context).chapterInfoDao.insertOrReplaceInTx(bookShelf.getBookChapters());
+//        if (bookShelf.getBookChapters() != null)
+//            DaoManager.getInstance(context).chapterInfoDao.insertOrReplaceInTx(bookShelf.getBookChapters());
         //上传服务器
 //        DDManager.getInstance().addBookShelf(bookShelf.getContent_id(), 1)
 //                .subscribeOn(Schedulers.io())
@@ -219,5 +229,91 @@ public class SQL {
                         return null;
                     }
                 }).execute();
+    }
+
+    /**
+     * 获取全部足迹图书
+     */
+    public List<ReadTrack> getAllReadTrack() {
+        return DaoManager.getInstance(context).readTrackDao.queryBuilder().orderDesc(ReadTrackDao.Properties.Time).list();
+    }
+
+    /**
+     * 足迹是否包含某本书
+     */
+    public boolean hasReadTrack(Long contentId) {
+        ReadTrack readTrack = DaoManager.getInstance(context).readTrackDao.loadByRowId(contentId);
+        return readTrack != null;
+    }
+
+    /**
+     * 添加足迹书籍
+     *
+     * @param readTrack
+     * @return
+     */
+    public void addReadTrack(ReadTrack readTrack) {
+        readTrack.setTime(System.currentTimeMillis() + "");
+        DaoManager.getInstance(context).readTrackDao.insertOrReplace(readTrack);
+        //上传服务器
+        APIContext.bookbrackApi().addBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), readTrack.getContent_id())
+                .onSuccess(new Function1<String, Unit>() {
+                    @Override
+                    public Unit invoke(String s) {
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
+
+    /**
+     * 批量更新本地足迹
+     *
+     * @param readTracks
+     */
+    public void insertOrReplaceReadTrack(List<ReadTrack> readTracks) {
+        long l = System.currentTimeMillis();
+        for (ReadTrack readTrack : readTracks) {
+            readTrack.setTime(l + "");
+        }
+        DaoManager.getInstance(context).readTrackDao.insertOrReplaceInTx(readTracks);
+    }
+
+
+    /**
+     * 移除足迹的书籍
+     *
+     * @param readTracks
+     * @return
+     */
+    public void delReadTrack(List<ReadTrack> readTracks) {
+        ArrayList<Long> contentIds = new ArrayList<>();
+        for (ReadTrack readTrack : readTracks) {
+            //删除书籍
+            DaoManager.getInstance(context).readTrackDao.delete(readTrack);
+            //删除章节
+            QueryBuilder<ChapterInfo> chapterInfoQueryBuilder = DaoManager.getInstance(context).chapterInfoDao.queryBuilder();
+            DeleteQuery<ChapterInfo> chapterInfoDeleteQuery = chapterInfoQueryBuilder.where(ChapterInfoDao.Properties.Content_id.eq(readTrack.getContent_id())).buildDelete();
+            chapterInfoDeleteQuery.executeDeleteWithoutDetachingEntities();
+
+            APIContext.readTrackApi().deleteReadTrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), readTrack.getContent_id())
+                    .onSuccess(new Function1<String, Unit>() {
+                        @Override
+                        public Unit invoke(String s) {
+                            return null;
+                        }
+                    })
+                    .onFail(new Function2<Integer, String, Unit>() {
+                        @Override
+                        public Unit invoke(Integer integer, String s) {
+                            return null;
+                        }
+                    }).execute();
+        }
     }
 }

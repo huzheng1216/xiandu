@@ -37,6 +37,7 @@ import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.adapter.LeftMenuAdapter;
 import com.inveno.xiandu.view.adapter.RightDataAdapter;
@@ -148,11 +149,30 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
             @Override
             public void onItemClick(BaseDataBean baseDataBean) {
                 if (baseDataBean instanceof BookShelf) {
+                    Toaster.showToastShort(getContext(), "正在获取书籍，请稍等...");
                     BookShelf bookShelf = (BookShelf) baseDataBean;
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
-                            .withString("json", GsonUtil.objectToJson(bookShelf))
-                            .navigation();
-                    clickReport(bookShelf.getContent_id());
+                    APIContext.getBookCityAPi().getBook(bookShelf.getContent_id())
+                            .onSuccess(new Function1<BookShelf, Unit>() {
+                                @Override
+                                public Unit invoke(BookShelf bookShelf) {
+                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                                            .withString("json", GsonUtil.objectToJson(bookShelf))
+                                            .navigation();
+                                    clickReport(bookShelf.getContent_id());
+                                    return null;
+                                }
+                            })
+                            .onFail(new Function2<Integer, String, Unit>() {
+                                @Override
+                                public Unit invoke(Integer integer, String s) {
+                                    Toaster.showToastCenter(getContext(), "获取书籍失败：" + integer);
+                                    return null;
+                                }
+                            }).execute();
+//                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+//                            .withString("json", GsonUtil.objectToJson(bookShelf))
+//                            .navigation();
+//                    clickReport(bookShelf.getContent_id());
                 }
             }
         });

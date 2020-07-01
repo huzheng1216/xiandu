@@ -2,6 +2,8 @@ package com.inveno.xiandu.view.detail;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
@@ -34,6 +36,7 @@ import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.inveno.android.ad.bean.IndexedAdValueWrapper;
@@ -54,6 +57,8 @@ import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.BitmapUtil;
+import com.inveno.xiandu.utils.GlideBlurformation;
 import com.inveno.xiandu.utils.GlideUtils;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
@@ -130,6 +135,9 @@ public class BookDetailActivity extends BaseActivity {
     @BindView(R.id.book_detail_popularity)
     TextView book_detail_popularity;//人气
 
+    @BindView(R.id.book_detail_unit)
+    TextView book_detail_unit;//人气单位
+
     @BindView(R.id.tvContent)
     TextView tvContent;//简介
 
@@ -162,6 +170,12 @@ public class BookDetailActivity extends BaseActivity {
 
     @BindView(R.id.second_titleBar)
     RelativeLayout second_titleBar;
+
+    @BindView(R.id.tittle_bar_layout)
+    RelativeLayout tittle_bar_layout;
+
+    @BindView(R.id.second_titleBar_title)
+    TextView second_titleBar_title;
 
     LinearLayout ad_pop_viewgroup;
 
@@ -207,6 +221,11 @@ public class BookDetailActivity extends BaseActivity {
                 }
             });
         }
+
+        if (book == null) {
+            Toaster.showToast(this, "无法获取书籍信息");
+            return;
+        }
         bookbrack.setContent_id(book.getContent_id());
         bookbrack.setBook_name(book.getBook_name());
         bookbrack.setPoster(book.getPoster());
@@ -214,12 +233,8 @@ public class BookDetailActivity extends BaseActivity {
         bookbrack.setChapter_name(book.getChapter_name());
         bookbrack.setChapter_id(book.getChapter_id());
 
-        if (book == null) {
-            Toaster.showToast(this, "无法获取书籍信息");
-            return;
-        }
         if (SQL.getInstance().hasBookbrack(bookbrack)) {
-            book_detail_coll.setText("已加入");
+            book_detail_coll.setText("已在书架");
         } else {
             book_detail_coll.setText("加入书架");
         }
@@ -246,14 +261,17 @@ public class BookDetailActivity extends BaseActivity {
         }
         book_detail_type.setText(wordsCountStr);
 
-        book_detail_score.setText(book.getScore() + "分");
+        book_detail_score.setText(String.valueOf(book.getScore()));
         String popularityStr = "";
         if (book.getPopularity() < 1000) {
-            popularityStr = String.format("%s+", book.getPopularity());
+            popularityStr = String.format("%s", book.getPopularity());
+            book_detail_unit.setText("+");
         } else if (book.getPopularity() >= 1000 && book.getPopularity() < 10000) {
-            popularityStr = String.format("%s千+", book.getPopularity() / 1000);
+            popularityStr = String.format("%s", book.getPopularity() / 1000);
+            book_detail_unit.setText("千+");
         } else {
-            popularityStr = String.format("%s万+", book.getPopularity() / 10000);
+            popularityStr = String.format("%s", book.getPopularity() / 10000);
+            book_detail_unit.setText("万+");
         }
         book_detail_popularity.setText(popularityStr);
 
@@ -312,12 +330,13 @@ public class BookDetailActivity extends BaseActivity {
         book_detail_scrollview.setScrollViewListener(new MScrollView.ScrollViewListener() {
             @Override
             public void onScrollChanged(MScrollView scrollView, int x, int y, int oldx, int oldy) {
-                if (overScreen(book_detail_goss_bg)) {
+                if (overScreen(tittle_bar_layout)) {
                     if (overScreen(book_capter)) {
                         Log.i("wyjjjjj", "目录不可见，");
                         if (!isShowSecondWhite) {
                             //改变背景
                             second_titleBar.setBackgroundColor(Color.parseColor("#ffffff"));
+                            second_titleBar_title.setText("书籍详情");
                             isShowSecondWhite = true;
                             isShowSecondGoss = false;
 
@@ -328,13 +347,19 @@ public class BookDetailActivity extends BaseActivity {
                             second_titleBar.setVisibility(View.VISIBLE);
                             isShowSecondGoss = true;
                             isShowSecondWhite = false;
-
+                            second_titleBar_title.setText("");
                             Glide.with(BookDetailActivity.this)
                                     .load(book.getPoster())
                                     .into(new SimpleTarget<Drawable>() {
                                         @Override
                                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
+                                            BitmapDrawable bd = (BitmapDrawable) resource;
+                                            Bitmap bm = bd.getBitmap();
 
+                                            Bitmap bitmap = BitmapUtil.cutBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight() / 3);
+
+                                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                                            second_titleBar.setBackground(drawable);
                                         }
                                     });
                         }
@@ -489,12 +514,10 @@ public class BookDetailActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("wyjjjjj", "onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-                        Log.i("wyjjjjj", "onComplete: ");
                     }
                 });
     }
@@ -582,6 +605,12 @@ public class BookDetailActivity extends BaseActivity {
     //返回
     @OnClick(R.id.book_detail_bar_back)
     void onClick() {
+        ActivityCompat.finishAfterTransition(this);
+    }
+
+    //返回
+    @OnClick(R.id.second_titleBar_back)
+    void onClickSecondBack() {
         ActivityCompat.finishAfterTransition(this);
     }
 

@@ -3,6 +3,7 @@ package com.inveno.xiandu.invenohttp.instancecontext;
 import com.inveno.android.basics.service.app.context.InstanceContext;
 import com.inveno.xiandu.invenohttp.api.book.BookbrackApi;
 import com.inveno.xiandu.invenohttp.api.book.GetBookCityAPi;
+import com.inveno.xiandu.invenohttp.api.book.ReadTrackApi;
 import com.inveno.xiandu.invenohttp.api.book.SearchBookApi;
 import com.inveno.xiandu.invenohttp.api.coin.CoinApi;
 import com.inveno.xiandu.invenohttp.api.coin.ConsumerCoinAPI;
@@ -64,6 +65,10 @@ public class APIContext {
 
     public static BookbrackApi bookbrackApi() {
         return InstanceContext.get().getInstance(BookbrackApi.class);
+    }
+
+    public static ReadTrackApi readTrackApi() {
+        return InstanceContext.get().getInstance(ReadTrackApi.class);
     }
 
     public static SearchBookApi SearchBookApi() {

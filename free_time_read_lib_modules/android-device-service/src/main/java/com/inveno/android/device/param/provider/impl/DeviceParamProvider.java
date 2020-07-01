@@ -48,7 +48,29 @@ public class DeviceParamProvider implements IDeviceParamProvider {
      */
     @Override
     public String getNetwork() {
-        return TelephonyManagerTools.GetNetworkType(context);
+//        network	说明
+//        1	wifi网络
+//        2	2G 移动网络
+//        3	3G 移动网络
+//        4	4G 移动网络
+//        5	5G 移动网络
+//        6	其他移动网络
+//        7	其他网络（非wifi并且也非移动网络）
+//        8	unknown，纯H5产品，获取不了网络状况
+        String networkType = TelephonyManagerTools.GetNetworkType(context);
+        String networkNum = "7";
+        if (networkType.equals("WIFI")){
+            networkNum = "1";
+        }else if (networkType.equals("2G")){
+            networkNum = "2";
+        }else if (networkType.equals("3G")){
+            networkNum = "3";
+        }else if (networkType.equals("4G")){
+            networkNum = "4";
+        }else if (networkType.equals("5G")){
+            networkNum = "5";
+        }
+        return networkNum;
     }
 
     /**

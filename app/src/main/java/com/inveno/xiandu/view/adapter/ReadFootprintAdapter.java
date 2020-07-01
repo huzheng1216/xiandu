@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
+import com.inveno.xiandu.bean.ad.AdReadTrackModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
+import com.inveno.xiandu.bean.book.ReadTrack;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.utils.ClickUtil;
 import com.inveno.xiandu.utils.Toaster;
@@ -38,7 +40,7 @@ import static com.inveno.android.ad.config.AdViewType.AD_READ_FOOT_TRACE_TYPE;
 public class ReadFootprintAdapter extends RecyclerBaseAdapter {
 
     private Context context;
-    private List<Bookbrack> data;
+    private List<ReadTrack> data;
     private ShelfAdapterListener shelfAdapterListener;
 
     private String headerTime;
@@ -56,7 +58,7 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
         this.shelfAdapterListener = shelfAdapterListener;
     }
 
-    public void setData(List<Bookbrack> list) {
+    public void setData(List<ReadTrack> list) {
         data.clear();
         data.addAll(list);
         notifyDataSetChanged();
@@ -67,7 +69,7 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addAd(AdBookModel adBookModel) {
+    public void addAd(AdReadTrackModel adBookModel) {
         if (data.size() >= adBookModel.getIndex()) {
             data.add(adBookModel.getIndex(), adBookModel);
             notifyDataSetChanged();
@@ -86,26 +88,26 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public List<Bookbrack> deleteSelect() {
-        ArrayList<Bookbrack> bookbracks = new ArrayList<>();
+    public List<ReadTrack> deleteSelect() {
+        ArrayList<ReadTrack> readTracks = new ArrayList<>();
         for (int i = data.size() - 1; i >= 0; i--) {
             if (data.get(i).isSelect()) {
-                Bookbrack bookbrack = data.get(i);
-                if (!(bookbrack instanceof AdBookModel)) {
-                    bookbracks.add(bookbrack);
-                    BookShelf bookShelf = SQL.getInstance().getBookShelf(bookbrack.getContent_id());
+                ReadTrack readTrack = data.get(i);
+                if (!(readTrack instanceof AdReadTrackModel)) {
+                    readTracks.add(readTrack);
+                    BookShelf bookShelf = SQL.getInstance().getBookShelf(readTrack.getContent_id());
                     if (bookShelf != null) {
                         SQL.getInstance().delBookShelf(bookShelf);
                     }
-                    data.remove(bookbrack);
+                    data.remove(readTrack);
                 }
             }
         }
 
-        SQL.getInstance().delBookbrack(bookbracks);
+        SQL.getInstance().delReadTrack(readTracks);
         setSelect(false);
         notifyDataSetChanged();
-        Toaster.showToastCenterShort(context, String.format("已删除%s本书", bookbracks.size()));
+        Toaster.showToastCenterShort(context, String.format("已删除%s本书", readTracks.size()));
         return data;
     }
 
@@ -129,7 +131,7 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
     public int getItemViewType(int position) {
         if (getHeaderView() == null && getFooterView() == null) {
             if (data.size() > position) {
-                if (data.get(position) instanceof AdBookModel) {
+                if (data.get(position) instanceof AdReadTrackModel) {
                     return AD_READ_FOOT_TRACE_TYPE;
                 }
             }
@@ -142,12 +144,12 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
                 if (position == 0) {
                     return HEADER_ITEM_TYPE;
                 }
-                if (data.get(position - 1) instanceof AdBookModel) {
+                if (data.get(position - 1) instanceof AdReadTrackModel) {
                     return AD_READ_FOOT_TRACE_TYPE;
                 }
                 return CONTENT_ITEM_TYPE;
             } else {
-                if (data.get(position) instanceof AdBookModel) {
+                if (data.get(position) instanceof AdReadTrackModel) {
                     return AD_READ_FOOT_TRACE_TYPE;
                 }
                 return CONTENT_ITEM_TYPE;
@@ -185,7 +187,7 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
             if (getHeaderView() != null) {
                 realPosition = position - 1;
             }
-            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdBookModel) data.get(realPosition)).getWrapper().getAdValue(), position);
+            ((NormalAdViewHolder) holder).onBindViewHolder(context, ((AdReadTrackModel) data.get(realPosition)).getWrapper().getAdValue(), position);
         } else {
 
             int realPosition = position;
@@ -370,18 +372,18 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
     }
 
     public interface ShelfAdapterListener {
-        void onBookReadContinue(Bookbrack Bookbrack);
+        void onBookReadContinue(ReadTrack readTrack);
 
-        void onBookDelete(Bookbrack Bookbrack);
+        void onBookDelete(ReadTrack readTrack);
 
-        void onBookClick(Bookbrack Bookbrack);
+        void onBookClick(ReadTrack readTrack);
 
-        void onBookLongClick(Bookbrack Bookbrack, View parent);
+        void onBookLongClick(ReadTrack readTrack, View parent);
 
         void onFooterClick();
     }
 
-    public List<Bookbrack> getData() {
+    public List<ReadTrack> getData() {
         return data;
     }
 }

@@ -311,7 +311,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             adBottom.setVisibility(VISIBLE);
             return null;
         }).onFail((integer, s) -> {
-            adBottom.setVisibility(GONE);
+            if (adBottom!=null) {
+                adBottom.setVisibility(GONE);
+            }
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         }).execute();
@@ -939,7 +941,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onStart() {
         super.onStart();
         registerBrightObserver();
-        ReportManager.INSTANCE.readBookStart("","",0,bookShelf.getContent_id());
+        ReportManager.INSTANCE.readBookStart("", "", 0, bookShelf.getContent_id());
     }
 
     @Override
@@ -958,7 +960,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         super.onPause();
         mWakeLock.release();
 //        if (isCollected) {
-            mPageLoader.saveRecord();
+        mPageLoader.saveRecord();
 //        }
     }
 
@@ -1077,8 +1079,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(10,"",this, ServiceContext.userService().getUserPid());
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(10, "", this, ServiceContext.userService().getUserPid());
     }
 
 }

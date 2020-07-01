@@ -257,7 +257,6 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             }
             iholder.adapter_bookshelf_book_name.setText(data.get(realPosition).getBook_name());
             if (TextUtils.isEmpty(data.get(realPosition).getChapter_name())) {
-
                 iholder.adapter_bookshelf_read_name.setText("还未开始阅读");
             } else {
                 iholder.adapter_bookshelf_read_name.setText(String.format("读到：%s", data.get(realPosition).getChapter_name()));

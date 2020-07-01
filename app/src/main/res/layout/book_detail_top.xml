@@ -5,28 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="309dp">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="266dp">
+
             <ImageView
                 android:id="@+id/book_detail_goss_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_test_ad"/>
+                android:src="@drawable/ic_test_ad" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#CCFFFFFF"/>
+                android:background="#AAFFFFFF" />
 
             <RelativeLayout
                 android:id="@+id/tittle_bar_layout"
                 android:layout_width="match_parent"
-                android:layout_marginTop="28dp"
-                android:layout_height="55dp">
+                android:layout_height="55dp"
+                android:layout_marginTop="28dp">
 
                 <ImageView
                     android:id="@+id/book_detail_bar_back"
@@ -71,9 +75,9 @@
                     android:id="@+id/book_detail_bookname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="测试中的陈倩倩"
-                    android:layout_marginTop="15dp"
                     android:layout_marginStart="12dp"
+                    android:layout_marginTop="15dp"
+                    android:text="测试中的陈倩倩"
                     android:textColor="@color/gray_3"
                     android:textSize="16dp"
                     app:layout_constraintStart_toEndOf="@+id/book_detail_poster"
@@ -83,9 +87,9 @@
                     android:id="@+id/book_detail_author"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="南镇编剧 著"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="12dp"
+                    android:layout_marginTop="16dp"
+                    android:text="南镇编剧 著"
                     android:textColor="@color/gray_6"
                     android:textSize="12dp"
                     app:layout_constraintStart_toEndOf="@+id/book_detail_poster"
@@ -95,15 +99,16 @@
                     android:id="@+id/book_detail_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="穿越宫斗-连载-38万字"
-                    android:layout_marginTop="8dp"
                     android:layout_marginStart="12dp"
+                    android:layout_marginTop="8dp"
+                    android:text="穿越宫斗-连载-38万字"
                     android:textColor="@color/gray_6"
                     android:textSize="12dp"
                     app:layout_constraintStart_toEndOf="@+id/book_detail_poster"
                     app:layout_constraintTop_toBottomOf="@+id/book_detail_author" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="85dp"
@@ -112,6 +117,7 @@
             android:layout_marginEnd="15dp"
             android:background="@drawable/mine_card_bg"
             android:orientation="horizontal">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -119,22 +125,36 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/book_detail_score"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/gray_3"
-                    android:text="8.8分" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/book_detail_score"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="8.8"
+                        android:textColor="@color/gray_3"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="分"
+                        android:textColor="@color/gray_3"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="14sp"
+                    android:text="评分"
                     android:textColor="@color/gray_9"
-                    android:text="评分" />
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -144,22 +164,37 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/book_detail_popularity"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:textColor="@color/gray_3"
-                    android:text="33万+" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/book_detail_popularity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="33"
+                        android:textColor="@color/gray_3"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/book_detail_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="万+"
+                        android:textColor="@color/gray_3"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/textView9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="14sp"
+                    android:text="人气"
                     android:textColor="@color/gray_9"
-                    android:text="人气" />
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
 

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
 
     <com.inveno.xiandu.view.custom.MSwipeRefreshLayout
         android:id="@+id/store_refresh_layout"
@@ -17,4 +18,40 @@
             android:layout_height="match_parent"
             android:overScrollMode="never" />
     </com.inveno.xiandu.view.custom.MSwipeRefreshLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/store_error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/load_error_img" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="17dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/store_error_refresh"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/error_bg_white"
+                android:gravity="center"
+                android:paddingTop="13dp"
+                android:paddingBottom="13dp"
+                android:text="点击重试"
+                android:textColor="@color/gray_6"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

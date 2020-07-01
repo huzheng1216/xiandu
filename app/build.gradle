@@ -71,6 +71,36 @@ android {
             signingConfig signingConfigs.release
         }
     }
+//    productFlavors {
+//        inveno {
+//
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//        inveno {
+//        }
+//    }
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8

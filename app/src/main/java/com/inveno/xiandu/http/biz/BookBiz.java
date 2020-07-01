@@ -137,6 +137,6 @@ public class BookBiz extends BaseBiz {
         param.put("chapter_id", chapter_id);
         param.put("words_num", words_num);
         param.put("pid", ServiceContext.userService().getUserPid());
-        return mMRRequestService.postReadTime(param);
+        return mMRRequestService.postReadProgress(param);
     }
 }

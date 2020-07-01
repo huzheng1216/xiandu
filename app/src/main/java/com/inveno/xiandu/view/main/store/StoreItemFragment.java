@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -76,6 +77,8 @@ public class StoreItemFragment extends BaseFragment {
     private RecyclerView recyclerView;
     private BookCityAdapter bookCityAdapter;
     private MSwipeRefreshLayout store_refresh_layout;
+    private LinearLayout store_error;
+    private TextView store_error_refresh;
 
     private ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
     private ArrayList<BaseDataBean> mTopDataBeans = new ArrayList<>();
@@ -88,6 +91,10 @@ public class StoreItemFragment extends BaseFragment {
 
     private boolean isVisible;
     private int pageId = 2;
+
+    public StoreItemFragment() {
+
+    }
 
     public StoreItemFragment(String title) {
         switch (title) {
@@ -122,6 +129,10 @@ public class StoreItemFragment extends BaseFragment {
     public View initView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_store_item, container, false);
         ButterKnife.bind(this, view);
+
+        store_error = view.findViewById(R.id.store_error);
+        store_error_refresh = view.findViewById(R.id.store_error_refresh);
+
         recyclerView = view.findViewById(R.id.RecyclerView);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -132,7 +143,6 @@ public class StoreItemFragment extends BaseFragment {
         bookCityAdapter.setOnItemClickListener(new BookCityAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseDataBean baseDataBean, int position) {
-
                 if (baseDataBean instanceof BookShelf) {
                     BookShelf bookShelf = (BookShelf) baseDataBean;
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
@@ -140,6 +150,7 @@ public class StoreItemFragment extends BaseFragment {
                             .navigation();
                     clickReport(bookShelf.getContent_id(), position);
                 } else if (baseDataBean instanceof EditorRecommend) {
+                    Toaster.showToastCenterShort(getContext(), "正在准备书籍，请稍后");
                     //小编推荐需要去请求书本数据
                     EditorRecommend editorRecommend = (EditorRecommend) baseDataBean;
                     APIContext.getBookCityAPi().getBook(editorRecommend.getContent_id())
@@ -155,7 +166,7 @@ public class StoreItemFragment extends BaseFragment {
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                                    Toaster.showToastCenterShort(getContext(), "获取数据失败:" + integer);
                                     return null;
                                 }
                             }).execute();
@@ -313,6 +324,7 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(ArrayList<BaseDataBean> baseDataBeans) {
                         store_refresh_layout.setRefreshing(false);
+                        store_error.setVisibility(View.GONE);
                         mDataBeans = baseDataBeans;
                         if (mDataBeans.size() > 0) {
                             if (mDataBeans.size() < 10) {
@@ -321,6 +333,7 @@ public class StoreItemFragment extends BaseFragment {
                             bookCityAdapter.setDataList(mDataBeans);
                             impReport();
                         } else {
+                            store_error.setVisibility(View.VISIBLE);
                             Toaster.showToastCenter(getContext(), "获取数据失败");
                             bookCityAdapter.setFooterText("没有更多数据");
                         }
@@ -331,6 +344,11 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(Integer integer, String s) {
                         store_refresh_layout.setRefreshing(false);
+                        if (mDataBeans.size() < 1) {
+                            store_error.setVisibility(View.VISIBLE);
+                        } else {
+                            store_error.setVisibility(View.GONE);
+                        }
                         bookCityAdapter.setFooterText("没有更多数据");
                         Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
                         return null;
@@ -344,6 +362,12 @@ public class StoreItemFragment extends BaseFragment {
         isVisible = false;
     }
 
+    @OnClick(R.id.store_error_refresh)
+    public void clickRefresh(View view) {
+//            initData();
+        getData();
+        initLoadData();
+    }
 
     //**************** 上报  start ******************//
     private void report() {

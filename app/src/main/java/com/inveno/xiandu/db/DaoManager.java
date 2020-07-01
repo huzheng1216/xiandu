@@ -9,6 +9,7 @@ import com.inveno.xiandu.gen.BookbrackDao;
 import com.inveno.xiandu.gen.ChapterInfoDao;
 import com.inveno.xiandu.gen.DaoMaster;
 import com.inveno.xiandu.gen.DaoSession;
+import com.inveno.xiandu.gen.ReadTrackDao;
 import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.utils.Toaster;
 
@@ -30,6 +31,8 @@ public class DaoManager {
     public BookShelfDao bookShelfDao;
     //真实书架
     public BookbrackDao bookbrackDao;
+    //阅读足迹
+    public ReadTrackDao readTrackDao;
     //章节
     public ChapterInfoDao chapterInfoDao;
 
@@ -77,6 +80,7 @@ public class DaoManager {
 
         bookShelfDao = daoSession.getBookShelfDao();
         bookbrackDao = daoSession.getBookbrackDao();
+        readTrackDao = daoSession.getReadTrackDao();
         chapterInfoDao = daoSession.getChapterInfoDao();
     }
 }

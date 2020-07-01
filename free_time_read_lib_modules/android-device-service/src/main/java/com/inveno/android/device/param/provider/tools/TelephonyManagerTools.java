@@ -352,6 +352,9 @@ public class TelephonyManagerTools {
                     case TelephonyManager.NETWORK_TYPE_LTE:    //api<11 : replace by 13
                         strNetworkType = "4G";
                         break;
+                    case TelephonyManager.NETWORK_TYPE_NR:
+                        strNetworkType = "5G";
+                        break;
                     default:
                         // http://baike.baidu.com/item/TD-SCDMA 中国移动 联通 电信 三种3G制式
                         if (_strSubTypeName.equalsIgnoreCase("TD-SCDMA") || _strSubTypeName.equalsIgnoreCase("WCDMA") || _strSubTypeName.equalsIgnoreCase("CDMA2000")) {

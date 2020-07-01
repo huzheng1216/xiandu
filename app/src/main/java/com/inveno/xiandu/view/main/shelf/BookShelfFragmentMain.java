@@ -39,6 +39,7 @@ import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.custom.SwipeItemLayout;
@@ -177,6 +178,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
+                                    Toaster.showToastCenterShort(getContext(), "获取小说失败："+ s);
                                     return null;
                                 }
                             }).execute();
@@ -298,7 +300,6 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             shelfAdapter.setCoinNum("--");
             shelfAdapter.setHeaderTime("--");
         }
-//        shelfAdapter.setData(SQL.getInstance().getAllBookbrack());
         List<Bookbrack> list = SQL.getInstance().getAllBookbrack();
         if (adBookModel != null) {
             int index = adBookModel.getIndex();

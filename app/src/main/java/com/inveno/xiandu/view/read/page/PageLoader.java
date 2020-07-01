@@ -14,7 +14,9 @@ import android.text.TextPaint;
 import androidx.core.content.ContextCompat;
 
 import com.inveno.xiandu.bean.book.BookShelf;
+import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
+import com.inveno.xiandu.bean.book.ReadTrack;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.http.body.BaseRequest;
@@ -628,7 +630,8 @@ public abstract class PageLoader {
             return;
         }
         LogUtils.H(mCollBook.getContent_id() + "---" + mCurChapterPos + "---" + mCurPage.position);
-        mCollBook.setChapter_id(mCurPage.id);
+        mCollBook.setChapter_id(mCurChapterPos);
+        mCollBook.setChapter_name(mCurPage.title);
 
         int words = 0;
         if (mCurPage != null) {
@@ -642,11 +645,34 @@ public abstract class PageLoader {
         } else {
             mCollBook.setWords_num(words);
         }
+
+        if (SQL.getInstance().hasBookbrack(mCollBook.getContent_id())) {
+            //书架中存在图书，需要更新进度
+            //书架对象
+            Bookbrack bookbrack = new Bookbrack();
+            bookbrack.setContent_id(mCollBook.getContent_id());
+            bookbrack.setBook_name(mCollBook.getBook_name());
+            bookbrack.setPoster(mCollBook.getPoster());
+            bookbrack.setWords_num(mCollBook.getWords_num());
+            bookbrack.setChapter_name(mCollBook.getChapter_name());
+            bookbrack.setChapter_id(mCollBook.getChapter_id());
+
+            SQL.getInstance().addBookbrack(bookbrack);
+        }
+        //足迹需要保存
+        ReadTrack readTrack = new ReadTrack();
+        readTrack.setContent_id(mCollBook.getContent_id());
+        readTrack.setBook_name(mCollBook.getBook_name());
+        readTrack.setPoster(mCollBook.getPoster());
+        readTrack.setWords_num(mCollBook.getWords_num());
+        readTrack.setChapter_name(mCollBook.getChapter_name());
+        readTrack.setChapter_id(mCollBook.getChapter_id());
+        SQL.getInstance().addReadTrack(readTrack);
 //
 //        //存储到数据库
 //        SQL.getInstance().insertOrReplace();
         //上报阅读进度
-        DDManager.getInstance().postReadProgress(mCollBook.getContent_id()+"", mCollBook.getChapter_id()+"", mCollBook.getWords_num())
+        DDManager.getInstance().postReadProgress(mCollBook.getContent_id() + "", mCollBook.getChapter_id() + "", mCollBook.getWords_num())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<BaseRequest>() {
                     @Override
@@ -655,7 +681,7 @@ public abstract class PageLoader {
 
                     @Override
                     public void onNext(BaseRequest baseRequest) {
-                        LogUtils.H("");
+                        LogUtils.H("" + baseRequest);
                     }
 
                     @Override
@@ -844,6 +870,9 @@ public abstract class PageLoader {
                 //根据状态不一样，数据不一样
                 if (mStatus != STATUS_FINISH) {
                     if (isChapterListPrepare) {
+                        if (mCurChapterPos > mChapterList.size()) {
+                            mCurChapterPos = 0;
+                        }
                         canvas.drawText(mChapterList.get(mCurChapterPos).getChapter_name()
                                 , mMarginWidth, tipTop, mTipPaint);
                     }
@@ -1453,9 +1482,9 @@ public abstract class PageLoader {
         if (mPageChangeListener != null) {
             mPageChangeListener.onPageChange(pos);
         }
-        if (mCurPageList.size() < pos){
-            return mCurPageList.get(mCurPageList.size()-1);
-        }else{
+        if (mCurPageList.size() < pos) {
+            return mCurPageList.get(mCurPageList.size() - 1);
+        } else {
             return mCurPageList.get(pos);
         }
     }

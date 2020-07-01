@@ -26,6 +26,7 @@ import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
 import com.inveno.xiandu.view.components.PopupWindowShelfItem;
 import com.inveno.xiandu.view.components.ShelfItemDialog;
+import com.inveno.xiandu.view.search.SerchResultActivity;
 
 import java.util.ArrayList;
 import java.util.List;

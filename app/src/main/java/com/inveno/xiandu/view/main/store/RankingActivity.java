@@ -107,11 +107,11 @@ public class RankingActivity extends TitleBarBaseActivity {
             public void onItemClick(BaseDataBean baseDataBean) {
                 //根据id请求书籍内容后跳转
                 if (baseDataBean instanceof RankingData) {
+                    Toaster.showToastShort(RankingActivity.this, "正在获取书籍，请稍等...");
                     APIContext.getBookCityAPi().getBook(((RankingData) baseDataBean).getContent_id())
                             .onSuccess(new Function1<BookShelf, Unit>() {
                                 @Override
                                 public Unit invoke(BookShelf bookShelf) {
-                                    Toaster.showToastShort(RankingActivity.this, "正在获取书籍，请稍等...");
                                     ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                                             .withString("json", GsonUtil.objectToJson(bookShelf))
                                             .navigation();
