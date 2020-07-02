@@ -12,6 +12,8 @@ public interface ReadContract extends BaseContract {
     interface View extends BaseView, com.inveno.xiandu.view.read.adapter.BaseContract.BaseView {
         void showCategory(List<ChapterInfo> bookChapterList);
 
+
+
         void finishChapter();
 
         void errorChapter();

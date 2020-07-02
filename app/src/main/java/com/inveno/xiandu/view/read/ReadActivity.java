@@ -163,6 +163,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private CategoryAdapter mCategoryAdapter;
     private BookShelf bookShelf;
     private Bookbrack bookbrack = new Bookbrack();
+    //当前章节
+    private ChapterInfo mChapterInfo;
 
     //心跳上报
     private Disposable subscribe;
@@ -311,7 +313,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             adBottom.setVisibility(VISIBLE);
             return null;
         }).onFail((integer, s) -> {
-            if (adBottom!=null) {
+            if (adBottom != null) {
                 adBottom.setVisibility(GONE);
             }
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
@@ -362,10 +364,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             mPvPage.setLayerType(LAYER_TYPE_SOFTWARE, null);
         }
-
-        int capterPos = getIntent().getIntExtra("capter", 0);
         //获取页面加载器
-        mPageLoader = mPvPage.getPageLoader(bookShelf, capterPos);
+        mPageLoader = mPvPage.getPageLoader(bookShelf);
         //禁止滑动展示DrawerLayout
         mDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //侧边打开后，返回键能够起作用
@@ -613,7 +613,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                         //进行切换
                         int pagePos = mSbChapterProgress.getProgress();
                         if (pagePos != mPageLoader.getChapterPos()) {
-                            mPageLoader.skipToChapter(pagePos);
+                            mPageLoader.skipToChapter(pagePos, 0);
                         }
                         //隐藏提示
                         mTvPageTip.setVisibility(GONE);
@@ -649,7 +649,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mLvCategory.setOnItemClickListener(
                 (parent, view, position, id) -> {
                     mDlSlide.closeDrawer(Gravity.START);
-                    mPageLoader.skipToChapter(position);
+                    mPageLoader.skipToChapter(position, 0);
                 }
         );
 
@@ -856,6 +856,20 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     public void showCategory(List<ChapterInfo> bookChapters) {
+
+        //根据章节id，获取章节位置
+        int chapter_id = getIntent().getIntExtra("capter", 0);
+        int wordsNum = getIntent().getIntExtra("words_num", 0);
+        mChapterInfo = bookChapters.get(0);
+        if (chapter_id > 0) {
+            for (int i = 0; i < bookChapters.size(); i++) {
+                if (chapter_id == bookChapters.get(i).getChapter_id()) {
+                    mChapterInfo = bookChapters.get(i);
+                    mPageLoader.skipToChapter(i, wordsNum);
+                    break;
+                }
+            }
+        }
 
         mPageLoader.getCollBook().setBookChapters(bookChapters);
         mPageLoader.refreshChapterList();

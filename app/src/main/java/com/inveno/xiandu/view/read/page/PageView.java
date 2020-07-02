@@ -342,7 +342,7 @@ public class PageView extends View {
      * @param collBook
      * @return
      */
-    public PageLoader getPageLoader(BookShelf collBook, int CapterPos) {
+    public PageLoader getPageLoader(BookShelf collBook) {
         // 判是否已经存在
         if (mPageLoader != null) {
             return mPageLoader;
@@ -351,7 +351,7 @@ public class PageView extends View {
 //        if (collBook.isLocal()) {
 //            mPageLoader = new LocalPageLoader(this, collBook);
 //        } else {
-            mPageLoader = new NetPageLoader(this, collBook, CapterPos);
+            mPageLoader = new NetPageLoader(this, collBook);
 //        }
         // 判断是否 PageView 已经初始化完成
         if (mViewWidth != 0 || mViewHeight != 0) {

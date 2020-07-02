@@ -76,7 +76,7 @@ public class ReadTrackApi extends BaseSingleInstanceService {
                 uiCallback.invokeFail(integer, s);
                 return null;
             }
-        }).execute();
+        });
 
         return uiCallback;
     }

@@ -61,8 +61,8 @@ public class LocalPageLoader extends PageLoader {
 
     private Disposable mChapterDisp = null;
 
-    public LocalPageLoader(PageView pageView, BookShelf collBook, int capterPos) {
-        super(pageView, collBook, capterPos);
+    public LocalPageLoader(PageView pageView, BookShelf collBook) {
+        super(pageView, collBook);
         mStatus = STATUS_PARING;
     }
 

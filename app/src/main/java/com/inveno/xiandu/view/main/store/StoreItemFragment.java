@@ -137,6 +137,8 @@ public class StoreItemFragment extends BaseFragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
 
         bookCityAdapter = new BookCityAdapter(getContext(), getActivity(), mDataBeans);
         recyclerView.setAdapter(bookCityAdapter);

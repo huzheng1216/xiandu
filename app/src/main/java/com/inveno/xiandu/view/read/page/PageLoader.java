@@ -152,11 +152,13 @@ public abstract class PageLoader {
 
     // 当前章
     protected int mCurChapterPos = 0;
+    //阅读到的字数
+    protected int mWordsNum = 0;
     //上一章的记录
     private int mLastChapterPos = 0;
 
     /*****************************init params*******************************/
-    public PageLoader(PageView pageView, BookShelf collBook, int curChapterPos) {
+    public PageLoader(PageView pageView, BookShelf collBook) {
         mPageView = pageView;
         mContext = pageView.getContext();
         mCollBook = collBook;
@@ -168,7 +170,7 @@ public abstract class PageLoader {
         // 初始化PageView
         initPageView();
         // 初始化书籍
-        prepareBook(curChapterPos);
+        prepareBook();
     }
 
     private void initData() {
@@ -319,14 +321,14 @@ public abstract class PageLoader {
     }
 
     /**
-     * 跳转到指定章节
+     * 跳转到指定章节，与指定位置
      *
      * @param pos:从 0 开始。
      */
-    public void skipToChapter(int pos) {
+    public void skipToChapter(int pos, int words_num) {
         // 设置参数
         mCurChapterPos = pos;
-
+        mWordsNum = words_num;
         // 将上一章的缓存设置为null
         mPrePageList = null;
         // 如果当前下一章缓存正在执行，则取消
@@ -349,6 +351,7 @@ public abstract class PageLoader {
         if (!isChapterListPrepare) {
             return false;
         }
+
         mCurPage = getCurPage(pos);
         mPageView.drawCurPage(false);
         return true;
@@ -630,7 +633,7 @@ public abstract class PageLoader {
             return;
         }
         LogUtils.H(mCollBook.getContent_id() + "---" + mCurChapterPos + "---" + mCurPage.position);
-        mCollBook.setChapter_id(mCurChapterPos);
+        mCollBook.setChapter_id(mCurPage.id);
         mCollBook.setChapter_name(mCurPage.title);
 
         int words = 0;
@@ -667,6 +670,7 @@ public abstract class PageLoader {
         readTrack.setWords_num(mCollBook.getWords_num());
         readTrack.setChapter_name(mCollBook.getChapter_name());
         readTrack.setChapter_id(mCollBook.getChapter_id());
+
         SQL.getInstance().addReadTrack(readTrack);
 //
 //        //存储到数据库
@@ -698,7 +702,7 @@ public abstract class PageLoader {
     /**
      * 初始化书籍
      */
-    private void prepareBook(int curChapterPos) {
+    private void prepareBook() {
 //        mBookRecord = BookRepository.getInstance()
 //                .getBookRecord(mCollBook.get_id());
 
@@ -706,7 +710,6 @@ public abstract class PageLoader {
 //            mBookRecord = new BookRecordBean();
 //        }
 //
-        mCurChapterPos = curChapterPos;
         if (mCurChapterPos == 0) {
             mLastChapterPos = mCurChapterPos;
         } else {
@@ -742,6 +745,26 @@ public abstract class PageLoader {
             // 如果章节从未打开
             if (!isChapterOpen) {
                 int position = 0;
+
+                //根据阅读到的字数，换算页码
+                if (mWordsNum > 0) {
+                    int words = 0;
+                    if (mCurPageList != null) {
+                        for (int i = 0; i <= mCurPageList.size(); i++) {
+                            TxtPage txtPage = mCurPageList.get(i);
+                            for (String c : txtPage.lines) {
+                                words += c.trim().length();
+                                if (words >= mWordsNum) {
+                                    position = i;
+                                    break;
+                                }
+                            }
+                            if (position > 0) {
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 // 防止记录页的页号，大于当前最大页号
                 if (position >= mCurPageList.size()) {

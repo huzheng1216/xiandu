@@ -102,6 +102,12 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
+    @Override
     protected void initView() {
         super.initView();
         footprint_recycle = findViewById(R.id.footprint_recycle);
@@ -181,6 +187,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                                 ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                                         .withString("json", GsonUtil.objectToJson(bookShelf))
                                         .withInt("capter", readTrack.getChapter_id())
+                                        .withInt("words_num", readTrack.getWords_num())
                                         .navigation();
                                 return null;
                             }
@@ -265,11 +272,20 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     private void syncData(List<ReadTrack> data) {
 //        SQL.getInstance().insertOrReplaceBookbrack(data);
         initData();
-//        //简单判断一下
-        if (SQL.getInstance().getAllReadTrack().size() != data.size()) {
-            SQL.getInstance().insertOrReplaceReadTrack(data);
-            initData();
+
+        //做一个简单的同步
+        List<ReadTrack> localData = SQL.getInstance().getAllReadTrack();
+        for (ReadTrack readTrack : data) {
+            //后台有，本地没有，需要添加到本地
+            if (!localData.contains(readTrack)) {
+                SQL.getInstance().insertOrReplaceReadTrack(data);
+                initData();
+            }
         }
+//        if (SQL.getInstance().getAllReadTrack().size() != data.size()) {
+//            SQL.getInstance().insertOrReplaceReadTrack(data);
+//            initData();
+//        }
     }
 
     private void initData() {

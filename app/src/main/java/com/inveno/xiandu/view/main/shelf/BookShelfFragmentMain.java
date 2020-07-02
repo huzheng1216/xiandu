@@ -162,6 +162,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                     ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                             .withString("json", GsonUtil.objectToJson(bookShelf))
                             .withInt("capter", bookbrack.getChapter_id())
+                            .withInt("words_num", bookbrack.getWords_num())
                             .navigation();
                 } else {
                     APIContext.getBookCityAPi().getBook(bookbrack.getContent_id())
@@ -171,6 +172,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                                     ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                                             .withString("json", GsonUtil.objectToJson(bookShelf))
                                             .withInt("capter", bookbrack.getChapter_id())
+                                            .withInt("words_num", bookbrack.getWords_num())
                                             .navigation();
                                     return null;
                                 }
@@ -178,7 +180,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenterShort(getContext(), "获取小说失败："+ s);
+                                    Toaster.showToastCenterShort(getContext(), "获取小说失败：" + s);
                                     return null;
                                 }
                             }).execute();
@@ -215,7 +217,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
         LinearLayoutManager dataLayoutManager = new LinearLayoutManager(getActivity());
         bookrack_recyclerview.setLayoutManager(dataLayoutManager);
-         //TODO 这里可能内存泄漏
+        //TODO 这里可能内存泄漏
         bookrack_recyclerview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -254,7 +256,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     @Override
     protected void onVisible(Boolean firstVisble) {
         LogUtils.H("书架可见：" + firstVisble);
-        ReportManager.INSTANCE.reportPageImp(1,"",getContext(), ServiceContext.userService().getUserPid());
+        ReportManager.INSTANCE.reportPageImp(1, "", getContext(), ServiceContext.userService().getUserPid());
         initData();
         if (firstVisble) {
             //从网络加载书籍
@@ -282,13 +284,19 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
      * @param data
      */
     private void syncData(List<Bookbrack> data) {
-//        SQL.getInstance().insertOrReplaceBookbrack(data);
         initData();
-//        //简单判断一下
-        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
-            SQL.getInstance().insertOrReplaceBookbrack(data);
-            initData();
+        //做一个简单的同步
+        for (Bookbrack bookbrack : data) {
+            //后台有，本地没有，需要添加到本地
+            if (!SQL.getInstance().hasBookbrack(bookbrack)) {
+                SQL.getInstance().insertOrReplaceBookbrack(data);
+                initData();
+            }
         }
+//        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
+//            SQL.getInstance().insertOrReplaceBookbrack(data);
+//            initData();
+//        }
     }
 
     private void initData() {
@@ -443,12 +451,12 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     private void impReport(int first, int last) {
         List<Bookbrack> mBookselfs = new ArrayList<>(shelfAdapter.getData());
         int size = mBookselfs.size();
-        int newFirst = first - 1 ;
+        int newFirst = first - 1;
         int newLast = last - 2;
 //        Log.i("ReportManager", "size:" + size + " first:" + first + "  last:" + last + " newLast:" + newLast + " newFirst:" + newFirst);
         if (newLast >= 0 && size > newLast) {
             for (int i = newFirst; i <= newLast; i++) {
-                if(i >= 0) {
+                if (i >= 0) {
                     Bookbrack bookbrack = mBookselfs.get(i);
                     if (!(bookbrack instanceof AdBookModel)) {
 //                        Log.i("ReportManager", "name:" + bookbrack.getBook_name() + " i:" + i);

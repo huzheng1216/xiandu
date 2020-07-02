@@ -20,8 +20,8 @@ import java.util.List;
 public class NetPageLoader extends PageLoader {
     private static final String TAG = "PageFactory";
 
-    public NetPageLoader(PageView pageView, BookShelf collBook, int CapterPos) {
-        super(pageView, collBook, CapterPos);
+    public NetPageLoader(PageView pageView, BookShelf collBook) {
+        super(pageView, collBook);
     }
 
 //    private List<ChapterInfo> convertTxtChapter(List<ChapterInfo> bookChapters) {

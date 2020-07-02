@@ -76,7 +76,7 @@ public class BookbrackApi extends BaseSingleInstanceService {
                 uiCallback.invokeFail(integer, s);
                 return null;
             }
-        }).execute();
+        });
 
         return uiCallback;
     }
