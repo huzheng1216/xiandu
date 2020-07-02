@@ -79,9 +79,9 @@ public enum DataManager {
         drBaseBean.setReferrer(referrer);
     }
 
-    private static String createAdTk(long time) {
-        return Hashing.md5().newHasher().putString("e3dccdbeeefeb574b3ad7ae5df1a2cf34b7aeabb" + "::" + time, Charsets.UTF_8).hash().toString();
-    }
+//    private static String createAdTk(long time) {
+//        return Hashing.md5().newHasher().putString("e3dccdbeeefeb574b3ad7ae5df1a2cf34b7aeabb" + "::" + time, Charsets.UTF_8).hash().toString();
+//    }
 
     public  LinkedHashMap<String, Object> reportPageImp(int pageId, String upack, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
@@ -166,7 +166,7 @@ public enum DataManager {
         long now = System.currentTimeMillis();
         dataReportBean.setReport_time(now);
         dataReportBean.setEvent_time(now);
-        dataReportBean.setTk(createAdTk(now));
+        dataReportBean.setTk(InvenoServiceContext.product().createTk("",""+now));
         dataReportBean.setIp(NetWorkUtil.getIpAddress(context));
         dataReportBean.setRequest_time(String.valueOf(now));
     }
