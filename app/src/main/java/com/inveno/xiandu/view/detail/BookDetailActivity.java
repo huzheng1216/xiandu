@@ -53,6 +53,7 @@ import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RelevantBookAdapter;
+import com.inveno.xiandu.view.custom.BookDetailScrollView;
 import com.inveno.xiandu.view.read.CategoryAdapter;
 
 import java.util.ArrayList;
@@ -146,6 +147,9 @@ public class BookDetailActivity extends BaseActivity {
     LinearLayout ad_bottom_viewgroup;
 
     LinearLayout ad_pop_viewgroup;
+
+    @BindView((R.id.book_detail_scrollview))
+    BookDetailScrollView scrollView;
 
     private AdModel adModel;
     private AdModel adBottomModel;
@@ -280,10 +284,9 @@ public class BookDetailActivity extends BaseActivity {
                 }
             }
         });
-        //TODO 这里可能内存泄漏
-        book_detail_bottom_recyclerview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        scrollView.setOnScrollBottomListener(new BookDetailScrollView.OnScrollBottomListener() {
             @Override
-            public void onGlobalLayout() {
+            public void scrollBottom() {
                 impReport();
             }
         });
@@ -669,7 +672,7 @@ public class BookDetailActivity extends BaseActivity {
         if (size>0 && size > last) {
             for (int i = first; i <= last; i++) {
                 BookShelf bookShelf = bookShelfs.get(i);
-//                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
                 long contentId = bookShelf.getContent_id();
                 ReportManager.INSTANCE.reportBookImp(11, "", "", 9,
                         0, contentId, BookDetailActivity.this, ServiceContext.userService().getUserPid());
