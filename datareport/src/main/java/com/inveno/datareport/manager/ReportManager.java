@@ -37,11 +37,12 @@ public enum ReportManager {
         }
     }
 
-    public void appEnd(Context context, long pid) {
+    public void appEnd(Context context, long pid, String upack) {
         if (appDurationBean != null) {
             appDurationBean.endTime = System.currentTimeMillis();
             DataManager.INSTANCE.initPid(pid);
-            LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportAppDuration(appDurationBean.startTime, appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context);
+            LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportAppDuration(appDurationBean.startTime,
+                    appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context, upack);
             Log.i("ReportManager", "appEnd json:" + map);
             ReportService.INSTANCE.report(map);
         }

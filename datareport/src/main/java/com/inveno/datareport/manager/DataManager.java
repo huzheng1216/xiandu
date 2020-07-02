@@ -95,9 +95,7 @@ public enum DataManager {
         dataReportBean.setPage_id(pageId);
 
         Log.i("ReportManager"," upack" + upack + "  "+TextUtils.isEmpty(upack));
-        if (!TextUtils.isEmpty(upack)) {
-            dataReportBean.setUpack(upack);
-        }
+        dataReportBean.setUpack(upack);
 
         return parseToMap(drBaseBean, dataReportBean);
     }
@@ -153,7 +151,7 @@ public enum DataManager {
     }
 
 
-    public  LinkedHashMap<String, Object> reportAppDuration(long startTime , long stayTime, long leaveTime, Context context) {
+    public  LinkedHashMap<String, Object> reportAppDuration(long startTime , long stayTime, long leaveTime, Context context , String upack) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
@@ -161,6 +159,7 @@ public enum DataManager {
         dataReportBean.setStay_time(stayTime);
         dataReportBean.setLeave_time(leaveTime);
         dataReportBean.setEvent_time(startTime);
+        dataReportBean.setUpack(upack);
 
         return parseToMap(drBaseBean, dataReportBean);
     }
@@ -177,11 +176,14 @@ public enum DataManager {
 
     private LinkedHashMap<String, Object> parseToMap(DrBaseBean drBaseBean, DataReportBean dataReportBean) {
         JSONObject jsonObject = (JSONObject) JSON.toJSON(drBaseBean);
-        JSONObject jsonObject2 = (JSONObject) JSON.toJSON(dataReportBean);
+
+        //一段奇怪的代码
+        String newJson = JSON.toJSONString(dataReportBean);
+        JSONObject jsonObject1 = JSON.parseObject(newJson);
 
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.putAll(jsonObject);
-        map.putAll(jsonObject2);
+        map.putAll(jsonObject1);
         return map;
     }
 
