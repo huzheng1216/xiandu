@@ -37,11 +37,11 @@ public enum ReportManager {
         }
     }
 
-    public void appEnd(Context context , long pid) {
+    public void appEnd(Context context, long pid) {
         if (appDurationBean != null) {
             appDurationBean.endTime = System.currentTimeMillis();
             DataManager.INSTANCE.initPid(pid);
-            LinkedHashMap<String, Object> map  = DataManager.INSTANCE.reportAppDuration(appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context);
+            LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportAppDuration(appDurationBean.startTime, appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context);
             Log.i("ReportManager", "appEnd json:" + map);
             ReportService.INSTANCE.report(map);
         }
@@ -54,13 +54,13 @@ public enum ReportManager {
 
     public void reportPageImp(int pageId, String upack, Context context, long pid) {
         DataManager.INSTANCE.initPid(pid);
-        LinkedHashMap<String, Object> map  = DataManager.INSTANCE.reportPageImp(pageId, upack, context);
+        LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportPageImp(pageId, upack, context);
         Log.i("ReportManager", "reportPageImp json:" + map);
         ReportService.INSTANCE.report(map);
     }
 
     public void reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context, long pid) {
-        if (reportCache.ifCanReport(pageId,type,contentId)) {
+        if (reportCache.ifCanReport(pageId, type, contentId)) {
             DataManager.INSTANCE.initPid(pid);
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookImp(pageId, upack, cpack, type, serverTime, contentId, context);
             Log.i("ReportManager", "reportBookImp json:" + map);
@@ -72,12 +72,12 @@ public enum ReportManager {
         currentPageId = pageId;
         currentType = type;
         DataManager.INSTANCE.initPid(pid);
-        LinkedHashMap<String, Object> map  = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
+        LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
         Log.i("ReportManager", "reportBookClick json:" + map);
         ReportService.INSTANCE.report(map);
     }
 
-    public void readBookStart( String upack, String cpack, long serverTime, long contentId) {
+    public void readBookStart(String upack, String cpack, long serverTime, long contentId) {
         if (readBean == null) {
             readBean = new ReadBean();
             readBean.startTime = System.currentTimeMillis();
@@ -106,7 +106,7 @@ public enum ReportManager {
         DataManager.INSTANCE.setReferrer(referrer);
     }
 
-    public void setLocation(String location){
+    public void setLocation(String location) {
         DataManager.INSTANCE.setLocation(location);
     }
 }

@@ -153,13 +153,14 @@ public enum DataManager {
     }
 
 
-    public  LinkedHashMap<String, Object> reportAppDuration(long stayTime, long leaveTime, Context context) {
+    public  LinkedHashMap<String, Object> reportAppDuration(long startTime , long stayTime, long leaveTime, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
         dataReportBean.setEvent_id(EventIdType.APP_DURATION);
         dataReportBean.setStay_time(stayTime);
         dataReportBean.setLeave_time(leaveTime);
+        dataReportBean.setEvent_time(startTime);
 
         return parseToMap(drBaseBean, dataReportBean);
     }
