@@ -11,7 +11,6 @@ public class DataReportBean {
     public long stay_time;
     public long leave_time;
     public String upack;
-    public Long report_time;
     public String tk;
     public String ip;
     public long content_id;
@@ -89,14 +88,6 @@ public class DataReportBean {
         this.upack = upack;
     }
 
-    public Long getReport_time() {
-        return report_time;
-    }
-
-    public void setReport_time(Long report_time) {
-        this.report_time = report_time;
-    }
-
     public String getTk() {
         return tk;
     }
@@ -155,7 +146,6 @@ public class DataReportBean {
                 ", stay_time=" + stay_time +
                 ", leave_time=" + leave_time +
                 ", upack='" + upack + '\'' +
-                ", report_time=" + report_time +
                 ", tk='" + tk + '\'' +
                 ", ip='" + ip + '\'' +
                 ", content_id=" + content_id +

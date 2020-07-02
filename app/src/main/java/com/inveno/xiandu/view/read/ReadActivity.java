@@ -559,6 +559,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                         }
                         mCategoryAdapter.refreshItems(chapters);
                         mSbChapterProgress.setMax(Math.max(0, chapters.size()));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            mSbChapterProgress.setMin(1);
+                        }
                     }
 
                     @Override
@@ -598,9 +601,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (mLlBottomMenu.getVisibility() == VISIBLE) {
                             //显示标题
-                            mTvPageTip.setText((progress + 1) + "/" + (mSbChapterProgress.getMax() + 1));
+                            mTvPageTip.setText((progress) + "/" + (mSbChapterProgress.getMax()));
                             mTvPageTip.setVisibility(VISIBLE);
-                            mToolbar.setTitle(mCategoryAdapter.getItem(progress + 1).getChapter_name());
+//                            mToolbar.setTitle(mCategoryAdapter.getItem(progress).getChapter_name());
                         }
                     }
 
@@ -611,7 +614,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         //进行切换
-                        int pagePos = mSbChapterProgress.getProgress();
+                        int pagePos = mSbChapterProgress.getProgress() - 1;
                         if (pagePos != mPageLoader.getChapterPos()) {
                             mPageLoader.skipToChapter(pagePos, 0);
                         }

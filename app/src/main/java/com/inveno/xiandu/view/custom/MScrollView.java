@@ -14,6 +14,7 @@ import android.widget.ScrollView;
  */
 public class MScrollView extends ScrollView {
 
+    private OnScrollBottomListener onScrollBottomListener;
     private ScrollViewListener scrollViewListener = null;
     public MScrollView(Context context) {
         super(context);
@@ -32,11 +33,24 @@ public class MScrollView extends ScrollView {
         if (scrollViewListener != null) {
             scrollViewListener.onScrollChanged(this, l, t, oldl, oldt);
         }
+        if (getChildAt(0).getHeight() == getHeight() + getScrollY()){
+            if (onScrollBottomListener!=null){
+                onScrollBottomListener.scrollBottom();
+            }
+        }
     }
 
 
     public void setScrollViewListener(ScrollViewListener scrollViewListener) {
         this.scrollViewListener = scrollViewListener;
+    }
+
+    public interface OnScrollBottomListener{
+        void scrollBottom();
+    }
+
+    public void setOnScrollBottomListener(OnScrollBottomListener onScrollBottomListener) {
+        this.onScrollBottomListener = onScrollBottomListener;
     }
 
     public interface ScrollViewListener {

@@ -348,8 +348,8 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                 iosTypeDialog.dismiss();
                 iosTypeDialog = null;
 
-                List<ReadTrack> bookbracks = readFootprintAdapter.deleteSelect();
-                if (bookbracks.size() < 1) {
+                List<ReadTrack> readTracks = readFootprintAdapter.deleteSelect();
+                if (readTracks.size() < 1) {
                     no_book_show.setVisibility(View.VISIBLE);
                 }
 

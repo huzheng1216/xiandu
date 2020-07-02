@@ -33,18 +33,6 @@ public class Bookbrack {
     @Transient
     private boolean isSelect;
 
-    public boolean isSelect() {
-        return isSelect;
-    }
-
-    public void setSelect(boolean select) {
-        isSelect = select;
-    }
-
-    @Generated(hash = 1260541532)
-    public Bookbrack() {
-    }
-
     @Generated(hash = 189409290)
     public Bookbrack(Long content_id, String book_name, String poster,
             int words_num, String chapter_name, int chapter_id, String time) {
@@ -55,6 +43,18 @@ public class Bookbrack {
         this.chapter_name = chapter_name;
         this.chapter_id = chapter_id;
         this.time = time;
+    }
+
+    @Generated(hash = 1260541532)
+    public Bookbrack() {
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 
     public Long getContent_id() {

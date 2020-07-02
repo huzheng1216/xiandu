@@ -335,6 +335,7 @@ public class StoreItemFragment extends BaseFragment {
                             bookCityAdapter.setDataList(mDataBeans);
                             impReport();
                         } else {
+                            bookCityAdapter.setDataList(mDataBeans);
                             store_error.setVisibility(View.VISIBLE);
                             Toaster.showToastCenter(getContext(), "获取数据失败");
                             bookCityAdapter.setFooterText("没有更多数据");
@@ -347,6 +348,7 @@ public class StoreItemFragment extends BaseFragment {
                     public Unit invoke(Integer integer, String s) {
                         store_refresh_layout.setRefreshing(false);
                         if (mDataBeans.size() < 1) {
+                            bookCityAdapter.setDataList(mDataBeans);
                             store_error.setVisibility(View.VISIBLE);
                         } else {
                             store_error.setVisibility(View.GONE);

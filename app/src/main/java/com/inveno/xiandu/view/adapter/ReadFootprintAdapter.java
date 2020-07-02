@@ -207,6 +207,8 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
                 iholder.bookbrack_checkbox.setVisibility(View.VISIBLE);
                 if (data.get(realPosition).isSelect()) {
                     iholder.bookbrack_checkbox.setChecked(true);
+                }else{
+                    iholder.bookbrack_checkbox.setChecked(false);
                 }
                 iholder.bookbrack_checkbox.setOnClickListener(new View.OnClickListener() {
                     @Override

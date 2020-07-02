@@ -206,6 +206,16 @@ public class BookDetailActivity extends BaseActivity {
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (SQL.getInstance().hasBookbrack(bookbrack)) {
+            book_detail_coll.setText("已在书架");
+        } else {
+            book_detail_coll.setText("加入书架");
+        }
+    }
+
     private void initData() {
         book = GsonUtil.gsonToObject(json, BookShelf.class);
         if (book == null) {
@@ -232,12 +242,6 @@ public class BookDetailActivity extends BaseActivity {
         bookbrack.setWords_num(book.getWords_num());
         bookbrack.setChapter_name(book.getChapter_name());
         bookbrack.setChapter_id(book.getChapter_id());
-
-        if (SQL.getInstance().hasBookbrack(bookbrack)) {
-            book_detail_coll.setText("已在书架");
-        } else {
-            book_detail_coll.setText("加入书架");
-        }
 
         Glide.with(this).load(book.getPoster()).into(book_detail_poster);
         GlideUtils.LoadImageGoss(this, book.getPoster(), book_detail_goss_bg);
@@ -319,10 +323,9 @@ public class BookDetailActivity extends BaseActivity {
                 }
             }
         });
-        //TODO 这里可能内存泄漏
-        book_detail_bottom_recyclerview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        book_detail_scrollview.setOnScrollBottomListener(new MScrollView.OnScrollBottomListener() {
             @Override
-            public void onGlobalLayout() {
+            public void scrollBottom() {
                 impReport();
             }
         });
@@ -758,7 +761,7 @@ public class BookDetailActivity extends BaseActivity {
         if (size > 0 && size > last) {
             for (int i = first; i <= last; i++) {
                 BookShelf bookShelf = bookShelfs.get(i);
-//                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
                 long contentId = bookShelf.getContent_id();
                 ReportManager.INSTANCE.reportBookImp(11, "", "", 9,
                         0, contentId, BookDetailActivity.this, ServiceContext.userService().getUserPid());
