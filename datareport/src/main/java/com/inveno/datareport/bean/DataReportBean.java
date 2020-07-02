@@ -2,49 +2,49 @@ package com.inveno.datareport.bean;
 
 public class DataReportBean {
 
-    public int event_id;
-    public int page_id;
-    public long event_time;
-    public int type;
+    public Integer event_id;
+    public Integer page_id;
+    public Long event_time;
+    public Integer type;
     public String cpack;
-    public long server_time;
-    public long stay_time;
-    public long leave_time;
-    public String upack;
-    public String tk;
-    public String ip;
-    public long content_id;
+    public Long server_time;
+    public Long stay_time;
+    public Long leave_time;
+    public String upack="";
+    public String tk="";
+    public String ip="";
+    public Long content_id;
     public String request_time;
 
-    public int getEvent_id() {
+    public Integer getEvent_id() {
         return event_id;
     }
 
-    public void setEvent_id(int event_id) {
+    public void setEvent_id(Integer event_id) {
         this.event_id = event_id;
     }
 
-    public int getPage_id() {
+    public Integer getPage_id() {
         return page_id;
     }
 
-    public void setPage_id(int page_id) {
+    public void setPage_id(Integer page_id) {
         this.page_id = page_id;
     }
 
-    public long getEvent_time() {
+    public Long getEvent_time() {
         return event_time;
     }
 
-    public void setEvent_time(long event_time) {
+    public void setEvent_time(Long event_time) {
         this.event_time = event_time;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -56,27 +56,27 @@ public class DataReportBean {
         this.cpack = cpack;
     }
 
-    public long getServer_time() {
+    public Long getServer_time() {
         return server_time;
     }
 
-    public void setServer_time(long server_time) {
+    public void setServer_time(Long server_time) {
         this.server_time = server_time;
     }
 
-    public long getStay_time() {
+    public Long getStay_time() {
         return stay_time;
     }
 
-    public void setStay_time(long stay_time) {
+    public void setStay_time(Long stay_time) {
         this.stay_time = stay_time;
     }
 
-    public long getLeave_time() {
+    public Long getLeave_time() {
         return leave_time;
     }
 
-    public void setLeave_time(long leave_time) {
+    public void setLeave_time(Long leave_time) {
         this.leave_time = leave_time;
     }
 
@@ -104,11 +104,11 @@ public class DataReportBean {
         this.ip = ip;
     }
 
-    public long getContent_id() {
+    public Long getContent_id() {
         return content_id;
     }
 
-    public void setContent_id(long content_id) {
+    public void setContent_id(Long content_id) {
         this.content_id = content_id;
     }
 

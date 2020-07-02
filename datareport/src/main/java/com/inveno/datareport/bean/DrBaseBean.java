@@ -5,27 +5,27 @@ package com.inveno.datareport.bean;
  */
 public class DrBaseBean {
 
-    String product_id;
-    String uid;
+    String product_id="";
+    String uid="";
     long pid;
-    String app_ver;
-    String api_ver;
+    String app_ver="";
+    String api_ver="";
 
-    String network;
+    String network="";
 
-    String upack;
-    String location;
-    String imei;
-    String aid;
-    String brand;
-    String model;
-    String osv;
+    String upack="";
+    String location="";
+    String imei="";
+    String aid="";
+    String brand="";
+    String model="";
+    String osv="";
     String platform = "android";
-    String language;
-    String mcc;
-    String mnc;
-    String referrer;
-    String sid;
+    String language="";
+    String mcc="";
+    String mnc="";
+    String referrer="";
+    String sid="";
 
 
     public String getProduct_id() {
