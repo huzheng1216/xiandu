@@ -79,6 +79,10 @@ public enum DataManager {
         drBaseBean.setReferrer(referrer);
     }
 
+    public void setLocation(String location){
+        drBaseBean.setLocation(location);
+    }
+
 //    private static String createAdTk(long time) {
 //        return Hashing.md5().newHasher().putString("e3dccdbeeefeb574b3ad7ae5df1a2cf34b7aeabb" + "::" + time, Charsets.UTF_8).hash().toString();
 //    }
@@ -164,7 +168,6 @@ public enum DataManager {
     private void setData(Context context, DataReportBean dataReportBean) {
         initUid();
         long now = System.currentTimeMillis();
-        dataReportBean.setReport_time(now);
         dataReportBean.setEvent_time(now);
         dataReportBean.setTk(InvenoServiceContext.product().createTk("",""+now));
         dataReportBean.setIp(NetWorkUtil.getIpAddress(context));

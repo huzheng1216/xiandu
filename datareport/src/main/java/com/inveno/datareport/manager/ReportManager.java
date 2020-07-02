@@ -102,4 +102,11 @@ public enum ReportManager {
         readBean = null;
     }
 
+    public void setReferrer(String referrer) {
+        DataManager.INSTANCE.setReferrer(referrer);
+    }
+
+    public void setLocation(String location){
+        DataManager.INSTANCE.setLocation(location);
+    }
 }
