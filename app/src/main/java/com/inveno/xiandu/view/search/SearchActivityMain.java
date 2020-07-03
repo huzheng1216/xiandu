@@ -9,6 +9,8 @@ import android.view.WindowManager;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ import com.inveno.xiandu.view.components.DelayerEditText;
 import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,6 +68,8 @@ public class SearchActivityMain extends BaseActivity {
     View bt_search_main_cancel;
     @BindView(R.id.search_ad_ll)
     LinearLayout search_ad_ll;
+    @BindView(R.id.search_delete_title)
+    ImageView search_delete_title;
 
     private AdModel adModel;
 
@@ -81,6 +86,7 @@ public class SearchActivityMain extends BaseActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);  // 垂直排列
         historyRecyclerView.addItemDecoration(new GridSpacingItemDecoration(3, getResources().getDimensionPixelSize(R.dimen.adapter_search_history), true));
         historyRecyclerView.setLayoutManager(layoutManager);
+        setCursorColor(editText);
         editText.setOnDelayerTextChange(new DelayerEditText.OnDelayerTextChange() {
             @Override
             public void textChange(String title) {
@@ -106,7 +112,7 @@ public class SearchActivityMain extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         iosTypeDialog.dismiss();
-                        iosTypeDialog=null;
+                        iosTypeDialog = null;
                         history.clear();
                         historyAdapter.notifyDataSetChanged();
                         del.setVisibility(View.GONE);
@@ -117,7 +123,7 @@ public class SearchActivityMain extends BaseActivity {
                     @Override
                     public void onClick(View v) {
                         iosTypeDialog.dismiss();
-                        iosTypeDialog=null;
+                        iosTypeDialog = null;
                     }
                 });
 
@@ -139,6 +145,13 @@ public class SearchActivityMain extends BaseActivity {
                 ActivityCompat.finishAfterTransition(SearchActivityMain.this);
             }
         });
+        ClickUtil.bindSingleClick(search_delete_title, 500, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+            }
+        });
+
         //本地历史
         String localHistory = SPUtils.getInformain(Keys.SEARCH_HISTORY, "");
         history = new ArrayList<>();
@@ -146,9 +159,9 @@ public class SearchActivityMain extends BaseActivity {
         if (strings != null) {
             history.addAll(strings);
         }
-        if (history.size()<1){
+        if (history.size() < 1) {
             del.setVisibility(View.GONE);
-        }else{
+        } else {
             del.setVisibility(View.VISIBLE);
         }
         historyAdapter = new HistoryAdapter(history);
@@ -171,6 +184,22 @@ public class SearchActivityMain extends BaseActivity {
         loadAd();
     }
 
+    /**
+     * 反射设置光标颜色
+     *
+     * @param mEditText
+     */
+    private void setCursorColor(EditText mEditText) {
+
+        try {
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(mEditText, R.drawable.my_cursor);
+        } catch (Exception ignored) {
+        }
+
+    }
+
     private void search(String title) {
         //TODO 搜索
         ARouter.getInstance().build(ARouterPath.ACTIVITY_SEARCH_RESULT)
@@ -191,7 +220,7 @@ public class SearchActivityMain extends BaseActivity {
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = dlg.getWindow().getAttributes();
-        lp.width = (int)(windowManager.getDefaultDisplay().getWidth()* 0.8); //设置宽度
+        lp.width = (int) (windowManager.getDefaultDisplay().getWidth() * 0.8); //设置宽度
         dlg.getWindow().setAttributes(lp);
     }
 
@@ -204,12 +233,12 @@ public class SearchActivityMain extends BaseActivity {
     /**
      * 加载广告
      */
-    private void loadAd(){
+    private void loadAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(SEARCH, this).onSuccess(wrapper -> {
 //            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
-            NormalAdViewHolder holder = ((NormalAdViewHolder)ADViewHolderFactory.create(SearchActivityMain.this, AD_SEARCH_TYPE));
-            holder.onBindViewHolder(SearchActivityMain.this,adModel.getWrapper().getAdValue(),0);
+            NormalAdViewHolder holder = ((NormalAdViewHolder) ADViewHolderFactory.create(SearchActivityMain.this, AD_SEARCH_TYPE));
+            holder.onBindViewHolder(SearchActivityMain.this, adModel.getWrapper().getAdValue(), 0);
             View view = holder.getViewGroup();
             search_ad_ll.addView(view);
             search_ad_ll.setVisibility(View.VISIBLE);

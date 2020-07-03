@@ -59,7 +59,7 @@
             android:layout_centerVertical="true"
             android:padding="7dp"
             android:src="@drawable/black_back_arrow"
-            android:tint="@color/base_color"
+            android:tint="@color/black"
             android:transitionName="photo" />
 
         <com.inveno.xiandu.view.components.DelayerEditText
@@ -69,14 +69,22 @@
             android:layout_toLeftOf="@id/bt_search_main_cancel"
             android:layout_toRightOf="@id/bt_search_main_back"
             android:background="@drawable/background_search_main_toolbar"
-            android:hint="输入书名或作者"
+            android:hint="请输入书名/作者名"
             android:imeOptions="actionSearch"
             android:inputType="text"
             android:maxLength="18"
             android:paddingStart="5dp"
             android:singleLine="true"
-            android:textColorHint="#884577FF"
+            android:textColorHint="@color/gray_9"
             android:textSize="14sp" />
+        <ImageView
+            android:id="@+id/search_delete_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search_delete_title"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:layout_toLeftOf="@id/bt_search_main_cancel"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -103,10 +111,10 @@
 
     <ImageView
         android:id="@+id/bt_search_main_history_del"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_delete_bt_64dp"
+        android:src="@drawable/search_delete"
         app:layout_constraintEnd_toEndOf="@+id/main_search_layout"
         app:layout_constraintTop_toBottomOf="@+id/search_ad_ll" />
 

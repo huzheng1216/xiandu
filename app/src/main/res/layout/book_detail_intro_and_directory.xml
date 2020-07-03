@@ -51,7 +51,7 @@
             android:textColor="@color/gray_3"
             android:drawablePadding="4dp"
             android:layout_marginStart="20dp"
-            android:drawableLeft="@mipmap/ic_read_menu_category"/>
+            android:drawableLeft="@drawable/detail_record"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
