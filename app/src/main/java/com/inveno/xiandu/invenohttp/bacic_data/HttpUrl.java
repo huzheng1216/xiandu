@@ -1,5 +1,7 @@
 package com.inveno.xiandu.invenohttp.bacic_data;
 
+import com.inveno.xiandu.BuildConfig;
+
 /**
  * @author yongji.wang
  * @date 2020/6/8 14:54
@@ -8,8 +10,7 @@ package com.inveno.xiandu.invenohttp.bacic_data;
  * @Version：1.0.0
  */
 public class HttpUrl {
-    //    private static String HOST_URI = "https://novel.inveno.com/novel";//生产环境
-    private static String HOST_URI = "http://121.201.120.128:9000";//测试环境
+    private static String HOST_URI = BuildConfig.InvenoUrl;//请求地址
 
     public static String GET_CODE = "/user/get_code";
     public static String LOGIN_PHONE = "/user/login_phone";

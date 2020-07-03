@@ -64,41 +64,84 @@ android {
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
+
+            buildConfigField 'String', 'InvenoUrl', '"http://baidu.com"'
         }
         debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+
+            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
+
         }
     }
-//    productFlavors {
-//        inveno {
-//
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//        inveno {
-//        }
-//    }
+    productFlavors {
+//      测试环境 其他
+        dev {
+            buildConfigField 'int', 'referrer', '1'
 
+        }
+//      2官方渠道
+        inveno {
+            buildConfigField 'int', 'referrer', '2'
+        }
+
+//      3应用宝
+        tencent {
+            buildConfigField 'int', 'referrer', '3'
+        }
+//      4小米商店
+        xiaomi {
+            buildConfigField 'int', 'referrer', '4'
+        }
+//      5 360手机助手
+        store360 {
+            buildConfigField 'int', 'referrer', '5'
+        }
+
+//      6华为
+        huawei {
+            buildConfigField 'int', 'referrer', '6'
+        }
+//      7oppo
+        oppo {
+            buildConfigField 'int', 'referrer', '7'
+        }
+//      8豌豆荚
+        wandoujia {
+            buildConfigField 'int', 'referrer', '8'
+        }
+//      9阿里旗下
+        ali {
+            buildConfigField 'int', 'referrer', '9'
+        }
+//      10安智
+        anzhi {
+            buildConfigField 'int', 'referrer', '10'
+        }
+//      11木蚂蚁
+        mumayi {
+            buildConfigField 'int', 'referrer', '11'
+        }
+//      12力趣
+        liqu {
+            buildConfigField 'int', 'referrer', '12'
+        }
+//      13百度
+        baidu {
+            buildConfigField 'int', 'referrer', '13'
+        }
+//      14vivo
+        vivo {
+            buildConfigField 'int', 'referrer', '14'
+        }
+
+//        1	其他
+        other {
+            buildConfigField 'int', 'referrer', '1'
+        }
+    }
 
 
     compileOptions {
@@ -131,11 +174,11 @@ android {
                 def outputFile = output.outputFile
                 if (outputFile != null && outputFile.name.endsWith('.apk')) {
                     def time = buildTime()
-                    def fileName = defaultConfig.versionName + "/" + variant.name + "-V" + defaultConfig.versionName + "-" + time + ".apk"
+                    def fileName = variant.name + "/" + variant.name + "-V" + defaultConfig.versionName + "-" + time + ".apk"
                     outputFileName = fileName
-                    variant.getPackageApplication().outputDirectory = new File("../../output")
+                    variant.getPackageApplication().outputDirectory = new File("../../output/" + defaultConfig.versionName)
 //                    output.outputFile = new File("../../../output", fileName)
-                    apkFile = "../../output/" + defaultConfig.versionName + "/" + "APKNAMERelease" + "-V" + defaultConfig.versionName + "-" + time + ".apk"
+                    apkFile = "../../output/" + defaultConfig.versionName + "/" + variant.name + "/"  + "APKNAMERelease" + "-V" + defaultConfig.versionName + "-" + time + ".apk"
                 }
 
             }
@@ -203,7 +246,7 @@ dependencies {
     implementation project(path: ':free_time_read_lib_modules:inveno-ad-service')
     implementation project(path: ':basics_modules:basics-service')
     implementation project(path: ':basics_modules:appcompat')
-    implementation project (":ad_lib")
+    implementation project(":ad_lib")
     implementation project(path: ':free_time_read_lib_modules:book-service')
-    implementation project (":datareport")
+    implementation project(":datareport")
 }
