@@ -381,7 +381,7 @@ public class BookDetailActivity extends BaseActivity {
         initDirectoryPopwindow();
 
         loadAd();
-        report();
+
     }
 
     private boolean isTextView(TextView textView) {
@@ -761,7 +761,7 @@ public class BookDetailActivity extends BaseActivity {
         if (size > 0 && size > last) {
             for (int i = first; i <= last; i++) {
                 BookShelf bookShelf = bookShelfs.get(i);
-                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
+//                Log.i("ReportManager", "name:" + bookShelf.getBook_name());
                 long contentId = bookShelf.getContent_id();
                 ReportManager.INSTANCE.reportBookImp(11, "", "", 9,
                         0, contentId, BookDetailActivity.this, ServiceContext.userService().getUserPid());
@@ -776,4 +776,9 @@ public class BookDetailActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        report();
+    }
 }

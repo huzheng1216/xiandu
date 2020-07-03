@@ -272,7 +272,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mBookId = bookShelf.getContent_id() + "";
         startBottomAd();
         startChapterAD();
-        report();
+
     }
 
     /**
@@ -958,6 +958,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onStart() {
         super.onStart();
         registerBrightObserver();
+        report();
         ReportManager.INSTANCE.readBookStart("", "", 0, bookShelf.getContent_id());
     }
 
@@ -983,13 +984,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     protected void onStop() {
+        ReportManager.INSTANCE.readBookStartEnd(this, ServiceContext.userService().getUserPid());
         super.onStop();
         unregisterBrightObserver();
         //结束心跳
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
-        ReportManager.INSTANCE.readBookStartEnd(this, ServiceContext.userService().getUserPid());
+
     }
 
     @Override

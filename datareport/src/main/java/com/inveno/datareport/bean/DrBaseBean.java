@@ -24,8 +24,9 @@ public class DrBaseBean {
     String language="";
     String mcc="";
     String mnc="";
-    String referrer="";
+    int referrer;
     String sid="";
+    int seq;
 
 
     public String getProduct_id() {
@@ -158,11 +159,11 @@ public class DrBaseBean {
         this.mnc = mnc;
     }
 
-    public String getReferrer() {
+    public int getReferrer() {
         return referrer;
     }
 
-    public void setReferrer(String referrer) {
+    public void setReferrer(int referrer) {
         this.referrer = referrer;
     }
 
@@ -180,5 +181,17 @@ public class DrBaseBean {
 
     public void setUpack(String upack) {
         this.upack = upack;
+    }
+
+    public int getSeq() {
+        return seq;
+    }
+
+    public void setSeq(int seq) {
+        this.seq = seq;
+    }
+
+    public int increaseSeq(){
+        return ++this.seq;
     }
 }

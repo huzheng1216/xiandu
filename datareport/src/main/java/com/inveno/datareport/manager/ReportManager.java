@@ -24,7 +24,6 @@ public enum ReportManager {
     int currentType;
     int currentPageId;
 
-
     ReportManager() {
         reportCache = new ReportCache();
     }
@@ -47,6 +46,7 @@ public enum ReportManager {
             ReportService.INSTANCE.report(map);
         }
         appDurationBean = null;
+        resetSeq();
     }
 
     public void setUpack(String upack) {
@@ -103,11 +103,15 @@ public enum ReportManager {
         readBean = null;
     }
 
-    public void setReferrer(String referrer) {
+    public void setReferrer(int referrer) {
         DataManager.INSTANCE.setReferrer(referrer);
     }
 
     public void setLocation(String location) {
         DataManager.INSTANCE.setLocation(location);
+    }
+
+    public void resetSeq(){
+        DataManager.INSTANCE.setSeq(0);
     }
 }

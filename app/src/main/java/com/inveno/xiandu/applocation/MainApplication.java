@@ -57,6 +57,8 @@ public class MainApplication extends Application implements Application.Activity
         InvenoServiceContext.init(this);
 
         registerActivityLifecycleCallbacks(this);
+
+        ReportManager.INSTANCE.setReferrer(BuildConfig.referrer);
     }
 
     public void initCrash(){

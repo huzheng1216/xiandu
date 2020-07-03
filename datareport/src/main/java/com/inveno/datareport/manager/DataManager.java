@@ -37,7 +37,6 @@ public enum DataManager {
         IProductService productService = InvenoServiceContext.product();
         initUid();
 
-
         drBaseBean.setProduct_id(productService.getProductId());
         drBaseBean.setApp_ver(androidParamProvider.app().getVersionName());
         drBaseBean.setApi_ver(Config.API_VER);
@@ -52,15 +51,11 @@ public enum DataManager {
         drBaseBean.setAid(androidParamProvider.device().getAid());
         drBaseBean.setPlatform(androidParamProvider.device().getPlatform());
 
-        drBaseBean.setReferrer("");
-
     }
 
     private void initUid(){
         String uid = InvenoServiceContext.uid().getUid();
-        if (!TextUtils.isEmpty(uid)) {
-            drBaseBean.setUid(uid);
-        }
+        drBaseBean.setUid(uid);
     }
 
     public void initPid(long pid) {
@@ -75,17 +70,17 @@ public enum DataManager {
         drBaseBean.setUpack(upack);
     }
 
-    public void setReferrer(String referrer) {
+    public void setSeq(int seq){
+        drBaseBean.setSeq(seq);
+    }
+
+    public void setReferrer(int referrer) {
         drBaseBean.setReferrer(referrer);
     }
 
     public void setLocation(String location){
         drBaseBean.setLocation(location);
     }
-
-//    private static String createAdTk(long time) {
-//        return Hashing.md5().newHasher().putString("e3dccdbeeefeb574b3ad7ae5df1a2cf34b7aeabb" + "::" + time, Charsets.UTF_8).hash().toString();
-//    }
 
     public  LinkedHashMap<String, Object> reportPageImp(int pageId, String upack, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
@@ -94,7 +89,7 @@ public enum DataManager {
         dataReportBean.setEvent_id(EventIdType.PAGE_IMP);
         dataReportBean.setPage_id(pageId);
 
-        Log.i("ReportManager"," upack" + upack + "  "+TextUtils.isEmpty(upack));
+//        Log.i("ReportManager"," upack" + upack + "  "+TextUtils.isEmpty(upack));
         dataReportBean.setUpack(upack);
 
         return parseToMap(drBaseBean, dataReportBean);
@@ -175,7 +170,9 @@ public enum DataManager {
     }
 
     private LinkedHashMap<String, Object> parseToMap(DrBaseBean drBaseBean, DataReportBean dataReportBean) {
+        int seq = drBaseBean.increaseSeq();
         JSONObject jsonObject = (JSONObject) JSON.toJSON(drBaseBean);
+        jsonObject.put("seq",seq);
 
         //一段奇怪的代码
         String newJson = JSON.toJSONString(dataReportBean);
