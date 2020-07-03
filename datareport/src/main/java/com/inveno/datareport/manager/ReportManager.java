@@ -19,13 +19,15 @@ public enum ReportManager {
 
     ReadBean readBean;
 
-    ReportCache reportCache;
+    ReportCache reportCacheImp;
+    ReportCache reportCacheClick;
 
     int currentType;
     int currentPageId;
 
     ReportManager() {
-        reportCache = new ReportCache();
+        reportCacheImp = new ReportCache();
+        reportCacheClick = new ReportCache();
     }
 
     public void appStart() {
@@ -61,7 +63,7 @@ public enum ReportManager {
     }
 
     public void reportBookImp(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context, long pid) {
-        if (reportCache.ifCanReport(pageId, type, contentId)) {
+        if (reportCacheImp.ifCanReport(pageId, type, contentId)) {
             DataManager.INSTANCE.initPid(pid);
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookImp(pageId, upack, cpack, type, serverTime, contentId, context);
             Log.i("ReportManager", "reportBookImp json:" + map);
@@ -72,10 +74,13 @@ public enum ReportManager {
     public void reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context, long pid) {
         currentPageId = pageId;
         currentType = type;
-        DataManager.INSTANCE.initPid(pid);
-        LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
-        Log.i("ReportManager", "reportBookClick json:" + map);
-        ReportService.INSTANCE.report(map);
+        if (reportCacheClick.ifCanReport(pageId, type, contentId)) {
+            DataManager.INSTANCE.initPid(pid);
+            LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
+            Log.i("ReportManager", "reportBookClick json:" + map);
+            ReportService.INSTANCE.report(map);
+        }
+        reportBookImp(pageId,upack,cpack,type,serverTime,contentId,context,pid);
     }
 
     public void readBookStart(String upack, String cpack, long serverTime, long contentId) {
@@ -95,7 +100,7 @@ public enum ReportManager {
         if (readBean != null) {
             DataManager.INSTANCE.initPid(pid);
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportReadBookDuration(readBean.pageId, readBean.upack, readBean.cpack,
-                    readBean.type, readBean.serverTime, System.currentTimeMillis() - readBean.startTime,
+                    readBean.serverTime, System.currentTimeMillis() - readBean.startTime,
                     readBean.contentId, readBean.startTime, context);
             Log.i("ReportManager", "readBookStartEnd json:" + map);
             ReportService.INSTANCE.report(map);
@@ -111,7 +116,7 @@ public enum ReportManager {
         DataManager.INSTANCE.setLocation(location);
     }
 
-    public void resetSeq(){
+    public void resetSeq() {
         DataManager.INSTANCE.setSeq(0);
     }
 }

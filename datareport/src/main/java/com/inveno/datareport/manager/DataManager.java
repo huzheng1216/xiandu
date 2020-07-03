@@ -128,7 +128,7 @@ public enum DataManager {
     }
 
 
-    public  LinkedHashMap<String, Object> reportReadBookDuration(int pageId, String upack, String cpack, int type, long serverTime, long stayTime, long contentId, long eventTime, Context context) {
+    public  LinkedHashMap<String, Object> reportReadBookDuration(int pageId, String upack, String cpack, long serverTime, long stayTime, long contentId, long eventTime, Context context) {
         DataReportBean dataReportBean = new DataReportBean();
 
         setData(context, dataReportBean);
@@ -136,7 +136,6 @@ public enum DataManager {
         dataReportBean.setPage_id(pageId);
         dataReportBean.setUpack(upack);
         dataReportBean.setCpack(cpack);
-        dataReportBean.setType(type);
         dataReportBean.setServer_time(serverTime);
         dataReportBean.setStay_time(stayTime);
         dataReportBean.setContent_id(contentId);

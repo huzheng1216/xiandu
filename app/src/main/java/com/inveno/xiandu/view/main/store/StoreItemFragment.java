@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -197,7 +198,7 @@ public class StoreItemFragment extends BaseFragment {
                                 baseDataBeans.addAll(mDataBeans);
                                 mDataBeans = baseDataBeans;
                                 bookCityAdapter.setDataList(mDataBeans);
-                                impReport();
+//                                impReport();
                                 return null;
                             }
                         })
@@ -272,6 +273,13 @@ public class StoreItemFragment extends BaseFragment {
                 impReport(first, last);
             }
         });
+        //TODO 这里可能内存泄漏
+        recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                impReport();
+            }
+        });
         return view;
     }
 
@@ -333,7 +341,7 @@ public class StoreItemFragment extends BaseFragment {
                                 bookCityAdapter.setFooterText("没有更多数据");
                             }
                             bookCityAdapter.setDataList(mDataBeans);
-                            impReport();
+//                            impReport();
                         } else {
                             bookCityAdapter.setDataList(mDataBeans);
                             store_error.setVisibility(View.VISIBLE);

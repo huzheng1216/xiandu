@@ -295,7 +295,7 @@ public class RankingActivity extends TitleBarBaseActivity {
             rightDataAdapter.addAd(adModel);
             return null;
         }).onFail((integer, s) -> {
-            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+//            Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         }).execute();
     }
@@ -314,7 +314,7 @@ public class RankingActivity extends TitleBarBaseActivity {
     }
 
     private void clickReport(long contentId) {
-        ReportManager.INSTANCE.reportBookClick(6, "", "", 10,
+        ReportManager.INSTANCE.reportBookClick(5, "", "", 10,
                 0, contentId, RankingActivity.this, ServiceContext.userService().getUserPid());
     }
 
@@ -330,7 +330,7 @@ public class RankingActivity extends TitleBarBaseActivity {
                     RankingData rankingData = (RankingData) baseDataBean;
 //                    Log.i("ReportManager", "name:" + rankingData.getBook_name());
                     long contentId = rankingData.getContent_id();
-                    ReportManager.INSTANCE.reportBookImp(6, "", "", 10,
+                    ReportManager.INSTANCE.reportBookImp(5, "", "", 10,
                             0, contentId, RankingActivity.this, ServiceContext.userService().getUserPid());
                 }
 
