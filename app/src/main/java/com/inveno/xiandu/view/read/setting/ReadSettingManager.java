@@ -93,11 +93,11 @@ public class ReadSettingManager {
     }
 
     public int getTextSize() {
-        return SPUtils.getInformain(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(14));
+        return SPUtils.getInformain(SHARED_READ_TEXT_SIZE, ScreenUtils.spToPx(21));
     }
 
     public boolean isDefaultTextSize() {
-        return SPUtils.getInformain(SHARED_READ_IS_TEXT_DEFAULT, false);
+        return SPUtils.getInformain(SHARED_READ_IS_TEXT_DEFAULT, true);
     }
 
     public PageMode getPageMode() {
