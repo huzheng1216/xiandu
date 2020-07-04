@@ -58,10 +58,10 @@ public class MainApplication extends Application implements Application.Activity
 
         registerActivityLifecycleCallbacks(this);
 
-        ReportManager.INSTANCE.setReferrer(BuildConfig.referrer);
+        ReportManager.INSTANCE.init(BuildConfig.referrer, this);
     }
 
-    public void initCrash(){
+    public void initCrash() {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
     }
@@ -110,16 +110,15 @@ public class MainApplication extends Application implements Application.Activity
     }
 
 
-
     /**
      * 判断是否在前台
      */
     private void isForeground() {
-        if (activityCount>0) {
+        if (activityCount > 0) {
             isForeground = true;
-        }else {
-            isForeground=false;
-            ReportManager.INSTANCE.appEnd(this , ServiceContext.userService().getUserPid(),"");
+        } else {
+            isForeground = false;
+            ReportManager.INSTANCE.appEnd(this, ServiceContext.userService().getUserPid(), "");
         }
 //        Log.e("ReportManager",+activityCount+"-------isForeground="+isForeground);
     }

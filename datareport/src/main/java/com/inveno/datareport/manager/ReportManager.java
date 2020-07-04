@@ -7,6 +7,7 @@ import com.inveno.datareport.bean.AppDurationBean;
 import com.inveno.datareport.bean.ReportCache;
 import com.inveno.datareport.bean.ReadBean;
 import com.inveno.datareport.service.ReportService;
+import com.inveno.datareport.utils.ReportSPUtils;
 
 import java.util.LinkedHashMap;
 import java.util.UUID;
@@ -36,6 +37,7 @@ public enum ReportManager {
             DataManager.INSTANCE.setSid(UUID.randomUUID().toString());
             appDurationBean.startTime = System.currentTimeMillis();
         }
+        ReReportManager.INSTANCE.checkReReport();
     }
 
     public void appEnd(Context context, long pid, String upack) {
@@ -44,11 +46,12 @@ public enum ReportManager {
             DataManager.INSTANCE.initPid(pid);
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportAppDuration(appDurationBean.startTime,
                     appDurationBean.endTime - appDurationBean.startTime, appDurationBean.endTime, context, upack);
-            Log.i("ReportManager", "appEnd json:" + map);
+//            Log.i("ReportManager", "appEnd json:" + map);
             ReportService.INSTANCE.report(map);
         }
         appDurationBean = null;
         resetSeq();
+        ReReportManager.INSTANCE.checkReReport();
     }
 
     public void setUpack(String upack) {
@@ -58,7 +61,7 @@ public enum ReportManager {
     public void reportPageImp(int pageId, String upack, Context context, long pid) {
         DataManager.INSTANCE.initPid(pid);
         LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportPageImp(pageId, upack, context);
-        Log.i("ReportManager", "reportPageImp json:" + map);
+//        Log.i("ReportManager", "reportPageImp json:" + map);
         ReportService.INSTANCE.report(map);
     }
 
@@ -66,9 +69,10 @@ public enum ReportManager {
         if (reportCacheImp.ifCanReport(pageId, type, contentId)) {
             DataManager.INSTANCE.initPid(pid);
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookImp(pageId, upack, cpack, type, serverTime, contentId, context);
-            Log.i("ReportManager", "reportBookImp json:" + map);
+//            Log.i("ReportManager", "reportBookImp json:" + map);
             ReportService.INSTANCE.report(map);
         }
+        ReReportManager.INSTANCE.checkReReport();
     }
 
     public void reportBookClick(int pageId, String upack, String cpack, int type, long serverTime, long contentId, Context context, long pid) {
@@ -77,10 +81,11 @@ public enum ReportManager {
         if (reportCacheClick.ifCanReport(pageId, type, contentId)) {
             DataManager.INSTANCE.initPid(pid);
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportBookClick(pageId, upack, cpack, type, serverTime, contentId, context);
-            Log.i("ReportManager", "reportBookClick json:" + map);
+//            Log.i("ReportManager", "reportBookClick json:" + map);
             ReportService.INSTANCE.report(map);
         }
         reportBookImp(pageId,upack,cpack,type,serverTime,contentId,context,pid);
+        ReReportManager.INSTANCE.checkReReport();
     }
 
     public void readBookStart(String upack, String cpack, long serverTime, long contentId) {
@@ -94,6 +99,7 @@ public enum ReportManager {
             readBean.serverTime = serverTime;
             readBean.contentId = contentId;
         }
+        ReReportManager.INSTANCE.checkReReport();
     }
 
     public void readBookStartEnd(Context context, long pid) {
@@ -102,14 +108,17 @@ public enum ReportManager {
             LinkedHashMap<String, Object> map = DataManager.INSTANCE.reportReadBookDuration(readBean.pageId, readBean.upack, readBean.cpack,
                     readBean.serverTime, System.currentTimeMillis() - readBean.startTime,
                     readBean.contentId, readBean.startTime, context);
-            Log.i("ReportManager", "readBookStartEnd json:" + map);
+//            Log.i("ReportManager", "readBookStartEnd json:" + map);
             ReportService.INSTANCE.report(map);
         }
         readBean = null;
+
+        ReReportManager.INSTANCE.checkReReport();
     }
 
-    public void setReferrer(int referrer) {
+    public void init(int referrer , Context context) {
         DataManager.INSTANCE.setReferrer(referrer);
+        ReportSPUtils.init(context);
     }
 
     public void setLocation(String location) {
