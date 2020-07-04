@@ -600,6 +600,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (mLlBottomMenu.getVisibility() == VISIBLE) {
+                            if (progress <= 0) {
+                                progress = 1;
+                            }
                             //显示标题
                             mTvPageTip.setText((progress) + "/" + (mSbChapterProgress.getMax()));
                             mTvPageTip.setVisibility(VISIBLE);
@@ -615,6 +618,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     public void onStopTrackingTouch(SeekBar seekBar) {
                         //进行切换
                         int pagePos = mSbChapterProgress.getProgress() - 1;
+                        if (pagePos < 0) {
+                            pagePos = 0;
+                        }
                         if (pagePos != mPageLoader.getChapterPos()) {
                             mPageLoader.skipToChapter(pagePos, 0);
                         }

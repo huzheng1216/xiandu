@@ -51,6 +51,9 @@ public class StoreFragment extends BaseFragment {
     private String[] strings = new String[]{"推荐", "男频", "女频"};
     MyAdapter myAdapter;
 
+    public StoreFragment(){
+
+    }
     public static StoreFragment newInstance(String name) {
         Bundle args = new Bundle();
         args.putString("name", name);

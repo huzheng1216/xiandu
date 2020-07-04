@@ -73,8 +73,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:drawableRight="@drawable/ic_mine_right"
+            android:drawableEnd="@drawable/ic_mine_right"
             android:drawablePadding="10dp"
+            android:maxEms="15"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="湾仔小芋头"
             android:textColor="@color/gray_9"
             android:textSize="14sp" />

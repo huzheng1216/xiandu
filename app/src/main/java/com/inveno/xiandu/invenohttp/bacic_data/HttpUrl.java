@@ -48,6 +48,8 @@ public class HttpUrl {
     public static String GET_READ_TRACK = "/behavior/get_read_track"; //阅读足迹查询
     public static String DELETE_READ_TRACK = "/behavior/delete_read_track"; //删除阅读足迹
 
+    public static String UPDATA_URL = "/behavior/get_app_version"; //更新
+
 
     public static String getHttpUri(String url) {
         return HOST_URI + url;

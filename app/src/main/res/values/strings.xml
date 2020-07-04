@@ -34,4 +34,21 @@
     <!--ad-->
     <string name="ad_tag_string">广告</string>
 
+    <string name="install">安装</string>
+    <string name="install_known">立即安装</string>
+    <string name="version_memory">版本大小:</string>
+    <string name="advice_download_in_wifi">\n\n建议:在WIFI情况下载安装</string>
+    <string name="new_version">发现新版本V</string>
+    <string name="new_version_update">更新內容：</string>
+    <string name="updata_known">立即更新</string>
+    <string name="updata_not">下次再说</string>
+    <string name="update_downloading">正在下载安装包</string>
+    <string name="updata_failure">更新失败</string>
+    <string name="download_failure_check_net_zone">下载失败 请检查网络和空间</string>
+    <string name="read_permissions">读写手机存储权限。您未授权，您可以去设置页面重新授权</string>
+    <string name="goto_setting">去设置</string>
+    <string name="close">关闭</string>
+    <string name="download_failed">下载失败</string>
+    <string name="update_download_failure">更新包下载失败</string>
+
 </resources>

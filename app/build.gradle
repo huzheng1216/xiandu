@@ -65,10 +65,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
 
-            buildConfigField 'String', 'InvenoUrl', '"http://baidu.com"'
+            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
@@ -249,4 +249,10 @@ dependencies {
     implementation project(":ad_lib")
     implementation project(path: ':free_time_read_lib_modules:book-service')
     implementation project(":datareport")
+
+    //权限管理
+    implementation 'com.mylhyl:acp:1.1.7'
+    //网络
+    implementation 'com.lzy.net:okgo:2.1.4'
+    implementation 'com.squareup.okhttp3:okhttp:3.14.2'
 }

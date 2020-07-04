@@ -1,17 +1,21 @@
 package com.inveno.xiandu.view.main;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -30,6 +34,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.inveno.android.device.param.provider.tools.NetWorkUtil;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.apkupdata.UpdateApkManager;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
@@ -42,10 +47,21 @@ import com.inveno.xiandu.view.main.my.MineFragment;
 import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.main.store.StoreFragment;
 import com.inveno.xiandu.view.main.welfare.WelfareFragment;
+import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
+import com.mylhyl.acp.Acp;
+import com.mylhyl.acp.AcpListener;
+import com.mylhyl.acp.AcpOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 @Route(path = ARouterPath.ACTIVITY_MAIN)
 public class MainActivity extends BaseActivity {
@@ -61,6 +77,12 @@ public class MainActivity extends BaseActivity {
 
     private Dialog dialog;
 
+    private Handler handler = new Handler();
+
+    private long firstTime;// 记录点击返回时第一次的时间毫秒值
+
+    private UpdateApkManager updateApkManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,20 +90,6 @@ public class MainActivity extends BaseActivity {
         requestMyPermissions();
         setContentView(R.layout.activity_main);
         setStatusBar(R.color.white, true);
-//        toolbar = findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
-//        searchLayout = findViewById(R.id.home_toolbar_search);
-//        pic = findViewById(R.id.home_tallbar_search_ic);
-//        ClickUtil.bindSingleClick(searchLayout, 200, new View.OnClickListener() {
-//            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, SerchActivityMain.class);
-//                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pic, "photo").toBundle();
-//                startActivity(intent, bundle);
-//            }
-//        });
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         bottomNavigationView.setItemIconTintList(null);
@@ -95,11 +103,6 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageSelected(int position) {
-//                if (position > 1) {
-//                    toolbar.setVisibility(View.GONE);
-//                }else{
-//                    toolbar.setVisibility(View.VISIBLE);
-//                }
                 if (menuItem != null) {
                     menuItem.setChecked(false);
                 } else {
@@ -129,10 +132,10 @@ public class MainActivity extends BaseActivity {
         if (!firstLaunch) {
             //用户协议
             agreementDialog();
+        }else{
+            updata();
         }
     }
-
-    private Handler handler = new Handler();
 
     @Override
     protected void onResume() {
@@ -191,7 +194,52 @@ public class MainActivity extends BaseActivity {
         }
     };
 
-    private long firstTime;// 记录点击返回时第一次的时间毫秒值
+    private void updata() {
+        //应用更新提示
+        updateApkManager = new UpdateApkManager.Builder(this).updateListener(new UpdateApkManager
+                .UpdateListener() {
+            @Override
+            public void acceptUpdate(String msg) {
+
+            }
+
+            @Override
+            public void rejectUpdate(String errorMsg) {
+                permissionsDialog();
+            }
+        });
+
+        updateApkManager.update();
+    }
+
+    /**
+     * 读写权限提示
+     */
+    private void permissionsDialog() {
+        Acp.getInstance(MainActivity.this).request(new AcpOptions.Builder()
+                        .setPermissions(
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                android.Manifest.permission.READ_EXTERNAL_STORAGE
+                        )
+                        .setDeniedMessage(getResources().getString(R.string
+                                .read_permissions))
+                        .setDeniedCloseBtn(getResources().getString(R.string.close))
+                        .setDeniedSettingBtn(getResources().getString(R.string
+                                .goto_setting))
+                        .build(),
+                new AcpListener() {
+                    @Override
+                    public void onGranted() {
+
+                    }
+
+                    @Override
+                    public void onDenied(List<String> permissions) {
+                        //increment.load();
+                        finish();
+                    }
+                });
+    }
 
     //协议弹窗
     private void agreementDialog() {
@@ -217,6 +265,7 @@ public class MainActivity extends BaseActivity {
         ClickUtil.bindSingleClick(btn_sure, 500, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                updata();
                 SPUtils.setInformain(Keys.AGREE_AGREEMENT, true);
                 dialog.dismiss();
             }

@@ -353,6 +353,7 @@ public class BookDetailActivity extends BaseActivity {
                             second_titleBar_title.setText("");
                             Glide.with(BookDetailActivity.this)
                                     .load(book.getPoster())
+                                    .apply(RequestOptions.bitmapTransform(new GlideBlurformation(BookDetailActivity.this)))
                                     .into(new SimpleTarget<Drawable>() {
                                         @Override
                                         public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {

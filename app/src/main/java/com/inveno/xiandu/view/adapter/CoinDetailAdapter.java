@@ -100,7 +100,7 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
         if (viewType == HEADER_ITEM_TYPE) {
             mVIewHoder = new HeaderViewHolder(getHeaderView());
         } else if (viewType == CONTENT_ITEM_TYPE) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_right_data_item, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_coin_detail, null);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             view.setLayoutParams(lp);
             mVIewHoder = new ContentViewHolder(view);
@@ -139,14 +139,13 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
             coin_detail_change = itemView.findViewById(R.id.coin_detail_change);
         }
 
-        @SuppressLint("SetTextI18n")
         @Override
         public void setData(Context context, BaseDataBean baseDataBean) {
             if (baseDataBean instanceof CoinDetailData) {
                 CoinDetailData coinDetailData = (CoinDetailData) baseDataBean;
                 coin_detail_name.setText(coinDetailData.getTask_name());
                 if (coinDetailData.getCoin() > 0) {
-                    coin_detail_change.setText("+" + String.valueOf(coinDetailData.getCoin()));
+                    coin_detail_change.setText(String.format("+%s金币", coinDetailData.getCoin()));
                 } else {
                     coin_detail_change.setText(String.valueOf(coinDetailData.getCoin()));
                 }

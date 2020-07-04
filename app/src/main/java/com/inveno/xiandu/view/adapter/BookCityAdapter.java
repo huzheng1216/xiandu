@@ -2,6 +2,7 @@ package com.inveno.xiandu.view.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.applocation.MainApplication;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BookShelf;
@@ -119,7 +121,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mListener.onItemClick(mDataList.get(finalDataPosition) , finalDataPosition);
+                        mListener.onItemClick(mDataList.get(finalDataPosition), finalDataPosition);
                     }
                 });
             }
@@ -131,7 +133,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
                     mListener.onChangeClick();
                 }
             });
-            if (position>2) {
+            if (position > 2) {
                 centerPostion = position;
             }
         } else if (holder instanceof BookCityAdapter.BigImageViewHolder) {
@@ -323,6 +325,13 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         public CenterTItleViewHolder(@NonNull View itemView) {
             super(itemView);
             recommend_text = itemView.findViewById(R.id.recommend_text);
+            //设置宋体
+            recommend_text.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+            //字体加粗
+            TextPaint tp = recommend_text.getPaint();
+            tp.setFakeBoldText(true);
+
+
             book_city_change = itemView.findViewById(R.id.book_city_change);
         }
 
@@ -331,7 +340,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             if (object instanceof RecommendName) {
                 recommend_text.setText(((RecommendName) object).getRecommendName());
                 RecommendName recommendName = (RecommendName) object;
-                if (recommendName.getRecommendName().equals("男生热文") ||recommendName.getRecommendName().equals("女生热文")) {
+                if (recommendName.getRecommendName().equals("男生热文") || recommendName.getRecommendName().equals("女生热文")) {
                     book_city_change.setVisibility(View.VISIBLE);
                 } else {
                     book_city_change.setVisibility(View.GONE);
@@ -500,12 +509,12 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     }
 
     public interface OnItemClickListener {
-        void onItemClick(BaseDataBean baseDataBean , int position);
+        void onItemClick(BaseDataBean baseDataBean, int position);
 
         void onChangeClick();
     }
 
-    public int getCenterPostion(){
+    public int getCenterPostion() {
         return centerPostion;
     }
 }

@@ -390,6 +390,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                             swipeRefreshLayout.setRefreshing(false);
                         }
                         ClassifyData mClassifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id() + "-" + book_status);
+                        rightDataAdapter.setNotDataFooter();
                         if (mClassifyData != null && mClassifyData.getNovel_list().size() > 0) {
 //                            no_book_show.setVisibility(View.GONE);
                         } else {

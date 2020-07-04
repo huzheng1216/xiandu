@@ -25,15 +25,16 @@
                     android:layout_height="265dp"
                     android:background="@drawable/welfare_top_bg"
                     android:orientation="vertical"
-                    android:paddingTop="30dp">
+                    android:paddingTop="28dp">
 
                     <TextView
+                        android:id="@+id/welfare_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
                         android:text="福利中心"
+                        android:textStyle="bold"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 
@@ -41,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="103dp"
                         android:layout_marginStart="20dp"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="20dp"
                         android:background="@drawable/welfare_top_coin_bg">
 
@@ -95,7 +96,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="220dp"
+                    android:layout_marginTop="248dp"
                     android:background="@drawable/pop_top_radius"
                     android:orientation="vertical">
 

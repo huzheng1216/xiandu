@@ -35,6 +35,7 @@ import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
 
+import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 
 import kotlin.Unit;
@@ -125,7 +126,8 @@ public class UserinfoActivity extends TitleBarBaseActivity {
         Toaster.showToastCenter(this, "修改昵称");
         View edit_nickname_view = getLayoutInflater().inflate(R.layout.edit_nickname_view, null, false);
         EditText edit_nickname_et = edit_nickname_view.findViewById(R.id.edit_nickname_et);
-        edit_nickname_et.setText(mine_user_name.getText().toString());
+        setCursorColor(edit_nickname_et);
+        edit_nickname_et.setHint(mine_user_name.getText().toString());
         //跳转到通知开关页面
         IosTypeDialog.Builder builder = new IosTypeDialog.Builder(this);
         builder.setTitle("修改昵称");
@@ -298,5 +300,20 @@ public class UserinfoActivity extends TitleBarBaseActivity {
                 return null;
             }
         }).execute();
+    }
+
+    /**
+     * 反射设置光标颜色
+     * @param mEditText
+     */
+    private void setCursorColor(EditText mEditText) {
+
+        try {
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(mEditText, R.drawable.my_cursor);
+        } catch (Exception ignored) {
+        }
+
     }
 }

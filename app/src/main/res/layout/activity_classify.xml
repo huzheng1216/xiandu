@@ -42,7 +42,7 @@
             <com.inveno.xiandu.view.components.tablayout.MyTabLayout
                 android:id="@+id/MyTabLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="43dp"
                 app:tabBackground="@color/transparent"
                 app:tabGravity="center"
                 app:tabIndicatorColor="@color/base_color"

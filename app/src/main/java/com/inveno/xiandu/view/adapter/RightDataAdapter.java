@@ -163,7 +163,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
     public void setNotDataFooter() {
         isNotMore = true;
-        notifyItemChanged(getItemCount() - 1);
+        notifyDataSetChanged();
     }
 
     public boolean isNotMore() {

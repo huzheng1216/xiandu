@@ -9,7 +9,7 @@ import android.content.SharedPreferences.Editor;
  */
 public class SPUtils {
 
-    private static String SP_KEY = "gou";
+    private static String SP_KEY = "xiandu";
     private static SharedPreferences settings;
 
     public static void init(String key, Context context) {
@@ -24,7 +24,7 @@ public class SPUtils {
     public static void setInformain(String Key, long Value) {
         Editor editor = settings.edit();
         editor.putLong(Key, Value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -45,7 +45,7 @@ public class SPUtils {
     public static void setInformain(String Key, String Value) {
         Editor editor = settings.edit();
         editor.putString(Key, Value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -80,7 +80,7 @@ public class SPUtils {
     public static void setInformain(String key, int value) {
         Editor editor = settings.edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -89,7 +89,7 @@ public class SPUtils {
     public static void setInformain(String key, boolean value) {
         Editor editor = settings.edit();
         editor.putBoolean(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -119,7 +119,7 @@ public class SPUtils {
     public static void setInformain(String name, String key, int value){
         Editor editor = settings.edit();
         editor.putInt(key, value);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -131,7 +131,7 @@ public class SPUtils {
      */
     public static void remove(String key) {
         Editor editor = settings.edit().remove(key);
-        editor.commit();
+        editor.apply();
     }
 
 }

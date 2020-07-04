@@ -75,6 +75,8 @@
                         android:text="筛选"
                         android:textColor="@color/white"
                         android:textSize="12sp"
+                        android:drawableEnd="@drawable/choise_down"
+                        android:drawablePadding="3dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -169,6 +171,8 @@
             android:layout_alignParentEnd="true"
             android:padding="20dp"
             android:text="收起"
+            android:drawableEnd="@drawable/choise_up"
+            android:drawablePadding="3dp"
             android:textColor="@color/base_color"
             android:textSize="12sp" />
     </RelativeLayout>

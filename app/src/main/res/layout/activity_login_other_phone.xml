@@ -1,111 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/login_bg"
     android:orientation="vertical">
 
-    <include layout="@layout/base_tittle_bar" />
-
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="90dp" />
-
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/login_bg_img"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="83dp"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/edit_radio_background"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/base_tittle_bar" />
+
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="104dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/edit_radio_background"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="+86"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="10dp"
+                android:layout_gravity="center"
+                android:background="#999999" />
+
+            <EditText
+                android:id="@+id/login_phone_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:background="@null"
+                android:ems="10"
+                android:hint="@string/login_please_input_phone_num"
+                android:imeOptions="normal"
+                android:inputType="phone"
+                android:lines="1"
+                android:textColor="@color/black"
+                android:textColorHint="#b5b5b5"
+                android:textCursorDrawable="@drawable/my_cursor"
+                android:textSize="16sp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:text="+86"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="10dp"
-            android:layout_gravity="center"
-            android:background="#999999" />
-
-        <EditText
-            android:id="@+id/login_phone_edit"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:autofillHints=""
-            android:background="@null"
-            android:ems="10"
-            android:hint="@string/login_please_input_phone_num"
-            android:imeOptions="normal"
-            android:inputType="phone"
-            android:lines="1"
-            android:textColor="@color/black"
-            android:textColorHint="#b5b5b5"
-            android:textCursorDrawable="@drawable/my_cursor"
-            android:textSize="16sp" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/login_phone_prompt"
-        android:textColor="#b5b5b5"
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/login_get_code"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/button_radio_background_disclick"
-        android:enabled="false"
-        android:gravity="center"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
-        android:text="@string/login_get_code"
-        android:textColor="@color/white"
-        android:textSize="15sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="30dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <CheckBox
-            android:id="@+id/agree_cb"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:checked="true" />
-
-        <TextView
-            android:id="@+id/agree_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="我已阅读并同意《用户协议》及《隐私政策》"
-            android:textColor="@color/gray_9"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/login_phone_prompt"
+            android:textColor="#b5b5b5"
             android:textSize="12sp" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/login_get_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="30dp"
+            android:background="@drawable/button_radio_background_disclick"
+            android:enabled="false"
+            android:gravity="center"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            android:text="@string/login_get_code"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="30dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/agree_cb"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:checked="true" />
+
+            <TextView
+                android:id="@+id/agree_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我已阅读并同意《用户协议》及《隐私政策》"
+                android:textColor="@color/gray_9"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

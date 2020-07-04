@@ -1,6 +1,9 @@
 package com.inveno.xiandu.view.main.welfare;
 
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +67,9 @@ public class WelfareFragment extends BaseFragment {
     @BindView(R.id.no_mission_detail)
     TextView no_mission_detail;
 
+    @BindView(R.id.welfare_title)
+    TextView welfare_title;
+
     private MissionAdapter missionAdapter;
     private List<MissionData> missionDataList = new ArrayList<>();
     private UserCoin mUserCoin;
@@ -91,6 +97,12 @@ public class WelfareFragment extends BaseFragment {
                 }
             }
         });
+
+        AssetManager mgr = getContext().getAssets();//得到AssetManager
+        Typeface tf = Typeface.createFromAsset(mgr, "fonts/sourcehanserifcn_regular.otf");
+        welfare_title.setTypeface(tf);
+        TextPaint tp = welfare_title.getPaint();
+        tp.setFakeBoldText(true);
         return view;
     }
 
@@ -165,8 +177,8 @@ public class WelfareFragment extends BaseFragment {
                 }).execute();
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(7,"",getContext(), ServiceContext.userService().getUserPid());
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(7, "", getContext(), ServiceContext.userService().getUserPid());
     }
 
 }

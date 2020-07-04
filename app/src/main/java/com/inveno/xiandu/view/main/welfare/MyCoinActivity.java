@@ -2,6 +2,7 @@ package com.inveno.xiandu.view.main.welfare;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextPaint;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.applocation.MainApplication;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.coin.CoinDetail;
 import com.inveno.xiandu.bean.coin.CoinDetailData;
@@ -47,6 +49,7 @@ public class MyCoinActivity extends BaseActivity {
     private TextView coin_exchange_rate;
     private TextView no_coin_detail;
     private CoinDetailAdapter coinDetailAdapter;
+    private TextView coin_detail_txt;
     private ArrayList<BaseDataBean> coinDetailDatas = new ArrayList<>();
 
     private int pageKnow = 0;
@@ -72,6 +75,11 @@ public class MyCoinActivity extends BaseActivity {
         coin_sum_get = findViewById(R.id.coin_sum_get);
         coin_exchange_rate = findViewById(R.id.coin_exchange_rate);
         no_coin_detail = findViewById(R.id.no_coin_detail);
+
+        coin_detail_txt = findViewById(R.id.coin_detail_txt);
+        coin_detail_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+        TextPaint tp = coin_detail_txt.getPaint();
+        tp.setFakeBoldText(true);
 
         RecyclerView coin_detail_recycleview = findViewById(R.id.coin_detail_recycleview);
         coinDetailAdapter = new CoinDetailAdapter(this, this, coinDetailDatas);

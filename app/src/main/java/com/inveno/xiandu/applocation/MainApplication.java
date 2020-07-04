@@ -3,6 +3,8 @@ package com.inveno.xiandu.applocation;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -28,14 +30,18 @@ import com.inveno.xiandu.utils.SPUtils;
  */
 public class MainApplication extends Application implements Application.ActivityLifecycleCallbacks {
     private static Context sInstance;
+    private static MainApplication mInstance;
 
     private int activityCount;//activity的count数
     public static boolean isForeground;//是否在前台
+
+    private static Typeface sanhansTypeface;
 
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        mInstance = this;
         Const.init();
         //初始化ARouter
         // 这两行必须写在init之前，否则这些配置在init过程中将无效
@@ -55,17 +61,35 @@ public class MainApplication extends Application implements Application.Activity
         //基础服务模块
         BasicsServiceModule.Companion.onApplicationCreate(this);
         InvenoServiceContext.init(this);
+        //初始化宋体
+        initfonts();
 
         registerActivityLifecycleCallbacks(this);
     }
 
-    public void initCrash(){
+    public void initCrash() {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(getApplicationContext());
     }
 
+    private void initfonts() {
+        AssetManager mmgr = getAssets();//得到AssetManager
+        sanhansTypeface = Typeface.createFromAsset(mmgr, "fonts/sourcehanserifcn_regular.otf");
+    }
+
+    public Typeface getSanhansTypeface() {
+        if (sanhansTypeface == null) {
+            initfonts();
+        }
+        return sanhansTypeface;
+    }
+
     public static Context getContext() {
         return sInstance;
+    }
+
+    public static MainApplication getInstance() {
+        return mInstance;
     }
 
     @Override
@@ -108,16 +132,15 @@ public class MainApplication extends Application implements Application.Activity
     }
 
 
-
     /**
      * 判断是否在前台
      */
     private void isForeground() {
-        if (activityCount>0) {
+        if (activityCount > 0) {
             isForeground = true;
-        }else {
-            isForeground=false;
-            ReportManager.INSTANCE.appEnd(this , ServiceContext.userService().getUserPid(),"");
+        } else {
+            isForeground = false;
+            ReportManager.INSTANCE.appEnd(this, ServiceContext.userService().getUserPid(), "");
         }
 //        Log.e("ReportManager",+activityCount+"-------isForeground="+isForeground);
     }

@@ -22,7 +22,9 @@
             android:layout_weight="1"
             android:background="@null"
             android:ems="10"
-            android:maxEms="10"
+            android:maxEms="15"
+            android:lines="1"
+            android:ellipsize="end"
             android:textColor="#B5B5B5"
             android:textSize="14sp" />
     </LinearLayout>
