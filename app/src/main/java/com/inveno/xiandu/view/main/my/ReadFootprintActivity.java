@@ -54,6 +54,7 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
+import static com.inveno.android.ad.config.ScenarioManifest.BOOK_SHELF;
 import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
 import static com.inveno.android.ad.config.ScenarioManifest.READ_FOOT_TRACE;
 
@@ -80,6 +81,8 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     private IosTypeDialog iosTypeDialog;
 
     private AdReadTrackModel adBookModel;
+    private int adCount;
+    private int adIndex;
 
     private RecyclerView footprint_recycle;
 
@@ -105,6 +108,12 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     protected void onResume() {
         super.onResume();
         initData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        report();
     }
 
     @Override
@@ -135,6 +144,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     impReport();
+                    loadMoreAd();
                 }
             }
         });
@@ -241,7 +251,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
         });
         getData();
         loadAd();
-        report();
+
     }
 
     private void getData() {
@@ -383,7 +393,9 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                     public Unit invoke(IndexedAdValueWrapper wrapper) {
 //                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                         adBookModel = new AdReadTrackModel(wrapper);
-                        readFootprintAdapter.addAd(adBookModel);
+                        adIndex = adBookModel.getIndex();
+                        readFootprintAdapter.addAd(adIndex , adBookModel);
+                        adCount++;
                         return null;
                     }
                 })
@@ -391,9 +403,41 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                     @Override
                     public Unit invoke(Integer integer, String s) {
                         Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                        adCount--;
                         return null;
                     }
                 }).execute();
+    }
+
+    private void loadMoreAd() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) footprint_recycle.getLayoutManager();
+        if (layoutManager != null) {
+            final int topSize = adCount + 10 * adCount;
+            if (layoutManager.findLastVisibleItemPosition() >= (topSize-2) && readFootprintAdapter.getData().size() >= (topSize + adIndex)) {
+                adCount++;
+                InvenoAdServiceHolder.getService().requestInfoAd(READ_FOOT_TRACE, ReadFootprintActivity.this)
+                        .onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+                    @Override
+                    public Unit invoke(IndexedAdValueWrapper wrapper) {
+//                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                        AdReadTrackModel adBookModelMore = new AdReadTrackModel(wrapper);
+                        if (adBookModel==null){
+                            adBookModel = adBookModelMore;
+                        }
+                        int index = topSize + adBookModelMore.getIndex();
+                        readFootprintAdapter.addAd(index, adBookModelMore);
+                        return null;
+                    }
+                }).onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+//                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                        adCount--;
+                        return null;
+                    }
+                }).execute();
+            }
+        }
     }
 
     private void report() {

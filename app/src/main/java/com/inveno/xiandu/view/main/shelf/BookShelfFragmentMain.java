@@ -317,7 +317,6 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             if (list.size() >= index) {
                 list.add(index, adBookModel);
                 adCount = 1;
-                Log.i("requestInfoAd","initData");
             }
         }
         shelfAdapter.setData(list);
@@ -446,6 +445,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             @Override
             public Unit invoke(Integer integer, String s) {
 //                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                adCount--;
                 return null;
             }
         }).execute();
@@ -455,7 +455,6 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
      * 加载广告
      */
     private void loadMoreAd() {
-
         LinearLayoutManager layoutManager = (LinearLayoutManager) bookrack_recyclerview.getLayoutManager();
         if (layoutManager != null) {
             final int topSize = adCount + 10 * adCount;
@@ -465,9 +464,12 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                     @Override
                     public Unit invoke(IndexedAdValueWrapper wrapper) {
 //                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-                        AdBookModel adBookModel = new AdBookModel(wrapper);
-                        int index = topSize + adBookModel.getIndex();
-                        shelfAdapter.addAd(index, adBookModel);
+                        AdBookModel adBookModelMore = new AdBookModel(wrapper);
+                        if (adBookModel==null){
+                            adBookModel = adBookModelMore;
+                        }
+                        int index = topSize + adBookModelMore.getIndex();
+                        shelfAdapter.addAd(index, adBookModelMore);
                         return null;
                     }
                 }).onFail(new Function2<Integer, String, Unit>() {
@@ -479,7 +481,6 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                     }
                 }).execute();
             }
-
         }
     }
 
