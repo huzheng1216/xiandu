@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 
 public class ReadSettingDialog extends Dialog {
     private static final String TAG = "ReadSettingDialog";
-    private static final int DEFAULT_TEXT_SIZE = 16;
+    private static final int DEFAULT_TEXT_SIZE = 21;
 
     @BindView(R.id.read_setting_iv_brightness_minus)
     ImageView mIvBrightnessMinus;
@@ -77,8 +77,8 @@ public class ReadSettingDialog extends Dialog {
     @BindView(R.id.read_setting_rv_bg)
     RecyclerView mRvBg;
 
-    @BindView(R.id.read_setting_rb_compose_4)
-    RadioButton mRbCompose4;
+    //    @BindView(R.id.read_setting_rb_compose_4)
+//    RadioButton mRbCompose4;
     @BindView(R.id.read_setting_rb_compose_3)
     RadioButton mRbCompose3;
     @BindView(R.id.read_setting_rb_compose_2)
@@ -197,9 +197,9 @@ public class ReadSettingDialog extends Dialog {
 
     private void initPageCompose() {
         switch (mComposeMode) {
-            case MODE_4:
-                mRbCompose4.setChecked(true);
-                break;
+//            case MODE_4:
+//                mRbCompose4.setChecked(true);
+//                break;
             case MODE_3:
                 mRbCompose3.setChecked(true);
                 break;
@@ -283,11 +283,15 @@ public class ReadSettingDialog extends Dialog {
         //字体大小调节
         mTvFontMinus.setOnClickListener(
                 (v) -> {
-                    if (mCbFontDefault.isChecked()) {
-                        mCbFontDefault.setChecked(false);
-                    }
                     int fontSize = Integer.valueOf(mTvFont.getText().toString()) - 1;
                     if (fontSize < 0) return;
+                    if (fontSize == ScreenUtils.dpToPx(DEFAULT_TEXT_SIZE)) {
+                        mCbFontDefault.setChecked(true);
+                        mSettingManager.setDefaultTextSize(true);
+                    } else {
+                        mCbFontDefault.setChecked(false);
+                        mSettingManager.setDefaultTextSize(false);
+                    }
                     mTvFont.setText(fontSize + "");
                     mPageLoader.setTextSize(fontSize);
                 }
@@ -295,10 +299,14 @@ public class ReadSettingDialog extends Dialog {
 
         mTvFontPlus.setOnClickListener(
                 (v) -> {
-                    if (mCbFontDefault.isChecked()) {
-                        mCbFontDefault.setChecked(false);
-                    }
                     int fontSize = Integer.valueOf(mTvFont.getText().toString()) + 1;
+                    if (fontSize == ScreenUtils.dpToPx(DEFAULT_TEXT_SIZE)) {
+                        mCbFontDefault.setChecked(true);
+                        mSettingManager.setDefaultTextSize(true);
+                    } else {
+                        mCbFontDefault.setChecked(false);
+                        mSettingManager.setDefaultTextSize(false);
+                    }
                     mTvFont.setText(fontSize + "");
                     mPageLoader.setTextSize(fontSize);
                 }
@@ -347,9 +355,9 @@ public class ReadSettingDialog extends Dialog {
                 (group, checkedId) -> {
                     ComposeMode composeMode;
                     switch (checkedId) {
-                        case R.id.read_setting_rb_compose_4:
-                            composeMode = ComposeMode.MODE_4;
-                            break;
+//                        case R.id.read_setting_rb_compose_4:
+//                            composeMode = ComposeMode.MODE_4;
+//                            break;
                         case R.id.read_setting_rb_compose_3:
                             composeMode = ComposeMode.MODE_3;
                             break;
@@ -395,7 +403,7 @@ public class ReadSettingDialog extends Dialog {
         return mCbBrightnessAuto.isChecked();
     }
 
-    public interface OnSettingListener{
+    public interface OnSettingListener {
         void onPageStyleChange(PageStyle value);
     }
 }

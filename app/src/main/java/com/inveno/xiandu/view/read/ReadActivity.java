@@ -336,7 +336,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             View view = holder.getViewGroup();
             layoutChapter.removeAllViews();
             layoutChapter.addView(view);
-            layoutChapterAD.setBackgroundColor(ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            layoutChapterAD.setBackgroundColor(isNightMode ? 0xff000000 : ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
             layoutChapterAD.setVisibility(VISIBLE);
             return null;
         }).onFail((integer, s) -> {
@@ -371,7 +371,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         //侧边打开后，返回键能够起作用
         mDlSlide.setFocusableInTouchMode(false);
         mSettingDialog = new ReadSettingDialog(this, mPageLoader);
-        mSettingDialog.setOnSettingListener(value -> adBottom.setBackgroundColor(ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor())));
+        mSettingDialog.setOnSettingListener(value -> {
+            if (!isNightMode) {
+                adBottom.setBackgroundColor(ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            }
+        });
 
         if (!SQL.getInstance().hasBookbrack(bookbrack)) {
             mTvBrief.setText("保存书架");
@@ -1022,6 +1026,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 //
 //                    }
 //                });
+        if (!SQL.getInstance().hasBookShelf(bookShelf)) {
+
+        }
     }
 
     @Override
