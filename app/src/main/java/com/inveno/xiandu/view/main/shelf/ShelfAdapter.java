@@ -74,9 +74,9 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addAd(AdBookModel adBookModel) {
-        if (data.size() >= adBookModel.getIndex()) {
-            data.add(adBookModel.getIndex(), adBookModel);
+    public void addAd(int index , AdBookModel adBookModel) {
+        if (data.size() >= index) {
+            data.add(index, adBookModel);
             notifyDataSetChanged();
         }
     }

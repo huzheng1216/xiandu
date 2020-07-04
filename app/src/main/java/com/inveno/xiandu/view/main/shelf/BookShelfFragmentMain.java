@@ -74,6 +74,8 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
     private IosTypeDialog iosTypeDialog;
     private AdBookModel adBookModel;
+    private int adCount;
+    private int adIndex;
 
     public void SearchFragmentMain() {
     }
@@ -230,6 +232,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                     impReport();
+                    loadMoreAd();
                 }
             }
         });
@@ -313,9 +316,11 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             int index = adBookModel.getIndex();
             if (list.size() >= index) {
                 list.add(index, adBookModel);
+                adCount = 1;
             }
         }
         shelfAdapter.setData(list);
+
     }
 
     //今日金币
@@ -429,18 +434,54 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         InvenoAdServiceHolder.getService().requestInfoAd(BOOK_SHELF, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
             @Override
             public Unit invoke(IndexedAdValueWrapper wrapper) {
-//                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                 adBookModel = new AdBookModel(wrapper);
-                shelfAdapter.addAd(adBookModel);
+                adIndex = adBookModel.getIndex();
+                shelfAdapter.addAd(adIndex, adBookModel);
+                adCount++;
                 return null;
             }
         }).onFail(new Function2<Integer, String, Unit>() {
             @Override
             public Unit invoke(Integer integer, String s) {
 //                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                adCount--;
                 return null;
             }
         }).execute();
+    }
+
+    /**
+     * 加载广告
+     */
+    private void loadMoreAd() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) bookrack_recyclerview.getLayoutManager();
+        if (layoutManager != null) {
+            final int topSize = adCount + 10 * adCount;
+            if (layoutManager.findLastVisibleItemPosition() >= (topSize-2) && shelfAdapter.getData().size() >= (topSize + adIndex)) {
+                adCount++;
+                InvenoAdServiceHolder.getService().requestInfoAd(BOOK_SHELF, getContext()).onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
+                    @Override
+                    public Unit invoke(IndexedAdValueWrapper wrapper) {
+//                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
+                        AdBookModel adBookModelMore = new AdBookModel(wrapper);
+                        if (adBookModel==null){
+                            adBookModel = adBookModelMore;
+                        }
+                        int index = topSize + adBookModelMore.getIndex();
+                        shelfAdapter.addAd(index, adBookModelMore);
+                        return null;
+                    }
+                }).onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+//                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
+                        adCount--;
+                        return null;
+                    }
+                }).execute();
+            }
+        }
     }
 
     private void clickReport(long contentId) {
