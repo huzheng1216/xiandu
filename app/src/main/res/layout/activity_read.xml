@@ -111,7 +111,7 @@
                         style="@style/NB.Theme.TextAppearance.Read.TopMenu"
                         android:layout_alignParentRight="true"
                         android:padding="12dp"
-                        android:text="保存书架" />
+                        android:text="加入书架" />
 
                     <TextView
                         android:id="@+id/read_tv_community"
@@ -208,6 +208,7 @@
 
     <!--侧滑栏-->
     <LinearLayout
+        android:id="@+id/left_layout"
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
@@ -237,5 +238,68 @@
                 android:layout_height="match_parent"
                 android:scrollbars="vertical" />
         </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/attention_first_tag"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        android:background="#AA000000">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_pre"></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点左边\n上一页"
+                android:textColor="#ffffff"
+                android:layout_marginTop="8dp"></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_center"></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点中间\n弹出菜单"
+                android:textColor="#ffffff"
+                android:layout_marginTop="8dp"></TextView>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_next"></ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="点右边\n下一页"
+                android:textColor="#ffffff"
+                android:layout_marginTop="8dp"></TextView>
+        </LinearLayout>
     </LinearLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

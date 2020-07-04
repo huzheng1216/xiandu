@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.ContentObserver;
@@ -29,6 +30,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -49,6 +51,7 @@ import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
+import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.SystemBarUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
@@ -66,6 +69,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.reactivex.Flowable;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -121,6 +125,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     /***************bottom_menu_view***************************/
     @BindView(R.id.read_tv_page_tip)
     TextView mTvPageTip;
+    /***************引导界面***************************/
+    @BindView(R.id.attention_first_tag)
+    View attenView;
     /***************bottom_ad***************************/
     @BindView(R.id.ad_bottom)
     FrameLayout adBottom;
@@ -153,6 +160,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     /***************left slide*******************************/
     @BindView(R.id.read_iv_category)
     ListView mLvCategory;
+    @BindView(R.id.left_layout)
+    View mLeftLayout;
     /*****************view******************/
     private ReadSettingDialog mSettingDialog;
     private PageLoader mPageLoader;
@@ -171,6 +180,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     //每30秒切换底部广告
     private Disposable adBottomDisposable;
     private int adIndex = 5;//滑动几页展示广告
+    private View chapterADView;//等待展示的章节广告
     private int currIndex;//滑动页数
 
     //控制屏幕常亮
@@ -272,14 +282,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mBookId = bookShelf.getContent_id() + "";
         startBottomAd();
         startChapterAD();
-
     }
 
     /**
      * 执行章节广告
      */
     private void startChapterAD() {
-//        getChapterAd();
+        getChapterAd();
     }
 
     /**
@@ -323,6 +332,13 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     private void getChapterAd() {
         currIndex = 0;
+        if (chapterADView != null) {
+            layoutChapter.removeAllViews();
+            layoutChapter.addView(chapterADView);
+            layoutChapterAD.setBackgroundColor(isNightMode ? 0xff000000 : ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            layoutChapterAD.setVisibility(VISIBLE);
+            chapterADView = null;
+        }
         /**
          * 加载章节广告
          */
@@ -333,11 +349,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             holder.onBindViewHolder(ReadActivity.this, wrapper.getAdValue(), 0);
             //获取滑动页数配置
             adIndex = wrapper.getIndex();
-            View view = holder.getViewGroup();
-            layoutChapter.removeAllViews();
-            layoutChapter.addView(view);
-            layoutChapterAD.setBackgroundColor(isNightMode ? 0xff000000 : ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
-            layoutChapterAD.setVisibility(VISIBLE);
+            chapterADView = holder.getViewGroup();
             return null;
         }).onFail((integer, s) -> {
             layoutChapterAD.setVisibility(GONE);
@@ -359,6 +371,20 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void initWidget() {
         super.initWidget();
 
+        //如果是首次进入，显示引导界面
+        if (SPUtils.getInformain("first_reader_book", true)) {
+            attenView.setVisibility(VISIBLE);
+            attenView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SPUtils.setInformain("first_reader_book", false);
+                    attenView.setVisibility(GONE);
+                }
+            });
+        }else {
+            attenView.setVisibility(GONE);
+        }
+
         // 如果 API < 18 取消硬件加速
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2
                 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -372,15 +398,14 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mDlSlide.setFocusableInTouchMode(false);
         mSettingDialog = new ReadSettingDialog(this, mPageLoader);
         mSettingDialog.setOnSettingListener(value -> {
-            if (!isNightMode) {
-                adBottom.setBackgroundColor(ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
-            }
+            adBottom.setBackgroundColor(isNightMode ? 0xFF000000 : ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            mLeftLayout.setBackgroundColor(isNightMode ? 0xFF000000 : ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
         });
 
         if (!SQL.getInstance().hasBookbrack(bookbrack)) {
-            mTvBrief.setText("保存书架");
+            mTvBrief.setText("加入书架");
         } else {
-            mTvBrief.setText("已保存");
+            mTvBrief.setText("已在书架");
         }
         setUpAdapter();
 
@@ -483,11 +508,15 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_read_menu_morning);
             mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             layoutBackground.setBackgroundColor(0xFF000000);
+            adBottom.setBackgroundColor(0xFF000000);
+            mLeftLayout.setBackgroundColor(0xFF000000);
         } else {
             mTvNightMode.setText(StringUtils.getString(R.string.nb_mode_night));
             Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_read_menu_night);
             mTvNightMode.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
             layoutBackground.setBackgroundColor(ContextCompat.getColor(this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            adBottom.setBackgroundColor(ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
+            mLeftLayout.setBackgroundColor(ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
         }
     }
 
@@ -605,7 +634,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                         if (mLlBottomMenu.getVisibility() == VISIBLE) {
                             //显示标题
-                            mTvPageTip.setText((progress) + "/" + (mSbChapterProgress.getMax()));
+                            String chapterName = mCategoryAdapter.getItem(progress - 1).getChapter_name();
+                            if (chapterName.length() > 12) {
+                                chapterName = chapterName.substring(0, 11) + "...";
+                            }
+                            mTvPageTip.setText(chapterName);
+//                            mTvPageTip.setText((progress) + "/" + (mSbChapterProgress.getMax()));
                             mTvPageTip.setVisibility(VISIBLE);
 //                            mToolbar.setTitle(mCategoryAdapter.getItem(progress).getChapter_name());
                         }
@@ -683,6 +717,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 (v) -> {
                     if (mPageLoader.skipPreChapter()) {
                         mCategoryAdapter.setChapter(mPageLoader.getChapterPos());
+                        String chapterName = mCategoryAdapter.getItem(mPageLoader.getChapterPos()).getChapter_name();
+                        if (chapterName.length() > 12) {
+                            chapterName = chapterName.substring(0, 11) + "...";
+                        }
+                        mTvPageTip.setText(chapterName);
+                        mTvPageTip.setVisibility(VISIBLE);
                     }
                 }
         );
@@ -691,6 +731,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                 (v) -> {
                     if (mPageLoader.skipNextChapter()) {
                         mCategoryAdapter.setChapter(mPageLoader.getChapterPos());
+                        String chapterName = mCategoryAdapter.getItem(mPageLoader.getChapterPos()).getChapter_name();
+                        if (chapterName.length() > 12) {
+                            chapterName = chapterName.substring(0, 11) + "...";
+                        }
+                        mTvPageTip.setText(chapterName);
+                        mTvPageTip.setVisibility(VISIBLE);
                     }
                 }
         );
@@ -710,28 +756,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mTvBrief.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (SQL.getInstance().hasBookShelf(bookShelf)) {
-                    SQL.getInstance().delBookShelf(bookShelf);
-//                    Toaster.showToastCenter(ReadActivity.this, "已移除");
-//                    mTvBrief.setText("保存书架");
-                } else {
-                    SQL.getInstance().addBookShelf(bookShelf);
-//                    Toaster.showToastCenter(ReadActivity.this, "已保存");
-//                    mTvBrief.setText("已保存");
-                }
-
-                if (SQL.getInstance().hasBookbrack(bookbrack)) {
-                    ArrayList<Bookbrack> bookbracks = new ArrayList<>();
-                    bookbracks.add(bookbrack);
-                    SQL.getInstance().delBookbrack(bookbracks);
-                    Toaster.showToastCenter(ReadActivity.this, "已从书架移除");
-                    mTvBrief.setText("保存书架");
-                } else {
-                    SQL.getInstance().addBookbrack(bookbrack);
-                    Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
-                    mTvBrief.setText("已在书架");
-                }
+                addShelf();
             }
         });
 
@@ -745,6 +770,25 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mSettingDialog.setOnDismissListener(
                 dialog -> hideSystemBar()
         );
+    }
+
+    /**
+     * 保存到书架
+     */
+    private void addShelf() {
+        if (SQL.getInstance().hasBookShelf(bookShelf)) {
+            SQL.getInstance().delBookShelf(bookShelf);
+//            ArrayList<Bookbrack> bookbracks = new ArrayList<>();
+//            bookbracks.add(bookbrack);
+//            SQL.getInstance().delBookbrack(bookbracks);
+            Toaster.showToastCenter(ReadActivity.this, "已从书架移除");
+            mTvBrief.setText("保存书架");
+        } else {
+            SQL.getInstance().addBookShelf(bookShelf);
+            SQL.getInstance().addBookbrack(bookbrack);
+            Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
+            mTvBrief.setText("已在书架");
+        }
     }
 
     /**
@@ -999,6 +1043,35 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     @Override
+    public void finish() {
+        if (!SQL.getInstance().hasBookShelf(bookShelf)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//            builder.setTitle("问题：");
+            builder.setMessage("加入书架方便下次阅读?");
+            //设置正面按钮
+            builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    addShelf();
+                    dialog.dismiss();
+                    ReadActivity.super.finish();
+                }
+            });
+            //设置反面按钮
+            builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    ReadActivity.super.finish();
+                }
+            });
+            builder.show();
+        } else {
+            super.finish();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiver);
@@ -1026,9 +1099,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 //
 //                    }
 //                });
-        if (!SQL.getInstance().hasBookShelf(bookShelf)) {
-
-        }
     }
 
     @Override
@@ -1080,10 +1150,23 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             DDManager.getInstance().postReadTime(mBookId)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .subscribe(new Consumer<BaseRequest>() {
+                    .subscribe(new Observer<BaseRequest>() {
                         @Override
-                        public void accept(BaseRequest baseRequest) throws Exception {
+                        public void onSubscribe(Disposable d) {
+                        }
+
+                        @Override
+                        public void onNext(BaseRequest baseRequest) {
                             LogUtils.H("上传心跳：" + baseRequest.getCode() + "-" + baseRequest.getMessage());
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            LogUtils.H("无法上传心跳");
+                        }
+
+                        @Override
+                        public void onComplete() {
                         }
                     });
         } else {
