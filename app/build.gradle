@@ -80,7 +80,7 @@ android {
 //      测试环境 其他
         dev {
             buildConfigField 'int', 'referrer', '1'
-
+            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
         }
 //      2官方渠道
         inveno {
