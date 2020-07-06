@@ -1769,12 +1769,12 @@ public class MyTabLayout extends HorizontalScrollView {
 
             final boolean hasText = !TextUtils.isEmpty(text);
             if (textView != null) {
-                textView.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//                textView.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//
+//                TextPaint tp = textView.getPaint();
+//                tp.setFakeBoldText(true);
 
-                TextPaint tp = textView.getPaint();
-                tp.setFakeBoldText(true);
-
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 if (hasText) {
                     textView.setText(text);
                     textView.setVisibility(VISIBLE);
@@ -2313,13 +2313,13 @@ public class MyTabLayout extends HorizontalScrollView {
         @Override
         public void onTabSelected(Tab tab) {
             mViewPager.setCurrentItem(tab.getPosition());
-            tab.mView.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 19);
+            tab.mView.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         }
 
         @Override
         public void onTabUnselected(Tab tab) {
             // No-op
-            tab.mView.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+            tab.mView.mTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         }
 
         @Override

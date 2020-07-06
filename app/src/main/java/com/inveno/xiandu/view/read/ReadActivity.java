@@ -381,7 +381,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                     attenView.setVisibility(GONE);
                 }
             });
-        }else {
+        } else {
             attenView.setVisibility(GONE);
         }
 
@@ -782,19 +782,19 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      * 保存到书架
      */
     private void addShelf() {
-        if (SQL.getInstance().hasBookShelf(bookShelf)) {
-            SQL.getInstance().delBookShelf(bookShelf);
-//            ArrayList<Bookbrack> bookbracks = new ArrayList<>();
-//            bookbracks.add(bookbrack);
-//            SQL.getInstance().delBookbrack(bookbracks);
-            Toaster.showToastCenter(ReadActivity.this, "已从书架移除");
-            mTvBrief.setText("保存书架");
-        } else {
-            SQL.getInstance().addBookShelf(bookShelf);
-            SQL.getInstance().addBookbrack(bookbrack);
-            Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
-            mTvBrief.setText("已在书架");
-        }
+//        if (SQL.getInstance().hasBookShelf(bookShelf)) {
+//            SQL.getInstance().delBookShelf(bookShelf);
+////            ArrayList<Bookbrack> bookbracks = new ArrayList<>();
+////            bookbracks.add(bookbrack);
+////            SQL.getInstance().delBookbrack(bookbracks);
+//            Toaster.showToastCenter(ReadActivity.this, "已从书架移除");
+//            mTvBrief.setText("保存书架");
+//        } else {
+        SQL.getInstance().addBookShelf(bookShelf);
+        SQL.getInstance().addBookbrack(bookbrack);
+        Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
+        mTvBrief.setText("已在书架");
+//        }
     }
 
     /**
@@ -1050,7 +1050,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     public void finish() {
-        if (!SQL.getInstance().hasBookShelf(bookShelf)) {
+        if (!SQL.getInstance().hasBookbrack(bookShelf.getContent_id())) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //            builder.setTitle("问题：");
             builder.setMessage("加入书架方便下次阅读?");
