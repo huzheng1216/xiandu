@@ -69,9 +69,9 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addAd(AdReadTrackModel adBookModel) {
-        if (data.size() >= adBookModel.getIndex()) {
-            data.add(adBookModel.getIndex(), adBookModel);
+    public void addAd(int index , AdReadTrackModel adBookModel) {
+        if (data.size() >= index) {
+            data.add(index, adBookModel);
             notifyDataSetChanged();
         }
     }

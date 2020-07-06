@@ -65,6 +65,8 @@ public class MainApplication extends Application implements Application.Activity
         initfonts();
 
         registerActivityLifecycleCallbacks(this);
+
+        ReportManager.INSTANCE.init(BuildConfig.referrer, this);
     }
 
     public void initCrash() {

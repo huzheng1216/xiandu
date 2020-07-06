@@ -93,7 +93,6 @@ public class StoreFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         super.onVisible(firstVisble);
-        Log.i("ReportManager","onVisible");
         report();
         if (firstVisble) {
             int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
