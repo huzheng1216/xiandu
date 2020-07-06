@@ -282,6 +282,8 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mBookId = bookShelf.getContent_id() + "";
         startBottomAd();
         startChapterAD();
+
+        report();
     }
 
     /**
@@ -1012,7 +1014,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onStart() {
         super.onStart();
         registerBrightObserver();
-        report();
         ReportManager.INSTANCE.readBookStart("", "", 0, bookShelf.getContent_id());
     }
 
