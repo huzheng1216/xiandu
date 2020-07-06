@@ -65,7 +65,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
 
-            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
         debug {
             minifyEnabled false
