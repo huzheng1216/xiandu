@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.provider.titlebar.ITittleBaseActivity;
-import com.inveno.xiandu.view.BaseActivity;
 
 /**
  * @author yongji.wang

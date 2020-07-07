@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.ad.AdReadTrackModel;
@@ -238,7 +240,10 @@ public class ReadFootprintAdapter extends RecyclerBaseAdapter {
                     shelfAdapterListener.onBookReadContinue(data.get(finalRealPosition));
                 }
             });
-            Glide.with(context).load(data.get(realPosition).getPoster()).into(iholder.adapter_bookshelf_book_img);
+            Glide.with(context)
+                    .load(data.get(realPosition).getPoster())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
+                    .into(iholder.adapter_bookshelf_book_img);
 
             ClickUtil.bindSingleClick(iholder.bookbrack_itemView, 500, new View.OnClickListener() {
                 @Override

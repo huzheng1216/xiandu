@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:lines="1"
-                android:maxLength="8"
+                android:ellipsize="end"
+                android:maxEms="14"
                 android:text="书名"
                 android:textColor="@color/gray_3"
                 android:textSize="16dp" />
@@ -46,8 +47,8 @@
                 android:layout_marginBottom="5dp"
                 android:lines="1"
                 android:ellipsize="end"
-                android:maxLength="18"
-                android:text="读到：第几章第几章第几章第几章第几章几章几章几章"
+                android:maxEms="16"
+                android:text="读到："
                 android:textColor="@color/gray_9"
                 android:textSize="14dp" />
 

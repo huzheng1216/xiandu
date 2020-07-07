@@ -32,6 +32,7 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
 
     private Context mContext;
     public Activity mActivity;
+    private String footerStr = "正在努力加载...";
 
     public CoinDetailAdapter(Context context, Activity activity, ArrayList<BaseDataBean> dataList) {
         mContext = context;
@@ -46,7 +47,7 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getFooterView() {
-        return null;
+        return getViewHolderView(mContext, R.layout.item_load_more);
     }
 
     @NonNull
@@ -63,6 +64,10 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
         }
     }
 
+    public void setFooterText(String footerStr) {
+        this.footerStr = footerStr;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeaderViewHolder) {
@@ -71,7 +76,7 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
             ((ContentViewHolder) holder).setData(mContext, mDataList.get(position));
 
         } else if (holder instanceof FooterViewHolder) {
-
+            ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
         }
     }
 
@@ -94,6 +99,14 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
         this.mDataList = baseDataBeans;
         notifyDataSetChanged();
     }
+
+    private View getViewHolderView(Context context, int p) {
+        View view = LayoutInflater.from(context).inflate(p, null);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        return view;
+    }
+
 
     private RecyclerView.ViewHolder createDataViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder mVIewHoder = null;
@@ -119,9 +132,15 @@ public class CoinDetailAdapter extends RecyclerBaseAdapter {
     }
 
     public static class FooterViewHolder extends RecyclerView.ViewHolder {
-        public FooterViewHolder(View itemView) {
+
+        TextView load_more_tv;
+
+        public FooterViewHolder(@NonNull View itemView) {
             super(itemView);
+            load_more_tv = itemView.findViewById(R.id.load_more_tv);
+
         }
+
     }
 
     public static class ContentViewHolder extends BaseHolder<BaseDataBean> {

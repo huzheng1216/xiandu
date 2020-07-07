@@ -21,6 +21,7 @@ import androidx.core.graphics.ColorUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.utils.ActivityManager;
 import com.inveno.xiandu.view.detail.BookDetailActivity;
 import com.inveno.xiandu.view.event.EventNetChange;
 import com.inveno.xiandu.view.event.EventNightModeChange;
@@ -53,6 +54,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
         EventBus.getDefault().register(this);
+        //将Activity实例添加到AppManager的堆栈
+        ActivityManager.getAppManager().addActivity(this);
     }
 
     @Override
@@ -67,6 +70,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        ActivityManager.getAppManager().finishActivity(this);
     }
 
     //监听黑夜白天模式

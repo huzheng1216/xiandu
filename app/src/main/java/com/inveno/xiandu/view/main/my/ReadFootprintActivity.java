@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -26,7 +25,6 @@ import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.ad.AdReadTrackModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.ReadTrack;
@@ -41,8 +39,6 @@ import com.inveno.xiandu.view.adapter.ReadFootprintAdapter;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.custom.SwipeItemLayout;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
-import com.inveno.xiandu.view.main.MainActivity;
-import com.inveno.xiandu.view.main.shelf.ShelfAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +50,6 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-import static com.inveno.android.ad.config.ScenarioManifest.BOOK_SHELF;
-import static com.inveno.android.ad.config.ScenarioManifest.RANKING_LIST;
 import static com.inveno.android.ad.config.ScenarioManifest.READ_FOOT_TRACE;
 
 /**
@@ -283,12 +277,10 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 //        SQL.getInstance().insertOrReplaceBookbrack(data);
         initData();
 
-        //做一个简单的同步
-        List<ReadTrack> localData = SQL.getInstance().getAllReadTrack();
         for (ReadTrack readTrack : data) {
             //后台有，本地没有，需要添加到本地
-            if (!localData.contains(readTrack)) {
-                SQL.getInstance().insertOrReplaceReadTrack(data);
+            if (!SQL.getInstance().hasReadTrack(readTrack.getContent_id())) {
+                SQL.getInstance().addReadTrack(readTrack);
                 initData();
             }
         }
@@ -394,7 +386,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
 //                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
                         adBookModel = new AdReadTrackModel(wrapper);
                         adIndex = adBookModel.getIndex();
-                        readFootprintAdapter.addAd(adIndex , adBookModel);
+                        readFootprintAdapter.addAd(adIndex, adBookModel);
                         adCount++;
                         return null;
                     }
@@ -413,22 +405,22 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
         LinearLayoutManager layoutManager = (LinearLayoutManager) footprint_recycle.getLayoutManager();
         if (layoutManager != null) {
             final int topSize = adCount + 10 * adCount;
-            if (layoutManager.findLastVisibleItemPosition() >= (topSize-2) && readFootprintAdapter.getData().size() >= (topSize + adIndex)) {
+            if (layoutManager.findLastVisibleItemPosition() >= (topSize - 2) && readFootprintAdapter.getData().size() >= (topSize + adIndex)) {
                 adCount++;
                 InvenoAdServiceHolder.getService().requestInfoAd(READ_FOOT_TRACE, ReadFootprintActivity.this)
                         .onSuccess(new Function1<IndexedAdValueWrapper, Unit>() {
-                    @Override
-                    public Unit invoke(IndexedAdValueWrapper wrapper) {
+                            @Override
+                            public Unit invoke(IndexedAdValueWrapper wrapper) {
 //                        Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
-                        AdReadTrackModel adBookModelMore = new AdReadTrackModel(wrapper);
-                        if (adBookModel==null){
-                            adBookModel = adBookModelMore;
-                        }
-                        int index = topSize + adBookModelMore.getIndex();
-                        readFootprintAdapter.addAd(index, adBookModelMore);
-                        return null;
-                    }
-                }).onFail(new Function2<Integer, String, Unit>() {
+                                AdReadTrackModel adBookModelMore = new AdReadTrackModel(wrapper);
+                                if (adBookModel == null) {
+                                    adBookModel = adBookModelMore;
+                                }
+                                int index = topSize + adBookModelMore.getIndex();
+                                readFootprintAdapter.addAd(index, adBookModelMore);
+                                return null;
+                            }
+                        }).onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
 //                Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);

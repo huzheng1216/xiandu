@@ -1,5 +1,7 @@
 package com.inveno.xiandu.view.read;
 
+import com.inveno.xiandu.utils.ActivityManager;
+
 /**
  * Created by zheng.hu on 17-4-25.
  */
@@ -24,5 +26,6 @@ public abstract class BaseMVPActivity<T extends BaseContract.BasePresenter> exte
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.detachView();
+        ActivityManager.getAppManager().finishActivity(this);
     }
 }

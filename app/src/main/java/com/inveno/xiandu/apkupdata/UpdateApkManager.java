@@ -13,12 +13,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
 import com.inveno.android.basics.service.third.json.JsonUtil;
+import com.inveno.android.device.param.provider.AndroidParamProviderHolder;
 import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.Result;
@@ -27,6 +30,9 @@ import com.inveno.xiandu.invenohttp.bacic_data.HttpUrl;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.FileUtils;
 import com.inveno.xiandu.utils.SPUtils;
+import com.inveno.xiandu.utils.Toaster;
+import com.inveno.xiandu.view.dialog.IosTypeDialog;
+import com.inveno.xiandu.view.dialog.UpdataApkDialog;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.request.PostRequest;
@@ -70,11 +76,12 @@ public class UpdateApkManager {
     private ProgressDialog mProgressDialog;
     private UpdateListener mUpdateListener;
     private boolean isSettingCheck = false;// 如果是检查页面的检查，都要弹框，都要忽略更新的按钮
+    private UpdataApkDialog updataApkDialog;
 
     /**
      * 更新UI的handler
      */
-    MyHandle mHandler = new MyHandle(this);
+    private MyHandle mHandler = new MyHandle(this);
 
     public static class Builder {
         Context mContext;
@@ -83,7 +90,7 @@ public class UpdateApkManager {
         public Builder(Context context) {
             this.mContext = context;
             mUpdateApkManager = new UpdateApkManager(context);
-            savePath = context.getFilesDir().getAbsolutePath() + "/updateAPK/";
+//            savePath = context.getFilesDir().getAbsolutePath() + "/updateAPK/";
         }
 
         public UpdateApkManager updateListener(UpdateListener listener) {
@@ -112,43 +119,55 @@ public class UpdateApkManager {
     /**
      * 显示更新对话框
      */
-    public void showNoticeDialog() {
+    public void showNoticeDialog(int type) {
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle(mRes.getString(R.string.new_version) + mUpdateInfo.getVersion());
-//        String fileSize = FileUtils.FormetFileSize(mUpdateInfo.getSize());
-        String updateContent = mRes.getString(R.string.new_version_update) + "\n\n"
-                + mUpdateInfo.getInstruction()
-                + mRes.getString(R.string.advice_download_in_wifi);
-        dialog.setMessage(updateContent);
-        dialog.setPositiveButton(mRes.getString(R.string.updata_known), new DialogInterface
-                .OnClickListener() {
+        String cancelStr = "";
+        String updataStr = "";
+
+        if (type != 1) {
+            cancelStr = "下次再说";
+        }
+        //判断APK包是否存在
+        File file = new File(mSaveFileName);
+        if (file.exists()) {
+            updataStr = "已下载，立即安装";
+        } else {
+            updataStr = "立即更新";
+        }
+        UpdataApkDialog.Builder builder = new UpdataApkDialog.Builder(mContext);
+        builder.setTitle(mRes.getString(R.string.new_version) + mUpdateInfo.getVersion());
+        builder.setContext(mUpdateInfo.getInstruction());
+        builder.setCancelable(false);
+        builder.setNeedAdvice(!file.exists());
+        builder.setUpdataButtonListener(updataStr, new UpdataApkDialog.Builder.OnClickListener() {
             @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-                arg0.dismiss();
-                showDownloadDialog();
-                if (mUpdateListener != null) {
-                    mUpdateListener.acceptUpdate(null);
+            public void onClick(View v) {
+                updataApkDialog.dismiss();
+                if (!file.exists()) {
+                    showDownloadDialog();
+                    if (mUpdateListener != null) {
+                        mUpdateListener.acceptUpdate(null);
+                    }
+                } else {
+                    //调用安装
+                    installAPK();
                 }
             }
         });
-        //是否强制更新
-        if (!(mUpdateInfo.getType() == 1)) {
-            dialog.setNegativeButton(mRes.getString(R.string.updata_not), new DialogInterface
-                    .OnClickListener() {
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    SPUtils.setInformain(mUpdateInfo.getVersion(), true);
-                    if (mUpdateListener != null) {
-                        mUpdateListener.rejectUpdate(null);
-                    }
-                    arg0.dismiss();
+        builder.setCancelButtonListener(cancelStr, new UpdataApkDialog.Builder.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //记录更新版本号
+                SPUtils.setInformain(mUpdateInfo.getVersion(), true);
+                if (mUpdateListener != null) {
+                    mUpdateListener.rejectUpdate(null);
                 }
-            });
-        }
-        mUpdateDialog = dialog.create();
-        mUpdateDialog.setCancelable(false);
-        mUpdateDialog.show();
+                updataApkDialog.dismiss();
+            }
+        });
+
+        updataApkDialog = builder.create();
+        updataApkDialog.show();
     }
 
     /**
@@ -200,9 +219,8 @@ public class UpdateApkManager {
 
                                     File file = new File(savePath);
                                     if (!file.exists()) {
-                                        file.mkdir();
+                                        file.mkdirs();
                                     }
-                                    mSaveFileName = savePath + mAppName + ".apk";
                                     String apkFile = mSaveFileName;
                                     File ApkFile = new File(apkFile);
                                     FileOutputStream fos = new FileOutputStream(ApkFile);
@@ -293,7 +311,7 @@ public class UpdateApkManager {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent
                     .FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
             Uri contentUri = FileProvider.getUriForFile(mContext, BuildConfig.APPLICATION_ID +
-                    ".FileProvider", apkFile);
+                    ".updatafileProvider", apkFile);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
         } else {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -345,25 +363,70 @@ public class UpdateApkManager {
             @Override
             public void onSuccess(String s, Call call, Response response) {
                 Log.i("updateapi", "onSuccessresult,s:" + s);
+//                upgrade	YES	int	是否需要升级,0:不需要(为0时，其他字段不下发)1:需要
+//                instruction	YES	string	升级说明
+//                link	YES	string	下载地址
+//                type	YES	int	升级类型,1:强制升级2:非强制升级
+//                version	YES	string	升级版本
+//                compatible_version	YES	string	最小兼容版本
                 mIsDownload = false;
-                if (!TextUtils.isEmpty(s)) {
-                    Result<UpdateInfo> result = Result.fromJson(s, UpdateInfo.class);
-                    mUpdateInfo = result.getData();
-                    if (isSettingCheck) { // 如果是设置页的肯定直接弹出了
-                        showNoticeDialog();
-                    } else if (mUpdateInfo.getUpgrade() == 1) {
-                        showNoticeDialog();
-                    } else if (mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
-                            (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
-                        showNoticeDialog();
+//                s = "{\"code\":200,\"upack\":null,\"message\":\"OK\"," +
+//                        "\"data\":{\"upgrade\":1,\"instruction\":\"测试升级弹窗\",\"version\":\"1.1.2\",\"link\":\"http://q12.majiang2018.com/7mmfxs.apk\"}," +
+//                        "\"server_time\":1594018890746}";
+                String dataStr = "";
+                try {
+                    JSONObject jsonObject = new JSONObject(s);
+                    if (jsonObject.has("data")) {
+                        dataStr = jsonObject.getJSONObject("data").toString();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (!TextUtils.isEmpty(dataStr) && !dataStr.equals("{}")) {
+                    mUpdateInfo = JsonUtil.Companion.parseObject(dataStr, UpdateInfo.class);
+//                    Result<UpdateInfo> result = Result.fromJson(dataStr, UpdateInfo.class);
+//                    mUpdateInfo = result.getData();
+
+                    mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
+                    if (isSettingCheck) {
+                        // 如果是设置页的肯定直接弹出了
+                        //检查本地是否有数据，直接弹出安装
+                        showNoticeDialog(mUpdateInfo.getType());
                     } else {
-                        if (mUpdateListener != null) {
-                            mUpdateListener.rejectUpdate(null);
+                        if (mUpdateInfo != null && mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
+                                (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
+                            // TODO: 2020/7/6 有更新非设置页，需要后台下载，启动一个服务
+                            String network = AndroidParamProviderHolder.get().device().getNetwork();
+                            //WiFi环境后台默认下载
+                            if (network.equals("1")) {
+                                //强制升级直接弹出
+                                if (mUpdateInfo.getType() == 1){
+                                    showNoticeDialog(mUpdateInfo.getType());
+                                }else{
+                                    //启动一个服务进行下载
+                                    Intent intent = new Intent(mContext, UpdateService.class);
+                                    intent.putExtra("downloadUrl", mUpdateInfo.getLink());
+                                    intent.putExtra("appVersion", mUpdateInfo.getVersion());
+                                    intent.putExtra("instruction", mUpdateInfo.getInstruction());
+
+                                    mContext.startService(intent);
+                                }
+                            } else {
+                                //非WIFI环境，弹出提醒
+                                showNoticeDialog(mUpdateInfo.getType());
+                            }
+                        } else {
+                            if (mUpdateListener != null) {
+                                mUpdateListener.rejectUpdate(null);
+                            }
                         }
                     }
                 } else {
                     if (mUpdateListener != null) {
                         mUpdateListener.rejectUpdate(null);
+                    }
+                    if (isSettingCheck) {
+                        Toaster.showToastCenterShort(mContext, "当前是最新版");
                     }
                 }
             }
@@ -377,6 +440,10 @@ public class UpdateApkManager {
                 mIsDownload = false;
             }
         });
+    }
+
+    public void stopService(){
+
     }
 
     public void setUpdateListener(UpdateListener updateListener) {

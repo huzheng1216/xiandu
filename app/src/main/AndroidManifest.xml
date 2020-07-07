@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.inveno.xiandu">
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -86,5 +87,19 @@
         <activity
             android:name=".view.detail.BookDetailActivity"
             android:theme="@style/AppTheme" />
+
+        <service android:name=".apkupdata.UpdateService" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.updatafileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                tools:replace="android:resource" />
+        </provider>
     </application>
 </manifest>

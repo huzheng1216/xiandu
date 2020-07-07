@@ -11,10 +11,11 @@
         android:id="@+id/big_image_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="测试两行"
         android:textSize="16sp"
         android:textColor="@color/gray_3"
         android:maxLines="2"
+        android:ellipsize="end"
         android:paddingBottom="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

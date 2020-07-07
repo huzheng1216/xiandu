@@ -34,7 +34,7 @@ public class IosTypeDialog extends Dialog {
     private View dialog_bottom_view;
     private LinearLayout dialog_bottom_line;
 
-    public IosTypeDialog(Context context) {
+    private IosTypeDialog(Context context) {
         super(context);
     }
 
@@ -68,6 +68,7 @@ public class IosTypeDialog extends Dialog {
     }
 
     private void setData() {
+        dialog_bottom_line.setOrientation(mDialogParams.orientation);
         if (TextUtils.isEmpty(mDialogParams.title)) {
             dialog_title_tv.setVisibility(View.GONE);
         } else {
@@ -156,6 +157,11 @@ public class IosTypeDialog extends Dialog {
             return this;
         }
 
+        public Builder setOrientation(int orientation) {
+            dialogParams.orientation = orientation;
+            return this;
+        }
+
         public Builder setLeftButton(CharSequence charSequence, OnClickListener onClickListener) {
             dialogParams.leftButtonStr = charSequence;
             dialogParams.leftButtonListener = onClickListener;
@@ -197,6 +203,7 @@ public class IosTypeDialog extends Dialog {
             CharSequence leftButtonStr;
             CharSequence rightButtonStr;
             CharSequence centerButtonStr;
+            int orientation;
             OnClickListener leftButtonListener;
             OnClickListener rightButtonListener;
             OnClickListener centerButtonListener;

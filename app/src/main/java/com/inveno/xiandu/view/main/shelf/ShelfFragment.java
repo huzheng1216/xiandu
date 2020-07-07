@@ -6,36 +6,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
-import com.inveno.xiandu.bean.response.ResponseShelf;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
-import com.inveno.xiandu.http.DDManager;
-import com.inveno.xiandu.http.body.BaseRequest;
 import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
-import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
+import com.inveno.xiandu.view.adapter.ShelfAdapter;
 import com.inveno.xiandu.view.components.GridSpacingItemDecoration;
-import com.inveno.xiandu.view.components.PopupWindowShelfItem;
-import com.inveno.xiandu.view.components.ShelfItemDialog;
-import com.inveno.xiandu.view.search.SerchResultActivity;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created By huzheng

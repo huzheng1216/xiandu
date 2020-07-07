@@ -18,4 +18,8 @@ public class Keys {
     public static final String SEARCH_HISTORY = "search_history";
     //阅读偏好
     public static final String READ_LIKE = "read_like";
+
+    //应用更新跳过
+    public static final String CANCEL_UPDATA = "cancel_updata";
+
 }

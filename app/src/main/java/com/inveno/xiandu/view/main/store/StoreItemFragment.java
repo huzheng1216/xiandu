@@ -231,10 +231,10 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(BookShelfList bookShelfList) {
                         mMoreData[0] = new ArrayList<>(bookShelfList.getNovel_list());
-                        if (mMoreData[0].size() < 0) {
+                        if (mMoreData[0].size() < 1) {
                             bookCityAdapter.setFooterText("没有更多数据");
                         }
-                        if (flag[0] == true) {
+                        if (flag[0]) {
                             int adIndex = adModel.getWrapper().getIndex();
                             if (mMoreData[0].size() >= adIndex) {
                                 mMoreData[0].add(adIndex, adModel);

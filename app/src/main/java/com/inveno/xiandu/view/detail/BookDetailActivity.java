@@ -51,6 +51,7 @@ import com.inveno.xiandu.bean.book.BookShelfList;
 import com.inveno.xiandu.bean.book.Bookbrack;
 import com.inveno.xiandu.bean.book.ChapterInfo;
 import com.inveno.xiandu.bean.book.EditorRecommend;
+import com.inveno.xiandu.bean.book.ReadTrack;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.db.SQL;
 import com.inveno.xiandu.http.DDManager;
@@ -636,9 +637,18 @@ public class BookDetailActivity extends BaseActivity {
     //立即阅读
     @OnClick(R.id.book_detail_read)
     void read() {
-        ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
-                .withString("json", GsonUtil.objectToJson(book))
-                .navigation();
+        ReadTrack readTrack = SQL.getInstance().getReadtrack(book.getContent_id());
+        if (readTrack != null) {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
+                    .withString("json", GsonUtil.objectToJson(book))
+                    .withInt("capter", readTrack.getChapter_id())
+                    .withInt("words_num", readTrack.getWords_num())
+                    .navigation();
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
+                    .withString("json", GsonUtil.objectToJson(book))
+                    .navigation();
+        }
     }
 
     //展开简介

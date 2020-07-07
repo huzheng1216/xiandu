@@ -85,6 +85,13 @@ public class SQL {
     }
 
     /**
+     * 根据id获取足迹某本书
+     */
+    public ReadTrack getReadtrack(long content_id) {
+        return DaoManager.getInstance(context).readTrackDao.queryBuilder().where(ReadTrackDao.Properties.Content_id.eq(content_id)).unique();
+    }
+
+    /**
      * 是否包含某本书
      */
     public boolean hasBookShelf(BookShelf bookShelf) {

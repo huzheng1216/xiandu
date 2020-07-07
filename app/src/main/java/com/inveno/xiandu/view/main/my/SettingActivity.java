@@ -17,6 +17,7 @@ import androidx.core.app.NotificationManagerCompat;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.inveno.android.basics.service.event.EventService;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.apkupdata.UpdateApkManager;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
@@ -174,7 +175,28 @@ public class SettingActivity extends TitleBarBaseActivity {
     }
 
     public void get_version(View view) {
+        updata();
 //        Toaster.showToastCenter(this, "检查更新");
+
+    }
+
+
+    private void updata() {
+        //应用更新提示
+        UpdateApkManager updateApkManager = new UpdateApkManager.Builder(this).updateListener(new UpdateApkManager
+                .UpdateListener() {
+            @Override
+            public void acceptUpdate(String msg) {
+
+            }
+
+            @Override
+            public void rejectUpdate(String errorMsg) {
+
+            }
+        });
+        updateApkManager.setSettingCheck(true);
+        updateApkManager.update();
     }
 
     public void logout(View view) {
