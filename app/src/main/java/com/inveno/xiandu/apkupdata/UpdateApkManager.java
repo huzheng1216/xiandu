@@ -399,13 +399,18 @@ public class UpdateApkManager {
                             String network = AndroidParamProviderHolder.get().device().getNetwork();
                             //WiFi环境后台默认下载
                             if (network.equals("1")) {
-                                //启动一个服务进行下载
-                                Intent intent = new Intent(mContext, UpdateService.class);
-                                intent.putExtra("downloadUrl", mUpdateInfo.getLink());
-                                intent.putExtra("appVersion", mUpdateInfo.getVersion());
-                                intent.putExtra("instruction", mUpdateInfo.getInstruction());
+                                //强制升级直接弹出
+                                if (mUpdateInfo.getType() == 1){
+                                    showNoticeDialog(mUpdateInfo.getType());
+                                }else{
+                                    //启动一个服务进行下载
+                                    Intent intent = new Intent(mContext, UpdateService.class);
+                                    intent.putExtra("downloadUrl", mUpdateInfo.getLink());
+                                    intent.putExtra("appVersion", mUpdateInfo.getVersion());
+                                    intent.putExtra("instruction", mUpdateInfo.getInstruction());
 
-                                mContext.startService(intent);
+                                    mContext.startService(intent);
+                                }
                             } else {
                                 //非WIFI环境，弹出提醒
                                 showNoticeDialog(mUpdateInfo.getType());
