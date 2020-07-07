@@ -1082,7 +1082,8 @@ public abstract class PageLoader {
 
         // 重置 PageMode
         mPageView.setPageMode(mPageMode);
-
+        clearList(mNextPageList);
+        mNextPageList = null;
         if (!isChapterOpen) {
             // 展示加载界面
             mPageView.drawCurPage(false);
