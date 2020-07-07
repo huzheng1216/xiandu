@@ -1041,6 +1041,10 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (subscribe.isDisposed()) {
             startPostRead();
         }
+        //隐藏StatusBar
+        mPvPage.post(
+                () -> hideSystemBar()
+        );
     }
 
     @Override
