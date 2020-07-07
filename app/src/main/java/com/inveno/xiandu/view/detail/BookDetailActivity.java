@@ -205,6 +205,7 @@ public class BookDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         setStatusBar(R.color.white, true);
         initData();
+        report();
     }
 
     @Override
@@ -787,9 +788,4 @@ public class BookDetailActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        report();
-    }
 }

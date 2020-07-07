@@ -282,12 +282,18 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         mBookId = bookShelf.getContent_id() + "";
         startBottomAd();
         startChapterAD();
+
+        report();
     }
 
     /**
      * 执行章节广告
      */
     private void startChapterAD() {
+        Integer optIndex = InvenoAdServiceHolder.getService().getPos(READER_BETWEEN);
+        if (optIndex!=null){
+            adIndex = optIndex;
+        }
         getChapterAd();
     }
 
@@ -559,6 +565,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     }
 
     int lastPos = -1;
+    int lastChapterPos = 0;
 
     @SuppressLint("WrongConstant")
     @Override
@@ -570,9 +577,18 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
                     @Override
                     public void onChapterChange(int pos) {
-                        LogUtils.H("onChapterChange = " + pos);
+                        LogUtils.H("onChapterChange = " + pos+"   lastChapterPos:"+lastChapterPos);
                         mCategoryAdapter.setChapter(pos);
                         mSbChapterProgress.setProgress(pos);
+
+                        if (pos>lastChapterPos){
+                            lastPos = 0;
+                            currIndex++;
+                        }
+                        lastChapterPos = pos;
+                        if (currIndex == adIndex) {
+                            getChapterAd();
+                        }
                     }
 
                     @Override
@@ -613,10 +629,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
                     @Override
                     public void onPageChange(int pos) {
-                        LogUtils.H("onPageChange = " + pos);
+
                         if (pos == lastPos + 1) {
                             currIndex++;
                         }
+                        LogUtils.H("onPageChange = " + pos + " lastPos:"+lastPos+ " currIndex:"+currIndex+" adIndex"+adIndex);
                         lastPos = pos;
                         if (currIndex == adIndex) {
                             getChapterAd();
@@ -1013,7 +1030,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     protected void onStart() {
         super.onStart();
         registerBrightObserver();
-        report();
         ReportManager.INSTANCE.readBookStart("", "", 0, bookShelf.getContent_id());
     }
 

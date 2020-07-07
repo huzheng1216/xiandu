@@ -47,6 +47,7 @@ import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
 import com.inveno.xiandu.view.custom.MRecycleScrollListener;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.main.AdapterChannel;
+import com.inveno.xiandu.view.main.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -294,7 +295,12 @@ public class StoreItemFragment extends BaseFragment {
         Log.i("wyjjjjjjj", "页面: " + channel);
         Log.i("wyjjjjjjj", "是否第一次: " + firstVisble);
         isVisible = true;
-        report();
+        if (((StoreFragment)getParentFragment()).isVisible) {
+            if (!((MainActivity)getActivity()).isOnPause()) {
+                report();
+            }
+        }
+        impReport();
         if (firstVisble) {
 //            initData();
             getData();
@@ -384,12 +390,13 @@ public class StoreItemFragment extends BaseFragment {
     //**************** 上报  start ******************//
     private void report() {
         ReportManager.INSTANCE.reportPageImp(pageId, "", getContext(), ServiceContext.userService().getUserPid());
-        impReport();
+
     }
 
     public void checkAndReport() {
         if (isVisible) {
             report();
+            impReport();
         }
     }
 

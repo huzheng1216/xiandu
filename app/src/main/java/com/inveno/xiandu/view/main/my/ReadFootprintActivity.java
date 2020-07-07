@@ -96,6 +96,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
         super.onCreate(savedInstanceState);
         setStatusBar(R.color.white, true);
         ButterKnife.bind(this, this);
+        report();
     }
 
     @Override
@@ -107,7 +108,6 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        report();
     }
 
     @Override

@@ -92,7 +92,7 @@ public enum ReportManager {
         if (readBean == null) {
             readBean = new ReadBean();
             readBean.startTime = System.currentTimeMillis();
-            readBean.pageId = currentPageId;
+            readBean.pageId = 11;
             readBean.upack = upack;
             readBean.cpack = cpack;
             readBean.type = currentType;

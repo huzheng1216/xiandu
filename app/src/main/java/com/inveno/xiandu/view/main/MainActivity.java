@@ -83,6 +83,8 @@ public class MainActivity extends BaseActivity {
 
     private UpdateApkManager updateApkManager;
 
+    private boolean isOnPause;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -390,5 +392,19 @@ public class MainActivity extends BaseActivity {
         viewPagerAdapter.notifyDataSetChanged();
 
         viewPager.setCurrentItem(position);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isOnPause = true;
+    }
+
+    public boolean isOnPause(){
+        if (isOnPause){
+            isOnPause = false;
+            return true;
+        }
+        return false;
     }
 }

@@ -57,6 +57,19 @@ public class InvenoAdService {
         return InvenoADAgent.getAdApi().requestSplashAD(splashAdParam);
     }
 
+    public Integer getPos(String scenario){
+        try {
+            Rule_list rule_list = InvenoServiceContext.ad().getRuleList(scenario);
+            if (rule_list != null) {
+                Rule rule = rule_list.getRule().get(0).get(0);
+                return rule.getPos();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 
     public StatefulCallBack<IndexedAdValueWrapper> requestInfoAd(String scenario, Context context) {
         try {

@@ -24,6 +24,7 @@ import com.inveno.xiandu.utils.DensityUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.components.tablayout.MyTabLayout;
+import com.inveno.xiandu.view.main.MainActivity;
 import com.inveno.xiandu.view.search.SearchActivityMain;
 
 import java.lang.reflect.Field;
@@ -50,6 +51,8 @@ public class StoreFragment extends BaseFragment {
     private List<Fragment> fragments = new ArrayList<>();
     private String[] strings = new String[]{"推荐", "男频", "女频"};
     MyAdapter myAdapter;
+
+    public boolean isVisible;
 
     public StoreFragment(){
 
@@ -93,6 +96,7 @@ public class StoreFragment extends BaseFragment {
     @Override
     protected void onVisible(Boolean firstVisble) {
         super.onVisible(firstVisble);
+        isVisible = true;
         report();
         if (firstVisble) {
             int gender = SPUtils.getInformain(Keys.READ_LIKE, 0);
@@ -144,8 +148,14 @@ public class StoreFragment extends BaseFragment {
     }
 
     private void report(){
-        for (int i = 0; i < fragments.size(); i++) {
-            ((StoreItemFragment)fragments.get(i)).checkAndReport();
-        }
+            for (int i = 0; i < fragments.size(); i++) {
+                ((StoreItemFragment) fragments.get(i)).checkAndReport();
+            }
+    }
+
+    @Override
+    protected void onInVisible() {
+        super.onInVisible();
+        isVisible = false;
     }
 }
