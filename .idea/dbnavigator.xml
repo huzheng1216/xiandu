@@ -25,13 +25,13 @@
     <show-object-properties value="true" />
     <loaded-nodes>
       <connection connection-id="5a9646d7-d86c-4099-82f3-8dbe3f55377f">
-        <schema name="main" object-types="view, dataset trigger, index, table, column, constraint" />
+        <schema name="main" object-types="view, table" />
       </connection>
     </loaded-nodes>
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="5a9646d7-d86c-4099-82f3-8dbe3f55377f">
-      <console name="Connection" type="STANDARD" schema="" session="Main"><![CDATA[select * from BookShelf]]></console>
+      <console name="Connection" type="STANDARD" schema="" session="Main">select * from BookShelf</console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
