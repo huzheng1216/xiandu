@@ -931,7 +931,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
     @Override
     public void showCategory(List<ChapterInfo> bookChapters) {
-
+        if (bookChapters == null) {
+            Toaster.showToastCenter(this, "章节列表获取失败");
+            finish();
+            return;
+        }
         //根据章节id，获取章节位置
         int chapter_id = getIntent().getIntExtra("capter", 0);
         int wordsNum = getIntent().getIntExtra("words_num", 0);
