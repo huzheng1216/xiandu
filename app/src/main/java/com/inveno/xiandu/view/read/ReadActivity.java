@@ -529,7 +529,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
     private void setUpAdapter() {
         mCategoryAdapter = new CategoryAdapter();
         mLvCategory.setAdapter(mCategoryAdapter);
-        mLvCategory.setFastScrollEnabled(true);
+//        mLvCategory.setFastScrollEnabled(true);
     }
 
     // 注册亮度观察者
