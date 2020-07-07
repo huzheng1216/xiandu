@@ -1,4 +1,4 @@
-package com.inveno.xiandu.view.main.shelf;
+package com.inveno.xiandu.view.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -278,8 +278,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
                 }
             });
             Glide.with(context)
-                    .load(data.get(realPosition)
-                    .getPoster())
+                    .load(data.get(realPosition).getPoster())
                     .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
                     .into(iholder.adapter_bookshelf_book_img);
 

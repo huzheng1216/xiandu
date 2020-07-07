@@ -26,7 +26,6 @@ import com.inveno.android.ad.service.InvenoAdServiceHolder;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
-import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
@@ -41,6 +40,7 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.LogUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
+import com.inveno.xiandu.view.adapter.ShelfAdapter;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.custom.SwipeItemLayout;
 import com.inveno.xiandu.view.dialog.IosTypeDialog;
@@ -291,10 +291,11 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         //做一个简单的同步
         for (Bookbrack bookbrack : data) {
             //后台有，本地没有，需要添加到本地
-            if (!SQL.getInstance().hasBookbrack(bookbrack)) {
-                SQL.getInstance().insertOrReplaceBookbrack(data);
+            if (!SQL.getInstance().hasBookbrack(bookbrack.getContent_id())) {
+                SQL.getInstance().addBookbrack(bookbrack);
                 initData();
             }
+
         }
 //        if (SQL.getInstance().getAllBookShelf().size() != data.size()) {
 //            SQL.getInstance().insertOrReplaceBookbrack(data);

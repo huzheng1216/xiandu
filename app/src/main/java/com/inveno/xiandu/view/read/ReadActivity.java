@@ -790,11 +790,12 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 //            Toaster.showToastCenter(ReadActivity.this, "已从书架移除");
 //            mTvBrief.setText("保存书架");
 //        } else {
-        SQL.getInstance().addBookShelf(bookShelf);
-        SQL.getInstance().addBookbrack(bookbrack);
-        Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
-        mTvBrief.setText("已在书架");
-//        }
+        if (!SQL.getInstance().hasBookbrack(bookShelf.getContent_id())) {
+            SQL.getInstance().addBookShelf(bookShelf);
+            SQL.getInstance().addBookbrack(bookbrack);
+            Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
+            mTvBrief.setText("已在书架");
+        }
     }
 
     /**

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.utils.ActivityManager;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -80,6 +81,8 @@ public abstract class BaseReadActivity extends AppCompatActivity {
         initWidget();
         initClick();
         processLogic();
+        //将Activity实例添加到AppManager的堆栈
+        ActivityManager.getAppManager().addActivity(this);
     }
 
     private void initToolbar(){
@@ -99,6 +102,7 @@ public abstract class BaseReadActivity extends AppCompatActivity {
         if (mDisposable != null){
             mDisposable.dispose();
         }
+
     }
 
     /**************************used method area*******************************************/

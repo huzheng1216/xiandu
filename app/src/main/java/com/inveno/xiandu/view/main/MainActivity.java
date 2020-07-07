@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity {
         viewPagerAdapter.setList(list);
         setDefaultItem(1);
 
-        //是否第一次启动
+        //是否同意协议
         boolean firstLaunch = SPUtils.getInformain(Keys.AGREE_AGREEMENT, false);
         if (!firstLaunch) {
             //用户协议

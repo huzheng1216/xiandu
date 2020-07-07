@@ -3,10 +3,14 @@ package com.inveno.xiandu.view.main.welfare;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextPaint;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -87,6 +91,16 @@ public class MyCoinActivity extends BaseActivity {
         coin_detail_recycleview.setLayoutManager(dataLayoutManager);
         coin_detail_recycleview.setAdapter(coinDetailAdapter);
 
+        //上拉加载
+        coin_detail_recycleview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                    getCoinDetail();
+                }
+            }
+        });
         if (mUserCoin != null) {
             coin_balance.setText(String.valueOf(mUserCoin.getBalance()));
             coin_today.setText(String.valueOf(mUserCoin.getCurrent_coin()));
@@ -132,8 +146,14 @@ public class MyCoinActivity extends BaseActivity {
                 .onSuccess(new Function1<CoinDetail, Unit>() {
                     @Override
                     public Unit invoke(CoinDetail coinDetail) {
-                        pageKnow = coinDetail.getPageSize() + 1;
+                        //索引从0开始计算，不需要+1
+                        pageKnow = coinDetail.getPage() + coinDetail.getPageSize();
 
+                        if (coinDetail.getCoin_detail().size() < coinDetail.getPageSize()) {
+                            coinDetailAdapter.setFooterText("没有更多数据");
+                        } else {
+                            coinDetailAdapter.setFooterText("正在努力加载...");
+                        }
                         coinDetailDatas.addAll(coinDetail.getCoin_detail());
                         coinDetailAdapter.setData(coinDetailDatas);
                         if (coinDetailDatas.size() > 0) {

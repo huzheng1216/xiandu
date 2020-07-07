@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class LogUtils {
 
-    private static final String TAG = "zheng.hu";
+    private static final String TAG = "xiandu";
     public static final String TAG_ACCOUNT = "account";
 
     /**
