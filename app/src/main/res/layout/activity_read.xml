@@ -224,7 +224,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginBottom="8dp"
             android:text="目录"
-            android:textColor="@color/nb.text.default"
+            android:textColor="#888888"
             android:textSize="20sp" />
 
         <RelativeLayout
