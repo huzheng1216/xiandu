@@ -241,6 +241,7 @@ public class UpdateService extends Service {
         if (!apkFile.exists()) {
             return;
         }
+        stopSelf();
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

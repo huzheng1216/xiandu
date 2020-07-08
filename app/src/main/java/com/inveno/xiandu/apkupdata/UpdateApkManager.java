@@ -78,6 +78,7 @@ public class UpdateApkManager {
     private boolean isSettingCheck = false;// 如果是检查页面的检查，都要弹框，都要忽略更新的按钮
     private UpdataApkDialog updataApkDialog;
 
+    private Intent updataServiceIntent;
     /**
      * 更新UI的handler
      */
@@ -119,7 +120,7 @@ public class UpdateApkManager {
     /**
      * 显示更新对话框
      */
-    public void showNoticeDialog(int type) {
+    public void showNoticeDialog(int type, String network) {
 
         String cancelStr = "";
         String updataStr = "";
@@ -138,7 +139,16 @@ public class UpdateApkManager {
         builder.setTitle(mRes.getString(R.string.new_version) + mUpdateInfo.getVersion());
         builder.setContext(mUpdateInfo.getInstruction());
         builder.setCancelable(false);
-        builder.setNeedAdvice(!file.exists());
+        if (file.exists()) {
+            builder.setNeedAdvice(false);
+        } else {
+            //wifi环境不需要提示wifi下载
+            if (network.equals("1")) {
+                builder.setNeedAdvice(false);
+            } else {
+                builder.setNeedAdvice(true);
+            }
+        }
         builder.setUpdataButtonListener(updataStr, new UpdataApkDialog.Builder.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -388,32 +398,32 @@ public class UpdateApkManager {
 //                    mUpdateInfo = result.getData();
 
                     mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
+                    // 检查网络环境，wifi的话，直接后台下载完后提醒
+                    String network = AndroidParamProviderHolder.get().device().getNetwork();
                     if (isSettingCheck) {
                         // 如果是设置页的肯定直接弹出了
                         //检查本地是否有数据，直接弹出安装
-                        showNoticeDialog(mUpdateInfo.getType());
+                        showNoticeDialog(mUpdateInfo.getType(), network);
                     } else {
                         if (mUpdateInfo != null && mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
                                 (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
-                            // TODO: 2020/7/6 有更新非设置页，需要后台下载，启动一个服务
-                            String network = AndroidParamProviderHolder.get().device().getNetwork();
                             //WiFi环境后台默认下载
                             if (network.equals("1")) {
                                 //强制升级直接弹出
-                                if (mUpdateInfo.getType() == 1){
-                                    showNoticeDialog(mUpdateInfo.getType());
-                                }else{
+                                if (mUpdateInfo.getType() == 1) {
+                                    showNoticeDialog(mUpdateInfo.getType(), network);
+                                } else {
                                     //启动一个服务进行下载
-                                    Intent intent = new Intent(mContext, UpdateService.class);
-                                    intent.putExtra("downloadUrl", mUpdateInfo.getLink());
-                                    intent.putExtra("appVersion", mUpdateInfo.getVersion());
-                                    intent.putExtra("instruction", mUpdateInfo.getInstruction());
+                                    updataServiceIntent = new Intent(mContext, UpdateService.class);
+                                    updataServiceIntent.putExtra("downloadUrl", mUpdateInfo.getLink());
+                                    updataServiceIntent.putExtra("appVersion", mUpdateInfo.getVersion());
+                                    updataServiceIntent.putExtra("instruction", mUpdateInfo.getInstruction());
 
-                                    mContext.startService(intent);
+                                    mContext.startService(updataServiceIntent);
                                 }
                             } else {
                                 //非WIFI环境，弹出提醒
-                                showNoticeDialog(mUpdateInfo.getType());
+                                showNoticeDialog(mUpdateInfo.getType(), network);
                             }
                         } else {
                             if (mUpdateListener != null) {
@@ -442,8 +452,10 @@ public class UpdateApkManager {
         });
     }
 
-    public void stopService(){
-
+    public void stopService() {
+        if (updataServiceIntent != null) {
+            mContext.stopService(updataServiceIntent);
+        }
     }
 
     public void setUpdateListener(UpdateListener updateListener) {

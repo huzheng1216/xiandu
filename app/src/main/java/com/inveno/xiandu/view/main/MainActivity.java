@@ -1,21 +1,17 @@
 package com.inveno.xiandu.view.main;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -47,21 +43,13 @@ import com.inveno.xiandu.view.main.my.MineFragment;
 import com.inveno.xiandu.view.main.shelf.BookShelfFragmentMain;
 import com.inveno.xiandu.view.main.store.StoreFragment;
 import com.inveno.xiandu.view.main.welfare.WelfareFragment;
-import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
 import com.mylhyl.acp.Acp;
 import com.mylhyl.acp.AcpListener;
 import com.mylhyl.acp.AcpOptions;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Response;
 
 @Route(path = ARouterPath.ACTIVITY_MAIN)
 public class MainActivity extends BaseActivity {
@@ -92,7 +80,6 @@ public class MainActivity extends BaseActivity {
         requestMyPermissions();
         setContentView(R.layout.activity_main);
         setStatusBar(R.color.white, true);
-
         bottomNavigationView = findViewById(R.id.bottomNavigationView_main);
         bottomNavigationView.setItemIconTintList(null);
         bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -134,7 +121,7 @@ public class MainActivity extends BaseActivity {
         if (!firstLaunch) {
             //用户协议
             agreementDialog();
-        }else{
+        } else {
             updata();
         }
     }
@@ -169,6 +156,12 @@ public class MainActivity extends BaseActivity {
                 }
             }
         }, 2000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        updateApkManager.stopService();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -400,8 +393,8 @@ public class MainActivity extends BaseActivity {
         isOnPause = true;
     }
 
-    public boolean isOnPause(){
-        if (isOnPause){
+    public boolean isOnPause() {
+        if (isOnPause) {
             isOnPause = false;
             return true;
         }
