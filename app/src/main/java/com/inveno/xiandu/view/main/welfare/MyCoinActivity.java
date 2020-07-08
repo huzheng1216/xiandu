@@ -81,9 +81,9 @@ public class MyCoinActivity extends BaseActivity {
         no_coin_detail = findViewById(R.id.no_coin_detail);
 
         coin_detail_txt = findViewById(R.id.coin_detail_txt);
-        coin_detail_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-        TextPaint tp = coin_detail_txt.getPaint();
-        tp.setFakeBoldText(true);
+//        coin_detail_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tp = coin_detail_txt.getPaint();
+//        tp.setFakeBoldText(true);
 
         RecyclerView coin_detail_recycleview = findViewById(R.id.coin_detail_recycleview);
         coinDetailAdapter = new CoinDetailAdapter(this, this, coinDetailDatas);

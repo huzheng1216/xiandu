@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.android.basics.service.event.EventCanceler;
 import com.inveno.android.basics.service.event.EventListener;
 import com.inveno.android.basics.service.event.EventService;
+import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.UserCoin;
@@ -33,6 +34,8 @@ import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.main.MainActivity;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.LinkedHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -176,10 +179,16 @@ public class MineFragment extends BaseFragment {
             public void onEvent(@NotNull String name, @NotNull String arg) {
                 UserInfo userInfo = ServiceContext.userService().getUserInfo();
                 if (TextUtils.isEmpty(userInfo.getUser_name())) {
-                    user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+                    //随机一个6位数作为编号
+                    int userCode = (int) ((Math.random() * 9 + 1) * 100000);
+                    String username = String.format("闲读读者_%s", userCode);
+                    user_name.setText(username);
+                    userUpdata("user_name", username);
+                    userInfo.setUser_name(username);
                 } else {
                     user_name.setText(userInfo.getUser_name());
                 }
+                AppPersistRepository.get().save(LoginAPI.USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
             }
         });
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
@@ -208,7 +217,13 @@ public class MineFragment extends BaseFragment {
             UserInfo userInfo = ServiceContext.userService().getUserInfo();
             if (userInfo != null) {
                 if (TextUtils.isEmpty(userInfo.getUser_name())) {
-                    user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+                    //随机一个6位数作为编号
+                    int userCode = (int) ((Math.random() * 9 + 1) * 100000);
+                    String username = String.format("闲读读者_%s", userCode);
+                    user_name.setText(username);
+                    userUpdata("user_name", username);
+                    userInfo.setUser_name(username);
+                    AppPersistRepository.get().save(LoginAPI.USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
                 } else {
                     user_name.setText(userInfo.getUser_name());
                 }
@@ -223,7 +238,13 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public Unit invoke(UserInfo userInfo) {
                         if (TextUtils.isEmpty(userInfo.getUser_name())) {
-                            user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+                            //随机一个6位数作为编号
+                            int userCode = (int) ((Math.random() * 9 + 1) * 100000);
+                            String username = String.format("闲读读者_%s", userCode);
+                            user_name.setText(username);
+                            userUpdata("user_name", username);
+                            userInfo.setUser_name(username);
+                            AppPersistRepository.get().save(LoginAPI.USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
                         } else {
                             user_name.setText(userInfo.getUser_name());
                         }
@@ -244,7 +265,7 @@ public class MineFragment extends BaseFragment {
         }
         if (ServiceContext.userService().isLogin()) {
             get_coin();
-        }else{
+        } else {
             mine_my_coin.setText("--");
             mine_today_coin.setText("--");
         }
@@ -258,6 +279,28 @@ public class MineFragment extends BaseFragment {
     private void setHeaderImage(String url) {
 //        Glide.with(this).load(R.drawable.ic_test_ad).centerCrop().placeholder(R.drawable.ic_header_default).into(pic);
         GlideUtils.LoadCircleImage(this.getContext(), R.drawable.ic_header_default, pic);
+    }
+
+    /**
+     * 第一次登录，提交一个默认的昵称
+     * @param key
+     * @param value
+     */
+    private void userUpdata(String key, String value) {
+        LinkedHashMap<String, Object> updata = new LinkedHashMap<>();
+        updata.put("utype", "1");
+        updata.put(key, value);
+        APIContext.updataUserAPI().updataUser(updata).onSuccess(new Function1<UserInfo, Unit>() {
+            @Override
+            public Unit invoke(UserInfo userInfo) {
+                return null;
+            }
+        }).onFail(new Function2<Integer, String, Unit>() {
+            @Override
+            public Unit invoke(Integer integer, String s) {
+                return null;
+            }
+        }).execute();
     }
 
     @Override
@@ -284,7 +327,7 @@ public class MineFragment extends BaseFragment {
         }
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(8,"",getContext(), ServiceContext.userService().getUserPid());
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(8, "", getContext(), ServiceContext.userService().getUserPid());
     }
 }

@@ -35,7 +35,7 @@ public class MainApplication extends Application implements Application.Activity
     private int activityCount;//activity的count数
     public static boolean isForeground;//是否在前台
 
-    private static Typeface sanhansTypeface;
+//    private static Typeface sanhansTypeface;
 
     @Override
     public void onCreate() {
@@ -62,7 +62,7 @@ public class MainApplication extends Application implements Application.Activity
         BasicsServiceModule.Companion.onApplicationCreate(this);
         InvenoServiceContext.init(this);
         //初始化宋体
-        initfonts();
+//        initfonts();
 
         registerActivityLifecycleCallbacks(this);
 
@@ -74,17 +74,17 @@ public class MainApplication extends Application implements Application.Activity
         crashHandler.init(getApplicationContext());
     }
 
-    private void initfonts() {
-        AssetManager mmgr = getAssets();//得到AssetManager
-        sanhansTypeface = Typeface.createFromAsset(mmgr, "fonts/sourcehanserifcn_regular.otf");
-    }
-
-    public Typeface getSanhansTypeface() {
-        if (sanhansTypeface == null) {
-            initfonts();
-        }
-        return sanhansTypeface;
-    }
+//    private void initfonts() {
+//        AssetManager mmgr = getAssets();//得到AssetManager
+//        sanhansTypeface = Typeface.createFromAsset(mmgr, "fonts/sourcehanserifcn_regular.otf");
+//    }
+//
+//    public Typeface getSanhansTypeface() {
+//        if (sanhansTypeface == null) {
+//            initfonts();
+//        }
+//        return sanhansTypeface;
+//    }
 
     public static Context getContext() {
         return sInstance;

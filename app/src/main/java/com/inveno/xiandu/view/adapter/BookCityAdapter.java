@@ -63,6 +63,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getHeaderView() {
+//        return null;
         return getViewHolderView(mContext, R.layout.item_store_header);
     }
 
@@ -73,7 +74,10 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
 
     public void setDataList(ArrayList<BaseDataBean> dataList) {
+//        int addDataNum = dataList.size() - mDataList.size();
+//        int lastSum = mDataList.size();
         mDataList = dataList;
+//        notifyItemRangeInserted(lastSum, addDataNum);
         notifyDataSetChanged();
     }
 
@@ -230,7 +234,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     }
 
     private RecyclerView.ViewHolder createViewHoder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder mVIewHoder = null;
+        RecyclerView.ViewHolder mVIewHoder;
 
         if (viewType == HEADER_ITEM_TYPE) {
             mVIewHoder = new BookCityAdapter.HeaderViewHolder(getHeaderView());
@@ -326,10 +330,10 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             super(itemView);
             recommend_text = itemView.findViewById(R.id.recommend_text);
             //设置宋体
-            recommend_text.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-            //字体加粗
-            TextPaint tp = recommend_text.getPaint();
-            tp.setFakeBoldText(true);
+//            recommend_text.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//            //字体加粗
+//            TextPaint tp = recommend_text.getPaint();
+//            tp.setFakeBoldText(true);
 
 
             book_city_change = itemView.findViewById(R.id.book_city_change);

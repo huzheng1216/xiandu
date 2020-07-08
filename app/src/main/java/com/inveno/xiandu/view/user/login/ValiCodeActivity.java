@@ -149,7 +149,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
 
         } else if (id == R.id.vali_login) {
             // TODO: 2020/6/8 发送登录请求
-            Toaster.showToast(ValiCodeActivity.this, "登录请求");
+//            Toaster.showToast(ValiCodeActivity.this, "登录请求");
             APIContext.loginAPI().login(loginPhoneNum, vali_code_input_editview.getText().toString())
                     .onSuccess(new Function1<UserInfo, Unit>() {
                         @Override

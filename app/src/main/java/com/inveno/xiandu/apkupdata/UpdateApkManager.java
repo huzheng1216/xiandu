@@ -410,17 +410,18 @@ public class UpdateApkManager {
                             //WiFi环境后台默认下载
                             if (network.equals("1")) {
                                 //强制升级直接弹出
-                                if (mUpdateInfo.getType() == 1) {
-                                    showNoticeDialog(mUpdateInfo.getType(), network);
-                                } else {
-                                    //启动一个服务进行下载
-                                    updataServiceIntent = new Intent(mContext, UpdateService.class);
-                                    updataServiceIntent.putExtra("downloadUrl", mUpdateInfo.getLink());
-                                    updataServiceIntent.putExtra("appVersion", mUpdateInfo.getVersion());
-                                    updataServiceIntent.putExtra("instruction", mUpdateInfo.getInstruction());
+//                                if (mUpdateInfo.getType() == 1) {
+//                                    showNoticeDialog(mUpdateInfo.getType(), network);
+//                                } else {
+                                //启动一个服务进行下载
+                                updataServiceIntent = new Intent(mContext, UpdateService.class);
+                                updataServiceIntent.putExtra("downloadUrl", mUpdateInfo.getLink());
+                                updataServiceIntent.putExtra("appVersion", mUpdateInfo.getVersion());
+                                updataServiceIntent.putExtra("instruction", mUpdateInfo.getInstruction());
+                                updataServiceIntent.putExtra("type", mUpdateInfo.getType());
 
-                                    mContext.startService(updataServiceIntent);
-                                }
+                                mContext.startService(updataServiceIntent);
+//                                }
                             } else {
                                 //非WIFI环境，弹出提醒
                                 showNoticeDialog(mUpdateInfo.getType(), network);

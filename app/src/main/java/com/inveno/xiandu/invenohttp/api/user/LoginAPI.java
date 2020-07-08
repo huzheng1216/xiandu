@@ -12,6 +12,7 @@ import com.inveno.android.basics.service.third.json.JsonUtil;
 import com.inveno.android.basics.service.thread.ThreadUtil;
 import com.inveno.xiandu.bean.user.UserInfo;
 import com.inveno.xiandu.bean.user.UserInfoList;
+import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
@@ -82,8 +83,15 @@ public class LoginAPI extends BaseSingleInstanceService {
                 if (userInfoList.getUser_list().size() > 0) {
                     UserInfo userInfo = userInfoList.getUser_list().get(0);
                     userInfo.setPhone_num(phoneNum);
+
                     if (TextUtils.isEmpty(userInfo.getUser_name())) {
-                        userInfo.setUser_name(String.format("闲读读者_%s", userInfo.getPid()));
+                        //随机一个6位数作为编号
+                        int userCode = (int) ((Math.random() * 9 + 1) * 100000);
+                        String username = String.format("闲读读者_%s", userCode);
+                        userInfo.setUser_name(username);
+                        //登录成功，Pid需要及时变更
+                        ServiceContext.userService().setUserInfo(userInfo);
+                        userUpdata("user_name", username);
                     }
                     AppPersistRepository.get().save(USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
                     ServiceContext.userService().setUserInfo(userInfo);
@@ -101,5 +109,29 @@ public class LoginAPI extends BaseSingleInstanceService {
             }
         });
         return uiCallBack;
+    }
+
+
+    /**
+     * 第一次登录，提交一个默认的昵称
+     * @param key
+     * @param value
+     */
+    private void userUpdata(String key, String value) {
+        LinkedHashMap<String, Object> updata = new LinkedHashMap<>();
+        updata.put("utype", "1");
+        updata.put(key, value);
+        APIContext.updataUserAPI().updataUser(updata).onSuccess(new Function1<UserInfo, Unit>() {
+            @Override
+            public Unit invoke(UserInfo userInfo) {
+                UserInfo mUserInfo = userInfo;
+                return null;
+            }
+        }).onFail(new Function2<Integer, String, Unit>() {
+            @Override
+            public Unit invoke(Integer integer, String s) {
+                return null;
+            }
+        }).execute();
     }
 }

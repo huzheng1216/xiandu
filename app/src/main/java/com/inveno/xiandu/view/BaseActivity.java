@@ -135,6 +135,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             view = getnetworkErrorView(listener);
         }
         errorPopup = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        errorPopup.setClippingEnabled(false);//全屏显示
         errorPopup.setFocusable(true);// 取得焦点
         //点击外部消失
         errorPopup.setOutsideTouchable(false);

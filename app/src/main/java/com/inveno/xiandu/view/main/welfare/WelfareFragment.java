@@ -110,17 +110,17 @@ public class WelfareFragment extends BaseFragment {
 
     private void setTextTypeface() {
 
-        welfare_title.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-        TextPaint tp = welfare_title.getPaint();
-        tp.setFakeBoldText(true);
-
-        welfare_today_coin_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-        TextPaint tpCoin = welfare_today_coin_txt.getPaint();
-        tpCoin.setFakeBoldText(true);
-
-        welfare_coin_mission_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-        TextPaint tpMission = welfare_coin_mission_txt.getPaint();
-        tpMission.setFakeBoldText(true);
+//        welfare_title.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tp = welfare_title.getPaint();
+//        tp.setFakeBoldText(true);
+//
+//        welfare_today_coin_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tpCoin = welfare_today_coin_txt.getPaint();
+//        tpCoin.setFakeBoldText(true);
+//
+//        welfare_coin_mission_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tpMission = welfare_coin_mission_txt.getPaint();
+//        tpMission.setFakeBoldText(true);
     }
 
     @Override

@@ -34,9 +34,9 @@
                         android:layout_marginBottom="10dp"
                         android:gravity="center"
                         android:text="福利中心"
-                        android:textStyle="bold"
                         android:textColor="@color/white"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
@@ -54,6 +54,7 @@
                             android:layout_marginTop="12dp"
                             android:text="今日金币"
                             android:textColor="@color/black"
+                            android:typeface="sans"
                             android:textSize="18sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
@@ -132,6 +133,13 @@
                         app:layout_constraintTop_toBottomOf="@+id/welfare_coin_mission_txt" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

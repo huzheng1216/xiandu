@@ -53,6 +53,7 @@ public class UpdateService extends Service {
     private String downloadUrl = "";//下载地址
     private String updataVersion = "";//升级版本号
     private String instruction = ""; //升级信息
+    private int type = 2;//1:强制升级2:非强制升级
     private String mSaveFileName;
     private UpdataApkDialog updataApkDialog;
 
@@ -78,6 +79,7 @@ public class UpdateService extends Service {
         downloadUrl = intent.getStringExtra("downloadUrl");
         updataVersion = intent.getStringExtra("appVersion");
         instruction = intent.getStringExtra("instruction");
+        type = intent.getIntExtra("type", 2);
 
         mSaveFileName = savePath + getPackageName() + updataVersion + ".apk";
         updata();
@@ -206,6 +208,11 @@ public class UpdateService extends Service {
 
 
     public void showNotifiDialog() {
+        String cancelStr = "";
+
+        if (type != 1) {
+            cancelStr = "下次再说";
+        }
         // TODO: 2020/7/7 这里应该弹窗提醒安装
         UpdataApkDialog.Builder builder = new UpdataApkDialog.Builder(ActivityManager.getAppManager().currentActivity());
         builder.setTitle(getResources().getString(R.string.new_version) + updataVersion);
@@ -220,7 +227,7 @@ public class UpdateService extends Service {
                 installAPK();
             }
         });
-        builder.setCancelButtonListener("下次再说", new UpdataApkDialog.Builder.OnClickListener() {
+        builder.setCancelButtonListener(cancelStr, new UpdataApkDialog.Builder.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //记录更新版本号
