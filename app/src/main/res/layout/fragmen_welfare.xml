@@ -47,7 +47,7 @@
                         android:background="@drawable/welfare_top_coin_bg">
 
                         <TextView
-                            android:id="@+id/textView10"
+                            android:id="@+id/welfare_today_coin_txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="20dp"
@@ -101,7 +101,7 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/textView15"
+                        android:id="@+id/welfare_coin_mission_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -121,7 +121,7 @@
                         android:text="暂无金币任务"
                         android:textColor="@color/gray_6"
                         android:textSize="14sp"
-                        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                        app:layout_constraintTop_toBottomOf="@+id/welfare_coin_mission_txt" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/welfare_mission_recycle"
@@ -129,7 +129,7 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="10dp"
                         android:overScrollMode="never"
-                        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+                        app:layout_constraintTop_toBottomOf="@+id/welfare_coin_mission_txt" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </FrameLayout>
         </LinearLayout>
