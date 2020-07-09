@@ -16,9 +16,15 @@ public enum  ReportService {
 
     INSTANCE;
 
-    String url = "http://121.201.120.128:9000/report/data";
+    String url = "http://novel.inveno.com/report/data";
+
+    public void init(String host){
+        url = host+"/report/data";
+    }
 
     public void report(final LinkedHashMap<String, Object> map){
+
+        Log.i("requestInfoAd","url:"+url);
 
         MultiTypeHttpStatefulCallBack.INSTANCE
                 .<String>newCallBack(new TypeReference<String>() {
