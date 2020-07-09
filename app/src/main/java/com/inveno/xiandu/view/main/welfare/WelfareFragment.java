@@ -188,7 +188,7 @@ public class WelfareFragment extends BaseFragment {
                         } else {
                             Toaster.showToastShort(getContext(), "获取任务失败:" + s);
                         }
-                        no_mission_detail.setVisibility(View.VISIBLE);
+//                        no_mission_detail.setVisibility(View.VISIBLE);
                         return null;
                     }
                 }).execute();

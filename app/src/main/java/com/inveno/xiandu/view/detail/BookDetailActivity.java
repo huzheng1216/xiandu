@@ -482,7 +482,7 @@ public class BookDetailActivity extends BaseActivity {
                 popupWindow.dismiss();
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                         .withString("json", GsonUtil.objectToJson(book))
-                        .withInt("capter", position)
+                        .withInt("chapter_num", position)
                         .navigation();
             }
         });
@@ -692,7 +692,7 @@ public class BookDetailActivity extends BaseActivity {
             //这里需要跳转到小说阅读
             ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                     .withString("json", GsonUtil.objectToJson(book))
-                    .withInt("capter", 1)
+                    .withInt("chapter_num", 1)
                     .navigation();
         }
     }
