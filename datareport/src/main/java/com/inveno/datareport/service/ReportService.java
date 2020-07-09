@@ -24,7 +24,7 @@ public enum  ReportService {
 
     public void report(final LinkedHashMap<String, Object> map){
 
-        Log.i("requestInfoAd","url:"+url);
+//        Log.i("requestInfoAd","url:"+url);
 
         MultiTypeHttpStatefulCallBack.INSTANCE
                 .<String>newCallBack(new TypeReference<String>() {
