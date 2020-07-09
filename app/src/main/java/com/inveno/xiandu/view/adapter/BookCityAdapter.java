@@ -472,6 +472,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         TextView default_image_words;
         TextView default_image_score;
         ImageView default_image_img;
+        View default_image_bottom_line;
 
         public DefaulRemmendViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -482,6 +483,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             default_image_words = itemView.findViewById(R.id.default_image_words);
             default_image_score = itemView.findViewById(R.id.default_image_score);
             default_image_img = itemView.findViewById(R.id.default_image_img);
+            default_image_bottom_line = itemView.findViewById(R.id.default_image_img);
         }
 
         @Override

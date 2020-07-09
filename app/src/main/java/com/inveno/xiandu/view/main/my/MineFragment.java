@@ -26,6 +26,7 @@ import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
 import com.inveno.xiandu.utils.GlideUtils;
+import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
@@ -78,10 +79,16 @@ public class MineFragment extends BaseFragment {
         clickUser();
     }
 
+    private UserCoin mUserCoin;
+
     @OnClick(R.id.mine_my_coin_line)
     void my_coin() {
         if (!ServiceContext.userService().isLogin()) {
             ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_MY_COIN)
+                    .withString("mUserCoin", GsonUtil.objectToJson(mUserCoin))
+                    .navigation();
         }
     }
 
@@ -89,6 +96,10 @@ public class MineFragment extends BaseFragment {
     void today_coin() {
         if (!ServiceContext.userService().isLogin()) {
             ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_MY_COIN)
+                    .withString("mUserCoin", GsonUtil.objectToJson(mUserCoin))
+                    .navigation();
         }
     }
 
@@ -148,7 +159,7 @@ public class MineFragment extends BaseFragment {
                 .onSuccess(new Function1<UserCoinOut, Unit>() {
                     @Override
                     public Unit invoke(UserCoinOut userCoin) {
-                        UserCoin mUserCoin = userCoin.getCoin();
+                        mUserCoin = userCoin.getCoin();
                         mine_my_coin.setText(String.valueOf(mUserCoin.getBalance()));
                         mine_today_coin.setText(String.valueOf(mUserCoin.getCurrent_coin()));
                         return null;
@@ -283,6 +294,7 @@ public class MineFragment extends BaseFragment {
 
     /**
      * 第一次登录，提交一个默认的昵称
+     *
      * @param key
      * @param value
      */

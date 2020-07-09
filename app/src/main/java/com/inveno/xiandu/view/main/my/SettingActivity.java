@@ -23,6 +23,7 @@ import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.AppInfoUtils;
+import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
@@ -41,6 +42,8 @@ public class SettingActivity extends TitleBarBaseActivity {
     private TextView mine_push_status;
 
     private TextView mine_appversion;
+
+    private View upgrade_red_dot;
 
     private IosTypeDialog iosTypeDialog;
 
@@ -71,6 +74,14 @@ public class SettingActivity extends TitleBarBaseActivity {
 
         mine_appversion = findViewById(R.id.mine_appversion);
 
+        upgrade_red_dot = findViewById(R.id.upgrade_red_dot);
+        //是否需要升级
+        boolean needUpgrage = SPUtils.getInformain(UpdateApkManager.NEED_UPGRADE, false);
+        if (needUpgrage){
+            upgrade_red_dot.setVisibility(View.VISIBLE);
+        }else{
+            upgrade_red_dot.setVisibility(View.INVISIBLE);
+        }
         mine_appversion.setText(AppInfoUtils.getAppVersion(this));
 
         logout = findViewById(R.id.logout);

@@ -166,7 +166,8 @@ public class WelfareFragment extends BaseFragment {
     }
 
     public void get_mission() {
-        int[] typeIds = {4, 3};
+        int[] typeIds = {4};
+//        int[] typeIds = {4, 3};
         APIContext.coinApi().getMission(typeIds)
                 .onSuccess(new Function1<MissionDataList, Unit>() {
                     @Override

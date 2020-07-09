@@ -8,24 +8,24 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="298dp">
+        android:layout_height="266dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="226dp"
+            android:layout_height="206dp"
             android:background="@drawable/ic_mine_header_bg">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="28dp"
+                android:layout_marginTop="22dp"
                 android:layout_marginBottom="40dp"
                 android:orientation="horizontal">
 
                 <RelativeLayout
                     android:id="@+id/tittle_bar_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="65dp"
+                    android:layout_height="48dp"
                     tools:ignore="UselessParent">
 
                     <ImageView
@@ -36,7 +36,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginStart="10dp"
                         android:onClick="back"
-                        android:padding="5dp"
+                        android:padding="8dp"
                         android:src="@drawable/black_back_arrow" />
 
                     <TextView
@@ -120,7 +120,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:text="今日获得金币"
                 android:textColor="@color/gray_other"
                 android:textSize="14sp"
@@ -132,7 +132,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="40dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:text="累计获得金币"
                 android:textColor="@color/gray_other"
                 android:textSize="14sp"
@@ -156,53 +156,53 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.51"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView29">
 
                 <View
                     android:id="@+id/view6"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
+                    android:layout_height="1px"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginEnd="20dp"
                     android:background="#CAA714" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/coin_exchange_rate"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
-                android:text="今日汇率：10,000金币≈1元"
-                android:textColor="@color/gray_6"
-                android:textSize="12sp"
+                android:layout_marginBottom="4dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+                <TextView
+                    android:id="@+id/coin_exchange_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:text="今日汇率：10,000金币≈1元"
+                    android:textColor="@color/gray_6"
+                    android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/textView33"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="7dp"
-                android:background="@drawable/get_money_bt_bg"
-                android:onClick="coin_top_up"
-                android:paddingStart="17dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="17dp"
-                android:paddingBottom="4dp"
-                android:text="充话费"
-                android:textColor="@color/gray_3"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+                <TextView
+                    android:id="@+id/textView33"
+                    android:layout_width="70dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="11dp"
+                    android:background="@drawable/get_money_bt_bg"
+                    android:onClick="coin_top_up"
+                    android:gravity="center"
+                    android:text="充话费"
+                    android:textColor="@color/gray_3"
+                    android:textSize="12sp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
@@ -220,7 +220,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_marginStart="5dp"
             android:background="?attr/selectableItemBackground"
             android:orientation="horizontal"

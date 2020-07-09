@@ -72,7 +72,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
 
         }
     }

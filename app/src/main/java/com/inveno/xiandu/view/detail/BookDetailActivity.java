@@ -310,7 +310,7 @@ public class BookDetailActivity extends BaseActivity {
         relevantBookAdapter.setOnitemClickListener(new RelevantBookAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                         .withString("json", GsonUtil.objectToJson(bookShelfs.get(position)))
                         .navigation();
                 clickReport(bookShelfs.get(position).getContent_id());
@@ -482,7 +482,7 @@ public class BookDetailActivity extends BaseActivity {
                 popupWindow.dismiss();
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                         .withString("json", GsonUtil.objectToJson(book))
-                        .withInt("chapter_num", position)
+                        .withInt("capter", book.getBookChapters().get(position).getChapter_id())
                         .navigation();
             }
         });
@@ -514,7 +514,16 @@ public class BookDetailActivity extends BaseActivity {
                     @Override
                     public void onNext(BaseRequest<BookChapter> bookChapterBaseRequest) {
                         chapterInfos = bookChapterBaseRequest.getData().getChapter_list();
-                        book.setBookChapters(chapterInfos);
+                        List<ChapterInfo> mBookChapters = new ArrayList<>();
+                        for (ChapterInfo bookChapter : chapterInfos) {
+                            if (bookChapter.getChapter_name().startsWith(" ")){
+                                break;
+                            }
+                            bookChapter.setChapter_name(bookChapter.getChapter_name().trim());
+                            mBookChapters.add(bookChapter);
+                        }
+                        chapterInfos = mBookChapters;
+                        book.setBookChapters(mBookChapters);
                         refreshCapter();
                     }
 

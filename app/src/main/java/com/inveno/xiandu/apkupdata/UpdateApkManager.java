@@ -58,6 +58,7 @@ import okhttp3.Response;
 public class UpdateApkManager {
     private static String savePath = "/sdcard/updateAPK/"; //apk保存到SD卡的路径
     public static int OKGO_DEFAUL_TIMEOUT = 60000;
+    public static String NEED_UPGRADE = "needUpgrade";
 
     private static final int DOWNLOADING = 1; //表示正在下载
     private static final int DOWNLOADED = 2; //下载完毕
@@ -396,7 +397,11 @@ public class UpdateApkManager {
                     mUpdateInfo = JsonUtil.Companion.parseObject(dataStr, UpdateInfo.class);
 //                    Result<UpdateInfo> result = Result.fromJson(dataStr, UpdateInfo.class);
 //                    mUpdateInfo = result.getData();
-
+                    if (mUpdateInfo.getUpgrade() == 1) {
+                        SPUtils.setInformain(NEED_UPGRADE, true);
+                    } else {
+                        SPUtils.setInformain(NEED_UPGRADE, false);
+                    }
                     mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
                     // 检查网络环境，wifi的话，直接后台下载完后提醒
                     String network = AndroidParamProviderHolder.get().device().getNetwork();

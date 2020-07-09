@@ -174,8 +174,9 @@ public class RankingActivity extends TitleBarBaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(RankingActivity.this, SearchActivityMain.class);
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(RankingActivity.this, imageView, "photo").toBundle();
-                startActivity(intent, bundle);
+//                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(RankingActivity.this, imageView, "photo").toBundle();
+//                startActivity(intent, bundle);
+                startActivity(intent);
             }
         });
 //        imageView.setOnClickListener(new View.OnClickListener() {
@@ -273,22 +274,25 @@ public class RankingActivity extends TitleBarBaseActivity {
         rankingBooks.clear();
         rightDataAdapter.setmDataList(rankingBooks);
         rightDataAdapter.addAd(adModel);//先展示广告
-        String dataKey = String.format("%s-%s", mMenus.get(knowRankingPosition).getRanking_id(), channel_id);
-        List<RankingData> rankingDatas = mRankingDatas.get(dataKey);
-        if (rankingDatas != null) {
-            ArrayList<BaseDataBean> mData = new ArrayList<>(rankingDatas);
-            addAd(mData);
-            rightDataAdapter.setmDataList(mData);
-        } else {
-            getRankingData();
+        if (mMenus.size() > knowRankingPosition) {
+            String dataKey = String.format("%s-%s", mMenus.get(knowRankingPosition).getRanking_id(), channel_id);
+            List<RankingData> rankingDatas = mRankingDatas.get(dataKey);
+            if (rankingDatas != null) {
+                ArrayList<BaseDataBean> mData = new ArrayList<>(rankingDatas);
+                addAd(mData);
+                rightDataAdapter.setmDataList(mData);
+            } else {
+                getRankingData();
+            }
         }
+
     }
 
 
     /**
      * 加载广告
      */
-    private void loadAd(){
+    private void loadAd() {
         InvenoAdServiceHolder.getService().requestInfoAd(RANKING_LIST, this).onSuccess(wrapper -> {
 //            Log.i("requestInfoAd", "onSuccess wrapper " + wrapper.toString());
             adModel = new AdModel(wrapper);
@@ -300,17 +304,17 @@ public class RankingActivity extends TitleBarBaseActivity {
         }).execute();
     }
 
-    private void addAd(List<BaseDataBean> mData){
-        if (adModel!=null) {
+    private void addAd(List<BaseDataBean> mData) {
+        if (adModel != null) {
             int index = adModel.getWrapper().getIndex();
-            if (mData.size() >= index){
-                mData.add(index,adModel);
+            if (mData.size() >= index) {
+                mData.add(index, adModel);
             }
         }
     }
 
-    private void report(){
-        ReportManager.INSTANCE.reportPageImp(5,"",this, ServiceContext.userService().getUserPid());
+    private void report() {
+        ReportManager.INSTANCE.reportPageImp(5, "", this, ServiceContext.userService().getUserPid());
     }
 
     private void clickReport(long contentId) {

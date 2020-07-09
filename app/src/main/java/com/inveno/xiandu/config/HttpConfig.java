@@ -1,11 +1,13 @@
 package com.inveno.xiandu.config;
 
+import com.inveno.xiandu.BuildConfig;
+
 /**
  * Created by Administrator on 2016/9/23.
  */
 public class HttpConfig {
 
-    public static final String HOST = "http://121.201.120.128:9000/";
+    public static final String HOST = BuildConfig.InvenoUrl;
 //    public static final String HOST = "http://business.inveno.com/";
 
     //微信token接口

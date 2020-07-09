@@ -1076,7 +1076,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
-
     }
 
     @Override

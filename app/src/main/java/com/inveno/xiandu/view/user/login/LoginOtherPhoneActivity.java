@@ -180,7 +180,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                                 public Unit invoke(String s) {
                                     lastPhone = login_phone_edit.getText().toString();
                                     lastLoginTime = System.currentTimeMillis();
-                                    Toaster.showToast(LoginOtherPhoneActivity.this, "验证码:" + s);
+                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, "验证码已发送");
                                     Intent intent = new Intent(LoginOtherPhoneActivity.this, ValiCodeActivity.class);
                                     intent.putExtra(ValiCodeActivity.LOGIN_PHONE_NUM, login_phone_edit.getText().toString());
                                     intent.putExtra(ValiCodeActivity.LOGIN_TIME, 60);

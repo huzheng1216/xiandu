@@ -35,7 +35,7 @@ public class MainApplication extends Application implements Application.Activity
     private int activityCount;//activity的count数
     public static boolean isForeground;//是否在前台
 
-//    private static Typeface sanhansTypeface;
+    private static Typeface sanhansTypeface;
 
     @Override
     public void onCreate() {
@@ -78,7 +78,7 @@ public class MainApplication extends Application implements Application.Activity
 //        AssetManager mmgr = getAssets();//得到AssetManager
 //        sanhansTypeface = Typeface.createFromAsset(mmgr, "fonts/sourcehanserifcn_regular.otf");
 //    }
-//
+
 //    public Typeface getSanhansTypeface() {
 //        if (sanhansTypeface == null) {
 //            initfonts();

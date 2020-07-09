@@ -3,6 +3,7 @@ package com.inveno.datareport.service;
 import android.util.Log;
 
 import com.alibaba.fastjson.TypeReference;
+import com.example.datareport.BuildConfig;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.datareport.manager.ReReportManager;
 
@@ -16,7 +17,7 @@ public enum  ReportService {
 
     INSTANCE;
 
-    String url = "http://121.201.120.128:9000/report/data";
+    String url = BuildConfig.InvenoUrl + "/report/data";
 
     public void report(final LinkedHashMap<String, Object> map){
 

@@ -85,8 +85,9 @@ public class StoreFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), SearchActivityMain.class);
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), search, "photo").toBundle();
-                startActivity(intent, bundle);
+//                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(getActivity(), search, "photo").toBundle();
+//                startActivity(intent, bundle);
+                startActivity(intent);
             }
         });
 

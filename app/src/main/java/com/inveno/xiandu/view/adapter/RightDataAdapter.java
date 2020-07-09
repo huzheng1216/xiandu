@@ -252,7 +252,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
                 ranking_book_ranking.setTextColor(Color.parseColor("#F5A623"));
                 ranking_book_ranking.setText(String.format("%s", bookShelf.getScore()));
                 ranking_book_text.setText("分");
-                GlideUtils.LoadImage(context, bookShelf.getPoster(), R.drawable.background_bookshelf_adapter_foot, ranking_book_pic);
+                GlideUtils.LoadImage(context, bookShelf.getPoster(), R.drawable.book_defaul_img, ranking_book_pic);
             }
         }
     }

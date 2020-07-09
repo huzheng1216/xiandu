@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="30dp"
             android:text="0"
             android:textColor="@color/gray_3"
             android:textSize="20sp"
@@ -43,7 +43,7 @@
             android:id="@+id/view7"
             android:layout_width="wrap_content"
             android:layout_height="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:background="#EFEFEF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:layout_marginBottom="23dp"
+            android:layout_marginBottom="33dp"
             android:text="(约0元)"
             android:textColor="@color/gray_6"
             android:textSize="12sp"
@@ -64,9 +64,9 @@
         <TextView
             android:id="@+id/textView37"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="17dp"
+            android:gravity="center_vertical"
             android:textColor="@color/gray_3"
             android:textSize="18sp"
             android:text="金币充话费"
@@ -107,9 +107,9 @@
                         android:id="@+id/coin_top_up_rmb_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="21dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="提现10元"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="10元话费"
                         android:textColor="@color/white"
                         android:textSize="16sp" />
 
@@ -117,7 +117,7 @@
                         android:id="@+id/coin_top_up_coin_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="21dp"
+                        android:layout_marginBottom="16dp"
                         android:text="需要100000金币"
                         android:textColor="@color/white"
                         android:textSize="12sp" />
@@ -139,8 +139,8 @@
                         android:id="@+id/coin_top_up_rmb_30"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="提现30元"
+                        android:layout_marginBottom="8dp"
+                        android:text="30元话费"
                         android:textColor="@color/gray_9"
                         android:textSize="16sp" />
 
@@ -175,9 +175,9 @@
                         android:id="@+id/coin_top_up_rmb_50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="21dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="提现50元"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="50元话费"
                         android:textColor="@color/gray_9"
                         android:textSize="16sp" />
 
@@ -185,7 +185,7 @@
                         android:id="@+id/coin_top_up_coin_50"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="21dp"
+                        android:layout_marginBottom="16dp"
                         android:text="需要500000金币"
                         android:textColor="@color/gray_9"
                         android:textSize="12sp" />
@@ -206,8 +206,8 @@
                         android:id="@+id/coin_top_up_rmb_100"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:text="提现100元"
+                        android:layout_marginBottom="8dp"
+                        android:text="100元话费"
                         android:textColor="@color/gray_9"
                         android:textSize="16sp" />
 
