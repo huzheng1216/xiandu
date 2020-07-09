@@ -199,7 +199,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                         .onFail(new Function2<Integer, String, Unit>() {
                             @Override
                             public Unit invoke(Integer integer, String s) {
-                                Toaster.showToastCenterShort(ReadFootprintActivity.this, "获取小说失败：" + s);
+                                Toaster.showToastCenterShort(ReadFootprintActivity.this, "获取小说失败");
                                 return null;
                             }
                         }).execute();

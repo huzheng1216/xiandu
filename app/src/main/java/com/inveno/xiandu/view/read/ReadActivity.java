@@ -358,7 +358,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             chapterADView = holder.getViewGroup();
             return null;
         }).onFail((integer, s) -> {
-            layoutChapterAD.setVisibility(GONE);
+            if (layoutChapterAD != null) {
+                layoutChapterAD.setVisibility(GONE);
+            }
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         }).execute();

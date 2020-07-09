@@ -98,7 +98,7 @@ public class ChoiseGenderActivity extends BaseActivity {
                 .onFail(new Function2<Integer, String, Unit>() {
                     @Override
                     public Unit invoke(Integer integer, String s) {
-                        Toaster.showToastCenter(ChoiseGenderActivity.this, "上传偏好失败：" + integer);
+                        Toaster.showToastCenter(ChoiseGenderActivity.this, "上传偏好失败");
                         return null;
                     }
                 }).execute();

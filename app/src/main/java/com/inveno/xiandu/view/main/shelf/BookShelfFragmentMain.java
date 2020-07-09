@@ -182,7 +182,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenterShort(getContext(), "获取小说失败：" + s);
+                                    Toaster.showToastCenterShort(getContext(), "获取小说失败");
                                     return null;
                                 }
                             }).execute();

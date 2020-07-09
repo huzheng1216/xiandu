@@ -122,7 +122,7 @@ public class RankingActivity extends TitleBarBaseActivity {
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenter(RankingActivity.this, "获取书籍失败：" + integer);
+                                    Toaster.showToastCenter(RankingActivity.this, "获取书籍失败");
                                     return null;
                                 }
                             }).execute();

@@ -191,8 +191,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Log.i("wyjjjjjj", "onFail: " + s);
-                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail) + ":" + s);
+                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail));
                                     return null;
                                 }
                             })

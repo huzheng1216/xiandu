@@ -187,7 +187,7 @@ public class WelfareFragment extends BaseFragment {
                         if (s.equals("404")) {
                             Toaster.showToastShort(getContext(), "获取任务失败:请求的数据不存在");
                         } else {
-                            Toaster.showToastShort(getContext(), "获取任务失败:" + s);
+                            Toaster.showToastShort(getContext(), "获取任务失败");
                         }
 //                        no_mission_detail.setVisibility(View.VISIBLE);
                         return null;

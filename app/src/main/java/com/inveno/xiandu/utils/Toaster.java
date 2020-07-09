@@ -33,7 +33,6 @@ public class Toaster {
         }
     }
 
-
     public static void showToastCenter(Context context, String str) {
 
         if (toastCenter != null) {

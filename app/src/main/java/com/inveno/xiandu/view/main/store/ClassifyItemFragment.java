@@ -165,7 +165,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenter(getContext(), "获取书籍失败：" + integer);
+                                    Toaster.showToastCenter(getContext(), "获取书籍失败");
                                     return null;
                                 }
                             }).execute();
@@ -412,10 +412,12 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
     }
 
     private void addAd() {
-        int index = adModel.getWrapper().getIndex();
-        if (mBookselfs != null && mBookselfs.size() >= index) {
-            mBookselfs.add(index, adModel);
-            rightDataAdapter.setmDataList(mBookselfs);
+        if (adModel != null && adModel.getWrapper() != null) {
+            int index = adModel.getWrapper().getIndex();
+            if (mBookselfs != null && mBookselfs.size() >= index) {
+                mBookselfs.add(index, adModel);
+                rightDataAdapter.setmDataList(mBookselfs);
+            }
         }
     }
 

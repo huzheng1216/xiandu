@@ -170,7 +170,7 @@ public class StoreItemFragment extends BaseFragment {
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenterShort(getContext(), "获取数据失败:" + integer);
+                                    Toaster.showToastCenterShort(getContext(), "获取数据失败");
                                     return null;
                                 }
                             }).execute();
@@ -206,7 +206,7 @@ public class StoreItemFragment extends BaseFragment {
                         .onFail(new Function2<Integer, String, Unit>() {
                             @Override
                             public Unit invoke(Integer integer, String s) {
-                                Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
+                                Toaster.showToastShort(getActivity(), "没有书了");
                                 return null;
                             }
                         }).execute();
@@ -248,7 +248,7 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(Integer integer, String s) {
                         bookCityAdapter.setFooterText("没有更多数据");
-                        Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
+                        Toaster.showToastShort(getActivity(), "没有书了");
                         return null;
                     }
                 }).execute();
@@ -368,7 +368,7 @@ public class StoreItemFragment extends BaseFragment {
                             store_error.setVisibility(View.GONE);
                         }
                         bookCityAdapter.setFooterText("没有更多数据");
-                        Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                        Toaster.showToastCenter(getContext(), "获取数据失败");
                         return null;
                     }
                 }).execute();
