@@ -403,7 +403,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         //禁止滑动展示DrawerLayout
         mDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         //侧边打开后，返回键能够起作用
-        mDlSlide.setFocusableInTouchMode(false);
+        mDlSlide.setFocusableInTouchMode(true);
         mSettingDialog = new ReadSettingDialog(this, mPageLoader);
         mSettingDialog.setOnSettingListener(value -> {
             adBottom.setBackgroundColor(isNightMode ? 0xFF000000 : ContextCompat.getColor(ReadActivity.this, ReadSettingManager.getInstance().getPageStyle().getBgColor()));
