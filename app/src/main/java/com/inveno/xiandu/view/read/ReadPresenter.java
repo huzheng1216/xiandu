@@ -52,8 +52,9 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
                         List<ChapterInfo> chapterInfos = bookChapterBaseRequest.getData().getChapter_list();
                         List<ChapterInfo> mBookChapters = new ArrayList<>();
                         for (ChapterInfo bookChapter : chapterInfos) {
-                            if (bookChapter.getChapter_name().startsWith(" ")){
-                                bookChapter.setChapter_name(bookChapter.getChapter_name().trim());
+                            String chapter_name1 = bookChapter.getChapter_name().replace((char) 12288, ' ');
+                            if (chapter_name1.startsWith(" ")){
+                                bookChapter.setChapter_name(chapter_name1.trim());
                             }
                             mBookChapters.add(bookChapter);
                         }

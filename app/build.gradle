@@ -136,6 +136,10 @@ android {
         vivo {
             buildConfigField 'int', 'referrer', '14'
         }
+//      15酷安
+        kuan {
+            buildConfigField 'int', 'referrer', '15'
+        }
 
 //        1	其他
         other {
