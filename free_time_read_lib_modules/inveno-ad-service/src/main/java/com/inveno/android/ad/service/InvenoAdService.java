@@ -249,5 +249,6 @@ public class InvenoAdService {
 //        } else {
 //            statefulCallBack.invokeSuccess("ok");
 //        }
+
     }
 }
