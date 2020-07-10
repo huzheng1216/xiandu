@@ -16,6 +16,7 @@
             android:id="@+id/adapter_bookshelf_book_img"
             android:layout_width="50dp"
             android:layout_height="70dp"
+            android:background="@drawable/book_poster_bg"
             android:src="@drawable/book_defaul_img"/>
 
         <LinearLayout

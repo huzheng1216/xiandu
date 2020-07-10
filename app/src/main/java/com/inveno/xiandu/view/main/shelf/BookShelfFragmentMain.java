@@ -102,7 +102,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
                             @Override
                             public Unit invoke(List<Bookbrack> bookbracks) {
                                 swipeRefreshLayout.setRefreshing(false);
-//                            //同步数据
+                                //同步数据
                                 syncData(bookbracks);
                                 return null;
                             }
@@ -294,7 +294,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         for (Bookbrack bookbrack : data) {
             //后台有，本地没有，需要添加到本地
             if (!SQL.getInstance().hasBookbrack(bookbrack.getContent_id())) {
-                SQL.getInstance().addBookbrack(bookbrack);
+                SQL.getInstance().addBookbrack(bookbrack, false);
                 initData();
             }
 
@@ -384,7 +384,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             shelfAdapter.selectAll();
         } else if (id == R.id.bookbrack_delete_all_delete) {
             IosTypeDialog.Builder builder = new IosTypeDialog.Builder(getActivity());
-            builder.setContext("确定要删除收藏的全部书籍？");
+            builder.setContext("确定要删除选中的全部书籍吗？");
             builder.setTitle("提示");
             builder.setLeftButton("确定", new IosTypeDialog.OnClickListener() {
                 @Override

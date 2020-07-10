@@ -172,7 +172,6 @@ public class SplashActivity extends BaseActivity implements AppInitListener {
         }
     }
 
-
     @Override
     public void onAppInitSuccess() {
         readyToDo();

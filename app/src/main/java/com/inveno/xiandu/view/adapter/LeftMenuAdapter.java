@@ -66,7 +66,7 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 vholder.left_menu_name.setTextColor(mContext.getResources().getColor(R.color.gray_3));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 50, 0);//4个参数按顺序分别是左bai上右下
-                vholder.left_menu_name.setPadding(0, 56, -54 - vholder.left_menu_select.getWidth(), 56);
+                vholder.left_menu_name.setPadding(0, 56, 0, 56);
                 vholder.left_menu_name.setLayoutParams(layoutParams);
             }
             vholder.left_menu_name.setOnClickListener(new View.OnClickListener() {

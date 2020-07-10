@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -66,7 +67,7 @@ public class RankingLeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 vholder.left_menu_name.setTextColor(mContext.getResources().getColor(R.color.gray_3));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 50, 0);//4个参数按顺序分别是左bai上右下
-                vholder.left_menu_name.setPadding(0, 56, -54 - vholder.left_menu_select.getWidth(), 56);
+                vholder.left_menu_name.setPadding(0, 56, 0, 56);
                 vholder.left_menu_name.setLayoutParams(layoutParams);
             }
             vholder.left_menu_name.setOnClickListener(new View.OnClickListener() {
@@ -81,12 +82,13 @@ public class RankingLeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
     }
 
-    public void setSelectMenu(int position){
+    public void setSelectMenu(int position) {
         notifyItemChanged(lastChoise);
         notifyItemChanged(position);
         lastChoise = position;
         mListener.onItemClick(position);
     }
+
     @Override
     public int getItemCount() {
         return mMenus.size();
@@ -102,13 +104,13 @@ public class RankingLeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             super(itemView);
             this.lefMenuView = itemView;
             left_menu_name = itemView.findViewById(R.id.left_menu_name);
-            left_menu_select= itemView.findViewById(R.id.left_menu_select);
+            left_menu_select = itemView.findViewById(R.id.left_menu_select);
         }
     }
 
     private RecyclerView.ViewHolder createDataViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_left_menu_item, null);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
         return new LeftMenusHolder(view);
     }
@@ -117,7 +119,7 @@ public class RankingLeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         void onItemClick(int position);
     }
 
-    public void setMenusData(List<RankingMenu> menus){
+    public void setMenusData(List<RankingMenu> menus) {
         mMenus = menus;
         notifyDataSetChanged();
     }

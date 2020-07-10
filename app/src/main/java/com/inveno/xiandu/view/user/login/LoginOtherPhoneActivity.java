@@ -172,7 +172,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                     }
                     startActivityForResult(intent, LOGIN_VALI_CODE_REBACK);
                 } else {
-                    Toaster.showToastCenterShort(this, getResources().getString(R.string.login_get_code));
+//                    Toaster.showToastCenterShort(this, getResources().getString(R.string.login_get_code));
                     // TODO: 2020/6/6 发送给验证码请求，成功后跳转
                     APIContext.varicationCode().getVaricationCode(login_phone_edit.getText().toString(), "3")
                             .onSuccess(new Function1<String, Unit>() {
@@ -205,6 +205,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
 
     /**
      * 反射设置光标颜色
+     *
      * @param mEditText
      */
     private void setCursorColor(EditText mEditText) {

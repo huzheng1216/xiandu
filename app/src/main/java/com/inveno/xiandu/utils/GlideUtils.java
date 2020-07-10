@@ -83,6 +83,7 @@ public class GlideUtils {
     public static void LoadImageGoss(Context mContext, String path, ImageView imageview) {
         Glide.with(mContext)
                 .load(path)
+                .placeholder(R.drawable.book_defaul_img)
                 .apply(RequestOptions.bitmapTransform(new GlideBlurformation(mContext)))
                 .into(imageview);
     }

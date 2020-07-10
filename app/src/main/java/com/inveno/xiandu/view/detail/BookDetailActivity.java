@@ -517,9 +517,8 @@ public class BookDetailActivity extends BaseActivity {
                         List<ChapterInfo> mBookChapters = new ArrayList<>();
                         for (ChapterInfo bookChapter : chapterInfos) {
                             if (bookChapter.getChapter_name().startsWith(" ")){
-                                break;
+                                bookChapter.setChapter_name(bookChapter.getChapter_name().trim());
                             }
-                            bookChapter.setChapter_name(bookChapter.getChapter_name().trim());
                             mBookChapters.add(bookChapter);
                         }
                         chapterInfos = mBookChapters;
@@ -637,7 +636,7 @@ public class BookDetailActivity extends BaseActivity {
         }
 
         if (!SQL.getInstance().hasBookbrack(bookbrack)) {
-            SQL.getInstance().addBookbrack(bookbrack);
+            SQL.getInstance().addBookbrack(bookbrack, true);
             Toaster.showToastCenter(this, "成功加入书架");
             book_detail_coll.setText("已在书架");
         }

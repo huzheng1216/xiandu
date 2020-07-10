@@ -44,6 +44,7 @@ import com.inveno.xiandu.view.adapter.RightDataAdapter;
 import com.inveno.xiandu.view.custom.MRecycleScrollListener;
 import com.inveno.xiandu.view.detail.BookDetailActivity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,10 +82,15 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
     private List<ClassifyMenu> mMenus = new ArrayList<>();
     private List<BaseDataBean> mBookselfs = new ArrayList<>();
 
-    private int knowClassifyPosition = 0;
+    //选择的分类
+    private int selectPosition = 0;
+    //分类id
+    private int selectCategoryId = 0;
     //    -1表示全部，0:连载 ,1:完本
     private int book_status = -1;
     private boolean isOpenScreen = false;
+    //菜单是否加载成功
+    private boolean isMenuLoad = false;
 
     private HashMap<String, ClassifyData> mClassifyDatas = new HashMap<>();
 
@@ -191,9 +197,11 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         leftMenuAdapter.setOnitemClickListener(new LeftMenuAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if (knowClassifyPosition != position) {
+                if (selectPosition != position) {
+                    rightDataAdapter.reLoad();
                     //点击后列表初始化，准备填充新数据
-                    knowClassifyPosition = position;
+                    selectPosition = position;
+                    selectCategoryId = mMenus.get(selectPosition).getCategory_id();
                     getBookData();
                 }
             }
@@ -202,16 +210,21 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                //刷新要清掉旧数据
-                //点击后列表初始化，准备填充新数据
-                mBookselfs.clear();
-                rightDataAdapter.setmDataList(mBookselfs);
-                initAd();//先展示广告
-                book_sum.setText("共计0本");
-                mClassifyDatas.remove(mMenus.get(knowClassifyPosition).getCategory_id() + "-" + book_status);
-                //刷新请求新数据
-                getClassifyData(1);
-
+                if (!isMenuLoad) {
+                    //菜单未加载，则需要加载
+                    loadMenuData();
+                } else {
+                    //刷新要清掉旧数据
+                    //点击后列表初始化，准备填充新数据
+                    mBookselfs.clear();
+                    rightDataAdapter.setmDataList(mBookselfs);
+                    initAd();//先展示广告
+                    book_sum.setText("共计0本");
+                    //本地缓存也要清除
+                    mClassifyDatas.remove(selectCategoryId + "-" + book_status);
+                    //刷新请求新数据
+                    getClassifyData(1);
+                }
             }
         });
         //上拉加载
@@ -220,15 +233,18 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
             public void onLoadMore() {
 //                Toaster.showToastShort(SerchResultActivity.this, "上拉加载");
                 if (!rightDataAdapter.isNotMore()) {
-                    ClassifyData mClassifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id() + "-" + book_status);
+                    //拿到缓存数据，确定要加载的页码
+                    ClassifyData mClassifyData = mClassifyDatas.get(getDataKey(selectCategoryId));
                     if (mClassifyData != null) {
+                        //本地有缓存，从缓存的页码开始加载
                         getClassifyData(mClassifyData.getPageNum());
-                        mBookselfs = new ArrayList<>(mClassifyData.getNovel_list());
-                        if (adModel != null && mBookselfs.size() >= adModel.getWrapper().getIndex()) {
-                            mBookselfs.add(adModel.getWrapper().getIndex(), adModel);
-                        }
-                        rightDataAdapter.setmDataList(mBookselfs);
+//                        mBookselfs = new ArrayList<>(mClassifyData.getNovel_list());
+//                        if (adModel != null && mBookselfs.size() >= adModel.getWrapper().getIndex()) {
+//                            mBookselfs.add(adModel.getWrapper().getIndex(), adModel);
+//                        }
+//                        rightDataAdapter.setmDataList(mBookselfs);
                     } else {
+                        //本地无缓存，从第一页开始加载
                         getClassifyData(1);
                     }
                 }
@@ -244,19 +260,29 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         return view;
     }
 
+    /**
+     * 获取缓存数据的key
+     *
+     * @param categoryId 分类id
+     * @return
+     */
+    private String getDataKey(int categoryId) {
+        return categoryId + "-" + book_status;
+    }
+
     private void getBookData() {
         mBookselfs.clear();
         rightDataAdapter.setmDataList(mBookselfs);
         book_sum.setText("共计0本");
         initAd();//先展示广告
         //先从缓存里面拿
-        ClassifyData classifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id() + "-" + book_status);
+        ClassifyData classifyData = mClassifyDatas.get(selectCategoryId + "-" + book_status);
 
         if (classifyData != null) {
             //缓存有数据，直接填充
             mBookselfs = new ArrayList<>(classifyData.getNovel_list());
             rightDataAdapter.setmDataList(mBookselfs);
-            book_sum.setText(String.format("共计%s本", mBookselfs.size()));
+            book_sum.setText(String.format("共计%s本", classifyData.getNovel_count()));
             if (mBookselfs.size() < 1) {
 //                            no_book_show.setVisibility(View.VISIBLE);
 //                            book_sum.setText("");
@@ -296,35 +322,41 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
         //第一次加载数据
         Log.i("ClassifyItemFragment", "页面: " + channel);
         Log.i("ClassifyItemFragment", "是否第一次: " + firstVisble);
-        if (firstVisble) {
+        if (firstVisble && !isMenuLoad) {
             //先加载分类菜单
-            APIContext.getBookCityAPi().getClassifyMenu(channel)
-                    .onSuccess(new Function1<List<ClassifyMenu>, Unit>() {
-                        @Override
-                        public Unit invoke(List<ClassifyMenu> classifyMenus) {
-                            mMenus = classifyMenus;
-                            leftMenuAdapter.setMenusData(mMenus);
-                            knowClassifyPosition = 0;
-                            initAd();//先展示广告
-                            getClassifyData(1);
-                            return null;
-                        }
-                    })
-                    .onFail(new Function2<Integer, String, Unit>() {
-                        @Override
-                        public Unit invoke(Integer integer, String s) {
-
-                            return null;
-                        }
-                    }).execute();
+            loadMenuData();
         }
+    }
+
+    private void loadMenuData() {
+        APIContext.getBookCityAPi().getClassifyMenu(channel)
+                .onSuccess(new Function1<List<ClassifyMenu>, Unit>() {
+                    @Override
+                    public Unit invoke(List<ClassifyMenu> classifyMenus) {
+                        isMenuLoad = true;
+                        mMenus = classifyMenus;
+                        leftMenuAdapter.setMenusData(mMenus);
+                        selectPosition = 0;
+                        selectCategoryId = mMenus.get(0).getCategory_id();
+                        initAd();//先展示广告
+                        getClassifyData(1);
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+
+                        return null;
+                    }
+                }).execute();
     }
 
     /**
      * 获取分类数据
      */
     private void getClassifyData(int page_num) {
-        APIContext.getBookCityAPi().getClassifyData(mMenus.get(knowClassifyPosition).getCategory_id(), book_status, page_num)
+        APIContext.getBookCityAPi().getClassifyData(selectCategoryId, book_status, page_num)
                 .onSuccess(new Function1<ClassifyData, Unit>() {
                     @Override
                     public Unit invoke(ClassifyData classifyData) {
@@ -332,30 +364,66 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                             swipeRefreshLayout.setRefreshing(false);
                         }
                         // TODO: 2020/6/17 这里先缓存记录分类数据，后续更改使用数据库存储
-                        ClassifyData mClassifyData = mClassifyDatas.get(classifyData.getCategory_id() + "-" + book_status);
-                        //是否又记录数据
-                        if (mClassifyData == null) {
-                            classifyData.setPageNum(2);
-                            mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
+//                        ClassifyData mClassifyData = mClassifyDatas.get(getDataKey());
+//                        //是否又记录数据
+//                        if (mClassifyData == null) {
+//                            //本地无数据，直接添加缓存
+//                            classifyData.setPageNum(2);
+//                            mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
+//                        } else {
+//                            //本地有数据
+//                            //请求有内容，往缓存数据里面去增加内容
+//                            if (classifyData.getNovel_list().size() > 0) {
+//                                //本地数据是否够一页显示
+//                                if (mClassifyData.getNovel_list().size() < 1) {
+//                                    classifyData.setPageNum(2);
+//                                    mClassifyData.getNovel_list().addAll(classifyData.getNovel_list());
+////                                    mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
+//                                } else {
+//                                    mClassifyData.setPageNum(mClassifyData.getPageNum() + 1);
+//
+//                                    //分页加载，所以存储数据需要累加
+//                                    if (mClassifyData.getNovel_list() != null) {
+//                                        mClassifyData.getNovel_list().addAll(classifyData.getNovel_list());
+//                                    }
+////                                    List<BookShelf> bookShelfList = mClassifyData.getNovel_list();
+////                                    bookShelfList.addAll(classifyData.getNovel_list());
+////                                    mClassifyData.setNovel_list(bookShelfList);
+////                                    mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, mClassifyData);
+//                                }
+//                            } else {
+//                                rightDataAdapter.setNotDataFooter();
+//                            }
+//                        }
+
+                        //1.从本地拿数据
+                        ClassifyData localData = mClassifyDatas.get(getDataKey(classifyData.getCategory_id()));
+                        if (localData != null && localData.getNovel_list().size() > 0) {
+                            //本地有数据
+                            if (classifyData.getNovel_list()!=null && classifyData.getNovel_list().size()>0){
+                                //请求有数据
+                                //设置加载的页码
+                                localData.setPageNum(localData.getPageNum() + 1);
+                                localData.getNovel_list().addAll(classifyData.getNovel_list());
+                            }else{
+                                //请求无数据
+                                rightDataAdapter.setNotDataFooter();
+                            }
                         } else {
-                            if (classifyData.getNovel_list().size() > 0) {
-                                if (mClassifyData.getNovel_list().size() < 1) {
-                                    classifyData.setPageNum(2);
-                                    mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
-                                } else {
-                                    mClassifyData.setPageNum(mClassifyData.getPageNum() + 1);
-                                    List<BookShelf> bookShelfList = mClassifyData.getNovel_list();
-                                    bookShelfList.addAll(classifyData.getNovel_list());
-                                    mClassifyData.setNovel_list(bookShelfList);
-                                    mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, mClassifyData);
-                                }
-                            } else {
+                            //本地没有数据
+                            //本地有数据
+                            if (classifyData.getNovel_list()!=null && classifyData.getNovel_list().size()>0) {
+                                //请求有数据
+                                //设置加载的页码
+                                classifyData.setPageNum(2);
+                                mClassifyDatas.put(getDataKey(classifyData.getCategory_id()), classifyData);
+                            }else{
+                                //请求无数据
                                 rightDataAdapter.setNotDataFooter();
                             }
                         }
-
                         //如果是当前页
-                        if (classifyData.getCategory_id() == mMenus.get(knowClassifyPosition).getCategory_id()) {
+                        if (classifyData.getCategory_id() == selectCategoryId) {
                             book_sum.setText(String.format("共计%s本", classifyData.getNovel_count()));
 
                             ClassifyData knowClassifyData = mClassifyDatas.get(classifyData.getCategory_id() + "-" + book_status);
@@ -373,13 +441,16 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                             }
                             rightDataAdapter.setmDataList(mData);
                         }
-                        mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
-                        List<BaseDataBean> mData = new ArrayList<>(classifyData.getNovel_list());
-                        //加广告
-                        if (adModel != null && mData.size() >= adModel.getWrapper().getIndex()) {
-                            mData.add(adModel.getWrapper().getIndex(), adModel);
+//                        mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
+                        ClassifyData showData = mClassifyDatas.get(getDataKey(selectCategoryId));
+                        if (showData != null) {
+                            List<BaseDataBean> mData = new ArrayList<>(showData.getNovel_list());
+                            //加广告
+                            if (adModel != null && mData.size() >= adModel.getWrapper().getIndex()) {
+                                mData.add(adModel.getWrapper().getIndex(), adModel);
+                            }
+                            rightDataAdapter.setmDataList(mData);
                         }
-                        rightDataAdapter.setmDataList(mData);
                         return null;
                     }
                 })
@@ -389,7 +460,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                         if (swipeRefreshLayout.isRefreshing()) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                        ClassifyData mClassifyData = mClassifyDatas.get(mMenus.get(knowClassifyPosition).getCategory_id() + "-" + book_status);
+                        ClassifyData mClassifyData = mClassifyDatas.get(getDataKey(selectCategoryId));
                         rightDataAdapter.setNotDataFooter();
                         if (mClassifyData != null && mClassifyData.getNovel_list().size() > 0) {
 //                            no_book_show.setVisibility(View.GONE);

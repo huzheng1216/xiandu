@@ -4,89 +4,92 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/second_titleBar"
-        android:layout_width="match_parent"
-        android:layout_height="83dp"
-        android:visibility="gone"
-        android:background="@drawable/ic_test_ad">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="83dp"
-            android:background="#99FFFFFF" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="28dp">
-
-            <ImageView
-                android:id="@+id/second_titleBar_back"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:onClick="back"
-                android:padding="5dp"
-                android:src="@drawable/black_back_arrow" />
-
-            <TextView
-                android:id="@+id/second_titleBar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:layout_centerInParent="true"
-                android:textSize="16sp"
-                android:textColor="@color/gray_3" />
-
-            <LinearLayout
-                android:id="@+id/second_titleBar_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="10dp"
-                android:orientation="horizontal"
-                android:padding="5dp" />
-        </RelativeLayout>
-
-    </RelativeLayout>
-
-    <com.inveno.xiandu.view.custom.MScrollView
-        android:id="@+id/book_detail_scrollview"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.01"
-        android:background="#FFFFFF"
-        android:scrollbars="none"
-        android:overScrollMode="never">
-
-        <LinearLayout
+        android:layout_weight="0.01">
+        <com.inveno.xiandu.view.custom.MScrollView
+            android:id="@+id/book_detail_scrollview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
-            <include layout="@layout/book_detail_top" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-            <include layout="@layout/book_detail_intro_and_directory" />
+                <include layout="@layout/book_detail_top" />
+
+                <include layout="@layout/book_detail_intro_and_directory" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="#EFEFEF" />
+
+                <include layout="@layout/book_detail_first_chapter" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:background="#EFEFEF" />
+
+                <include layout="@layout/book_detail_read_more" />
+            </LinearLayout>
+        </com.inveno.xiandu.view.custom.MScrollView>
+
+        <RelativeLayout
+            android:id="@+id/second_titleBar"
+            android:layout_width="match_parent"
+            android:layout_height="83dp"
+            android:background="@drawable/ic_test_ad"
+            android:visibility="invisible">
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="#EFEFEF" />
+                android:layout_height="83dp"
+                android:background="#99FFFFFF" />
 
-            <include layout="@layout/book_detail_first_chapter" />
-
-            <View
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="8dp"
-                android:background="#EFEFEF" />
+                android:layout_height="55dp"
+                android:layout_marginTop="28dp">
 
-            <include layout="@layout/book_detail_read_more" />
-        </LinearLayout>
-    </com.inveno.xiandu.view.custom.MScrollView>
+                <ImageView
+                    android:id="@+id/second_titleBar_back"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:onClick="back"
+                    android:padding="5dp"
+                    android:src="@drawable/black_back_arrow" />
+
+                <TextView
+                    android:id="@+id/second_titleBar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text=""
+                    android:textColor="@color/gray_3"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/second_titleBar_right"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

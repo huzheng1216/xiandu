@@ -141,25 +141,28 @@ public class SQL {
      * 添加书籍阅读记录
      *
      * @param bookbrack
+     * @param isUpload 是否上传服务器
      * @return
      */
-    public void addBookbrack(Bookbrack bookbrack) {
+    public void addBookbrack(Bookbrack bookbrack, boolean isUpload) {
         bookbrack.setTime(System.currentTimeMillis() + "");
         DaoManager.getInstance(context).bookbrackDao.insertOrReplace(bookbrack);
-        //上传服务器
-        APIContext.bookbrackApi().addBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), bookbrack.getContent_id())
-                .onSuccess(new Function1<String, Unit>() {
-                    @Override
-                    public Unit invoke(String s) {
-                        return null;
-                    }
-                })
-                .onFail(new Function2<Integer, String, Unit>() {
-                    @Override
-                    public Unit invoke(Integer integer, String s) {
-                        return null;
-                    }
-                }).execute();
+        if (isUpload) {
+            //上传服务器
+            APIContext.bookbrackApi().addBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), bookbrack.getContent_id())
+                    .onSuccess(new Function1<String, Unit>() {
+                        @Override
+                        public Unit invoke(String s) {
+                            return null;
+                        }
+                    })
+                    .onFail(new Function2<Integer, String, Unit>() {
+                        @Override
+                        public Unit invoke(Integer integer, String s) {
+                            return null;
+                        }
+                    }).execute();
+        }
     }
 
     /**
@@ -269,20 +272,7 @@ public class SQL {
     public void addReadTrack(ReadTrack readTrack) {
         readTrack.setTime(System.currentTimeMillis() + "");
         DaoManager.getInstance(context).readTrackDao.insertOrReplace(readTrack);
-        //上传服务器
-        APIContext.bookbrackApi().addBookbrack(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid(), readTrack.getContent_id())
-                .onSuccess(new Function1<String, Unit>() {
-                    @Override
-                    public Unit invoke(String s) {
-                        return null;
-                    }
-                })
-                .onFail(new Function2<Integer, String, Unit>() {
-                    @Override
-                    public Unit invoke(Integer integer, String s) {
-                        return null;
-                    }
-                }).execute();
+        // TODO: 2020/7/10  这里可上报服务器可不上报，足迹和阅读进度是同一个接口
     }
 
     /**

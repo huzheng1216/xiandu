@@ -811,7 +811,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 //        } else {
         if (!SQL.getInstance().hasBookbrack(bookShelf.getContent_id())) {
             SQL.getInstance().addBookShelf(bookShelf);
-            SQL.getInstance().addBookbrack(bookbrack);
+            SQL.getInstance().addBookbrack(bookbrack, true);
             Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
             mTvBrief.setText("已在书架");
         }

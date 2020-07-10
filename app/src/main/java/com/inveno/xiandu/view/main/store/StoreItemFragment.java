@@ -235,9 +235,11 @@ public class StoreItemFragment extends BaseFragment {
                             bookCityAdapter.setFooterText("没有更多数据");
                         }
                         if (flag[0]) {
-                            int adIndex = adModel.getWrapper().getIndex();
-                            if (mMoreData[0].size() >= adIndex) {
-                                mMoreData[0].add(adIndex, adModel);
+                            if (adModel != null && adModel.getWrapper() != null) {
+                                int adIndex = adModel.getWrapper().getIndex();
+                                if (mMoreData[0].size() >= adIndex) {
+                                    mMoreData[0].add(adIndex, adModel);
+                                }
                             }
                             mDataBeans.addAll(mMoreData[0]);
                             bookCityAdapter.setDataList(mDataBeans);
@@ -295,8 +297,8 @@ public class StoreItemFragment extends BaseFragment {
         Log.i("wyjjjjjjj", "页面: " + channel);
         Log.i("wyjjjjjjj", "是否第一次: " + firstVisble);
         isVisible = true;
-        if (((StoreFragment)getParentFragment()).isVisible) {
-            if (!((MainActivity)getActivity()).isOnPause()) {
+        if (((StoreFragment) getParentFragment()).isVisible) {
+            if (!((MainActivity) getActivity()).isOnPause()) {
                 report();
             }
         }

@@ -11,7 +11,8 @@
         android:id="@+id/ranking_book_pic"
         android:layout_width="38dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_header_default"
+        android:src="@drawable/book_defaul_img"
+        android:background="@drawable/book_poster_bg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

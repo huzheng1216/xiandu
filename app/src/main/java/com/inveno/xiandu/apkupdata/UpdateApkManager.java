@@ -399,42 +399,45 @@ public class UpdateApkManager {
 //                    mUpdateInfo = result.getData();
                     if (mUpdateInfo.getUpgrade() == 1) {
                         SPUtils.setInformain(NEED_UPGRADE, true);
-                    } else {
-                        SPUtils.setInformain(NEED_UPGRADE, false);
-                    }
-                    mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
-                    // 检查网络环境，wifi的话，直接后台下载完后提醒
-                    String network = AndroidParamProviderHolder.get().device().getNetwork();
-                    if (isSettingCheck) {
-                        // 如果是设置页的肯定直接弹出了
-                        //检查本地是否有数据，直接弹出安装
-                        showNoticeDialog(mUpdateInfo.getType(), network);
-                    } else {
-                        if (mUpdateInfo != null && mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
-                                (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
-                            //WiFi环境后台默认下载
-                            if (network.equals("1")) {
-                                //强制升级直接弹出
+                        mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
+                        // 检查网络环境，wifi的话，直接后台下载完后提醒
+                        String network = AndroidParamProviderHolder.get().device().getNetwork();
+                        if (isSettingCheck) {
+                            // 如果是设置页的肯定直接弹出了
+                            //检查本地是否有数据，直接弹出安装
+                            showNoticeDialog(mUpdateInfo.getType(), network);
+                        } else {
+                            if (mUpdateInfo != null && mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
+                                    (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
+                                //WiFi环境后台默认下载
+                                if (network.equals("1")) {
+                                    //强制升级直接弹出
 //                                if (mUpdateInfo.getType() == 1) {
 //                                    showNoticeDialog(mUpdateInfo.getType(), network);
 //                                } else {
-                                //启动一个服务进行下载
-                                updataServiceIntent = new Intent(mContext, UpdateService.class);
-                                updataServiceIntent.putExtra("downloadUrl", mUpdateInfo.getLink());
-                                updataServiceIntent.putExtra("appVersion", mUpdateInfo.getVersion());
-                                updataServiceIntent.putExtra("instruction", mUpdateInfo.getInstruction());
-                                updataServiceIntent.putExtra("type", mUpdateInfo.getType());
+                                    //启动一个服务进行下载
+                                    updataServiceIntent = new Intent(mContext, UpdateService.class);
+                                    updataServiceIntent.putExtra("downloadUrl", mUpdateInfo.getLink());
+                                    updataServiceIntent.putExtra("appVersion", mUpdateInfo.getVersion());
+                                    updataServiceIntent.putExtra("instruction", mUpdateInfo.getInstruction());
+                                    updataServiceIntent.putExtra("type", mUpdateInfo.getType());
 
-                                mContext.startService(updataServiceIntent);
+                                    mContext.startService(updataServiceIntent);
 //                                }
+                                } else {
+                                    //非WIFI环境，弹出提醒
+                                    showNoticeDialog(mUpdateInfo.getType(), network);
+                                }
                             } else {
-                                //非WIFI环境，弹出提醒
-                                showNoticeDialog(mUpdateInfo.getType(), network);
+                                if (mUpdateListener != null) {
+                                    mUpdateListener.rejectUpdate(null);
+                                }
                             }
-                        } else {
-                            if (mUpdateListener != null) {
-                                mUpdateListener.rejectUpdate(null);
-                            }
+                        }
+                    } else {
+                        SPUtils.setInformain(NEED_UPGRADE, false);
+                        if (isSettingCheck) {
+                            Toaster.showToastCenterShort(mContext, "当前是最新版");
                         }
                     }
                 } else {

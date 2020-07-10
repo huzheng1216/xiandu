@@ -411,9 +411,6 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
             }
             return null;
         }).onFail((integer, s) -> {
-            if (mDataBeans != null && mDataBeans.size() > 0) {
-                uiCallback.invokeSuccess(mDataBeans);
-            }
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         });
@@ -477,8 +474,6 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
                 } else {
                     topRequest.execute();
                 }
-                //请求广告
-                topAdRequest.execute();
             }
         };
 
@@ -503,7 +498,9 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
                 addAd(topDataBeans, null, adModelTop, null);
 
                 mDataBeans.addAll(topDataBeans);
-                uiCallback.invokeSuccess(mDataBeans);
+//                uiCallback.invokeSuccess(mDataBeans);
+                //请求广告
+                topAdRequest.execute();
                 return null;
             }
         }).onFail(new Function2<Integer, String, Unit>() {
@@ -521,13 +518,12 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
             if (mDataBeans.size() >= adIndex && topDataBeans.size() >= adIndex) {
                 topDataBeans.add(adIndex, adModelTop);
                 mDataBeans.add(adIndex, adModelTop);
+
                 uiCallback.invokeSuccess(mDataBeans);
             }
             return null;
         }).onFail((integer, s) -> {
-            if (mDataBeans != null && mDataBeans.size() > 0) {
-                uiCallback.invokeSuccess(mDataBeans);
-            }
+            uiCallback.invokeSuccess(mDataBeans);
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         });
