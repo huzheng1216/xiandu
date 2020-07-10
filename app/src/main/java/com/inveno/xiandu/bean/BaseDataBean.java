@@ -9,6 +9,7 @@ package com.inveno.xiandu.bean;
  */
 public class BaseDataBean {
     private int type;
+//    private boolean hasLine = false;//是否有分割线
 
     public int getType() {
         return type;
@@ -17,4 +18,12 @@ public class BaseDataBean {
     public void setType(int type) {
         this.type = type;
     }
+
+//    public boolean isHasLine() {
+//        return hasLine;
+//    }
+//
+//    public void setHasLine(boolean hasLine) {
+//        this.hasLine = hasLine;
+//    }
 }

@@ -14,7 +14,7 @@
         android:paddingBottom="8dp"
         android:text="标题标题标题标题标题标题标标题标题标标题标题标题标题标题标题标题标题标"
         android:textColor="@color/gray_3"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="5dp"
         android:layout_alignParentStart="true"
         android:layout_marginEnd="8dp"
         android:layout_toStartOf="@+id/small_image_img"
@@ -27,7 +27,7 @@
         android:text="《小说名称》"
         android:textColor="@color/gray_9"
         android:layout_alignBottom="@+id/small_image_img"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="5dp"
         android:textSize="12sp"/>
 
     <ImageView

@@ -89,7 +89,7 @@ public class ReadSettingManager {
     }
 
     public boolean isBrightnessAuto() {
-        return SPUtils.getInformain(SHARED_READ_IS_BRIGHTNESS_AUTO, false);
+        return SPUtils.getInformain(SHARED_READ_IS_BRIGHTNESS_AUTO, true);
     }
 
     public int getTextSize() {

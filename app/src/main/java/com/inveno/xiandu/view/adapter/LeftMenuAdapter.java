@@ -53,7 +53,8 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             LeftMenusHolder vholder = (LeftMenusHolder) holder;
             vholder.left_menu_name.setText(mMenus.get(position).getCategory_name());
             if (position == lastChoise) {
-                vholder.left_menu_name.setBackground(mContext.getResources().getDrawable(R.drawable.left_menu_select_bg));
+                vholder.left_menu_name.setBackgroundColor(Color.WHITE);
+                vholder.left_menu_select.setVisibility(View.VISIBLE);
                 vholder.left_menu_name.setTextColor(mContext.getResources().getColor(R.color.clr_normal));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 0, 0);//4个参数按顺序分别是左bai上右下
@@ -61,6 +62,7 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 vholder.left_menu_name.setLayoutParams(layoutParams);
             } else {
                 vholder.left_menu_name.setBackgroundColor(Color.parseColor("#F6F7F9"));
+                vholder.left_menu_select.setVisibility(View.GONE);
                 vholder.left_menu_name.setTextColor(mContext.getResources().getColor(R.color.gray_3));
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 layoutParams.setMargins(0, 0, 50, 0);//4个参数按顺序分别是左bai上右下
@@ -88,11 +90,13 @@ public class LeftMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         View lefMenuView;
         TextView left_menu_name;
+        View left_menu_select;
 
         public LeftMenusHolder(View itemView) {
             super(itemView);
             this.lefMenuView = itemView;
             left_menu_name = itemView.findViewById(R.id.left_menu_name);
+            left_menu_select= itemView.findViewById(R.id.left_menu_select);
         }
     }
 

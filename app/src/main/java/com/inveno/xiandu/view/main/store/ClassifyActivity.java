@@ -81,8 +81,9 @@ public class ClassifyActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ClassifyActivity.this, SearchActivityMain.class);
-                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ClassifyActivity.this, classify_search_img, "photo").toBundle();
-                startActivity(intent, bundle);
+//                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(ClassifyActivity.this, classify_search_img, "photo").toBundle();
+//                startActivity(intent, bundle);
+                startActivity(intent);
             }
         });
 

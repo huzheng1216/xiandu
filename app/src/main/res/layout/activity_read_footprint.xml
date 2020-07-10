@@ -8,7 +8,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.001">
 
         <com.inveno.xiandu.view.custom.MSwipeRefreshLayout
             android:id="@+id/SwipeRefreshLayout"
@@ -21,45 +22,6 @@
                 android:layout_height="match_parent" />
         </com.inveno.xiandu.view.custom.MSwipeRefreshLayout>
 
-        <LinearLayout
-            android:id="@+id/bookbrack_delete_all_line"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:visibility="gone"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/bookbrack_delete_all_bg"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/bookbrack_delete_all_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="取消"
-                android:textColor="@color/gray_3"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/bookbrack_delete_all_select_all"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="全选"
-                android:textColor="@color/gray_3"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/bookbrack_delete_all_delete"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="删除"
-                android:textColor="@color/delete_red"
-                android:textSize="16sp" />
-        </LinearLayout>
         <LinearLayout
             android:id="@+id/no_book_show"
             android:layout_width="match_parent"
@@ -83,4 +45,43 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/bookbrack_delete_all_line"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bookbrack_delete_all_bg"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bookbrack_delete_all_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/bookbrack_delete_all_select_all"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="全选"
+            android:textColor="@color/gray_3"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/bookbrack_delete_all_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/delete_red"
+            android:textSize="16sp" />
+    </LinearLayout>
 </LinearLayout>

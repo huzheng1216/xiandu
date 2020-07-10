@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/dialog_border_radius"
     android:gravity="center"
+    android:paddingBottom="20dp"
     android:orientation="vertical">
 
     <TextView

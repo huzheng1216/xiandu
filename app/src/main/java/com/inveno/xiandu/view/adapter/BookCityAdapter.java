@@ -63,6 +63,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     @Override
     protected View getHeaderView() {
+//        return null;
         return getViewHolderView(mContext, R.layout.item_store_header);
     }
 
@@ -73,7 +74,10 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
 
     public void setDataList(ArrayList<BaseDataBean> dataList) {
+//        int addDataNum = dataList.size() - mDataList.size();
+//        int lastSum = mDataList.size();
         mDataList = dataList;
+//        notifyItemRangeInserted(lastSum, addDataNum);
         notifyDataSetChanged();
     }
 
@@ -230,7 +234,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     }
 
     private RecyclerView.ViewHolder createViewHoder(ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder mVIewHoder = null;
+        RecyclerView.ViewHolder mVIewHoder;
 
         if (viewType == HEADER_ITEM_TYPE) {
             mVIewHoder = new BookCityAdapter.HeaderViewHolder(getHeaderView());
@@ -326,10 +330,10 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             super(itemView);
             recommend_text = itemView.findViewById(R.id.recommend_text);
             //设置宋体
-            recommend_text.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-            //字体加粗
-            TextPaint tp = recommend_text.getPaint();
-            tp.setFakeBoldText(true);
+//            recommend_text.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//            //字体加粗
+//            TextPaint tp = recommend_text.getPaint();
+//            tp.setFakeBoldText(true);
 
 
             book_city_change = itemView.findViewById(R.id.book_city_change);
@@ -468,6 +472,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         TextView default_image_words;
         TextView default_image_score;
         ImageView default_image_img;
+        View default_image_bottom_line;
 
         public DefaulRemmendViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -478,6 +483,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
             default_image_words = itemView.findViewById(R.id.default_image_words);
             default_image_score = itemView.findViewById(R.id.default_image_score);
             default_image_img = itemView.findViewById(R.id.default_image_img);
+            default_image_bottom_line = itemView.findViewById(R.id.default_image_img);
         }
 
         @Override

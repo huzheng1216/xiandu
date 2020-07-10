@@ -14,16 +14,17 @@
         android:layout_width="70dp"
         android:layout_height="95dp"
         android:scaleType="fitXY"
+        android:background="@drawable/book_poster_bg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background_bookshelf_adapter_foot" />
+        app:srcCompat="@drawable/book_defaul_img" />
 
-    <View
-        android:layout_width="70dp"
-        android:layout_height="5dp"
-        android:background="@drawable/book_img_bottom_bg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/default_image_img"/>
+<!--    <View-->
+<!--        android:layout_width="70dp"-->
+<!--        android:layout_height="5dp"-->
+<!--        android:background="@drawable/book_img_bottom_bg"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/default_image_img"/>-->
 
     <TextView
         android:id="@+id/default_image_book_name"
@@ -93,4 +94,13 @@
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/default_image_book_name"/>
+
+    <View
+        android:id="@+id/default_image_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#E5E5E5"
+        app:layout_constraintTop_toBottomOf="@+id/default_image_img"
+        android:layout_marginTop="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

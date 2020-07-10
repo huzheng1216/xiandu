@@ -30,6 +30,7 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.view.BaseActivity;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.view.adapter.CoinDetailAdapter;
+import com.inveno.xiandu.view.custom.MRecycleScrollListener;
 
 import java.util.ArrayList;
 
@@ -81,9 +82,9 @@ public class MyCoinActivity extends BaseActivity {
         no_coin_detail = findViewById(R.id.no_coin_detail);
 
         coin_detail_txt = findViewById(R.id.coin_detail_txt);
-        coin_detail_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
-        TextPaint tp = coin_detail_txt.getPaint();
-        tp.setFakeBoldText(true);
+//        coin_detail_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tp = coin_detail_txt.getPaint();
+//        tp.setFakeBoldText(true);
 
         RecyclerView coin_detail_recycleview = findViewById(R.id.coin_detail_recycleview);
         coinDetailAdapter = new CoinDetailAdapter(this, this, coinDetailDatas);
@@ -92,15 +93,18 @@ public class MyCoinActivity extends BaseActivity {
         coin_detail_recycleview.setAdapter(coinDetailAdapter);
 
         //上拉加载
-        coin_detail_recycleview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        coin_detail_recycleview.addOnScrollListener(new MRecycleScrollListener() {
             @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE || newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-                    getCoinDetail();
-                }
+            public void onLoadMore() {
+                getCoinDetail();
+            }
+
+            @Override
+            public void onVisibleItem(int first, int last) {
+
             }
         });
+
         if (mUserCoin != null) {
             coin_balance.setText(String.valueOf(mUserCoin.getBalance()));
             coin_today.setText(String.valueOf(mUserCoin.getCurrent_coin()));

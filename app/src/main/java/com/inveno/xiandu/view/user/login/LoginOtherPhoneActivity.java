@@ -172,7 +172,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                     }
                     startActivityForResult(intent, LOGIN_VALI_CODE_REBACK);
                 } else {
-                    Toaster.showToastCenterShort(this, getResources().getString(R.string.login_get_code));
+//                    Toaster.showToastCenterShort(this, getResources().getString(R.string.login_get_code));
                     // TODO: 2020/6/6 发送给验证码请求，成功后跳转
                     APIContext.varicationCode().getVaricationCode(login_phone_edit.getText().toString(), "3")
                             .onSuccess(new Function1<String, Unit>() {
@@ -180,7 +180,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                                 public Unit invoke(String s) {
                                     lastPhone = login_phone_edit.getText().toString();
                                     lastLoginTime = System.currentTimeMillis();
-                                    Toaster.showToast(LoginOtherPhoneActivity.this, "验证码:" + s);
+                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, "验证码已发送");
                                     Intent intent = new Intent(LoginOtherPhoneActivity.this, ValiCodeActivity.class);
                                     intent.putExtra(ValiCodeActivity.LOGIN_PHONE_NUM, login_phone_edit.getText().toString());
                                     intent.putExtra(ValiCodeActivity.LOGIN_TIME, 60);
@@ -191,8 +191,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Log.i("wyjjjjjj", "onFail: " + s);
-                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail) + ":" + s);
+                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, getResources().getString(R.string.login_get_vali_code_fail));
                                     return null;
                                 }
                             })
@@ -206,6 +205,7 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
 
     /**
      * 反射设置光标颜色
+     *
      * @param mEditText
      */
     private void setCursorColor(EditText mEditText) {

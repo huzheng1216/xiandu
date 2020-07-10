@@ -97,7 +97,13 @@ public class UserinfoActivity extends TitleBarBaseActivity {
             if (!TextUtils.isEmpty(userInfo.getUser_name())) {
                 mine_user_name.setText(userInfo.getUser_name());
             } else {
-                mine_user_name.setText(String.format("闲读读者_%s", userInfo.getPid()));
+                //随机一个6位数作为编号
+                int userCode = (int) ((Math.random() * 9 + 1) * 100000);
+                String username = String.format("闲读读者_%s", userCode);
+                mine_user_name.setText(username);
+                userUpdata("user_name", username);
+                userInfo.setUser_name(username);
+                AppPersistRepository.get().save(LoginAPI.USER_DATA_KEY, JsonUtil.Companion.toJson(userInfo));
             }
 
             if (userInfo.getGender().equals("1")) {
@@ -119,11 +125,11 @@ public class UserinfoActivity extends TitleBarBaseActivity {
     }
 
     public void set_user_pic(View view) {
-        Toaster.showToastCenter(this, "修改头像");
+//        Toaster.showToastCenter(this, "修改头像");
     }
 
     public void set_nickname(View view) {
-        Toaster.showToastCenter(this, "修改昵称");
+//        Toaster.showToastCenter(this, "修改昵称");
         View edit_nickname_view = getLayoutInflater().inflate(R.layout.edit_nickname_view, null, false);
         EditText edit_nickname_et = edit_nickname_view.findViewById(R.id.edit_nickname_et);
         setCursorColor(edit_nickname_et);

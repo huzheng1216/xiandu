@@ -291,7 +291,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
      */
     private void startChapterAD() {
         Integer optIndex = InvenoAdServiceHolder.getService().getPos(READER_BETWEEN);
-        if (optIndex!=null){
+        if (optIndex != null) {
             adIndex = optIndex;
         }
         getChapterAd();
@@ -358,7 +358,9 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
             chapterADView = holder.getViewGroup();
             return null;
         }).onFail((integer, s) -> {
-            layoutChapterAD.setVisibility(GONE);
+            if (layoutChapterAD != null) {
+                layoutChapterAD.setVisibility(GONE);
+            }
             Log.i("requestInfoAd", "onFail s:" + s + " integer:" + integer);
             return null;
         }).execute();
@@ -577,11 +579,11 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 
                     @Override
                     public void onChapterChange(int pos) {
-                        LogUtils.H("onChapterChange = " + pos+"   lastChapterPos:"+lastChapterPos);
+                        LogUtils.H("onChapterChange = " + pos + "   lastChapterPos:" + lastChapterPos);
                         mCategoryAdapter.setChapter(pos);
                         mSbChapterProgress.setProgress(pos);
 
-                        if (pos>lastChapterPos){
+                        if (pos > lastChapterPos) {
                             lastPos = 0;
                             currIndex++;
                         }
@@ -633,7 +635,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
                         if (pos == lastPos + 1) {
                             currIndex++;
                         }
-                        LogUtils.H("onPageChange = " + pos + " lastPos:"+lastPos+ " currIndex:"+currIndex+" adIndex"+adIndex);
+                        LogUtils.H("onPageChange = " + pos + " lastPos:" + lastPos + " currIndex:" + currIndex + " adIndex" + adIndex);
                         lastPos = pos;
                         if (currIndex == adIndex) {
                             getChapterAd();
@@ -809,7 +811,7 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
 //        } else {
         if (!SQL.getInstance().hasBookbrack(bookShelf.getContent_id())) {
             SQL.getInstance().addBookShelf(bookShelf);
-            SQL.getInstance().addBookbrack(bookbrack);
+            SQL.getInstance().addBookbrack(bookbrack, true);
             Toaster.showToastCenter(ReadActivity.this, "成功加入书架");
             mTvBrief.setText("已在书架");
         }
@@ -938,14 +940,20 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         }
         //根据章节id，获取章节位置
         int chapter_id = getIntent().getIntExtra("capter", 0);
+        int chapterNum = getIntent().getIntExtra("chapter_num", -1);
         int wordsNum = getIntent().getIntExtra("words_num", 0);
-        mChapterInfo = bookChapters.get(0);
-        if (chapter_id > 0) {
-            for (int i = 0; i < bookChapters.size(); i++) {
-                if (chapter_id == bookChapters.get(i).getChapter_id()) {
-                    mChapterInfo = bookChapters.get(i);
-                    mPageLoader.skipToChapter(i, wordsNum);
-                    break;
+        if (chapterNum > 0) {
+            mChapterInfo = bookChapters.get(chapterNum);
+            mPageLoader.skipToChapter(chapterNum, 0);
+        } else {
+            mChapterInfo = bookChapters.get(0);
+            if (chapter_id > 0) {
+                for (int i = 0; i < bookChapters.size(); i++) {
+                    if (chapter_id == bookChapters.get(i).getChapter_id()) {
+                        mChapterInfo = bookChapters.get(i);
+                        mPageLoader.skipToChapter(i, wordsNum);
+                        break;
+                    }
                 }
             }
         }
@@ -1070,7 +1078,6 @@ public class ReadActivity extends BaseMVPActivity<ReadContract.Presenter>
         if (subscribe != null && !subscribe.isDisposed()) {
             subscribe.dispose();
         }
-
     }
 
     @Override

@@ -199,7 +199,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
                         .onFail(new Function2<Integer, String, Unit>() {
                             @Override
                             public Unit invoke(Integer integer, String s) {
-                                Toaster.showToastCenterShort(ReadFootprintActivity.this, "获取小说失败：" + s);
+                                Toaster.showToastCenterShort(ReadFootprintActivity.this, "获取小说失败");
                                 return null;
                             }
                         }).execute();
@@ -342,7 +342,7 @@ public class ReadFootprintActivity extends TitleBarBaseActivity {
     @OnClick(R.id.bookbrack_delete_all_delete)
     void delete_confirm() {
         IosTypeDialog.Builder builder = new IosTypeDialog.Builder(this);
-        builder.setContext("确定要删除收藏的全部书籍？");
+        builder.setContext("确定要删除选中的全部书籍吗？");
         builder.setTitle("提示");
         builder.setLeftButton("确定", new IosTypeDialog.OnClickListener() {
             @Override

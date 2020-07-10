@@ -4,32 +4,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/base_tittle_bar"/>
+    <include layout="@layout/base_tittle_bar" />
+
     <RelativeLayout
         android:id="@+id/mine_setting_userdata"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:onClick="user_data"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:onClick="user_data"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:text="基本信息"
             android:textColor="@color/gray_3"
-            android:textSize="14sp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"/>
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_mine_right"/>
+            android:src="@drawable/ic_mine_right" />
     </RelativeLayout>
 
     <View
@@ -42,32 +43,32 @@
         android:id="@+id/mine_setting_push_notification"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:onClick="push_setting"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:onClick="push_setting"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:text="推送通知"
             android:textColor="@color/gray_3"
-            android:textSize="14sp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"/>
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/mine_push_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开"
-            android:drawablePadding="10dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:textSize="14sp"
+            android:drawableRight="@drawable/ic_mine_right"
+            android:drawablePadding="10dp"
+            android:text="开"
             android:textColor="@color/gray_9"
-            android:drawableRight="@drawable/ic_mine_right"/>
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <View
@@ -80,45 +81,55 @@
         android:id="@+id/mine_get_version"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:onClick="get_version"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:onClick="get_version"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
             android:text="当前版本"
             android:textColor="@color/gray_3"
-            android:textSize="14sp"
+            android:textSize="14sp" />
+
+        <View
+            android:id="@+id/upgrade_red_dot"
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"/>
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/red_dot" />
 
         <TextView
             android:id="@+id/mine_appversion"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:layout_toStartOf="@+id/upgrade_red_dot"
             android:text="0"
-            android:textSize="14sp"
             android:textColor="@color/gray_9"
-            android:layout_marginEnd="20dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:textSize="14sp" />
     </RelativeLayout>
+
     <TextView
         android:id="@+id/logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
         android:layout_marginTop="45dp"
+        android:layout_marginEnd="30dp"
         android:background="@drawable/button_radio_background"
         android:gravity="center"
+        android:onClick="logout"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
+        android:text="@string/logout"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        android:onClick="logout"
-        android:text="@string/logout"/>
+        android:textSize="15sp" />
 </LinearLayout>

@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit
 
 class OkHttpExecutor : HttpExecutor() {
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(3 * 1000.toLong(), TimeUnit.MILLISECONDS)
-        .readTimeout(3 * 1000.toLong(), TimeUnit.MILLISECONDS)
-        .writeTimeout(3 * 1000.toLong(), TimeUnit.MILLISECONDS)
+        .connectTimeout(10 * 1000.toLong(), TimeUnit.MILLISECONDS)
+        .readTimeout(10 * 1000.toLong(), TimeUnit.MILLISECONDS)
+        .writeTimeout(10 * 1000.toLong(), TimeUnit.MILLISECONDS)
         .retryOnConnectionFailure(false)
         .addInterceptor{
             val request = it.request()

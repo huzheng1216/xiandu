@@ -8,18 +8,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="245dp">
+        android:layout_height="230dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="198dp"
+            android:layout_height="200dp"
             android:background="@drawable/ic_mine_header_bg"
             android:paddingTop="30dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="70dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -280,7 +280,7 @@
                 android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:layout_toEndOf="@+id/image4"
-                android:text="官方QQ群(2050587620)"
+                android:text="客服QQ(2050587620)"
                 android:textColor="@color/gray_3"
                 android:textSize="14sp" />
         </RelativeLayout>

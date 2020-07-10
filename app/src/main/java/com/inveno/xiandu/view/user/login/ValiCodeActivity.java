@@ -132,7 +132,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                     .onSuccess(new Function1<String, Unit>() {
                         @Override
                         public Unit invoke(String s) {
-                            Toaster.showToast(ValiCodeActivity.this, "验证码:" + s);
+                            Toaster.showToastCenterShort(ValiCodeActivity.this, "验证码发送成功");
                             return null;
                         }
                     })
@@ -149,12 +149,12 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
 
         } else if (id == R.id.vali_login) {
             // TODO: 2020/6/8 发送登录请求
-            Toaster.showToast(ValiCodeActivity.this, "登录请求");
+//            Toaster.showToast(ValiCodeActivity.this, "登录请求");
             APIContext.loginAPI().login(loginPhoneNum, vali_code_input_editview.getText().toString())
                     .onSuccess(new Function1<UserInfo, Unit>() {
                         @Override
                         public Unit invoke(UserInfo userInfos) {
-                            Toaster.showToastShort(ValiCodeActivity.this, getResources().getString(R.string.login_success));
+                            Toaster.showToastCenterShort(ValiCodeActivity.this, getResources().getString(R.string.login_success));
                             setResult(LoginOtherPhoneActivity.LOGIN_VALI_CODE_REBACK);
                             finish();
                             return null;
@@ -163,7 +163,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                     .onFail(new Function2<Integer, String, Unit>() {
                         @Override
                         public Unit invoke(Integer integer, String s) {
-                            Toaster.showToast(ValiCodeActivity.this, getResources().getString(R.string.login_fail));
+                            Toaster.showToastCenterShort(ValiCodeActivity.this, getResources().getString(R.string.login_fail));
                             return null;
                         }
                     }).execute();

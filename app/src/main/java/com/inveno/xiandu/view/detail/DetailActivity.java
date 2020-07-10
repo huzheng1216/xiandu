@@ -94,7 +94,7 @@ public class DetailActivity extends BaseActivity {
             Toaster.showToastCenter(this, "已从书架移除");
             collBt.setText("保存书架");
         } else {
-            SQL.getInstance().addBookbrack(bookbrack);
+            SQL.getInstance().addBookbrack(bookbrack, true);
             Toaster.showToastCenter(this, "成功加入书架");
             collBt.setText("已在书架");
         }

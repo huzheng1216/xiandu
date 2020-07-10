@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
+    <View
+        android:id="@+id/left_menu_select"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="@drawable/classify_menu_select_bg"/>
     <TextView
         android:id="@+id/left_menu_name"
         android:layout_width="match_parent"

@@ -7,12 +7,12 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="25dp" />
+        android:layout_height="22dp" />
 
     <RelativeLayout
         android:id="@+id/tittle_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="48dp"
         tools:ignore="UselessParent">
 
         <ImageView
@@ -22,7 +22,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
-            android:padding="5dp"
+            android:padding="8dp"
             android:src="@drawable/black_back_arrow" />
 
         <TextView

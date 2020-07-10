@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.inveno.datareport.manager.ReportManager;
 import com.inveno.xiandu.R;
+import com.inveno.xiandu.applocation.MainApplication;
 import com.inveno.xiandu.bean.coin.MissionData;
 import com.inveno.xiandu.bean.coin.MissionDataList;
 import com.inveno.xiandu.bean.coin.UserCoin;
@@ -70,6 +71,12 @@ public class WelfareFragment extends BaseFragment {
     @BindView(R.id.welfare_title)
     TextView welfare_title;
 
+    @BindView(R.id.welfare_today_coin_txt)
+    TextView welfare_today_coin_txt;
+
+    @BindView(R.id.welfare_coin_mission_txt)
+    TextView welfare_coin_mission_txt;
+
     private MissionAdapter missionAdapter;
     private List<MissionData> missionDataList = new ArrayList<>();
     private UserCoin mUserCoin;
@@ -97,13 +104,23 @@ public class WelfareFragment extends BaseFragment {
                 }
             }
         });
-
-        AssetManager mgr = getContext().getAssets();//得到AssetManager
-        Typeface tf = Typeface.createFromAsset(mgr, "fonts/sourcehanserifcn_regular.otf");
-        welfare_title.setTypeface(tf);
-        TextPaint tp = welfare_title.getPaint();
-        tp.setFakeBoldText(true);
+        setTextTypeface();
         return view;
+    }
+
+    private void setTextTypeface() {
+
+//        welfare_title.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tp = welfare_title.getPaint();
+//        tp.setFakeBoldText(true);
+//
+//        welfare_today_coin_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tpCoin = welfare_today_coin_txt.getPaint();
+//        tpCoin.setFakeBoldText(true);
+//
+//        welfare_coin_mission_txt.setTypeface(MainApplication.getInstance().getSanhansTypeface());
+//        TextPaint tpMission = welfare_coin_mission_txt.getPaint();
+//        tpMission.setFakeBoldText(true);
     }
 
     @Override
@@ -149,7 +166,8 @@ public class WelfareFragment extends BaseFragment {
     }
 
     public void get_mission() {
-        int[] typeIds = {4, 3};
+        int[] typeIds = {4};
+//        int[] typeIds = {4, 3};
         APIContext.coinApi().getMission(typeIds)
                 .onSuccess(new Function1<MissionDataList, Unit>() {
                     @Override
@@ -169,9 +187,9 @@ public class WelfareFragment extends BaseFragment {
                         if (s.equals("404")) {
                             Toaster.showToastShort(getContext(), "获取任务失败:请求的数据不存在");
                         } else {
-                            Toaster.showToastShort(getContext(), "获取任务失败:" + s);
+                            Toaster.showToastShort(getContext(), "获取任务失败");
                         }
-                        no_mission_detail.setVisibility(View.VISIBLE);
+//                        no_mission_detail.setVisibility(View.VISIBLE);
                         return null;
                     }
                 }).execute();

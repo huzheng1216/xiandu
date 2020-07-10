@@ -42,7 +42,7 @@ public class GlideUtils {
                                  ImageView imageview) {
         Glide.with(mContext).load(path)
 //                .centerCrop()
-                .placeholder(R.drawable.background_bookshelf_adapter_foot)
+                .placeholder(R.drawable.book_defaul_img)
 //                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .apply(RequestOptions.bitmapTransform(new RoundedCorners(10)))
                 .into(imageview);
@@ -83,6 +83,7 @@ public class GlideUtils {
     public static void LoadImageGoss(Context mContext, String path, ImageView imageview) {
         Glide.with(mContext)
                 .load(path)
+                .placeholder(R.drawable.book_defaul_img)
                 .apply(RequestOptions.bitmapTransform(new GlideBlurformation(mContext)))
                 .into(imageview);
     }

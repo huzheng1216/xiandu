@@ -245,7 +245,9 @@ public class BookDetailActivity extends BaseActivity {
         bookbrack.setChapter_name(book.getChapter_name());
         bookbrack.setChapter_id(book.getChapter_id());
 
-        Glide.with(this).load(book.getPoster()).into(book_detail_poster);
+        Glide.with(this).load(book.getPoster())
+                .placeholder(R.drawable.book_defaul_img)
+                .into(book_detail_poster);
         GlideUtils.LoadImageGoss(this, book.getPoster(), book_detail_goss_bg);
 
         book_detail_bookname.setText(book.getBook_name());
@@ -310,7 +312,7 @@ public class BookDetailActivity extends BaseActivity {
         relevantBookAdapter.setOnitemClickListener(new RelevantBookAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
                         .withString("json", GsonUtil.objectToJson(bookShelfs.get(position)))
                         .navigation();
                 clickReport(bookShelfs.get(position).getContent_id());
@@ -482,7 +484,7 @@ public class BookDetailActivity extends BaseActivity {
                 popupWindow.dismiss();
                 ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                         .withString("json", GsonUtil.objectToJson(book))
-                        .withInt("capter", position)
+                        .withInt("capter", book.getBookChapters().get(position).getChapter_id())
                         .navigation();
             }
         });
@@ -514,7 +516,15 @@ public class BookDetailActivity extends BaseActivity {
                     @Override
                     public void onNext(BaseRequest<BookChapter> bookChapterBaseRequest) {
                         chapterInfos = bookChapterBaseRequest.getData().getChapter_list();
-                        book.setBookChapters(chapterInfos);
+                        List<ChapterInfo> mBookChapters = new ArrayList<>();
+                        for (ChapterInfo bookChapter : chapterInfos) {
+                            if (bookChapter.getChapter_name().startsWith(" ")){
+                                bookChapter.setChapter_name(bookChapter.getChapter_name().trim());
+                            }
+                            mBookChapters.add(bookChapter);
+                        }
+                        chapterInfos = mBookChapters;
+                        book.setBookChapters(mBookChapters);
                         refreshCapter();
                     }
 
@@ -628,7 +638,7 @@ public class BookDetailActivity extends BaseActivity {
         }
 
         if (!SQL.getInstance().hasBookbrack(bookbrack)) {
-            SQL.getInstance().addBookbrack(bookbrack);
+            SQL.getInstance().addBookbrack(bookbrack, true);
             Toaster.showToastCenter(this, "成功加入书架");
             book_detail_coll.setText("已在书架");
         }
@@ -692,7 +702,7 @@ public class BookDetailActivity extends BaseActivity {
             //这里需要跳转到小说阅读
             ARouter.getInstance().build(ARouterPath.ACTIVITY_CONTENT_MAIN)
                     .withString("json", GsonUtil.objectToJson(book))
-                    .withInt("capter", 1)
+                    .withInt("chapter_num", 1)
                     .navigation();
         }
     }

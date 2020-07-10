@@ -170,7 +170,7 @@ public class StoreItemFragment extends BaseFragment {
                             .onFail(new Function2<Integer, String, Unit>() {
                                 @Override
                                 public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenterShort(getContext(), "获取数据失败:" + integer);
+                                    Toaster.showToastCenterShort(getContext(), "获取数据失败");
                                     return null;
                                 }
                             }).execute();
@@ -206,7 +206,7 @@ public class StoreItemFragment extends BaseFragment {
                         .onFail(new Function2<Integer, String, Unit>() {
                             @Override
                             public Unit invoke(Integer integer, String s) {
-                                Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
+                                Toaster.showToastShort(getActivity(), "没有书了");
                                 return null;
                             }
                         }).execute();
@@ -235,9 +235,11 @@ public class StoreItemFragment extends BaseFragment {
                             bookCityAdapter.setFooterText("没有更多数据");
                         }
                         if (flag[0]) {
-                            int adIndex = adModel.getWrapper().getIndex();
-                            if (mMoreData[0].size() >= adIndex) {
-                                mMoreData[0].add(adIndex, adModel);
+                            if (adModel != null && adModel.getWrapper() != null) {
+                                int adIndex = adModel.getWrapper().getIndex();
+                                if (mMoreData[0].size() >= adIndex) {
+                                    mMoreData[0].add(adIndex, adModel);
+                                }
                             }
                             mDataBeans.addAll(mMoreData[0]);
                             bookCityAdapter.setDataList(mDataBeans);
@@ -248,7 +250,7 @@ public class StoreItemFragment extends BaseFragment {
                     @Override
                     public Unit invoke(Integer integer, String s) {
                         bookCityAdapter.setFooterText("没有更多数据");
-                        Toaster.showToastShort(getActivity(), "请求出错了：" + integer);
+                        Toaster.showToastShort(getActivity(), "没有书了");
                         return null;
                     }
                 }).execute();
@@ -295,8 +297,8 @@ public class StoreItemFragment extends BaseFragment {
         Log.i("wyjjjjjjj", "页面: " + channel);
         Log.i("wyjjjjjjj", "是否第一次: " + firstVisble);
         isVisible = true;
-        if (((StoreFragment)getParentFragment()).isVisible) {
-            if (!((MainActivity)getActivity()).isOnPause()) {
+        if (((StoreFragment) getParentFragment()).isVisible) {
+            if (!((MainActivity) getActivity()).isOnPause()) {
                 report();
             }
         }
@@ -368,7 +370,7 @@ public class StoreItemFragment extends BaseFragment {
                             store_error.setVisibility(View.GONE);
                         }
                         bookCityAdapter.setFooterText("没有更多数据");
-                        Toaster.showToastCenter(getContext(), "获取数据失败:" + integer);
+                        Toaster.showToastCenter(getContext(), "获取数据失败");
                         return null;
                     }
                 }).execute();

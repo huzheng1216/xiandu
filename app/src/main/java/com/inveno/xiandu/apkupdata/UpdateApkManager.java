@@ -58,6 +58,7 @@ import okhttp3.Response;
 public class UpdateApkManager {
     private static String savePath = "/sdcard/updateAPK/"; //apk保存到SD卡的路径
     public static int OKGO_DEFAUL_TIMEOUT = 60000;
+    public static String NEED_UPGRADE = "needUpgrade";
 
     private static final int DOWNLOADING = 1; //表示正在下载
     private static final int DOWNLOADED = 2; //下载完毕
@@ -396,39 +397,47 @@ public class UpdateApkManager {
                     mUpdateInfo = JsonUtil.Companion.parseObject(dataStr, UpdateInfo.class);
 //                    Result<UpdateInfo> result = Result.fromJson(dataStr, UpdateInfo.class);
 //                    mUpdateInfo = result.getData();
-
-                    mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
-                    // 检查网络环境，wifi的话，直接后台下载完后提醒
-                    String network = AndroidParamProviderHolder.get().device().getNetwork();
-                    if (isSettingCheck) {
-                        // 如果是设置页的肯定直接弹出了
-                        //检查本地是否有数据，直接弹出安装
-                        showNoticeDialog(mUpdateInfo.getType(), network);
-                    } else {
-                        if (mUpdateInfo != null && mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
-                                (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
-                            //WiFi环境后台默认下载
-                            if (network.equals("1")) {
-                                //强制升级直接弹出
-                                if (mUpdateInfo.getType() == 1) {
-                                    showNoticeDialog(mUpdateInfo.getType(), network);
-                                } else {
+                    if (mUpdateInfo.getUpgrade() == 1) {
+                        SPUtils.setInformain(NEED_UPGRADE, true);
+                        mSaveFileName = savePath + mContext.getPackageName() + mUpdateInfo.getVersion() + ".apk";
+                        // 检查网络环境，wifi的话，直接后台下载完后提醒
+                        String network = AndroidParamProviderHolder.get().device().getNetwork();
+                        if (isSettingCheck) {
+                            // 如果是设置页的肯定直接弹出了
+                            //检查本地是否有数据，直接弹出安装
+                            showNoticeDialog(mUpdateInfo.getType(), network);
+                        } else {
+                            if (mUpdateInfo != null && mUpdateInfo.getUpgrade() == 1 && mUpdateInfo.getVersion().compareTo
+                                    (mVersionName) > 0 && !SPUtils.getInformain(mUpdateInfo.getVersion(), false)) {
+                                //WiFi环境后台默认下载
+                                if (network.equals("1")) {
+                                    //强制升级直接弹出
+//                                if (mUpdateInfo.getType() == 1) {
+//                                    showNoticeDialog(mUpdateInfo.getType(), network);
+//                                } else {
                                     //启动一个服务进行下载
                                     updataServiceIntent = new Intent(mContext, UpdateService.class);
                                     updataServiceIntent.putExtra("downloadUrl", mUpdateInfo.getLink());
                                     updataServiceIntent.putExtra("appVersion", mUpdateInfo.getVersion());
                                     updataServiceIntent.putExtra("instruction", mUpdateInfo.getInstruction());
+                                    updataServiceIntent.putExtra("type", mUpdateInfo.getType());
 
                                     mContext.startService(updataServiceIntent);
+//                                }
+                                } else {
+                                    //非WIFI环境，弹出提醒
+                                    showNoticeDialog(mUpdateInfo.getType(), network);
                                 }
                             } else {
-                                //非WIFI环境，弹出提醒
-                                showNoticeDialog(mUpdateInfo.getType(), network);
+                                if (mUpdateListener != null) {
+                                    mUpdateListener.rejectUpdate(null);
+                                }
                             }
-                        } else {
-                            if (mUpdateListener != null) {
-                                mUpdateListener.rejectUpdate(null);
-                            }
+                        }
+                    } else {
+                        SPUtils.setInformain(NEED_UPGRADE, false);
+                        if (isSettingCheck) {
+                            Toaster.showToastCenterShort(mContext, "当前是最新版");
                         }
                     }
                 } else {

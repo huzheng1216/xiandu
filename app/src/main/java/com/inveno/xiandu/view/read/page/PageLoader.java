@@ -662,7 +662,7 @@ public abstract class PageLoader {
             bookbrack.setChapter_name(mCollBook.getChapter_name());
             bookbrack.setChapter_id(mCollBook.getChapter_id());
 
-            SQL.getInstance().addBookbrack(bookbrack);
+            SQL.getInstance().addBookbrack(bookbrack, true);
         }
         //足迹需要保存
         ReadTrack readTrack = new ReadTrack();

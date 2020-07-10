@@ -3,6 +3,7 @@ package com.inveno.datareport.service;
 import android.util.Log;
 
 import com.alibaba.fastjson.TypeReference;
+import com.example.datareport.BuildConfig;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.datareport.manager.ReReportManager;
 
@@ -12,17 +13,17 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-public enum  ReportService {
+public enum ReportService {
 
     INSTANCE;
 
-    String url = "http://novel.inveno.com/report/data";
+    String url = BuildConfig.InvenoUrl + "/report/data";
 
-    public void init(String host){
-        url = host+"/report/data";
+    public void init(String host) {
+        url = host + "/report/data";
     }
 
-    public void report(final LinkedHashMap<String, Object> map){
+    public void report(final LinkedHashMap<String, Object> map) {
 
 //        Log.i("requestInfoAd","url:"+url);
 
@@ -50,7 +51,7 @@ public enum  ReportService {
     }
 
 
-    public void report(final LinkedHashMap<String, Object> map , final Callback callback){
+    public void report(final LinkedHashMap<String, Object> map, final Callback callback) {
 
         MultiTypeHttpStatefulCallBack.INSTANCE
                 .<String>newCallBack(new TypeReference<String>() {
@@ -77,8 +78,9 @@ public enum  ReportService {
                 }).execute();
     }
 
-    public interface Callback{
+    public interface Callback {
         void onSuccess(LinkedHashMap<String, Object> map);
+
         void onFail(LinkedHashMap<String, Object> map);
     }
 

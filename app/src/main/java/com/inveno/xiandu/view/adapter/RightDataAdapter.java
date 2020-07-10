@@ -122,7 +122,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
 
         } else if (holder instanceof FooterViewHolder) {
             ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
-            if (mDataList.size() < 10 || isNotMore) {
+            if (mDataList.size() < 20 || isNotMore) {
                 ((FooterViewHolder) holder).load_more_tv.setText("沒有更多数据");
             } else {
                 ((FooterViewHolder) holder).load_more_tv.setText(footerStr);
@@ -164,6 +164,10 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
     public void setNotDataFooter() {
         isNotMore = true;
         notifyDataSetChanged();
+    }
+
+    public void reLoad(){
+        isNotMore = false;
     }
 
     public boolean isNotMore() {
@@ -252,7 +256,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
                 ranking_book_ranking.setTextColor(Color.parseColor("#F5A623"));
                 ranking_book_ranking.setText(String.format("%s", bookShelf.getScore()));
                 ranking_book_text.setText("分");
-                GlideUtils.LoadImage(context, bookShelf.getPoster(), R.drawable.background_bookshelf_adapter_foot, ranking_book_pic);
+                GlideUtils.LoadImage(context, bookShelf.getPoster(), R.drawable.book_defaul_img, ranking_book_pic);
             }
         }
     }

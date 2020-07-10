@@ -49,7 +49,15 @@ public class ReadPresenter extends RxPresenter<ReadContract.View>
 
                     @Override
                     public void onNext(BaseRequest<BookChapter> bookChapterBaseRequest) {
-                        mView.showCategory(bookChapterBaseRequest.getData().getChapter_list());
+                        List<ChapterInfo> chapterInfos = bookChapterBaseRequest.getData().getChapter_list();
+                        List<ChapterInfo> mBookChapters = new ArrayList<>();
+                        for (ChapterInfo bookChapter : chapterInfos) {
+                            if (bookChapter.getChapter_name().startsWith(" ")){
+                                bookChapter.setChapter_name(bookChapter.getChapter_name().trim());
+                            }
+                            mBookChapters.add(bookChapter);
+                        }
+                        mView.showCategory(mBookChapters);
                     }
 
                     @Override

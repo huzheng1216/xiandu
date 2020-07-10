@@ -8,7 +8,7 @@
     <Space
         android:id="@+id/top_spcae"
         android:layout_width="match_parent"
-        android:layout_height="28dp"
+        android:layout_height="33dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,29 +62,38 @@
             android:tint="@color/black"
             android:transitionName="photo" />
 
-        <com.inveno.xiandu.view.components.DelayerEditText
-            android:id="@+id/edit_search_main"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@id/bt_search_main_cancel"
             android:layout_toRightOf="@id/bt_search_main_back"
             android:background="@drawable/background_search_main_toolbar"
-            android:hint="请输入书名/作者名"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:maxLength="18"
-            android:paddingStart="5dp"
-            android:singleLine="true"
-            android:textColorHint="@color/gray_9"
-            android:textSize="14sp" />
-        <ImageView
-            android:id="@+id/search_delete_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/search_delete_title"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:layout_toLeftOf="@id/bt_search_main_cancel"/>
+            android:orientation="horizontal">
+
+            <com.inveno.xiandu.view.components.DelayerEditText
+                android:id="@+id/edit_search_main"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:hint="请输入书名/作者名"
+                android:background="@drawable/background_search_main_toolbar"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingStart="5dp"
+                android:singleLine="true"
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@color/gray_9"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/search_delete_title"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:padding="8dp"
+                android:src="@drawable/search_delete_title"
+                android:layout_gravity="center"
+                android:layout_marginEnd="4dp"/>
+        </LinearLayout>
     </RelativeLayout>
 
     <LinearLayout
@@ -123,7 +132,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

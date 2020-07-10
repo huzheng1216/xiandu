@@ -136,7 +136,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
             DecimalFormat df = new DecimalFormat("######0.00");
             rate = Integer.parseInt(mUserCoin.getExchage_rate().split("金币")[0]);
             String rnbStr = df.format(mUserCoin.getBalance() / (double) rate);
-            coin_top_up_rnb.setText(String.format("约%s元", rnbStr));
+            coin_top_up_rnb.setText(String.format("(约%s元)", rnbStr));
         } catch (Exception e) {
 
         }
