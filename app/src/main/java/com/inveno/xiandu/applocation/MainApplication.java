@@ -66,7 +66,7 @@ public class MainApplication extends Application implements Application.Activity
 
         registerActivityLifecycleCallbacks(this);
 
-        ReportManager.INSTANCE.init(BuildConfig.referrer, this);
+        ReportManager.INSTANCE.init(BuildConfig.referrer, this ,BuildConfig.InvenoUrl );
     }
 
     public void initCrash() {

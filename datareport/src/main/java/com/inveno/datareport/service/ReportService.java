@@ -13,13 +13,19 @@ import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-public enum  ReportService {
+public enum ReportService {
 
     INSTANCE;
 
     String url = BuildConfig.InvenoUrl + "/report/data";
 
-    public void report(final LinkedHashMap<String, Object> map){
+    public void init(String host) {
+        url = host + "/report/data";
+    }
+
+    public void report(final LinkedHashMap<String, Object> map) {
+
+//        Log.i("requestInfoAd","url:"+url);
 
         MultiTypeHttpStatefulCallBack.INSTANCE
                 .<String>newCallBack(new TypeReference<String>() {
@@ -45,7 +51,7 @@ public enum  ReportService {
     }
 
 
-    public void report(final LinkedHashMap<String, Object> map , final Callback callback){
+    public void report(final LinkedHashMap<String, Object> map, final Callback callback) {
 
         MultiTypeHttpStatefulCallBack.INSTANCE
                 .<String>newCallBack(new TypeReference<String>() {
@@ -72,8 +78,9 @@ public enum  ReportService {
                 }).execute();
     }
 
-    public interface Callback{
+    public interface Callback {
         void onSuccess(LinkedHashMap<String, Object> map);
+
         void onFail(LinkedHashMap<String, Object> map);
     }
 

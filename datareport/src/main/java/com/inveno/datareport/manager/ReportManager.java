@@ -116,9 +116,10 @@ public enum ReportManager {
         ReReportManager.INSTANCE.checkReReport();
     }
 
-    public void init(int referrer , Context context) {
+    public void init(int referrer , Context context , String reportHost) {
         DataManager.INSTANCE.setReferrer(referrer);
         ReportSPUtils.init(context);
+        ReportService.INSTANCE.init(reportHost);
     }
 
     public void setLocation(String location) {
