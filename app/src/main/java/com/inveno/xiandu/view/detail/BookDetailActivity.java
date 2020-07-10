@@ -245,7 +245,9 @@ public class BookDetailActivity extends BaseActivity {
         bookbrack.setChapter_name(book.getChapter_name());
         bookbrack.setChapter_id(book.getChapter_id());
 
-        Glide.with(this).load(book.getPoster()).into(book_detail_poster);
+        Glide.with(this).load(book.getPoster())
+                .placeholder(R.drawable.book_defaul_img)
+                .into(book_detail_poster);
         GlideUtils.LoadImageGoss(this, book.getPoster(), book_detail_goss_bg);
 
         book_detail_bookname.setText(book.getBook_name());

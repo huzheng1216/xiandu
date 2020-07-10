@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_test_ad" />
+                android:src="@drawable/book_defaul_img" />
 
             <View
                 android:layout_width="match_parent"
@@ -69,7 +69,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_test_ad" />
+                    app:srcCompat="@drawable/book_defaul_img" />
 
                 <TextView
                     android:id="@+id/book_detail_bookname"
