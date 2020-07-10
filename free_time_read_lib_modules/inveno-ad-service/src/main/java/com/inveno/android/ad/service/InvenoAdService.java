@@ -228,8 +228,8 @@ public class InvenoAdService {
     }
 
     private void initADConfig(final BaseStatefulCallBack<String> statefulCallBack) {
-        AdConfigData adConfigData = InvenoServiceContext.ad().getAdConfigData();
-        if (adConfigData == null) {
+//        AdConfigData adConfigData = InvenoServiceContext.ad().getAdConfigData();
+//        if (adConfigData == null) {
             InvenoServiceContext.ad().requestAdConfig()
                     .onSuccess(new Function1<AdConfigData, Unit>() {
                         @Override
@@ -246,8 +246,8 @@ public class InvenoAdService {
                         }
                     })
                     .execute();
-        } else {
-            statefulCallBack.invokeSuccess("ok");
-        }
+//        } else {
+//            statefulCallBack.invokeSuccess("ok");
+//        }
     }
 }
