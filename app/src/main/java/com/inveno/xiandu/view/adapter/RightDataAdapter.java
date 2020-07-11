@@ -166,7 +166,7 @@ public class RightDataAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void reLoad(){
+    public void reLoadNotmore(){
         isNotMore = false;
     }
 

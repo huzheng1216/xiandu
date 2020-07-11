@@ -198,7 +198,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
             @Override
             public void onItemClick(int position) {
                 if (selectPosition != position) {
-                    rightDataAdapter.reLoad();
+                    rightDataAdapter.reLoadNotmore();
                     //点击后列表初始化，准备填充新数据
                     selectPosition = position;
                     selectCategoryId = mMenus.get(selectPosition).getCategory_id();
@@ -217,6 +217,7 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                     //刷新要清掉旧数据
                     //点击后列表初始化，准备填充新数据
                     mBookselfs.clear();
+                    rightDataAdapter.reLoadNotmore();
                     rightDataAdapter.setmDataList(mBookselfs);
                     initAd();//先展示广告
                     book_sum.setText("共计0本");
@@ -363,61 +364,29 @@ public class ClassifyItemFragment extends BaseFragment implements View.OnClickLi
                         if (swipeRefreshLayout.isRefreshing()) {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                        // TODO: 2020/6/17 这里先缓存记录分类数据，后续更改使用数据库存储
-//                        ClassifyData mClassifyData = mClassifyDatas.get(getDataKey());
-//                        //是否又记录数据
-//                        if (mClassifyData == null) {
-//                            //本地无数据，直接添加缓存
-//                            classifyData.setPageNum(2);
-//                            mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
-//                        } else {
-//                            //本地有数据
-//                            //请求有内容，往缓存数据里面去增加内容
-//                            if (classifyData.getNovel_list().size() > 0) {
-//                                //本地数据是否够一页显示
-//                                if (mClassifyData.getNovel_list().size() < 1) {
-//                                    classifyData.setPageNum(2);
-//                                    mClassifyData.getNovel_list().addAll(classifyData.getNovel_list());
-////                                    mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, classifyData);
-//                                } else {
-//                                    mClassifyData.setPageNum(mClassifyData.getPageNum() + 1);
-//
-//                                    //分页加载，所以存储数据需要累加
-//                                    if (mClassifyData.getNovel_list() != null) {
-//                                        mClassifyData.getNovel_list().addAll(classifyData.getNovel_list());
-//                                    }
-////                                    List<BookShelf> bookShelfList = mClassifyData.getNovel_list();
-////                                    bookShelfList.addAll(classifyData.getNovel_list());
-////                                    mClassifyData.setNovel_list(bookShelfList);
-////                                    mClassifyDatas.put(classifyData.getCategory_id() + "-" + book_status, mClassifyData);
-//                                }
-//                            } else {
-//                                rightDataAdapter.setNotDataFooter();
-//                            }
-//                        }
 
                         //1.从本地拿数据
                         ClassifyData localData = mClassifyDatas.get(getDataKey(classifyData.getCategory_id()));
                         if (localData != null && localData.getNovel_list().size() > 0) {
                             //本地有数据
-                            if (classifyData.getNovel_list()!=null && classifyData.getNovel_list().size()>0){
+                            if (classifyData.getNovel_list() != null && classifyData.getNovel_list().size() > 0) {
                                 //请求有数据
                                 //设置加载的页码
-                                localData.setPageNum(localData.getPageNum() + 1);
+                                localData.setPageNum(page_num + 1);
                                 localData.getNovel_list().addAll(classifyData.getNovel_list());
-                            }else{
+                            } else {
                                 //请求无数据
                                 rightDataAdapter.setNotDataFooter();
                             }
                         } else {
                             //本地没有数据
                             //本地有数据
-                            if (classifyData.getNovel_list()!=null && classifyData.getNovel_list().size()>0) {
+                            if (classifyData.getNovel_list() != null && classifyData.getNovel_list().size() > 0) {
                                 //请求有数据
                                 //设置加载的页码
                                 classifyData.setPageNum(2);
                                 mClassifyDatas.put(getDataKey(classifyData.getCategory_id()), classifyData);
-                            }else{
+                            } else {
                                 //请求无数据
                                 rightDataAdapter.setNotDataFooter();
                             }
