@@ -20,7 +20,7 @@ public abstract class TitleBarBaseActivity extends BaseActivity implements ITitt
     /**
      * 标题中部文字描述
      */
-    private TextView titleText;
+    protected TextView titleText;
     /**
      * 标题右边View布局
      */

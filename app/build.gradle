@@ -56,6 +56,8 @@ android {
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [WEICHAT_APPKEY: "wxc0b8b2af11f2e717"]
     }
 
     buildTypes {
@@ -72,8 +74,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
-
+            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
         }
     }
     productFlavors {
@@ -243,6 +244,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
     //rxView
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    //banner
+    implementation 'com.youth.banner:banner:2.0.12'
+    //微信分享
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    //二维码
+    implementation 'com.google.zxing:android-core:3.3.0'
+    implementation 'com.google.zxing:core:3.3.3'
     // OpenCC to convert Simp. Chinese to Trad. Chinese
     implementation "com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar"
     implementation project(path: ':free_time_read_lib_modules:android-device-service')

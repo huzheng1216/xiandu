@@ -153,12 +153,17 @@ public class MyCoinActivity extends BaseActivity {
                         //索引从0开始计算，不需要+1
                         pageKnow = coinDetail.getPage() + coinDetail.getPageSize();
 
+                        coinDetailDatas.addAll(coinDetail.getCoin_detail());
+
                         if (coinDetail.getCoin_detail().size() < coinDetail.getPageSize()) {
                             coinDetailAdapter.setFooterText("没有更多数据");
                         } else {
-                            coinDetailAdapter.setFooterText("正在努力加载...");
+                            if (coinDetailDatas.size() < 5){
+                                coinDetailAdapter.setFooterText("没有更多数据");
+                            }else {
+                                coinDetailAdapter.setFooterText("正在努力加载...");
+                            }
                         }
-                        coinDetailDatas.addAll(coinDetail.getCoin_detail());
                         coinDetailAdapter.setData(coinDetailDatas);
                         if (coinDetailDatas.size() > 0) {
                             no_coin_detail.setVisibility(View.GONE);

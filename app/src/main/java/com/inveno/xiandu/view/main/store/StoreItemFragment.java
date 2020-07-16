@@ -1,5 +1,7 @@
 package com.inveno.xiandu.view.main.store;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ import com.inveno.xiandu.bean.book.EditorRecommend;
 import com.inveno.xiandu.bean.book.EditorRecommendList;
 import com.inveno.xiandu.bean.book.RecommendName;
 import com.inveno.xiandu.bean.response.ResponseChannel;
+import com.inveno.xiandu.bean.store.BannerDataBean;
+import com.inveno.xiandu.bean.store.BannerDataList;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Const;
 import com.inveno.xiandu.http.DDManager;
@@ -43,11 +47,18 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.adapter.BookCityAdapter;
+import com.inveno.xiandu.view.adapter.BookCityBannerAdapter;
 import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
+import com.inveno.xiandu.view.browser.BrowserActivity;
+import com.inveno.xiandu.view.custom.IndicatorView;
 import com.inveno.xiandu.view.custom.MRecycleScrollListener;
 import com.inveno.xiandu.view.custom.MSwipeRefreshLayout;
 import com.inveno.xiandu.view.main.AdapterChannel;
 import com.inveno.xiandu.view.main.MainActivity;
+import com.youth.banner.Banner;
+import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.indicator.RectangleIndicator;
+import com.youth.banner.indicator.RoundLinesIndicator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,17 +66,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observer;
-import io.reactivex.Scheduler;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import kotlin.jvm.functions.Function2;
 
-import static com.inveno.android.ad.config.ScenarioManifest.BOY_GIRL_BOTTOM;
-import static com.inveno.android.ad.config.ScenarioManifest.EDITOR_RECOMMEND;
 import static com.inveno.android.ad.config.ScenarioManifest.GUESS_YOU_LIKE;
 
 /**
@@ -78,13 +82,16 @@ public class StoreItemFragment extends BaseFragment {
     private int channel;
     private RecyclerView recyclerView;
     private BookCityAdapter bookCityAdapter;
+    private Banner store_banner;
+    private BookCityBannerAdapter bookCityBannerAdapter;
     private MSwipeRefreshLayout store_refresh_layout;
     private LinearLayout store_error;
     private TextView store_error_refresh;
 
+    //显示用的banner数据列表
+    private List<BannerDataBean> showBannerList = new ArrayList<>();
+
     private ArrayList<BaseDataBean> mDataBeans = new ArrayList<>();
-    private ArrayList<BaseDataBean> mTopDataBeans = new ArrayList<>();
-    private ArrayList<BaseDataBean> mBottomDataBeans = new ArrayList<>();
     private String topTitle;
     private String bottomTitle;
 
@@ -143,6 +150,8 @@ public class StoreItemFragment extends BaseFragment {
         recyclerView.setItemViewCacheSize(20);
 
         bookCityAdapter = new BookCityAdapter(getContext(), getActivity(), mDataBeans);
+        bookCityAdapter.setHeaderView(initHeaderView());
+
         recyclerView.setAdapter(bookCityAdapter);
         bookCityAdapter.setOnItemClickListener(new BookCityAdapter.OnItemClickListener() {
             @Override
@@ -154,26 +163,9 @@ public class StoreItemFragment extends BaseFragment {
                             .navigation();
                     clickReport(bookShelf.getContent_id(), position);
                 } else if (baseDataBean instanceof EditorRecommend) {
-                    Toaster.showToastCenterShort(getContext(), "正在准备书籍，请稍后");
                     //小编推荐需要去请求书本数据
                     EditorRecommend editorRecommend = (EditorRecommend) baseDataBean;
-                    APIContext.getBookCityAPi().getBook(editorRecommend.getContent_id())
-                            .onSuccess(new Function1<BookShelf, Unit>() {
-                                @Override
-                                public Unit invoke(BookShelf bookShelf) {
-                                    ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
-                                            .withString("json", GsonUtil.objectToJson(bookShelf))
-                                            .navigation();
-                                    return null;
-                                }
-                            })
-                            .onFail(new Function2<Integer, String, Unit>() {
-                                @Override
-                                public Unit invoke(Integer integer, String s) {
-                                    Toaster.showToastCenterShort(getContext(), "获取数据失败");
-                                    return null;
-                                }
-                            }).execute();
+                    getBookToDetail(editorRecommend.getContent_id());
                     clickRecommandReport(editorRecommend.getContent_id(), position);
 
                 }
@@ -216,6 +208,7 @@ public class StoreItemFragment extends BaseFragment {
         store_refresh_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getBannerData();
                 getData();
             }
         });
@@ -286,6 +279,59 @@ public class StoreItemFragment extends BaseFragment {
         return view;
     }
 
+    private View initHeaderView() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.item_store_header, null);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(lp);
+        TextView classify = view.findViewById(R.id.classify);
+        classify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_CLASSIFY).navigation();
+            }
+        });
+        TextView rankiing = view.findViewById(R.id.rankiing);
+        rankiing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).navigation();
+            }
+        });
+        TextView the_end = view.findViewById(R.id.the_end);
+        the_end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).withBoolean("isEndRanking", true).navigation();
+            }
+        });
+        store_banner = view.findViewById(R.id.store_banner);
+        store_banner.addBannerLifecycleObserver(getActivity());
+        store_banner.setIndicator(new RectangleIndicator(getContext()));
+
+        bookCityBannerAdapter = new BookCityBannerAdapter(getActivity(), showBannerList);
+        bookCityBannerAdapter.setBannerClickListener(new BookCityBannerAdapter.OnBannerClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (showBannerList.size() > position) {
+                    BannerDataBean bannerDataBean = showBannerList.get(position);
+                    //1书籍详情页 2 H5链接
+                    if (bannerDataBean.getBanner_type() == 1) {
+                        getBookToDetail(bannerDataBean.getBanner_book_id());
+                    } else if (showBannerList.get(position).getBanner_type() == 2) {
+                        // TODO: 2020/7/16 使用地址，跳到内部浏览器页
+                        Intent intent = new Intent(getContext(), BrowserActivity.class);
+                        intent.putExtra("browser_url", bannerDataBean.getBanner_web_url());
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+        store_banner.setAdapter(bookCityBannerAdapter);
+        store_banner.start();
+
+        return view;
+    }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -308,6 +354,8 @@ public class StoreItemFragment extends BaseFragment {
             getData();
             initLoadData();
         }
+        //每次切换，都要检查一下数据
+        getBannerData();
     }
 
     private void initLoadData() {
@@ -334,6 +382,27 @@ public class StoreItemFragment extends BaseFragment {
             //请求猜你喜欢
             bottomRequest = APIContext.getBookCityAPi().getRecommend(0, 4, GetBookCityAPi.GET_DATA_PAGE_NUM);
         }
+    }
+
+    private void getBookToDetail(long content_id) {
+        Toaster.showToastCenterShort(getContext(), "正在准备书籍，请稍后");
+        APIContext.getBookCityAPi().getBook(content_id)
+                .onSuccess(new Function1<BookShelf, Unit>() {
+                    @Override
+                    public Unit invoke(BookShelf bookShelf) {
+                        ARouter.getInstance().build(ARouterPath.ACTIVITY_DETAIL_MAIN)
+                                .withString("json", GsonUtil.objectToJson(bookShelf))
+                                .navigation();
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        Toaster.showToastCenterShort(getContext(), "获取数据失败");
+                        return null;
+                    }
+                }).execute();
     }
 
     private void getData() {
@@ -371,6 +440,46 @@ public class StoreItemFragment extends BaseFragment {
                         }
                         bookCityAdapter.setFooterText("没有更多数据");
                         Toaster.showToastCenter(getContext(), "获取数据失败");
+                        return null;
+                    }
+                }).execute();
+    }
+
+    /**
+     * 获取banner列表数据
+     */
+    private void getBannerData() {
+        APIContext.getBookCityAPi().getBannerData(channel)
+                .onSuccess(new Function1<BannerDataList, Unit>() {
+                    @Override
+                    public Unit invoke(BannerDataList bannerDataList) {
+                        if (bannerDataList.getBanner_list().size() > 0) {
+                            showBannerList.clear();
+                            for (BannerDataBean bannerDataBean : bannerDataList.getBanner_list()) {
+                                long sysTime = System.currentTimeMillis();
+                                //在有效时间内才会显示
+                                if (bannerDataBean.getStart_time() < sysTime && bannerDataBean.getEnd_time() > sysTime) {
+                                    showBannerList.add(bannerDataBean);
+                                }
+                            }
+                            if (showBannerList.size() > 0) {
+                                store_banner.setVisibility(View.VISIBLE);
+                                bookCityBannerAdapter.setmDatas(showBannerList);
+                            } else {
+                                store_banner.setVisibility(View.GONE);
+                            }
+                        } else {
+                            store_banner.setVisibility(View.GONE);
+                        }
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        if (showBannerList.size() < 1) {
+                            store_banner.setVisibility(View.GONE);
+                        }
                         return null;
                     }
                 }).execute();

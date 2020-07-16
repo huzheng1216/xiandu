@@ -24,6 +24,8 @@ import com.inveno.xiandu.db.DaoManager;
 import com.inveno.xiandu.http.DDManager;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.SPUtils;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 /**
  * Created by Administrator on 2016/9/23.
@@ -49,8 +51,10 @@ public class MainApplication extends Application implements Application.Activity
             ARouter.openLog();// 打印日志
             ARouter.openDebug();// 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         }
+        //初始化错误采集
         initCrash();
-
+        //初始化微信分享
+        initWeChat();
         ARouter.init(this);
         //初始化sp存储
         SPUtils.init(Keys.SP_KEY, this);
@@ -147,4 +151,10 @@ public class MainApplication extends Application implements Application.Activity
 //        Log.e("ReportManager",+activityCount+"-------isForeground="+isForeground);
     }
 
+    private void initWeChat(){
+        // 三个参数分别是上下文、应用的appId、是否检查签名（默认为false）
+        IWXAPI mWxApi = WXAPIFactory.createWXAPI(this, "你的appId", true);
+// 注册
+        mWxApi.registerApp("你的appId");
+    }
 }

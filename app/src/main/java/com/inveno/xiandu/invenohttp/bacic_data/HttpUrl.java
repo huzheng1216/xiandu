@@ -23,7 +23,7 @@ public class HttpUrl {
     public static String QUERY_COIN = "/coin/query_coin"; //用户金币查询
     public static String QUERY_COIN_DETAILS = "/coin/query_coin_details"; //用户金币明细查询
     public static String GET_MISSION = "/mission/list"; //获取任务接口
-    public static String COMPLETE_MISSION = "/novel/mission/complete"; //完成任务接口
+    public static String COMPLETE_MISSION = "/mission/complete"; //完成任务接口
     public static String READ_TIME = "/behavior/heat_beat/read/time";//阅读时长
 
 
@@ -49,6 +49,7 @@ public class HttpUrl {
     public static String DELETE_READ_TRACK = "/behavior/delete_read_track"; //删除阅读足迹
 
     public static String UPDATA_URL = "/behavior/get_app_version"; //更新
+    public static String GET_BANNER_DATA = "/content/banner/list"; //获取Banner列表
 
 
     public static String getHttpUri(String url) {

@@ -30,6 +30,7 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.BaseFragment;
 import com.inveno.xiandu.view.main.MainActivity;
@@ -139,6 +140,28 @@ public class MineFragment extends BaseFragment {
     void mine_setting() {
 //        Toaster.showToastCenter(getContext(), "设置");
         ARouter.getInstance().build(ARouterPath.ACTIVITY_SETTING).navigation();
+    }
+
+    @OnClick(R.id.mine_invitation)
+    void mine_initation(){
+        Toaster.showToastCenter(getContext(), "邀请好友");
+        if (ServiceContext.userService().isLogin()) {
+            Intent intent = new Intent(getActivity(), InvitationFriendActivity.class);
+            startActivity(intent);
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
+    }
+
+    @OnClick(R.id.mine_write_invitation)
+    void mine_write_invitation(){
+        Toaster.showToastCenter(getContext(), "填写邀请码");
+        if (ServiceContext.userService().isLogin()) {
+            Intent intent = new Intent(getActivity(), UserinfoActivity.class);
+            startActivity(intent);
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
     }
 
     private EventCanceler event_login;

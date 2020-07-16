@@ -1,6 +1,7 @@
 package com.inveno.xiandu.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,7 @@ import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
+import com.inveno.xiandu.view.main.welfare.SignInActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +76,7 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addAd(int index , AdBookModel adBookModel) {
+    public void addAd(int index, AdBookModel adBookModel) {
         if (data.size() >= index) {
             data.add(index, adBookModel);
             notifyDataSetChanged();
@@ -391,12 +393,20 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
 
         TextView bookrack_read_time;
         TextView bookrack_coin_num;
+        TextView shelf_sign_in;
 
         public HeaderViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
             bookrack_read_time = itemView.findViewById(R.id.bookrack_read_time);
             bookrack_coin_num = itemView.findViewById(R.id.bookrack_coin_num);
+            shelf_sign_in = itemView.findViewById(R.id.shelf_sign_in);
+            shelf_sign_in.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, SignInActivity.class));
+                }
+            });
         }
     }
 

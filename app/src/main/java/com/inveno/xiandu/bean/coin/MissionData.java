@@ -15,11 +15,13 @@ public class MissionData {
     private int max_times;//当天最大完成次数
     private int reading_time;//要求阅读时长：0为无要求
     private int continue_sign_in_num;//要求连续签到天数：0为无要求
-    private boolean enable;//当天是否达到任务要求
+    private int code;//1.满足条件；2.不满足次数3.不满足连续签到4.不满足阅读时长5.系统异常6.任务已完成
+    private String message;//任务完成信息
 
-    public MissionData(){
+    public MissionData() {
 
     }
+
     public int getMission_id() {
         return mission_id;
     }
@@ -76,12 +78,19 @@ public class MissionData {
         this.continue_sign_in_num = continue_sign_in_num;
     }
 
-    public boolean isEnable() {
-        return enable;
+    public int getCode() {
+        return code;
     }
 
-    public void setEnable(boolean enable) {
-        this.enable = enable;
+    public void setCode(int code) {
+        this.code = code;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

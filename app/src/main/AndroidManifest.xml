@@ -87,6 +87,9 @@
         <activity
             android:name=".view.detail.BookDetailActivity"
             android:theme="@style/AppTheme" />
+        <activity android:name=".view.main.welfare.SignInActivity" />
+        <activity android:name=".view.main.my.InvitationFriendActivity" />
+        <activity android:name=".view.browser.BrowserActivity" />
 
         <service android:name=".apkupdata.UpdateService" />
 

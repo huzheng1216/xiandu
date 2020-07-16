@@ -11,6 +11,7 @@ import com.inveno.android.basics.service.callback.common.DefaultHttpStatefulCall
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.thread.ThreadUtil;
 import com.inveno.xiandu.bean.coin.CoinDetail;
+import com.inveno.xiandu.bean.coin.CompeleteMissionData;
 import com.inveno.xiandu.bean.coin.MissionDataList;
 import com.inveno.xiandu.bean.coin.ReadTime;
 import com.inveno.xiandu.bean.coin.UserCoin;
@@ -117,9 +118,9 @@ public class CoinApi extends BaseSingleInstanceService {
         }
     }
 
-    public StatefulCallBack<MissionDataList> completeMission(String mission_id) {
+    public StatefulCallBack<CompeleteMissionData> completeMission(String mission_id) {
         if (MODULE_DEBUG) {
-            return new BaseStatefulCallBack<MissionDataList>() {
+            return new BaseStatefulCallBack<CompeleteMissionData>() {
                 @Override
                 public void execute() {
                     ThreadUtil.Installer.install();
@@ -138,7 +139,7 @@ public class CoinApi extends BaseSingleInstanceService {
             mParams.putAll(mBaseParams);
 
             return MultiTypeHttpStatefulCallBack.INSTANCE
-                    .<MissionDataList>newCallBack(new TypeReference<MissionDataList>() {
+                    .<CompeleteMissionData>newCallBack(new TypeReference<CompeleteMissionData>() {
                     }.getType())
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.COMPLETE_MISSION))
                     .withArg(mParams)
