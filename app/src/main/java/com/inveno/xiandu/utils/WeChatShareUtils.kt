@@ -6,6 +6,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.inveno.xiandu.BuildConfig
 import com.tencent.mm.opensdk.modelbase.BaseReq
 import com.tencent.mm.opensdk.modelbase.BaseResp
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
@@ -26,7 +27,7 @@ import java.io.FileNotFoundException
  * @更新时间：2020/7/16
  * @Version：1.0.0
  */
-class WeChatShareUtils : IWXAPIEventHandler{
+object WeChatShareUtils : IWXAPIEventHandler{
     /**
      * 分享网页类型至微信
      *
@@ -38,7 +39,7 @@ class WeChatShareUtils : IWXAPIEventHandler{
      */
     fun shareWeb(context: Context, webUrl: String, title: String, content: String, bitmap: Bitmap, isFriend: Boolean) {
         // 通过appId得到IWXAPI这个对象
-        val wxapi = WXAPIFactory.createWXAPI(context, getAppId(context));
+        val wxapi = WXAPIFactory.createWXAPI(context, getAppId());
         // 检查手机或者模拟器是否安装了微信
         if (!wxapi.isWXAppInstalled) {
             Toaster.showToastShort(context, "您还没有安装微信")
@@ -78,10 +79,10 @@ class WeChatShareUtils : IWXAPIEventHandler{
     /**
      * 微信分享图片
      */
-    private fun shareImageToWeiXin(context: Context, activity: Activity, imagePath: String, isFriend: Boolean) {
+    fun shareImageToWeiXin(context: Context, activity: Activity, imagePath: String, isFriend: Boolean) {
         // 通过appId得到IWXAPI这个对象
-        val wxapi = WXAPIFactory.createWXAPI(context, getAppId(context))
-        wxapi.registerApp(getAppId(context))
+        val wxapi = WXAPIFactory.createWXAPI(context, getAppId())
+        wxapi.registerApp(getAppId())
         wxapi.handleIntent(activity.intent, this)
         // 检查手机或者模拟器是否安装了微信
         if (!wxapi.isWXAppInstalled) {
@@ -113,6 +114,43 @@ class WeChatShareUtils : IWXAPIEventHandler{
     }
 
     /**
+     * 微信分享图片
+     */
+    fun shareImageToWeiXin(context: Context, activity: Activity, bmp: Bitmap, isFriend: Boolean) {
+        // 通过appId得到IWXAPI这个对象
+        val wxapi = WXAPIFactory.createWXAPI(context, getAppId())
+        wxapi.registerApp(getAppId())
+        wxapi.handleIntent(activity.intent, this)
+        // 检查手机或者模拟器是否安装了微信
+        if (!wxapi.isWXAppInstalled) {
+            Toaster.showToastShort(context, "您还没有安装微信")
+            return
+        }
+
+        //初始化 WXImageObject 和 WXMediaMessage 对象
+        val imgObj =WXImageObject(bmp)
+        val msg = WXMediaMessage()
+        msg.mediaObject = imgObj;
+
+        //设置缩略图
+        val thumbBmp = Bitmap.createScaledBitmap(bmp, 60, 60, true);
+        bmp.recycle();
+        msg.thumbData = Bitmap2Bytes(thumbBmp)
+
+        //构造一个Req
+        val req = SendMessageToWX.Req()
+        req.transaction = System.currentTimeMillis().toString()
+        req.message = msg
+        if (isFriend) {
+            req.scene = SendMessageToWX.Req.WXSceneSession;
+        } else {
+            req.scene = SendMessageToWX.Req.WXSceneTimeline;
+        }
+        //调用api接口，发送数据到微信
+        wxapi.sendReq(req)
+    }
+
+    /**
      * 把Bitmap转Byte
      */
     fun Bitmap2Bytes(bm: Bitmap): ByteArray? {
@@ -123,10 +161,8 @@ class WeChatShareUtils : IWXAPIEventHandler{
     /**
      * 获取微信appid
      */
-    protected fun getAppId(context: Context): String? {
-        val appInfo: ApplicationInfo = context.getPackageManager()
-                .getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA)
-        return appInfo.metaData.getString("WEICHAT_APPKEY")
+    fun getAppId(): String? {
+        return BuildConfig.WeChatAppID
     }
 
     override fun onResp(p0: BaseResp?) {

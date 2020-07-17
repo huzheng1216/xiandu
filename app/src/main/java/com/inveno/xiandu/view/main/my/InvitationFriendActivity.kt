@@ -1,28 +1,27 @@
 package com.inveno.xiandu.view.main.my
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.*
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
-import com.inveno.android.basics.service.event.EventService.Companion.post
-import com.inveno.android.basics.service.third.json.JsonUtil.Companion.toJson
 import com.inveno.xiandu.BuildConfig
 import com.inveno.xiandu.R
 import com.inveno.xiandu.config.ARouterPath
-import com.inveno.xiandu.invenohttp.api.user.LoginAPI
-import com.inveno.xiandu.invenohttp.bacic_data.EventConstant
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext
+import com.inveno.xiandu.utils.LogUtils
 import com.inveno.xiandu.utils.Toaster
-import com.inveno.xiandu.utils.fileandsp.AppPersistRepository
+import com.inveno.xiandu.utils.WeChatShareUtils
 import com.inveno.xiandu.view.TitleBarBaseActivity
+import com.inveno.xiandu.view.custom.ShareView
 import kotlinx.android.synthetic.main.activity_mine_invitation_friend.*
 import kotlinx.android.synthetic.main.share_pop.*
-import java.util.*
-
+import kotlin.math.log
 
 /**
  * @author yongji.wang
@@ -34,6 +33,10 @@ import java.util.*
 class InvitationFriendActivity : TitleBarBaseActivity() {
     lateinit var popView: View
     lateinit var popupWindow: PopupWindow
+    private var face_to_facce_view: LinearLayout? = null
+    private var wechat_view: LinearLayout? = null
+    private var moments_view: LinearLayout? = null
+    private var qq_view: LinearLayout? = null
 
     override fun layoutID(): Int {
         return R.layout.activity_mine_invitation_friend
@@ -53,7 +56,7 @@ class InvitationFriendActivity : TitleBarBaseActivity() {
         initWebView()
     }
 
-    fun initWebView() {
+    private fun initWebView() {
         //初始化分享弹窗
         initPopwindow()
 
@@ -72,9 +75,14 @@ class InvitationFriendActivity : TitleBarBaseActivity() {
     /**
      * 初始化popupWindow
      */
-    fun initPopwindow() {
+    private fun initPopwindow() {
         //加载弹出框的布局
         popView = LayoutInflater.from(this).inflate(R.layout.share_pop, null)
+        face_to_facce_view = popView.findViewById(R.id.face_to_facce_view)
+        wechat_view = popView.findViewById(R.id.wechat_view)
+        moments_view = popView.findViewById(R.id.moments_view)
+        qq_view = popView.findViewById(R.id.qq_view)
+
         popupWindow = PopupWindow(popView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -102,25 +110,50 @@ class InvitationFriendActivity : TitleBarBaseActivity() {
     }
 
     private fun setButtonListeners() {
-        face_to_facce_view.setOnClickListener {
+        LogUtils.E("face_to_facce_view:" + face_to_facce_view)
+        face_to_facce_view?.setOnClickListener {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
             //面对面分享
         }
-        wechat_view.setOnClickListener {
+        wechat_view?.setOnClickListener {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
             //分享微信好友
-
+            val bmp = createShareImg()
+            if (bmp != null) {
+                WeChatShareUtils.shareImageToWeiXin(this@InvitationFriendActivity, this@InvitationFriendActivity, bmp, true)
+            } else {
+                Toaster.showToastShort(this@InvitationFriendActivity, "分享图片生成失败")
+            }
         }
-        moments_view.setOnClickListener {
+        moments_view?.setOnClickListener {
             if (popupWindow.isShowing) {
                 popupWindow.dismiss()
             }
             //分享微信朋友圈
+            val bmp = createShareImg()
+            if (bmp != null) {
+                WeChatShareUtils.shareImageToWeiXin(this@InvitationFriendActivity, this@InvitationFriendActivity, bmp, false)
+            } else {
+                Toaster.showToastShort(this@InvitationFriendActivity, "分享图片生成失败")
+            }
         }
+        qq_view?.setOnClickListener {
+            if (popupWindow.isShowing) {
+                popupWindow.dismiss()
+            }
+            //分享qq好友
+        }
+    }
+
+    //生成分享图片
+    private fun createShareImg(): Bitmap? {
+        val shareview = ShareView(this)
+        shareview.setInfo("AAABBB")
+        return shareview.createImage()
     }
 
     /**
@@ -128,7 +161,7 @@ class InvitationFriendActivity : TitleBarBaseActivity() {
      *
      * @param bgAlpha
      */
-    fun setBackgroundAlpha(bgAlpha: Float) {
+    private fun setBackgroundAlpha(bgAlpha: Float) {
         val lp = window.attributes
         lp.alpha = bgAlpha
         window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)

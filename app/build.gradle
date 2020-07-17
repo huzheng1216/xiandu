@@ -56,8 +56,6 @@ android {
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        manifestPlaceholders = [WEICHAT_APPKEY: "wxc0b8b2af11f2e717"]
     }
 
     buildTypes {
@@ -68,6 +66,7 @@ android {
             debuggable false
 
             buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
+            buildConfigField 'String', 'WeChatAppID', '"wxafee0cd4cded0bfe"'
         }
         debug {
             minifyEnabled false
@@ -75,7 +74,11 @@ android {
             signingConfig signingConfigs.release
 
             buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
+            buildConfigField 'String', 'WeChatAppID', '"wxafee0cd4cded0bfe"'
         }
+//        AppID:
+//         wxafee0cd4cded0bfe
+//        AppSecret:  95b9baec4531ba0286858ed104966e44
     }
     productFlavors {
 //      测试环境 其他
