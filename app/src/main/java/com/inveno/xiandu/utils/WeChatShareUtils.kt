@@ -2,22 +2,23 @@ package com.inveno.xiandu.utils
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
+import android.widget.Toast
 import com.inveno.xiandu.BuildConfig
+import com.inveno.xiandu.wxapi.EntryActivity
 import com.tencent.mm.opensdk.modelbase.BaseReq
 import com.tencent.mm.opensdk.modelbase.BaseResp
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import com.tencent.mm.opensdk.modelmsg.WXImageObject
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
+import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
-import java.io.FileNotFoundException
 
 
 /**
@@ -27,7 +28,7 @@ import java.io.FileNotFoundException
  * @更新时间：2020/7/16
  * @Version：1.0.0
  */
-object WeChatShareUtils : IWXAPIEventHandler{
+object WeChatShareUtils{
     /**
      * 分享网页类型至微信
      *
@@ -83,7 +84,6 @@ object WeChatShareUtils : IWXAPIEventHandler{
         // 通过appId得到IWXAPI这个对象
         val wxapi = WXAPIFactory.createWXAPI(context, getAppId())
         wxapi.registerApp(getAppId())
-        wxapi.handleIntent(activity.intent, this)
         // 检查手机或者模拟器是否安装了微信
         if (!wxapi.isWXAppInstalled) {
             Toaster.showToastShort(context, "您还没有安装微信")
@@ -116,11 +116,7 @@ object WeChatShareUtils : IWXAPIEventHandler{
     /**
      * 微信分享图片
      */
-    fun shareImageToWeiXin(context: Context, activity: Activity, bmp: Bitmap, isFriend: Boolean) {
-        // 通过appId得到IWXAPI这个对象
-        val wxapi = WXAPIFactory.createWXAPI(context, getAppId())
-        wxapi.registerApp(getAppId())
-        wxapi.handleIntent(activity.intent, this)
+    fun shareImageToWeiXin(context: Context, wxapi: IWXAPI, bmp: Bitmap, isFriend: Boolean) {
         // 检查手机或者模拟器是否安装了微信
         if (!wxapi.isWXAppInstalled) {
             Toaster.showToastShort(context, "您还没有安装微信")
@@ -163,11 +159,5 @@ object WeChatShareUtils : IWXAPIEventHandler{
      */
     fun getAppId(): String? {
         return BuildConfig.WeChatAppID
-    }
-
-    override fun onResp(p0: BaseResp?) {
-    }
-
-    override fun onReq(p0: BaseReq?) {
     }
 }

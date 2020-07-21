@@ -51,6 +51,8 @@ public class HttpUrl {
     public static String UPDATA_URL = "/behavior/get_app_version"; //更新
     public static String GET_BANNER_DATA = "/content/banner/list"; //获取Banner列表
 
+    public static String GET_INVITE_CODE = "/behavior/get_invite_code"; //获取邀请码
+    public static String BIND_INVITE_CODE = "/behavior/bind_invite_relate"; //获取邀请码
 
     public static String getHttpUri(String url) {
         return HOST_URI + url;

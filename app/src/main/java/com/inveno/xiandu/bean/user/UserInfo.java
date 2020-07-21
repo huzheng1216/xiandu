@@ -14,6 +14,7 @@ public class UserInfo {
     private String user_name;
     private String head_url;
     private String phone_num;
+    private long create_time;
 
     public UserInfo(){
 
@@ -63,5 +64,13 @@ public class UserInfo {
 
     public void setPhone_num(String phone_num) {
         this.phone_num = phone_num;
+    }
+
+    public long getCreate_time() {
+        return create_time;
+    }
+
+    public void setCreate_time(long create_time) {
+        this.create_time = create_time;
     }
 }

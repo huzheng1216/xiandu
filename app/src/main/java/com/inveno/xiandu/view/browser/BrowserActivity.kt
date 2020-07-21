@@ -6,6 +6,7 @@ import android.view.*
 import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.LinearLayout
 import android.widget.PopupWindow
 import com.alibaba.android.arouter.launcher.ARouter
 import com.inveno.xiandu.BuildConfig
@@ -26,6 +27,7 @@ import kotlinx.android.synthetic.main.share_pop.*
  * @Version：1.0.0
  */
 class BrowserActivity : TitleBarBaseActivity() {
+    lateinit var mWebView: WebView
     lateinit var popView: View
     lateinit var popupWindow: PopupWindow
 
@@ -54,18 +56,25 @@ class BrowserActivity : TitleBarBaseActivity() {
         if (BuildConfig.DEBUG) {
             WebView.setWebContentsDebuggingEnabled(true)
         }
-
-        val webSetting = invitation_webview.settings
+        //创建一个LayoutParams宽高设定为全屏
+        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        //创建WebView
+        mWebView = WebView(applicationContext)
+        //设置WebView的宽高
+        mWebView.setLayoutParams(layoutParams)
+        //把webView添加到容器中
+        m_webview_layout.addView(mWebView)
+        val webSetting = mWebView.settings
         webSetting.javaScriptEnabled = true
         //不显示webview缩放按钮
         webSetting.displayZoomControls = false
         //                inAppWebView.setWebChromeClient(new InAppChromeClient
         // (thatWebView));
         val client: WebViewClient = BroserClient()
-        invitation_webview.webViewClient = client
-        invitation_webview.addJavascriptInterface(InvitationJs(), "InvitationJs")
+        mWebView.webViewClient = client
+        mWebView.addJavascriptInterface(InvitationJs(), "InvitationJs")
         val url = intent.getStringExtra("browser_url")
-        invitation_webview.loadUrl(url)
+        mWebView.loadUrl(url)
     }
 
     /**
@@ -140,8 +149,15 @@ class BrowserActivity : TitleBarBaseActivity() {
     }
 
     override fun onDestroy() {
+        //加载null内容
+        mWebView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null)
+        //清除历史记录
+        mWebView.clearHistory()
+        //移除WebView
+        (mWebView.parent as ViewGroup).removeView(mWebView)
+        //销毁VebView
+        mWebView.destroy()
         super.onDestroy()
-        invitation_webview.loadUrl("about:blank")
     }
 
     inner class InvitationJs {

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -69,6 +70,9 @@ public class MineFragment extends BaseFragment {
 
     @BindView(R.id.mine_today_coin)
     TextView mine_today_coin;
+
+    @BindView(R.id.mine_write_invitation)
+    RelativeLayout mine_write_invitation;
 
     @OnClick(R.id.iv_user_pic)
     void pic() {
@@ -143,8 +147,7 @@ public class MineFragment extends BaseFragment {
     }
 
     @OnClick(R.id.mine_invitation)
-    void mine_initation(){
-        Toaster.showToastCenter(getContext(), "邀请好友");
+    void mine_initation() {
         if (ServiceContext.userService().isLogin()) {
             Intent intent = new Intent(getActivity(), InvitationFriendActivity.class);
             startActivity(intent);
@@ -154,10 +157,9 @@ public class MineFragment extends BaseFragment {
     }
 
     @OnClick(R.id.mine_write_invitation)
-    void mine_write_invitation(){
-        Toaster.showToastCenter(getContext(), "填写邀请码");
+    void mine_write_invitation() {
         if (ServiceContext.userService().isLogin()) {
-            Intent intent = new Intent(getActivity(), UserinfoActivity.class);
+            Intent intent = new Intent(getActivity(), InputInviteCodeActivity.class);
             startActivity(intent);
         } else {
             ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
@@ -228,6 +230,10 @@ public class MineFragment extends BaseFragment {
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
+                //如果注册超过3天，不显示邀请码入口
+                if (!mine_write_invitation.isShown()) {
+                    mine_write_invitation.setVisibility(View.VISIBLE);
+                }
                 user_name.setText("点我登录");
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
                 ServiceContext.bacicParamService().refreshBaseParam();
@@ -299,6 +305,15 @@ public class MineFragment extends BaseFragment {
         }
         if (ServiceContext.userService().isLogin()) {
             get_coin();
+            //如果登录了，判断是否超过注册时间
+            long registTime = ServiceContext.userService().getUserInfo().getCreate_time();
+            long currentTime = System.currentTimeMillis();
+            //如果注册超过3天，不显示邀请码入口
+            if (mine_write_invitation.isShown()) {
+                if (currentTime > registTime + (3 * 24 * 60 * 60 * 1000)) {
+                    mine_write_invitation.setVisibility(View.GONE);
+                }
+            }
         } else {
             mine_my_coin.setText("--");
             mine_today_coin.setText("--");

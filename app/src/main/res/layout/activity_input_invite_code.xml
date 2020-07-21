@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include3"
+        layout="@layout/base_tittle_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_bg"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="365dp"
+            android:layout_marginStart="9dp"
+            android:layout_marginEnd="9dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/share_qrcode_bg"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="填写邀请码绑定好友关系"
+                    android:textColor="@color/gray_3"
+                    android:textSize="16sp" />
+
+                <com.inveno.xiandu.view.components.DelayerEditText
+                    android:id="@+id/invite_code_input_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="38dp"
+                    android:hint="此处填写邀请码"
+                    android:background="@drawable/input_invite_code_edit_bg"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:gravity="center"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:digits="0123456789qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM"
+                    android:maxLength="16"
+                    android:textColorHint="@color/gray_9"
+                    android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/invite_code_input_comfig"
+                    android:layout_width="144dp"
+                    android:layout_height="38dp"
+                    android:gravity="center"
+                    android:background="@drawable/blue_round_bg_15"
+                    android:text="提交"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.45"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="温馨提示："
+                    android:textColor="@color/gray_6"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:text="1. 邀请码可向好友索取，填写后即可绑定好友关系， 没有可不填写\n2. 邀请码注册后3天内可填写，超过3天后不可填写\n3. 一台设备只能填写一次邀请码，填写成功后，即 使再切换帐号也无法再次填写邀请码"
+                    android:textColor="@color/gray_6"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

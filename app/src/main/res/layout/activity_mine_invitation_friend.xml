@@ -6,9 +6,8 @@
 
     <include layout="@layout/base_tittle_bar" />
 
-    <com.inveno.xiandu.view.custom.MWebview
-        android:id="@+id/invitation_webview"
+    <FrameLayout
+        android:id="@+id/m_webview_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"/>
 </LinearLayout>
