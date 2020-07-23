@@ -57,7 +57,7 @@ public class BookCityBannerAdapter extends BannerAdapter<BannerDataBean, BookCit
 
     @Override
     public void onBindView(BannerViewHolder holder, BannerDataBean data, int position, int size) {
-        GlideUtils.LoadImage(mContext, mDatas.get(position).getBanner_img(), holder.imageView);
+        GlideUtils.LoadImage(mContext, mDatas.get(position).getBanner_img(), R.drawable.banner_defaul, holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

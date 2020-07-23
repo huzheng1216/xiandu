@@ -37,4 +37,7 @@ public interface ScenarioManifest {
     // 阅读足迹广告
     String READ_FOOT_TRACE = "0x0105fe";
 
+    // 观看小视频
+    String REWARD_VIEDO = "0x0302fe";
+
 }

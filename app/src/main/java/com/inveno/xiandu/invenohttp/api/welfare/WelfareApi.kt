@@ -7,6 +7,7 @@ import com.inveno.android.basics.service.callback.StatefulCallBack
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack.newCallBack
 import com.inveno.android.basics.service.thread.ThreadUtil
 import com.inveno.xiandu.BuildConfig
+import com.inveno.xiandu.bean.welfare.ActivityBeanList
 import com.inveno.xiandu.bean.welfare.InvideBean
 import com.inveno.xiandu.invenohttp.bacic_data.HttpUrl
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext
@@ -59,6 +60,19 @@ class WelfareApi : BaseSingleInstanceService() {
             return newCallBack<String>(object : TypeReference<String>() {}.type)
                     .atUrl(HttpUrl.getHttpUri(HttpUrl.BIND_INVITE_CODE))
                     .withArg(mParams)
+                    .buildCallerCallBack()
+        }
+    }
+
+
+    fun getActivityList(): StatefulCallBack<ActivityBeanList>? {
+        if (MODULE_DEBUG) {
+            return null
+        } else {
+            val getCodeData = ServiceContext.bacicParamService().baseParam
+            return newCallBack<ActivityBeanList>(object : TypeReference<ActivityBeanList>() {}.type)
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.GET_ACTIVITY))
+                    .withArg(getCodeData)
                     .buildCallerCallBack()
         }
     }

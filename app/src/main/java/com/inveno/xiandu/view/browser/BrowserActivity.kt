@@ -1,9 +1,11 @@
 package com.inveno.xiandu.view.browser
 
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.*
 import android.webkit.JavascriptInterface
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
@@ -70,8 +72,9 @@ class BrowserActivity : TitleBarBaseActivity() {
         webSetting.displayZoomControls = false
         //                inAppWebView.setWebChromeClient(new InAppChromeClient
         // (thatWebView));
-        val client: WebViewClient = BroserClient()
+        val client: WebViewClient = BrowserClient()
         mWebView.webViewClient = client
+        mWebView.webChromeClient = BrowserChromeClient()
         mWebView.addJavascriptInterface(InvitationJs(), "InvitationJs")
         val url = intent.getStringExtra("browser_url")
         mWebView.loadUrl(url)
@@ -139,7 +142,13 @@ class BrowserActivity : TitleBarBaseActivity() {
         window.attributes = lp
     }
 
-    inner class BroserClient : WebViewClient() {
+    inner class BrowserClient : WebViewClient() {
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            if (view != null) {
+                this@BrowserActivity.titleText.setText(view.getTitle())
+            }
+            super.onPageStarted(view, url, favicon)
+        }
         override fun onPageFinished(view: WebView?, url: String?) {
             if (view != null) {
                 this@BrowserActivity.titleText.setText(view.getTitle())
@@ -147,6 +156,21 @@ class BrowserActivity : TitleBarBaseActivity() {
             super.onPageFinished(view, url)
         }
     }
+
+    inner class BrowserChromeClient: WebChromeClient(){
+        override fun onProgressChanged(view: WebView?, newProgress: Int) {
+            if (newProgress == 100) {
+                load_progress.visibility = View.GONE
+            }else {
+                if (load_progress.getVisibility() == View.GONE) {
+                    load_progress.visibility = View.VISIBLE
+                }
+                load_progress.progress = newProgress
+            }
+            super.onProgressChanged(view, newProgress)
+        }
+    }
+
 
     override fun onDestroy() {
         //加载null内容

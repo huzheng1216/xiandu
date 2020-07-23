@@ -125,7 +125,6 @@ class SignInActivity : TitleBarBaseActivity() {
                     if (coinNum > 0) {
                         topDataList.clear()
                         if (compeleteData != null) {
-                            Toaster.showToastCenterShort(this, "今日已签到")
                             val dayNum = compeleteData.continueTimes
                             for (index in 0..signInStrArray.size - 1) {
                                 val signInTopData = SignInTopData()
@@ -148,10 +147,14 @@ class SignInActivity : TitleBarBaseActivity() {
                         //给gridview传值显示
                         signInTopAdapter?.setData(topDataList)
                     } else {
-                        Toaster.showToastCenterShort(this, "+%s金币".format(compeleteData?.gold))
-                        bottomDataList.get(finishPosition).code = 6
+                        bottomDataList[finishPosition].code = 6
 
                         signInMissionAdapter.setsData(bottomDataList)
+                    }
+                    if (compeleteData != null) {
+                        if (compeleteData.gold > 0) {
+                            Toaster.showToastCenterShort(this, "+%s金币".format(compeleteData.gold))
+                        }
                     }
                 }
                 .onFail { code, message ->

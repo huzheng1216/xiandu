@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -56,6 +57,10 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     private EditText coin_top_up_phone_num;
 
+    private RadioButton operator_yidong;//移动
+    private RadioButton operator_liantong;//联通
+    private RadioButton operator_dianxin;//电信
+
     private UserCoin mUserCoin;
 
     @Override
@@ -97,6 +102,10 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
         coin_top_up_30 = findViewById(R.id.coin_top_up_30);
         coin_top_up_50 = findViewById(R.id.coin_top_up_50);
         coin_top_up_100 = findViewById(R.id.coin_top_up_100);
+
+        operator_yidong = findViewById(R.id.operator_yidong);
+        operator_liantong = findViewById(R.id.operator_liantong);
+        operator_dianxin = findViewById(R.id.operator_dianxin);
 
         coin_top_up_phone_num = findViewById(R.id.coin_top_up_phone_num);
         setCursorColor(coin_top_up_phone_num);
@@ -200,9 +209,19 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     public void exchange(View view) {
         if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPhone_num() != null) {
-            if (StringTools.isPhone(ServiceContext.userService().getUserInfo().getPhone_num())){
+            if (StringTools.isPhone(ServiceContext.userService().getUserInfo().getPhone_num())) {
                 Toaster.showToastCenter(this, "金币余额不足");
-            }else{
+                //获取运营山
+                if (operator_yidong.isChecked()){
+                    //移动
+                }else if(operator_liantong.isChecked()){
+                    //联通
+                }else if(operator_dianxin.isChecked()){
+                    //电信
+                }else{
+                    //未知
+                }
+            } else {
                 Toaster.showToastCenter(this, "请输入正确电话号码");
             }
         } else {
@@ -217,6 +236,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     /**
      * 反射设置光标颜色
+     *
      * @param mEditText
      */
     private void setCursorColor(EditText mEditText) {

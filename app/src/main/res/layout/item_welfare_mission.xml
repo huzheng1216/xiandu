@@ -47,7 +47,7 @@
         android:id="@+id/welfare_sign_in_over_img"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/checkbox_select"
+        app:srcCompat="@drawable/mission_finish"
         android:layout_alignParentEnd="true"
         android:visibility="gone"
         android:layout_marginTop="4dp"

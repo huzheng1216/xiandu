@@ -51,12 +51,17 @@ public class DonewsAdApiImpl implements IAdApi {
     }
 
     @Override
-    public StatefulCallBack<String> requestRewardVideoAD(RewardAdParam uiAdParam) {
+    public StatefulCallBack<String> requestRewardVideoAD(final RewardAdParam rewardAdParam) {
 //        PlaintAdParamUtil.setPositionId()
         return new BaseStatefulCallBack<String>() {
             @Override
             public void execute() {
-                invokeFail(400, "not support for now");
+                if (TextUtils.isEmpty(rewardAdParam.getPositionId())) {
+                    invokeFail(400, "position_id is empty");
+                } else {
+                    executeRewardVideoAd(rewardAdParam);
+                    invokeSuccess("--------------------------- ok");
+                }
             }
         };
     }
@@ -125,87 +130,102 @@ public class DonewsAdApiImpl implements IAdApi {
 
             }
         });
-
-
-//        DoNewsAD doNewsAD = new DoNewsAD.Builder()
-//                .setExpressViewWidth(adParam.getWidth().floatValue())
-//                .setExpressViewHeight(adParam.getHeight().floatValue())
-//                .setAdCount(adParam.getAdIndexList().size())
-//                .build();
-//        DoNewsAdNative doNewsAdNative = DoNewsAdManagerHolder.get().createDoNewsAdNative();
-//        doNewsAdNative.onCreatTemplateAd(adParam.getActivity(), doNewsAD, new DoNewsAdNative.DoNewsTemplateListener() {
-//            @Override
-//            public void onAdError(String s) {
-//                adParam.getAdTemplateListener().onAdError(s);
-//            }
-//
-//            @Override
-//            public void onNoAD(String s) {
-//                adParam.getAdTemplateListener().onNoAD(s);
-//            }
-//
-//            @Override
-//            public void onADLoaded(List<DoNewsAdView> list) {
-
-//            }
-//
-//            @Override
-//            public void onAdClose(DoNewsAdView doNewsAdView) {
-//
-//            }
-//
-//            @Override
-//            public void onADExposure() {
-//
-//            }
-//
-//            @Override
-//            public void onADClicked() {
-//
-//            }
-//        });
     }
 
-
-    private void executeLoadSplashAd(final SplashAdParam splashAdParam) {
-        DoNewsAD doNewsAD = new DoNewsAD.Builder()
-                .setPositionid(splashAdParam.getPositionId()) //"分配的广告位id"
-                .setView(splashAdParam.getContainerView())
-                //.setExtendExtra("透传参数")
+    private void executeRewardVideoAd(final RewardAdParam rewardAdParam) {
+        DoNewsAD doNewsRewardvideoAD = new DoNewsAD.Builder()
+                .setPositionid(rewardAdParam.getPositionId())
                 .build();
         DoNewsAdNative doNewsAdNative = DoNewsAdManagerHolder.get().createDoNewsAdNative();
-        doNewsAdNative.onCreateAdSplash(splashAdParam.getActivity(), doNewsAD, new DoNewsAdNative.SplashListener() {
+        doNewsAdNative.onCreateRewardAd(rewardAdParam.getActivity(), doNewsRewardvideoAD, new DoNewsAdNative.RewardVideoAdListener() {
             @Override
-            public void onNoAD(String s) {
-//                Log.i("splashad","onNoAD "+s);
-                splashAdParam.getSplashAdListener().onNoAD(s);
+            public void onAdShow() {
+                //广告展示以及曝光
+                rewardAdParam.getRewardVideoAdListener().onAdShow();
             }
 
             @Override
-            public void onClicked() {
-                splashAdParam.getSplashAdListener().onClicked();
+            public void onAdVideoBarClick() {
+                //广告被点击
+                rewardAdParam.getRewardVideoAdListener().onAdVideoBarClick();
             }
 
             @Override
-            public void onShow() {
-                splashAdParam.getSplashAdListener().onShow();
+            public void onAdClose() {
+                //广告关闭
+                rewardAdParam.getRewardVideoAdListener().onAdClose();
             }
 
             @Override
-            public void onPresent() {
-                splashAdParam.getSplashAdListener().onPresent();
+            public void onVideoComplete() {
+                //广告播放已经完成
+                rewardAdParam.getRewardVideoAdListener().onVideoComplete();
             }
 
             @Override
-            public void onADDismissed() {
-                splashAdParam.getSplashAdListener().onADDismissed();
+            public void onRewardVerify(boolean b) {
+                //广告可以被激励,true为可以发奖励，false不能发奖励，奖励已这个为准
+                rewardAdParam.getRewardVideoAdListener().onRewardVerify(b);
             }
 
             @Override
-            public void extendExtra(String s) {
-                splashAdParam.getSplashAdListener().extendExtra(s);
-//                Log.i("splashad","extendExtra "+s);
+            public void onSkippedVideo() {
+                //跳过视频
+                rewardAdParam.getRewardVideoAdListener().onSkippedVideo();
+            }
+
+            @Override
+            public void onError(int i, String s) {
+                //广告失败
+                rewardAdParam.getRewardVideoAdListener().onError(i, s);
             }
         });
+    }
+
+    private void executeLoadSplashAd(final SplashAdParam splashAdParam) {
+        try {
+            DoNewsAD doNewsAD = new DoNewsAD.Builder()
+                    .setPositionid(splashAdParam.getPositionId()) //"分配的广告位id"
+                    .setView(splashAdParam.getContainerView())
+                    //.setExtendExtra("透传参数")
+                    .build();
+            DoNewsAdNative doNewsAdNative = DoNewsAdManagerHolder.get().createDoNewsAdNative();
+            doNewsAdNative.onCreateAdSplash(splashAdParam.getActivity(), doNewsAD, new DoNewsAdNative.SplashListener() {
+                @Override
+                public void onNoAD(String s) {
+//                Log.i("splashad","onNoAD "+s);
+                    splashAdParam.getSplashAdListener().onNoAD(s);
+                }
+
+                @Override
+                public void onClicked() {
+                    splashAdParam.getSplashAdListener().onClicked();
+                }
+
+                @Override
+                public void onShow() {
+                    splashAdParam.getSplashAdListener().onShow();
+                }
+
+                @Override
+                public void onPresent() {
+                    splashAdParam.getSplashAdListener().onPresent();
+                }
+
+                @Override
+                public void onADDismissed() {
+                    splashAdParam.getSplashAdListener().onADDismissed();
+                }
+
+                @Override
+                public void extendExtra(String s) {
+                    splashAdParam.getSplashAdListener().extendExtra(s);
+//                Log.i("splashad","extendExtra "+s);
+                }
+            });
+        }catch (Exception e){
+
+        }
+
     }
 }

@@ -17,6 +17,7 @@ public class MissionData {
     private int continue_sign_in_num;//要求连续签到天数：0为无要求
     private int code;//1.满足条件；2.不满足次数3.不满足连续签到4.不满足阅读时长5.系统异常6.任务已完成
     private String message;//任务完成信息
+    private int mission_type; //任务类型：1.签到 2. 连续签到 3.小视频 4.阅读时长
 
     public MissionData() {
 
@@ -92,5 +93,13 @@ public class MissionData {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public int getMission_type() {
+        return mission_type;
+    }
+
+    public void setMission_type(int mission_type) {
+        this.mission_type = mission_type;
     }
 }

@@ -785,7 +785,7 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         mParams.put("channel_id", channel_id);
         mParams.putAll(bacicParams);
 
-        if (BuildConfig.DEBUG) {
+        if (MODULE_DEBUG) {
             return new BaseStatefulCallBack<BannerDataList>() {
                 @Override
                 public void execute() {

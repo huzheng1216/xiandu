@@ -54,6 +54,8 @@ public class HttpUrl {
     public static String GET_INVITE_CODE = "/behavior/get_invite_code"; //获取邀请码
     public static String BIND_INVITE_CODE = "/behavior/bind_invite_relate"; //获取邀请码
 
+    public static String GET_ACTIVITY = "/content/activity/list"; //获取我的页面活动列表
+
     public static String getHttpUri(String url) {
         return HOST_URI + url;
     }

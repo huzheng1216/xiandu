@@ -5,7 +5,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 
-
 String apkFile
 
 def buildTime() {
@@ -13,7 +12,16 @@ def buildTime() {
     df.setTimeZone(TimeZone.getDefault())
     return df.format(new Date())
 }
-
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
 android {
     signingConfigs {
         release {
@@ -53,6 +61,17 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : "com.inveno.xiandu",
+                JPUSH_APPKEY : "7e1f18b725c29361cbe98faf", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -66,10 +85,12 @@ android {
             debuggable false
 
             buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
+//            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
+
             buildConfigField 'String', 'WeChatAppID', '"wxafee0cd4cded0bfe"'
         }
         debug {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
@@ -270,4 +291,8 @@ dependencies {
     //网络
     implementation 'com.lzy.net:okgo:2.1.4'
     implementation 'com.squareup.okhttp3:okhttp:3.14.2'
+
+    //极光推送
+    implementation 'cn.jiguang.sdk:jpush:3.6.8'
+    implementation 'cn.jiguang.sdk:jcore:2.4.0'
 }

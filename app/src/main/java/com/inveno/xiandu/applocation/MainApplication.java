@@ -27,6 +27,8 @@ import com.inveno.xiandu.utils.SPUtils;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by Administrator on 2016/9/23.
  */
@@ -50,7 +52,10 @@ public class MainApplication extends Application implements Application.Activity
         if (BuildConfig.DEBUG) {
             ARouter.openLog();// 打印日志
             ARouter.openDebug();// 开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+            //初始化极光推送
+            JPushInterface.setDebugMode(true);//设置开启日志,发布时请关闭日志
         }
+        JPushInterface.init(this);
         //初始化错误采集
         initCrash();
         //初始化微信分享
