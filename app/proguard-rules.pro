@@ -657,6 +657,7 @@ public void xxxxxx(**);
 -keep class com.bytedance.sdk.openadsdk.** { *; }
 -keep public interface com.bytedance.sdk.openadsdk.downloadnew.** {*;}
 -keep class com.pgl.sys.ces.* {*;}
+-keep class com.ss.android.downloadlib.** {*;}
 #百度
 -keepclassmembers class * extends android.app.Activity {
 public void *(android.view.View);
