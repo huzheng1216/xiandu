@@ -1,6 +1,8 @@
 package com.inveno.xiandu.view.main.welfare;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -22,6 +24,7 @@ import com.inveno.xiandu.view.TitleBarBaseActivity;
 
 import java.lang.reflect.Field;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
@@ -62,6 +65,11 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     private RadioButton operator_dianxin;//电信
 
     private UserCoin mUserCoin;
+
+    private int rechargeId = 1;
+    private int operator = 1;
+    private boolean coinFull = false;
+    int rate = 10000;
 
     @Override
     public String getCenterText() {
@@ -140,7 +148,6 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
     private void setView() {
         coin_top_up_sum.setText(String.valueOf(mUserCoin.getBalance()));
-        int rate = 10000;
         try {
             DecimalFormat df = new DecimalFormat("######0.00");
             rate = Integer.parseInt(mUserCoin.getExchage_rate().split("金币")[0]);
@@ -152,6 +159,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     }
 
     private void choiseMoney(int i) {
+        rechargeId = i + 1;
         //初始化背景色
         coin_top_up_10.setBackground(getResources().getDrawable(R.drawable.gray_corners_bg));
         coin_top_up_30.setBackground(getResources().getDrawable(R.drawable.gray_corners_bg));
@@ -170,15 +178,19 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
 
         switch (i) {
             case 0:
+                coinFull = mUserCoin.getBalance() >= rate * 10;
                 setChoise(coin_top_up_10, coin_top_up_coin_10, coin_top_up_rmb_10);
                 break;
             case 1:
+                coinFull = mUserCoin.getBalance() >= rate * 30;
                 setChoise(coin_top_up_30, coin_top_up_coin_30, coin_top_up_rmb_30);
                 break;
             case 2:
+                coinFull = mUserCoin.getBalance() >= rate * 50;
                 setChoise(coin_top_up_50, coin_top_up_coin_50, coin_top_up_rmb_50);
                 break;
             case 3:
+                coinFull = mUserCoin.getBalance() >= rate * 100;
                 setChoise(coin_top_up_100, coin_top_up_coin_100, coin_top_up_rmb_100);
                 break;
 
@@ -208,29 +220,52 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
     }
 
     public void exchange(View view) {
-        if (ServiceContext.userService().getUserInfo() != null && ServiceContext.userService().getUserInfo().getPhone_num() != null) {
-            if (StringTools.isPhone(ServiceContext.userService().getUserInfo().getPhone_num())) {
-                Toaster.showToastCenter(this, "金币余额不足");
-                //获取运营山
-                if (operator_yidong.isChecked()){
-                    //移动
-                }else if(operator_liantong.isChecked()){
-                    //联通
-                }else if(operator_dianxin.isChecked()){
-                    //电信
-                }else{
-                    //未知
+        if (coinFull) {
+            String telephone = coin_top_up_phone_num.getText().toString();
+            if (!TextUtils.isEmpty(telephone)) {
+                if (StringTools.isPhone(telephone)) {
+                    Toaster.showToastCenter(this, "金币余额不足");
+                    //获取运营商
+                    if (operator_yidong.isChecked()) {
+                        //移动
+                        operator = 1;
+                    } else if (operator_liantong.isChecked()) {
+                        //联通
+                        operator = 2;
+                    } else if (operator_dianxin.isChecked()) {
+                        //电信
+                        operator = 4;
+                    } else {
+                        //未知
+                        operator = 1;
+                    }
+                    Objects.requireNonNull(APIContext.getWelfareApi().topUpTelephone(rechargeId, telephone, operator))
+                            .onSuccess(new Function1<String, Unit>() {
+                                @Override
+                                public Unit invoke(String s) {
+                                    Toaster.showToastCenterShort(CoinTopUpActivity.this, "充值订单已提交，我们会在3个工作日内审核并为您充值");
+                                    return null;
+                                }
+                            })
+                            .onFail(new Function2<Integer, String, Unit>() {
+                                @Override
+                                public Unit invoke(Integer integer, String s) {
+                                    return null;
+                                }
+                            }).execute();
+                } else {
+                    Toaster.showToastCenter(this, "手机号有误");
                 }
             } else {
-                Toaster.showToastCenter(this, "请输入正确电话号码");
+                Toaster.showToastCenter(this, "请输入电话号码");
             }
         } else {
-            Toaster.showToastCenter(this, "请输入电话号码");
+            Toaster.showToastCenter(this, "您的金币余额不足无法充值");
         }
     }
 
     public void coinRecord(View view) {
-        Toaster.showToastCenter(this, "您没有充值记录");
+        startActivity(new Intent(this, TopUpRecordActivity.class));
     }
 
 

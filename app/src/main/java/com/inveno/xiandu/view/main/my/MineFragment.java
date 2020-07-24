@@ -383,12 +383,15 @@ public class MineFragment extends BaseFragment {
                     @Override
                     public Unit invoke(ActivityBeanList activityBeanList) {
                         if (activityBeanList != null && activityBeanList.getActivity_list().size() > 0) {
+                            if (!mine_activity_list_line.isShown()) {
+                                mine_activity_list_line.setVisibility(View.VISIBLE);
+                            }
                             activityBeans = activityBeanList.getActivity_list();
                             if (activityBeans.size() > 4) {
                                 LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) mine_activity_list_line.getLayoutParams();
                                 linearParams.height = ScreenUtils.dpToPx(160);
                                 mine_activity_list_line.setLayoutParams(linearParams);
-                            }else{
+                            } else {
                                 LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) mine_activity_list_line.getLayoutParams();
                                 linearParams.height = ScreenUtils.dpToPx(80);
                                 mine_activity_list_line.setLayoutParams(linearParams);

@@ -55,6 +55,8 @@ public class HttpUrl {
     public static String BIND_INVITE_CODE = "/behavior/bind_invite_relate"; //获取邀请码
 
     public static String GET_ACTIVITY = "/content/activity/list"; //获取我的页面活动列表
+    public static String TOP_UP_TELEPHONE = "/coin/recharge_telephone_cost"; //充值话费
+    public static String RECHANGE_INFO = "/coin/get_recharge_info"; //充值记录
 
     public static String getHttpUri(String url) {
         return HOST_URI + url;

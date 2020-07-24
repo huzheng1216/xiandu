@@ -84,13 +84,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
 
-            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
-//            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
+//            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
+            buildConfigField 'String', 'InvenoUrl', '"http://121.201.120.128:9000"'
 
             buildConfigField 'String', 'WeChatAppID', '"wxafee0cd4cded0bfe"'
         }
         debug {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
