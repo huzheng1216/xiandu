@@ -2,6 +2,7 @@ package com.inveno.xiandu.invenohttp.bacic_data;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.inveno.android.api.service.InvenoServiceContext;
 import com.inveno.android.api.service.product.IProductService;
 import com.inveno.android.api.service.product.ProductService;
@@ -15,6 +16,7 @@ import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.AppInfoUtils;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author yongji.wang
@@ -80,5 +82,9 @@ public class BacicParamService extends BaseSingleInstanceService {
             baseParam.put("pid", 0);
         }
         return baseParam;
+    }
+
+    public String getParamJsonStr(){
+        return new Gson().toJson(getBaseParam(), Map.class);
     }
 }

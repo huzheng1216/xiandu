@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.user.UserInfo;
+import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
 import com.inveno.xiandu.utils.CountDownTimerUtils;
 import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.invenohttp.instancecontext.APIContext;
+import com.inveno.xiandu.view.main.my.FaceToFacaInvitaActivity;
 
 import java.lang.reflect.Field;
 
@@ -110,6 +113,7 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
 
     /**
      * 反射设置光标颜色
+     *
      * @param mEditText
      */
     private void setCursorColor(EditText mEditText) {
@@ -132,7 +136,11 @@ public class ValiCodeActivity extends TitleBarBaseActivity implements View.OnCli
                     .onSuccess(new Function1<String, Unit>() {
                         @Override
                         public Unit invoke(String s) {
-                            Toaster.showToastCenterShort(ValiCodeActivity.this, "验证码发送成功");
+                            if (BuildConfig.DEBUG) {
+                                Toaster.showToastCenterShort(ValiCodeActivity.this, s);
+                            } else {
+                                Toaster.showToastCenterShort(ValiCodeActivity.this, "验证码发送成功");
+                            }
                             return null;
                         }
                     })

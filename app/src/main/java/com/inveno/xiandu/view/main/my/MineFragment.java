@@ -1,12 +1,19 @@
 package com.inveno.xiandu.view.main.my;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,6 +28,8 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.bean.coin.UserCoinOut;
 import com.inveno.xiandu.bean.user.UserInfo;
+import com.inveno.xiandu.bean.welfare.ActivityBean;
+import com.inveno.xiandu.bean.welfare.ActivityBeanList;
 import com.inveno.xiandu.config.ARouterPath;
 import com.inveno.xiandu.config.Keys;
 import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
@@ -30,13 +39,20 @@ import com.inveno.xiandu.utils.GsonUtil;
 import com.inveno.xiandu.utils.SPUtils;
 import com.inveno.xiandu.invenohttp.bacic_data.EventConstant;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
+import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.utils.fileandsp.AppPersistRepository;
 import com.inveno.xiandu.view.BaseFragment;
+import com.inveno.xiandu.view.adapter.ActivityListAdapter;
+import com.inveno.xiandu.view.browser.BrowserActivity;
 import com.inveno.xiandu.view.main.MainActivity;
+import com.inveno.xiandu.view.read.setting.ScreenUtils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +84,18 @@ public class MineFragment extends BaseFragment {
 
     @BindView(R.id.mine_today_coin)
     TextView mine_today_coin;
+
+    @BindView(R.id.mine_write_invitation)
+    RelativeLayout mine_write_invitation;
+
+    @BindView(R.id.mine_activity_list_line)
+    LinearLayout mine_activity_list_line;
+
+    @BindView(R.id.task_activity_grid)
+    GridView task_activity_grid;
+
+    private ActivityListAdapter activityListAdapter;
+    private List<ActivityBean> activityBeans = new ArrayList<>();
 
     @OnClick(R.id.iv_user_pic)
     void pic() {
@@ -141,6 +169,26 @@ public class MineFragment extends BaseFragment {
         ARouter.getInstance().build(ARouterPath.ACTIVITY_SETTING).navigation();
     }
 
+    @OnClick(R.id.mine_invitation)
+    void mine_initation() {
+        if (ServiceContext.userService().isLogin()) {
+            Intent intent = new Intent(getActivity(), InvitationFriendActivity.class);
+            startActivity(intent);
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
+    }
+
+    @OnClick(R.id.mine_write_invitation)
+    void mine_write_invitation() {
+        if (ServiceContext.userService().isLogin()) {
+            Intent intent = new Intent(getActivity(), InputInviteCodeActivity.class);
+            startActivity(intent);
+        } else {
+            ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+        }
+    }
+
     private EventCanceler event_login;
     private EventCanceler event_logout;
 
@@ -205,6 +253,10 @@ public class MineFragment extends BaseFragment {
         event_logout = EventService.Companion.register(EventConstant.LOGOUT, new EventListener() {
             @Override
             public void onEvent(@NotNull String name, @NotNull String arg) {
+                //如果注册超过3天，不显示邀请码入口
+                if (!mine_write_invitation.isShown()) {
+                    mine_write_invitation.setVisibility(View.VISIBLE);
+                }
                 user_name.setText("点我登录");
                 setHeaderImage(R.drawable.ic_header_default);//默认头像
                 ServiceContext.bacicParamService().refreshBaseParam();
@@ -218,13 +270,37 @@ public class MineFragment extends BaseFragment {
         } else if (gender == 2) {
             mine_read_gender_tv.setText("女");
         }
+        if (getContext() != null) {
+            task_activity_grid.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            activityListAdapter = new ActivityListAdapter(getContext(), activityBeans);
+            task_activity_grid.setAdapter(activityListAdapter);
+            task_activity_grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    // TODO: 2020/7/16 使用地址，跳到内部浏览器页
+                    ActivityBean activityBean = activityBeans.get(position);
+                    if (activityBeans.get(position).getSign_in() == 0) {
+                        Intent intent = new Intent(getContext(), BrowserActivity.class);
+                        intent.putExtra("browser_url", activityBeans.get(position).getActivity_url());
+                        startActivity(intent);
+                    } else {
+                        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+                    }
+                }
+            });
+        }
         return view;
     }
 
     @Override
     protected void onVisible(Boolean firstVisble) {
         report();
+        if (!mine_activity_list_line.isShown()) {
+            getTaskActiviy();
+        }
         if (firstVisble) {
+            //获取活动
+            getTaskActiviy();
             UserInfo userInfo = ServiceContext.userService().getUserInfo();
             if (userInfo != null) {
                 if (TextUtils.isEmpty(userInfo.getUser_name())) {
@@ -276,6 +352,15 @@ public class MineFragment extends BaseFragment {
         }
         if (ServiceContext.userService().isLogin()) {
             get_coin();
+            //如果登录了，判断是否超过注册时间
+            long registTime = ServiceContext.userService().getUserInfo().getCreate_time();
+            long currentTime = System.currentTimeMillis();
+            //如果注册超过3天，不显示邀请码入口
+            if (mine_write_invitation.isShown()) {
+                if (currentTime > registTime + (3 * 24 * 60 * 60 * 1000)) {
+                    mine_write_invitation.setVisibility(View.GONE);
+                }
+            }
         } else {
             mine_my_coin.setText("--");
             mine_today_coin.setText("--");
@@ -290,6 +375,41 @@ public class MineFragment extends BaseFragment {
     private void setHeaderImage(String url) {
 //        Glide.with(this).load(R.drawable.ic_test_ad).centerCrop().placeholder(R.drawable.ic_header_default).into(pic);
         GlideUtils.LoadCircleImage(this.getContext(), R.drawable.ic_header_default, pic);
+    }
+
+    private void getTaskActiviy() {
+        Objects.requireNonNull(APIContext.getWelfareApi().getActivityList())
+                .onSuccess(new Function1<ActivityBeanList, Unit>() {
+                    @Override
+                    public Unit invoke(ActivityBeanList activityBeanList) {
+                        if (activityBeanList != null && activityBeanList.getActivity_list().size() > 0) {
+                            if (!mine_activity_list_line.isShown()) {
+                                mine_activity_list_line.setVisibility(View.VISIBLE);
+                            }
+                            activityBeans = activityBeanList.getActivity_list();
+                            if (activityBeans.size() > 4) {
+                                LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) mine_activity_list_line.getLayoutParams();
+                                linearParams.height = ScreenUtils.dpToPx(160);
+                                mine_activity_list_line.setLayoutParams(linearParams);
+                            } else {
+                                LinearLayout.LayoutParams linearParams = (LinearLayout.LayoutParams) mine_activity_list_line.getLayoutParams();
+                                linearParams.height = ScreenUtils.dpToPx(80);
+                                mine_activity_list_line.setLayoutParams(linearParams);
+                            }
+                            activityListAdapter.setData(activityBeans);
+                        } else {
+                            mine_activity_list_line.setVisibility(View.GONE);
+                        }
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        mine_activity_list_line.setVisibility(View.GONE);
+                        return null;
+                    }
+                }).execute();
     }
 
     /**

@@ -5,7 +5,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'org.greenrobot.greendao' // apply plugin
 
-
 String apkFile
 
 def buildTime() {
@@ -13,7 +12,16 @@ def buildTime() {
     df.setTimeZone(TimeZone.getDefault())
     return df.format(new Date())
 }
-
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
 android {
     signingConfigs {
         release {
@@ -53,6 +61,17 @@ android {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
+        ndk {
+            //选择要添加的对应 cpu 类型的 .so 库。
+            abiFilters 'armeabi', 'armeabi-v7a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : "com.inveno.xiandu",
+                JPUSH_APPKEY : "7e1f18b725c29361cbe98faf", //JPush 上注册的包名对应的 Appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
 
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -65,16 +84,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
 
-            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
+            buildConfigField 'String', 'WeChatAppID', '"wxafee0cd4cded0bfe"'
         }
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
-
+            buildConfigField 'String', 'WeChatAppID', '"wxafee0cd4cded0bfe"'
         }
+//        AppID:
+//         wxafee0cd4cded0bfe
+//        AppSecret:  95b9baec4531ba0286858ed104966e44
     }
     productFlavors {
 //      测试环境 其他
@@ -85,65 +106,80 @@ android {
 //      2官方渠道
         inveno {
             buildConfigField 'int', 'referrer', '2'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 
 //      3应用宝
         tencent {
             buildConfigField 'int', 'referrer', '3'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      4小米商店
         xiaomi {
             buildConfigField 'int', 'referrer', '4'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      5 360手机助手
         store360 {
             buildConfigField 'int', 'referrer', '5'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 
 //      6华为
         huawei {
             buildConfigField 'int', 'referrer', '6'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      7oppo
         oppo {
             buildConfigField 'int', 'referrer', '7'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      8豌豆荚
         wandoujia {
             buildConfigField 'int', 'referrer', '8'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      9阿里旗下
         ali {
             buildConfigField 'int', 'referrer', '9'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      10安智
         anzhi {
             buildConfigField 'int', 'referrer', '10'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      11木蚂蚁
         mumayi {
             buildConfigField 'int', 'referrer', '11'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      12力趣
         liqu {
             buildConfigField 'int', 'referrer', '12'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      13百度
         baidu {
             buildConfigField 'int', 'referrer', '13'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      14vivo
         vivo {
             buildConfigField 'int', 'referrer', '14'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 //      15酷安
         kuan {
             buildConfigField 'int', 'referrer', '15'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
 
 //        1	其他
         other {
             buildConfigField 'int', 'referrer', '1'
+            buildConfigField 'String', 'InvenoUrl', '"http://novel.inveno.com"'
         }
     }
 
@@ -166,11 +202,15 @@ android {
 //            }
 //        }
         if (variant.buildType.debuggable) {
-//            variant.outputs.each { output ->
+//            variant.outputs.all { output ->
 //                def outputFile = output.outputFile
 //                if (outputFile != null && outputFile.name.endsWith('.apk')) {
-//                    def fileName = "apk/" + applicationId + "-V" + versionName + "-" + versionCode + "-" + variant.name + "-" + buildTime() + ".apk"
-//                   output.outputFile = new File(outputFile.parent, fileName)
+//                    def time = buildTime()
+//                    def fileName = variant.name + "/" + variant.name + "-V" + defaultConfig.versionName + "-" + time + ".apk"
+//                    outputFileName = fileName
+//                    variant.getPackageApplication().outputDirectory = new File("../../output/" + defaultConfig.versionName)
+////                    output.outputFile = new File("../../../output", fileName)
+//                    apkFile = "../../output/" + defaultConfig.versionName + "/" + variant.name + "/"  + "APKNAMEDebug" + "-V" + defaultConfig.versionName + "-" + time + ".apk"
 //                }
 //            }
         } else {
@@ -184,7 +224,6 @@ android {
 //                    output.outputFile = new File("../../../output", fileName)
                     apkFile = "../../output/" + defaultConfig.versionName + "/" + variant.name + "/"  + "APKNAMERelease" + "-V" + defaultConfig.versionName + "-" + time + ".apk"
                 }
-
             }
         }
     }
@@ -243,6 +282,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.0'
     //rxView
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'
+    //banner
+    implementation 'com.youth.banner:banner:2.0.12'
+    //微信分享
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-without-mta:+'
+    //二维码
+    implementation 'com.google.zxing:android-core:3.3.0'
+    implementation 'com.google.zxing:core:3.3.3'
     // OpenCC to convert Simp. Chinese to Trad. Chinese
     implementation "com.zqc.opencc.android.lib:lib-opencc-android:0.8.0@aar"
     implementation project(path: ':free_time_read_lib_modules:android-device-service')
@@ -259,4 +305,8 @@ dependencies {
     //网络
     implementation 'com.lzy.net:okgo:2.1.4'
     implementation 'com.squareup.okhttp3:okhttp:3.14.2'
+
+    //极光推送
+    implementation 'cn.jiguang.sdk:jpush:3.6.8'
+    implementation 'cn.jiguang.sdk:jcore:2.4.0'
 }

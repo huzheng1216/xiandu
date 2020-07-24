@@ -29,6 +29,8 @@ import com.inveno.xiandu.R;
 import com.inveno.xiandu.bean.ad.AdBookModel;
 import com.inveno.xiandu.bean.book.BookShelf;
 import com.inveno.xiandu.bean.book.Bookbrack;
+import com.inveno.xiandu.bean.coin.MissionData;
+import com.inveno.xiandu.bean.coin.MissionDataList;
 import com.inveno.xiandu.bean.coin.ReadTime;
 import com.inveno.xiandu.bean.coin.UserCoin;
 import com.inveno.xiandu.bean.coin.UserCoinOut;
@@ -71,6 +73,9 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
     private TextView bookbrack_delete_all_select_all;
     private TextView bookbrack_delete_all_delete;
     private RecyclerView bookrack_recyclerview;
+
+    //签到
+    private TextView shelf_sign_in;
 
     private IosTypeDialog iosTypeDialog;
     private AdBookModel adBookModel;
@@ -246,6 +251,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_bookrack_header, null);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         view.setLayoutParams(lp);
+        shelf_sign_in = view.findViewById(R.id.shelf_sign_in);
         shelfAdapter.setHeaderView(view);
     }
 
@@ -263,6 +269,7 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
             ReportManager.INSTANCE.reportPageImp(1, "", getContext(), ServiceContext.userService().getUserPid());
         }
         initData();
+        finishMission();
         if (firstVisble) {
             //从网络加载书籍
             APIContext.bookbrackApi().getBookbrackList(InvenoServiceContext.uid().getUid(), ServiceContext.userService().getUserPid())
@@ -326,6 +333,31 @@ public class BookShelfFragmentMain extends BaseFragment implements View.OnClickL
 
     }
 
+    //今日签到
+    private void finishMission(){
+        int[] typeIds = {1};
+        APIContext.coinApi().getMission(typeIds)
+                .onSuccess(new Function1<MissionDataList, Unit>() {
+                    @Override
+                    public Unit invoke(MissionDataList missionDataList) {
+                        if (missionDataList!=null && missionDataList.getMission_list().size()>0){
+                            MissionData missionData = missionDataList.getMission_list().get(0);
+                            if (missionData.getCode() == 6){
+                                shelf_sign_in.setText("已签到");
+                            }else{
+                                shelf_sign_in.setText("签到");
+                            }
+                        }
+                        return null;
+                    }
+                })
+                .onFail(new Function2<Integer, String, Unit>() {
+                    @Override
+                    public Unit invoke(Integer integer, String s) {
+                        return null;
+                    }
+                }).execute();
+    }
     //今日金币
     private void get_coin() {
         APIContext.coinApi().queryCoin()

@@ -50,7 +50,8 @@
 
     <!--Toolbar主题配置-->
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="actionMenuTextColor">@android:color/white</item> <!-- menu字体颜色,不要加android前缀，否则4.4以前无效 -->
+        <item name="actionMenuTextColor">@android:color/white
+        </item> <!-- menu字体颜色,不要加android前缀，否则4.4以前无效 -->
         <item name="android:textColorPrimary">@color/white</item> <!-- 改变menu图标及隐藏菜单字体颜色 -->
     </style>
 
@@ -70,15 +71,18 @@
         <!-- 设置弹出菜单文字颜色 -->
         <item name="android:textColor">#AAAAAA</item>
     </style>
+
     <declare-styleable name="MyScrollView">
         <attr name="maxHeight" format="dimension" />
     </declare-styleable>
+
     <style name="mypopwindow_anim_style">
         <item name="android:windowEnterAnimation">@anim/popshow_anim</item>
         <!-- 指定显示的动画xml -->
         <item name="android:windowExitAnimation">@anim/pophidden_anim</item>
         <!-- 指定消失的动画xml -->
     </style>
+
     <style name="mypopwindow_anim_classify_style">
         <item name="android:windowEnterAnimation">@anim/popshow_right_to_left_anim</item>
         <!-- 指定显示的动画xml -->
@@ -121,6 +125,7 @@
 
     <!--ReadActivity-->
     <style name="NB.Theme.TextAppearance.Read"></style>
+
     <style name="NB.Theme.TextAppearance.Read.TopMenu">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
@@ -128,14 +133,14 @@
         <item name="android:textColor">@color/nb.read.menu.text</item>
         <item name="android:textSize">@dimen/nb.read.text.top</item>
     </style>
+
     <style name="NB.Theme.TextAppearance.Read.BottomMenu">
         <item name="android:textColor">@color/nb.read.menu.text</item>
         <item name="android:textSize">@dimen/nb.read.text.bottom</item>
     </style>
 
 
-    <style name="NB.Theme.TextAppearance.Read.BottomMenu.Button"
-        parent="NB.Theme.TextAppearance.Read.BottomMenu">
+    <style name="NB.Theme.TextAppearance.Read.BottomMenu.Button" parent="NB.Theme.TextAppearance.Read.BottomMenu">
         <item name="android:gravity">center_horizontal|bottom</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -171,10 +176,10 @@
         <item name="android:windowExitAnimation">@anim/slide_bottom_out</item>
     </style>
     <!-- TextAppearance:修改 -->
-    <style name="NB.Theme.TextAppearance"/>
+    <style name="NB.Theme.TextAppearance" />
 
     <!--Common-->
-    <style name="NB.Theme" parent="AppTheme"/>
+    <style name="NB.Theme" parent="AppTheme" />
 
     <style name="checkbox">
         <item name="android:button">@drawable/checkbox_style_bg</item>
@@ -190,6 +195,7 @@
         <item name="android:layout_marginTop">0dp</item>
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
+
     <style name="adCardView2">
         <item name="cardCornerRadius">8dp</item>
         <item name="cardElevation">0dp</item>
@@ -201,4 +207,21 @@
         <item name="android:foreground">?android:attr/selectableItemBackground</item>
     </style>
 
+    <style name="pop_anim_style" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/pop_exit_anim</item>
+    </style>
+
+    <style name="pop_right_anim_style" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/pop_right_enter_anim</item>
+        <item name="android:windowExitAnimation">@anim/pop_right_exit_anim</item>
+    </style>
+
+    <!-- 网页加载进度条 -->
+    <style name="crowd_item_progressBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/crowd_progressbar_background</item>
+        <item name="android:minHeight">10dp</item>
+        <item name="android:maxHeight">10dp</item>
+    </style>
 </resources>

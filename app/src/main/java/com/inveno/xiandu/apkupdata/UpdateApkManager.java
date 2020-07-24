@@ -364,6 +364,7 @@ public class UpdateApkManager {
             json = new JSONObject(JsonUtil.Companion.toJson(mParams));
             json.put("referrer", BuildConfig.referrer);
             json.put("version", BuildConfig.VERSION_NAME);
+            json.put("versionCode", BuildConfig.VERSION_CODE);
         } catch (JSONException e) {
             e.printStackTrace();
         }

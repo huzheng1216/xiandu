@@ -51,4 +51,7 @@
     <string name="download_failed">下载失败</string>
     <string name="update_download_failure">更新包下载失败</string>
 
+    <!--分享-->
+    <string name="live_share_wechat">微信</string>
+    <string name="live_share_moments">朋友圈</string>
 </resources>

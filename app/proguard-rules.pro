@@ -683,6 +683,7 @@ public static ** valueOf(java.lang.String);
 -keep class com.inveno.xiandu.db.*{ *; }
 -keep class com.inveno.xiandu.gen.*{ *; }
 
+-keep class com.ss.android.downloadlib.*{ *; }
 #实体类
 -keep class com.inveno.android.api.bean.*{ *; }
 -keep public class com.inveno.xiandu.bean.**.*{ *; }

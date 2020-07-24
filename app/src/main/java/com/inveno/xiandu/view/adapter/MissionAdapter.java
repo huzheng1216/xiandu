@@ -62,27 +62,41 @@ public class MissionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             vholder.welfare_coin_num.setText(String.format("+%s", missionData.getGold_num()));
 
             boolean isFinish = false;
-            if (missionData.getMax_times() < 2) {
-                if (missionData.getCompleted_times() <= 0) {
-                    vholder.welfare_sign_in_tv.setText("去完成");
+            if (missionData.getMission_type() == 1) {
+                if (missionData.getCode() == 6){
+                    vholder.welfare_sign_in_over_img.setVisibility(View.VISIBLE);
+                    vholder.welfare_sign_in_tv.setVisibility(View.GONE);
+                }else{
+                    vholder.welfare_sign_in_over_img.setVisibility(View.GONE);
+                    vholder.welfare_sign_in_tv.setVisibility(View.VISIBLE);
+
+                    vholder.welfare_sign_in_tv.setText("签到");
                     vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.blue_round_bg_15));
                     vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.white));
-                } else {
-                    isFinish = true;
-                    vholder.welfare_sign_in_tv.setText("已完成");
-                    vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_finish_bg));
-                    vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.gray_9));
                 }
             } else {
-                if (missionData.getCompleted_times() < missionData.getMax_times()) {
-                    vholder.welfare_sign_in_tv.setText("去完成");
-                    vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_video_ad_bg));
-                    vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                if (missionData.getMission_type() != 3) {
+                    if (missionData.getCompleted_times() <= 0) {
+                        vholder.welfare_sign_in_tv.setText("去完成");
+                        vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.blue_round_bg_15));
+                        vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                    } else {
+                        isFinish = true;
+                        vholder.welfare_sign_in_tv.setText("已完成");
+                        vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_finish_bg));
+                        vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.gray_9));
+                    }
                 } else {
-                    isFinish = true;
-                    vholder.welfare_sign_in_tv.setText("已完成");
-                    vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_finish_bg));
-                    vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.gray_9));
+                    if (missionData.getCompleted_times() < missionData.getMax_times()) {
+                        vholder.welfare_sign_in_tv.setText("去完成");
+                        vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_video_ad_bg));
+                        vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.white));
+                    } else {
+                        isFinish = true;
+                        vholder.welfare_sign_in_tv.setText("已完成");
+                        vholder.welfare_sign_in_tv.setBackground(mContext.getResources().getDrawable(R.drawable.welfare_coin_finish_bg));
+                        vholder.welfare_sign_in_tv.setTextColor(mContext.getResources().getColor(R.color.gray_9));
+                    }
                 }
             }
             boolean finalIsFinish = isFinish;
@@ -108,6 +122,7 @@ public class MissionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         TextView welfare_mission_name;
         TextView welfare_coin_num;
         TextView welfare_sign_in_tv;
+        ImageView welfare_sign_in_over_img;
 
         public MissionHolder(View itemView) {
             super(itemView);
@@ -115,6 +130,7 @@ public class MissionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             welfare_mission_name = itemView.findViewById(R.id.welfare_mission_name);
             welfare_coin_num = itemView.findViewById(R.id.welfare_coin_num);
             welfare_sign_in_tv = itemView.findViewById(R.id.welfare_sign_in_tv);
+            welfare_sign_in_over_img = itemView.findViewById(R.id.welfare_sign_in_over_img);
         }
     }
 

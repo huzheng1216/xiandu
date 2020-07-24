@@ -2,6 +2,7 @@ package com.inveno.xiandu.view.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.text.TextPaint;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,10 +29,12 @@ import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.holder.BaseHolder;
+import com.youth.banner.Banner;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.inveno.android.ad.config.AdViewType.*;
 
@@ -50,6 +53,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     private BookCityAdapter.OnItemClickListener mListener;
     private String footerStr = "正在努力加载...";
     private int centerPostion = 5;
+    private View headerView;
 
     public BookCityAdapter(Context context, Activity activity, ArrayList<BaseDataBean> dataList) {
         mContext = context;
@@ -64,6 +68,9 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     @Override
     protected View getHeaderView() {
 //        return null;
+        if (headerView!=null){
+            return headerView;
+        }
         return getViewHolderView(mContext, R.layout.item_store_header);
     }
 
@@ -73,6 +80,9 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
     }
 
 
+    public void setHeaderView(View view){
+        headerView = view;
+    }
     public void setDataList(ArrayList<BaseDataBean> dataList) {
 //        int addDataNum = dataList.size() - mDataList.size();
 //        int lastSum = mDataList.size();
@@ -99,25 +109,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         }
         if (holder instanceof HeaderViewHolder) {
             HeaderViewHolder mHolder = (HeaderViewHolder) holder;
-            mHolder.classify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_CLASSIFY).navigation();
-                }
-            });
-            mHolder.rankiing.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).navigation();
-                }
-            });
-            mHolder.the_end.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //跳转到排行榜的完结榜
-                    ARouter.getInstance().build(ARouterPath.ACTIVITY_RANKING).withBoolean("isEndRanking", true).navigation();
-                }
-            });
+
         } else if (holder instanceof BookCityAdapter.DefaulRemmendViewHolder) {
             if (mDataList.size() > dataPosition) {
                 ((DefaulRemmendViewHolder) holder).setData(mContext, mDataList.get(dataPosition));
@@ -237,7 +229,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         RecyclerView.ViewHolder mVIewHoder;
 
         if (viewType == HEADER_ITEM_TYPE) {
-            mVIewHoder = new BookCityAdapter.HeaderViewHolder(getHeaderView());
+            mVIewHoder = new BookCityAdapter.HeaderViewHolder(getHeaderView(), mContext);
         } else if (viewType == RecyclerBaseAdapter.CENTER_TITLE) {
             View view = getViewHolderView(parent.getContext(), R.layout.recommend_text);
             mVIewHoder = new BookCityAdapter.CenterTItleViewHolder(view);
@@ -281,8 +273,7 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
 
     @NotNull
     private View getView(ViewGroup parent) {
-        View view = getViewHolderView(parent.getContext(), R.layout.item_small_image);
-        return view;
+        return getViewHolderView(parent.getContext(), R.layout.item_small_image);
     }
 
     public static class HeaderViewHolder extends BaseHolder {
@@ -290,13 +281,13 @@ public class BookCityAdapter extends RecyclerBaseAdapter {
         TextView classify;
         TextView rankiing;
         TextView the_end;
+        Banner store_banner;
 
-        public HeaderViewHolder(@NonNull View itemView) {
+        public HeaderViewHolder(@NonNull View itemView, Context activity) {
             super(itemView);
             classify = itemView.findViewById(R.id.classify);
             rankiing = itemView.findViewById(R.id.rankiing);
             the_end = itemView.findViewById(R.id.the_end);
-
         }
 
         @Override

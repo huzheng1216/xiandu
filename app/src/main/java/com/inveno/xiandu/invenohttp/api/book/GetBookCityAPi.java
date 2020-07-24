@@ -11,6 +11,7 @@ import com.inveno.android.basics.service.callback.BaseStatefulCallBack;
 import com.inveno.android.basics.service.callback.StatefulCallBack;
 import com.inveno.android.basics.service.callback.common.MultiTypeHttpStatefulCallBack;
 import com.inveno.android.basics.service.thread.ThreadUtil;
+import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.bean.BaseDataBean;
 import com.inveno.xiandu.bean.ad.AdModel;
 import com.inveno.xiandu.bean.book.BaseDataBeanList;
@@ -27,6 +28,10 @@ import com.inveno.xiandu.bean.book.RankingDataList;
 import com.inveno.xiandu.bean.book.RankingMenu;
 import com.inveno.xiandu.bean.book.RankingMenuList;
 import com.inveno.xiandu.bean.book.RecommendName;
+import com.inveno.xiandu.bean.store.BannerDataBean;
+import com.inveno.xiandu.bean.store.BannerDataList;
+import com.inveno.xiandu.bean.user.UserInfo;
+import com.inveno.xiandu.bean.user.UserInfoList;
 import com.inveno.xiandu.invenohttp.bacic_data.DisplayType;
 import com.inveno.xiandu.invenohttp.bacic_data.HttpUrl;
 import com.inveno.xiandu.invenohttp.instancecontext.ServiceContext;
@@ -765,5 +770,47 @@ public class GetBookCityAPi extends BaseSingleInstanceService {
         }
 
         return null;
+    }
+
+
+    /**
+     * 获取banner列表
+     *
+     * @param channel_id 频道id
+     * @return
+     */
+    public StatefulCallBack<BannerDataList> getBannerData(long channel_id) {
+        LinkedHashMap<String, Object> bacicParams = ServiceContext.bacicParamService().getBaseParam();
+        LinkedHashMap<String, Object> mParams = new LinkedHashMap<>();
+        mParams.put("channel_id", channel_id);
+        mParams.putAll(bacicParams);
+
+        if (MODULE_DEBUG) {
+            return new BaseStatefulCallBack<BannerDataList>() {
+                @Override
+                public void execute() {
+                    ThreadUtil.Installer.install();
+                    ThreadUtil.runOnUi(new Runnable() {
+                        @Override
+                        public void run() {
+                            List<BannerDataBean> bannerDataBeans = new ArrayList<>();
+                            bannerDataBeans.add(new BannerDataBean(1, "https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3413941370,3981512686&fm=26&gp=0.jpg", "https://www.baidu.com/", 3147, 0, 15948827800020L));
+                            bannerDataBeans.add(new BannerDataBean(1, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594892339780&di=bf2d9f464af5c784aea1033b69144a28&imgtype=0&src=http%3A%2F%2Finews.gtimg.com%2Fnewsapp_bt%2F0%2F10630628329%2F1000.jpg", "https://www.baidu.com/", 3177, 0, 15948827800020L));
+                            bannerDataBeans.add(new BannerDataBean(2, "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1594892339780&di=ec7e1222deaed9145e18ec26dcad8df1&imgtype=0&src=http%3A%2F%2Fr.sinaimg.cn%2Flarge%2Ftc%2Fimg3_jiemian_com%2Ff57f259f8e05e256bdf3133e2aacb0fc.jpg", "https://www.baidu.com/", 0, 0, 15948827800020L));
+                            BannerDataList bannerDataList = new BannerDataList();
+                            bannerDataList.setBanner_list(bannerDataBeans);
+                            invokeSuccess(bannerDataList);
+                        }
+                    });
+                }
+            };
+        } else {
+            return MultiTypeHttpStatefulCallBack.INSTANCE
+                    .<BannerDataList>newCallBack(new TypeReference<BannerDataList>() {
+                    }.getType())
+                    .atUrl(HttpUrl.getHttpUri(HttpUrl.GET_BANNER_DATA))
+                    .withArg(mParams)
+                    .buildCallerCallBack();
+        }
     }
 }

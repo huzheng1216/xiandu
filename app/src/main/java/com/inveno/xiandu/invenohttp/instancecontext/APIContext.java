@@ -14,6 +14,7 @@ import com.inveno.xiandu.invenohttp.api.user.GetUserAPI;
 import com.inveno.xiandu.invenohttp.api.user.LoginAPI;
 import com.inveno.xiandu.invenohttp.api.user.UpdataUserAPI;
 import com.inveno.xiandu.invenohttp.api.user.VaricationCodeAPI;
+import com.inveno.xiandu.invenohttp.api.welfare.WelfareApi;
 
 /**
  * @author yongji.wang
@@ -75,4 +76,7 @@ public class APIContext {
         return InstanceContext.get().getInstance(SearchBookApi.class);
     }
 
+    public static WelfareApi getWelfareApi() {
+        return InstanceContext.get().getInstance(WelfareApi.class);
+    }
 }
