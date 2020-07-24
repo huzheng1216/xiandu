@@ -32,6 +32,7 @@ import com.inveno.xiandu.utils.Toaster;
 import com.inveno.xiandu.view.ad.ADViewHolderFactory;
 import com.inveno.xiandu.view.ad.holder.NormalAdViewHolder;
 import com.inveno.xiandu.view.adapter.RecyclerBaseAdapter;
+import com.inveno.xiandu.view.main.my.InputInviteCodeActivity;
 import com.inveno.xiandu.view.main.welfare.SignInActivity;
 
 import java.util.ArrayList;
@@ -404,7 +405,11 @@ public class ShelfAdapter extends RecyclerBaseAdapter {
             shelf_sign_in.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(new Intent(context, SignInActivity.class));
+                    if (ServiceContext.userService().isLogin()) {
+                        context.startActivity(new Intent(context, SignInActivity.class));
+                    } else {
+                        ARouter.getInstance().build(ARouterPath.ACTIVITY_LOGIN_OTHER_PHONE).navigation();
+                    }
                 }
             });
         }

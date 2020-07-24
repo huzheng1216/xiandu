@@ -25,6 +25,7 @@ import androidx.annotation.Nullable;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.inveno.xiandu.BuildConfig;
 import com.inveno.xiandu.R;
 import com.inveno.xiandu.view.TitleBarBaseActivity;
 import com.inveno.xiandu.config.ARouterPath;
@@ -178,9 +179,13 @@ public class LoginOtherPhoneActivity extends TitleBarBaseActivity implements Vie
                             .onSuccess(new Function1<String, Unit>() {
                                 @Override
                                 public Unit invoke(String s) {
+                                    if (BuildConfig.DEBUG) {
+                                        Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, s);
+                                    }else{
+                                        Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, "验证码已发送");
+                                    }
                                     lastPhone = login_phone_edit.getText().toString();
                                     lastLoginTime = System.currentTimeMillis();
-                                    Toaster.showToastCenterShort(LoginOtherPhoneActivity.this, "验证码已发送");
                                     Intent intent = new Intent(LoginOtherPhoneActivity.this, ValiCodeActivity.class);
                                     intent.putExtra(ValiCodeActivity.LOGIN_PHONE_NUM, login_phone_edit.getText().toString());
                                     intent.putExtra(ValiCodeActivity.LOGIN_TIME, 60);

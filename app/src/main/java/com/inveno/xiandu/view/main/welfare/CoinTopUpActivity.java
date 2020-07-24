@@ -87,6 +87,7 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
         setStatusBar(R.color.white, true);
         String mUserCoinStr = getIntent().getStringExtra("mUserCoin");
         mUserCoin = GsonUtil.gsonToObject(mUserCoinStr, UserCoin.class);
+        coinFull = mUserCoin.getBalance() >= rate * 10;
     }
 
     @Override
@@ -224,7 +225,6 @@ public class CoinTopUpActivity extends TitleBarBaseActivity {
             String telephone = coin_top_up_phone_num.getText().toString();
             if (!TextUtils.isEmpty(telephone)) {
                 if (StringTools.isPhone(telephone)) {
-                    Toaster.showToastCenter(this, "金币余额不足");
                     //获取运营商
                     if (operator_yidong.isChecked()) {
                         //移动
